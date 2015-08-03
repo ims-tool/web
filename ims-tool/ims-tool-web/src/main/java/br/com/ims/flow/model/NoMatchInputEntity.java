@@ -9,8 +9,6 @@ public class NoMatchInputEntity extends AbstractEntity{
 	private PromptEntity prompt;
 	private FormEntity nextForm;
 	private TagEntity tag;
-	private VersionEntity versionId;
-	
 	
 	
 	public String getType() {
@@ -43,12 +41,6 @@ public class NoMatchInputEntity extends AbstractEntity{
 	}
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
-	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
 	}
 	
 

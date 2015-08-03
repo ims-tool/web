@@ -8,7 +8,6 @@ public class PromptAudioEntity extends AbstractEntity {
 	private AudioEntity audio;
 	private Integer orderNum;
 	private ConditionEntity condition;	
-	private VersionEntity versionId;
 	
 	
 	
@@ -33,12 +32,7 @@ public class PromptAudioEntity extends AbstractEntity {
 	public void setCondition(ConditionEntity condition) {
 		this.condition = condition;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
+	
 	public void setOrderNum(Integer orderNum) {
 		this.orderNum = orderNum;
 	}

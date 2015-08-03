@@ -6,7 +6,7 @@ public class TagTypeEntity extends AbstractEntity{
 	private String name;
 	private TagTypeEntity tagType;	
 	private String description;	
-	private VersionEntity versionId;
+
 	
 	
 	
@@ -28,12 +28,7 @@ public class TagTypeEntity extends AbstractEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
+
 	
 	
 	

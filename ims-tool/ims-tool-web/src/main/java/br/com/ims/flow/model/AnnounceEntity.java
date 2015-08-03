@@ -7,9 +7,6 @@ public class AnnounceEntity extends AbstractFormEntity{
 	private PromptEntity prompt;
 	private FormEntity nextform;
 	private TagEntity tag;
-	private VersionEntity versionId;
-	
-	
 		
 	public Integer getFlushpront() {
 		return flushpront;
@@ -35,12 +32,6 @@ public class AnnounceEntity extends AbstractFormEntity{
 	}
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
-	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
 	}
 	
 	

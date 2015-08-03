@@ -10,7 +10,6 @@ public class ConditionGroupEntity extends AbstractEntity{
 	private Integer orderNum;
 	private ConditionMapEntity conditionMap;
 	private String description;	
-	private VersionEntity versionId;
 	private List<ConditionParameterEntity> conditionParameters;
 	private List<ConditionValueEntity> conditionValues;
 	
@@ -39,12 +38,7 @@ public class ConditionGroupEntity extends AbstractEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
+	
 	public List<ConditionParameterEntity> getConditionParameters() {
 		return conditionParameters;
 	}

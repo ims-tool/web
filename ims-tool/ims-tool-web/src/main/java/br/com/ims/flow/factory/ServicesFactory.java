@@ -8,6 +8,9 @@ import br.com.ims.flow.service.FormService;
 import br.com.ims.flow.service.FormTypeService;
 import br.com.ims.flow.service.PromptEditorService;
 import br.com.ims.flow.service.PromptService;
+import br.com.ims.flow.service.TagEditorService;
+import br.com.ims.flow.service.TagService;
+import br.com.ims.flow.service.TagTypeService;
 
 
 public class ServicesFactory {
@@ -53,6 +56,19 @@ public class ServicesFactory {
 	
 	public ConditionService getConditionService() {
 		return new ConditionService();
+	}
+	
+	public TagService getTagService() {
+		return new TagService();
+	}
+	
+	public TagTypeService getTagTypeService() {
+		return new TagTypeService();
+		
+	}
+	
+	public TagEditorService getTagEditorService() {
+		return new TagEditorService();
 	}
 
 }

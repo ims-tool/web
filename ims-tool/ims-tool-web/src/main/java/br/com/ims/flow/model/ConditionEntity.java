@@ -6,7 +6,6 @@ public class ConditionEntity extends AbstractEntity{
 	private String name;
 	private String description;
 	private TagEntity tag;	
-	private VersionEntity versionId;
 	private ConditionGroupEntity conditionGroup;
 	
 	
@@ -28,12 +27,6 @@ public class ConditionEntity extends AbstractEntity{
 	}
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
-	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
 	}
 	public ConditionGroupEntity getConditionGroup() {
 		return conditionGroup;

@@ -108,6 +108,24 @@ public class AnnounceEditorBean extends AbstractBean {
 		
 
     }
+
+	@Override
+	public void save(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isUsed(String id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
     
 }

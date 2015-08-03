@@ -8,8 +8,6 @@ public class ConditionParameterEntity extends AbstractEntity {
 	private String paramName;
 	private String paramValue;
 	
-	private VersionEntity versionId;
-
 	
 	public Integer getConditionGroupId() {
 		return conditionGroupId;
@@ -33,14 +31,6 @@ public class ConditionParameterEntity extends AbstractEntity {
 
 	public void setParamValue(String paramValue) {
 		this.paramValue = paramValue;
-	}
-
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
 	}
 	
 		

@@ -23,7 +23,7 @@ public class TransferRuleEntity extends AbstractEntity {
 	private String valor9;
 	private String valor10;
 	private List<TransferOutEntity> saida;	
-	private VersionEntity versionId;
+	
 	
 	
 	public Integer getTransferId() {
@@ -134,13 +134,6 @@ public class TransferRuleEntity extends AbstractEntity {
 	public void setSaida(List<TransferOutEntity> saida) {
 		this.saida = saida;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
-	
 	
 	
 		

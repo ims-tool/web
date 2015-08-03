@@ -8,9 +8,7 @@ public class AudioEntity extends AbstractEntity{
 	private String description;
 	private String path;
 	private String property;
-	private VersionEntity versionId;
-	
-	
+		
 	public String getType() {
 		return type;
 	}
@@ -41,14 +39,6 @@ public class AudioEntity extends AbstractEntity{
 	public void setProperty(String property) {
 		this.property = property;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
-
-
 	
 	
 		

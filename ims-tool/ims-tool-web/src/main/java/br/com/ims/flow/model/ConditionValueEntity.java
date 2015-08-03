@@ -17,7 +17,6 @@ public class ConditionValueEntity extends AbstractEntity{
 	private String value8;
 	private String value9;
 	private String value10;
-	private VersionEntity version;
 	private TagEntity tagTrue;
 	private TagEntity tagFalse;
 	
@@ -100,12 +99,7 @@ public class ConditionValueEntity extends AbstractEntity{
 	public void setValue10(String value10) {
 		this.value10 = value10;
 	}
-	public VersionEntity getVersion() {
-		return version;
-	}
-	public void setVersion(VersionEntity version) {
-		this.version = version;
-	}
+	
 	public TagEntity getTagTrue() {
 		return tagTrue;
 	}

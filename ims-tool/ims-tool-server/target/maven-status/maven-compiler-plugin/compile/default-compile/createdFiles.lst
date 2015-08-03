@@ -1,0 +1,3 @@
+br\com\ims\util\ApplicationConfig.class
+br\com\ims\facade\VersionFacadeREST.class
+br\com\ims\facade\AbstractFacade.class

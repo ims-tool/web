@@ -79,7 +79,7 @@
 								 
 							    
 							    
-								<p:ajax event="connect" listener="#{flowEditorView.onConnect}" update="formFlow"  />
+								<p:ajax event="connect" listener="#{flowEditorView.onConnect}" update="formFlow,settingAuxiliarDlgId,flowEditor" oncomplete="PF('settingAuxiliartDlg').show()"  />
 						        <p:ajax event="disconnect"  listener="#{flowEditorView.onDisconnect}" />
 						        <p:ajax event="connectionChange" listener="#{flowEditorView.onConnectionChange}" />
 								  

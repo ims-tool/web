@@ -10,8 +10,6 @@ public class MenuEntity extends AbstractFormEntity{
 	private Integer fetchTimeOut;
 	private Integer terminatingTimeOut;
 	private String terminatingCharacter;	
-	private VersionEntity versionId;
-	
 	
 	
 	public PromptEntity getPrompt() {
@@ -50,13 +48,5 @@ public class MenuEntity extends AbstractFormEntity{
 	public void setTerminatingCharacter(String terminatingCharacter) {
 		this.terminatingCharacter = terminatingCharacter;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
-	
-	
-			
+
 }

@@ -6,10 +6,10 @@ import br.com.ims.flow.common.Constants;
 public class FormEntity extends AbstractFormEntity{
 	
 	private FormTypeEntity formType;
-	private Integer formId;
-	private Integer tag;
-	private Integer condition;
-	private Integer nextFormDefault;
+	private FormEntity formId;
+	private TagEntity tag;
+	private ConditionEntity condition;
+	private FormEntity nextFormDefault;
 	private VersionEntity versionId;
 	
 	
@@ -66,28 +66,37 @@ public class FormEntity extends AbstractFormEntity{
 			}
 		}
 	}
-	public Integer getFormId() {
+	
+
+	public FormEntity getFormId() {
 		return formId;
 	}
-	public void setFormId(Integer formId) {
+
+	public void setFormId(FormEntity formId) {
 		this.formId = formId;
 	}
-	public Integer getTag() {
+
+	public TagEntity getTag() {
 		return tag;
 	}
-	public void setTag(Integer tag) {
+
+	public void setTag(TagEntity tag) {
 		this.tag = tag;
 	}
-	public Integer getCondition() {
+
+	public ConditionEntity getCondition() {
 		return condition;
 	}
-	public void setCondition(Integer condition) {
+
+	public void setCondition(ConditionEntity condition) {
 		this.condition = condition;
 	}
-	public Integer getNextFormDefault() {
+
+	public FormEntity getNextFormDefault() {
 		return nextFormDefault;
 	}
-	public void setNextFormDefault(Integer nextFormDefault) {
+
+	public void setNextFormDefault(FormEntity nextFormDefault) {
 		this.nextFormDefault = nextFormDefault;
 	}
 

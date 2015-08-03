@@ -9,9 +9,6 @@ public class ChoiceEntity extends AbstractEntity{
 	private FormEntity nextForm;
 	private ConditionEntity condition;
 	private TagEntity tag;
-	private VersionEntity versionId;
-	
-	
 	
 	
 	public String getName() {
@@ -50,12 +47,7 @@ public class ChoiceEntity extends AbstractEntity{
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
+	
 	
 				
 }

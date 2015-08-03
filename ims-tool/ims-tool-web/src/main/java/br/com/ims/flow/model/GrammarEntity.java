@@ -8,9 +8,7 @@ public class GrammarEntity extends AbstractEntity {
 	private String type;
 	private Integer sizeMax;
 	private Integer sizeMin;
-	private VersionEntity versionId;
-	
-	
+
 	
 	public String getName() {
 		return name;
@@ -42,12 +40,7 @@ public class GrammarEntity extends AbstractEntity {
 	public void setSizeMin(Integer sizeMin) {
 		this.sizeMin = sizeMin;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
+	
 	
 
 

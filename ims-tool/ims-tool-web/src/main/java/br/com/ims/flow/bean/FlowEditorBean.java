@@ -28,6 +28,7 @@ import org.primefaces.model.diagram.overlay.ArrowOverlay;
 
 import br.com.ims.businessDelegate.FlowEditorBusinessDelegate;
 import br.com.ims.flow.common.LogicalFlow;
+import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
@@ -45,6 +46,8 @@ public class FlowEditorBean extends AbstractBean {
 	private List<FormTypeEntity> formTypes;
 	private List<FormEntity> listForm;
 	private FormEntity form;
+	private Node node;
+	
 	private LogicalFlow flow;
 	private String formId;
 	private String formPageEditor;
@@ -75,7 +78,7 @@ public class FlowEditorBean extends AbstractBean {
         
         model.getDefaultConnectionOverlays().add(new ArrowOverlay(20, 20, 1, 1));
         FlowChartConnector connector = new FlowChartConnector();
-        connector.setPaintStyle("{strokeStyle:'#98AFC7', lineWidth:2}");
+        connector.setPaintStyle("{strokeStyle:'#98AFC7', lineWidth:1}");
         connector.setHoverPaintStyle("{strokeStyle:'#5C738B'}");
 
         model.setDefaultConnector(connector);
@@ -122,9 +125,14 @@ public class FlowEditorBean extends AbstractBean {
 
 	public void onConnect(ConnectEvent event) {
         if(!suspendEvent) {
-        	FlowEditorBusinessDelegate.connectForm(model, flow, event);
+        	FlowEditorBusinessDelegate.connectForm(model, flow, event);        	
         	flow.validateNodes();
             flow.align();
+            
+            this.node = flow.getNode(event.getSourceElement());
+            
+            ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
+            this.auxiliarPageEditor = "/pages/auxiliar/TAG.xhtml";
             
         }
         else {
@@ -312,5 +320,23 @@ public class FlowEditorBean extends AbstractBean {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
  
     }
+
+	@Override
+	public void update(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isUsed(String id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
     
 }

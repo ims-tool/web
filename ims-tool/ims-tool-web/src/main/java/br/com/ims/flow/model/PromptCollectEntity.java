@@ -14,7 +14,6 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	private String terminatingCharacter;
 	private FormEntity nextform;
 	private TagEntity tag;
-	private VersionEntity versionId;
 	
 	
 	public GrammarEntity getGrammar() {
@@ -82,12 +81,6 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	}
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
-	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
 	}
 	
 

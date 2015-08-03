@@ -195,6 +195,18 @@ public class PromptEditorBean extends AbstractBean {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
 	}
+
+	@Override
+	public void update(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
 	
     
 }

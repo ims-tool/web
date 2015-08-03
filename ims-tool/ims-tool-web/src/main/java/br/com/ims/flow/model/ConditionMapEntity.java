@@ -8,10 +8,7 @@ public class ConditionMapEntity extends AbstractEntity {
 	private String type;
 	private String methodReference;
 	private Integer logActive;
-	private VersionEntity versionId;
-	
-	
-	
+		
 	public String getName() {
 		return name;
 	}
@@ -42,12 +39,7 @@ public class ConditionMapEntity extends AbstractEntity {
 	public void setLogActive(Integer logActive) {
 		this.logActive = logActive;
 	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
+	
 	
 		
 }

@@ -87,7 +87,19 @@ public class AudioEditorBean extends AbstractBean {
 		boolean auxiliarSaved = true;
 		context.addCallbackParam("auxiliarSaved", auxiliarSaved);
 		
-    }   
+    }
+
+	@Override
+	public void update(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
+	}   
 	
 	
     

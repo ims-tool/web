@@ -4,6 +4,8 @@ import br.com.ims.flow.dao.AudioDAO;
 import br.com.ims.flow.dao.FormDAO;
 import br.com.ims.flow.dao.FormTypeDAO;
 import br.com.ims.flow.dao.PromptDAO;
+import br.com.ims.flow.dao.TagDAO;
+import br.com.ims.flow.dao.TagTypeDAO;
 
 public class DAOFactory {
 
@@ -36,5 +38,12 @@ public class DAOFactory {
 		return AudioDAO.getInstance();
 	}
 	
+	public TagDAO getTagDAO() {
+		return TagDAO.getInstance();
+	}
+	
+	public TagTypeDAO getTagTypeDAO() {
+		return TagTypeDAO.getInstance();
+	}
 
 }

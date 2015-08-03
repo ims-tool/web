@@ -6,8 +6,6 @@ public class AnswerEntity extends AbstractFormEntity{
 	
 	private FormEntity nextform;
 	private TagEntity tag;
-	private VersionEntity versionId;
-	
 	
 	
 	public FormEntity getNextform() {
@@ -21,12 +19,6 @@ public class AnswerEntity extends AbstractFormEntity{
 	}
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
-	}
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
 	}
 	
 	
