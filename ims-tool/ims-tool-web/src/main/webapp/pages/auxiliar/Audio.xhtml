@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			<p:growl id="msgAuxiliarAudio" showDetail="true" />
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/announce.png"  width="60px" height="60px"   />
+				<h:outputText value="#{audioEditorView.insert? 'Mode: Inserting' : 'Mode: Editing'}" />
+				
+			</h:panelGrid>
+				
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_complement_audio_id" for="complement_audio_id" value="ID:" />
+	            <p:inputText id="complement_audio_id" value="#{audioEditorView.audio.id}" readonly="true" label="label_complement_audio_id" />
+	            
+	            <h:outputLabel id="label_complement_audio_type" for="complement_audio_type" value="TYPE:" />
+	            <p:selectOneMenu value="#{audioEditorView.audio.type}" 
+	 			                 id="complement_audio_type" 
+	 			                 label="label_complement_audio_type">
+	 				<f:selectItem itemLabel="WAV" itemValue="WAV" />
+	 				<f:selectItem itemLabel="V_WAV" itemValue="V_WAV" />
+	 				<f:selectItem itemLabel="TTS" itemValue="TTS" />
+	 				<f:selectItem itemLabel="VAR" itemValue="VAR" />	 				
+	 			</p:selectOneMenu>
+	 
+	            <h:outputLabel id="label_complement_audio_name" for="complement_audio_name" value="Name:" />
+	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" required="true" requiredMessage="Please,inform a Name" label="label_complement_audio_name" />
+	            
+	            <h:outputLabel id="label_complement_audio_description" for="complement_audio_description" value="Description:" />
+	            <p:inputText id="complement_audio_description" value="#{audioEditorView.audio.description}" required="true" requiredMessage="Please,inform a Description" label="label_complement_audio_description" />
+	            
+	            <h:outputLabel id="label_complement_audio_path" for="complement_audio_path" value="Path:" />
+	            <p:inputText id="complement_audio_path" value="#{audioEditorView.audio.path}" label="label_complement_audio_path" />
+	            
+	            <f:facet name="footer">
+	                <p:commandButton value="Save" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="formAuxiliar,formComplement" actionListener="#{audioEditorView.save}"/>
+	            </f:facet>  	           
+	        </h:panelGrid>	
+	        <p:separator />
+	        <p:panel id="panelPromptAudios" header="Audios Registered" style="margin-bottom:20px">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="a" value="#{audioEditorView.audios}">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{a.id}" />
+			        </p:column>
+			        <p:column headerText="TYPE" filterBy="#{a.type}" filterMatchMode="contains">
+			            <h:outputText value="#{a.type}" />
+			        </p:column>
+			        <p:column headerText="NAME" filterBy="#{a.name}" filterMatchMode="contains">
+			            <h:outputText value="#{a.name}" />
+			        </p:column>
+			        <p:column headerText="DESCRIPTION" filterBy="#{a.description}" filterMatchMode="contains">
+			        	<p:inputTextarea readonly="true" rows="2" autoResize="false" style="width:150px; cursor:text;" value="a.description" />			            
+			        </p:column>
+			        <p:column headerText="PATH" >
+			            <h:outputText value="#{a.path}" />
+			        </p:column>
+			        <p:column headerText="IN USE" >
+			            <h:outputText rendered="#{!audioEditorView.isUsed(a.id)}" value="NO" />
+			            <p:commandButton rendered="#{audioEditorView.isUsed(a.id)}" icon="ui-icon-search" title="Yes" />
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
+			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			        </p:column>
+			        
+			    </p:dataTable>
+ 				
+ 				
+ 			</p:panel>    	        
+	
+			
+</ui:composition>
+

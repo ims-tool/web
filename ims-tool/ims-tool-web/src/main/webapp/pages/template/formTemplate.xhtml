@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			<p:graphicImage library="images" value="#{bean.form.imagePath}"  width="60px" height="60px" alt="#{bean.form.name}"  />
+			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />	
+			<h:panelGrid columns="2" cellpadding="5">
+				
+				<h:outputLabel id="label_dialog_form_id" for="dialog_form_id" value="ID:" />
+	            <p:inputText id="dialog_form_id" value="#{bean.form.id}" readonly="true" label="label_dialog_form_id" />
+	 
+	            <h:outputLabel id="label_dialog_form_name" for="dialog_form_name" value="Name:" />
+	            <p:inputText id="dialog_form_name" value="#{bean.form.name}" required="true" requiredMessage="Please,inform a Name" label="label_dialog_form_name" />
+	            
+	            <h:outputLabel id="label_dialog_form_description" for="dialog_form_description" value="Description:" />
+	            <p:inputTextarea id="dialog_form_description" value="#{bean.form.description}" label="label_dialog_form_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	 
+	 			<ui:insert name="newContent" />
+	 			
+	            <f:facet name="footer">
+	                <p:commandButton value="Update"  oncomplete="handleFormUpdateRequest(xhr, status, args)" update="formForm,formFlow" actionListener="#{bean.update}"/>
+	            </f:facet>  
+	        </h:panelGrid>	        	        
+			
+</ui:composition>
+

@@ -1,0 +1,177 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	 <h:head>
+	    <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	</h:head>
+	
+	<ui:composition template="/pages/template/mainTemplate.xhtml">
+		<ui:define name="conteudo">
+	
+				
+			<script type="text/javascript">
+			    function handleDrop(event, ui) {
+			        var droppedFormType = ui.draggable;			 
+			        droppedFormType.fadeOut('fast');
+			    }
+			    function selectElement(elementId) {
+					document.getElementById('formFlow:elementId').value = elementId;
+					document.getElementById('formFlow:buttonElementSelected').click();
+				} 			   
+				function handleFormUpdateRequest(xhr, status, args) {		        						       
+			        if(!args.validationFailed) {				        	
+			        	if(args.formUpdated == true) {
+			            	PF('settingFormDlg').hide();
+			            }
+			            	
+			        }			        
+				} 
+				function handleComplementSaveRequest(xhr, status, args) {		        						       
+			        if(!args.validationFailed) {				        	
+			        	if(args.complementSaved == true) {
+			            	PF('settingComplementDlg').hide();
+			            }
+			            	
+			        }			        
+				}
+				
+				function handleAuxiliarSaveRequest(xhr, status, args) {		        						       
+			        if(!args.validationFailed) {				        	
+			        	if(args.auxiliarSaved == true) {
+			            	PF('settingAuxiliartDlg').hide();
+			            }
+			            	
+			        }			        
+				}
+			</script>
+			<p:growl id="msgs" showDetail="true" />
+			
+			<h:form id="formFlow">
+			    <p:layout closeTitle="Cadastrar" resizeTitle="Cadastrar" collapseTitle="Cadastrar" expandTitle="Cadastrar"  id="layoutFlowEditor" style="min-width:600px;min-height:600px;" >
+    				<p:layoutUnit position="west" resizable="false" size="80">
+    				
+	    				<p:dataTable id="palleteData" var="formType" value="#{flowEditorView.formTypes}" >
+				            <p:column headerText="Pallete">
+				            	<p:graphicImage id="pallete" url="#{formType.imagePathSuccess}" width="60px" height="60px" alt="formType.description" />
+				                <p:draggable for="pallete" revert="true" helper="clone" />
+				            </p:column>
+				       </p:dataTable>
+    				
+					</p:layoutUnit>
+			    
+				    <p:layoutUnit position="center" resizable="true">
+				 
+						    <p:diagram widgetVar="graph" 
+						               value="#{flowEditorView.model}" 
+						               style="height:100%" styleClass="ui-widget-content" 
+						               var="el" id="flowEditor"  >
+						        
+ 
+							        <f:facet  name="element"  >
+							             <h:outputText value="#{el.name}" style="display:block;margin-top:1em;" />
+								         <p:graphicImage library="images" value="#{el.imagePath}"  width="60px" height="60px" alt="#{el.formError ?  el.errorDescription : el.name}, double click to edit" ondblclick="selectElement('#{el.id}')" />								         								                   						             						    			
+								    </f:facet>
+								 
+							    
+							    
+								<p:ajax event="connect" listener="#{flowEditorView.onConnect}" update="formFlow"  />
+						        <p:ajax event="disconnect"  listener="#{flowEditorView.onDisconnect}" />
+						        <p:ajax event="connectionChange" listener="#{flowEditorView.onConnectionChange}" />
+								  
+						    </p:diagram>
+						    
+						    
+							
+						    <p:droppable id="dragPalletoToEditor" 
+						                 for="flowEditor" tolerance="touch" 
+						                 activeStyleClass="ui-state-highlight" datasource="palleteData" onDrop="handleDrop"
+						                 widgetVar="dropWV">
+						        <p:ajax listener="#{flowEditorView.onDropFormType}" update="formFlow" />						        
+						    </p:droppable>
+						    <div style="display: none" >
+						    	<h:inputHidden id="elementId" value="#{flowEditorView.formId}" />
+								<p:commandButton id="buttonElementSelected" 
+								                 update="formFlow,settingFormDlgId" 
+								                 actionListener="#{flowEditorView.elementSelected}" 
+								                 ajax="true" 
+								                 immediate="true" 
+								                 oncomplete="PF('settingFormDlg').show()"/>	    	
+						    </div>						    						    
+					</p:layoutUnit>
+					<p:layoutUnit effectSpeed="50" minSize="25" maxSize="265" effect="slide" collapsed="true" collapseSize="25" id="left_config" position="east" size="265" header="Settings" resizable="true" closable="false" collapsible="true" style="text-align:center" >
+						<p:messages id="messages" />
+						
+						<p:panel id="panelForms" header="Nodes" style="margin-bottom:10px;">
+					        <h:panelGrid columns="1">
+					            <p:selectOneMenu id="nodesForm" value="#{flowEditorView.form}" converter="formEntityConverter" panelStyle="width:180px"
+						                         effect="fade" var="f" style="width:160px" filter="true" filterMatchMode="startsWith">
+						            <f:selectItems value="#{flowEditorView.listForm}" var="form" itemLabel="#{form.description}" itemValue="#{form}" />
+						 
+						            <p:column style="width:10%">
+						            	<p:graphicImage url="#{f.imagePath}" width="40px" height="40px"/>
+						            </p:column>
+						 
+						            <p:column>
+						                <h:outputText value="#{f.name}" />
+						            </p:column>
+						            <p:ajax event="change" update="formFlow:panelProperties"/> 
+						        </p:selectOneMenu>						            
+					         </h:panelGrid>
+					    </p:panel>
+						<p:panel id="panelProperties" header="Properties" style="margin-bottom:10px;">
+					        <h:panelGrid columns="1">
+					            <p:outputLabel for="formEntity_id" value="ID:" />
+					            <p:inputText id="formEntity_id" value="#{flowEditorView.form != null ? flowEditorView.form.id : ''}" readonly="true" label="ID" />
+					            
+					            <p:outputLabel for="formEntity_name" value="Name:" />
+					            <p:inputText id="formEntity_name" value="#{flowEditorView.form != null ? flowEditorView.form.name : ''}" label="NAME" maxlength="30" size="30" />
+					                
+					            <p:message for="formEntity_name" />
+					 
+					
+					        </h:panelGrid>
+					    </p:panel>
+					    <p:toolbar>
+					        <f:facet name="left">
+					            <p:commandButton value="Save" update="formFlow" actionListener="#{flowEditorView.save}" style="margin-right:20px;" />
+					        </f:facet>
+					 
+					        <f:facet name="center">
+					            <p:commandButton value="Detail" update="formFlow" actionListener="#{flowEditorView.detail}" style="margin-right:20px;" />
+					        </f:facet>
+					        <f:facet name="right">
+					            <p:commandButton value="Delete" update="formFlow" actionListener="#{flowEditorView.delete}" style="margin-right:20px;" />
+					        </f:facet>
+					    </p:toolbar>
+					    
+					    <p:inputTextarea id="textArea" rows="2" autoResize="false" style="width:350px; cursor:text;"/> 
+					
+				 	</p:layoutUnit>
+				</p:layout>				 
+			</h:form>
+			<p:dialog id="settingFormDlgId" header="Settings" widgetVar="settingFormDlg" resizable="true" modal="true" draggable="false" position="center">
+				<h:form id="formForm">
+			 		<ui:include src="#{flowEditorView.formPageEditor}" />
+			 	</h:form>			 			       
+		    </p:dialog>
+		    
+		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" modal="true" draggable="false" position="center">
+			 	<h:form id="formComplement">
+			 		<ui:include src="#{flowEditorView.complementPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliartDlg" resizable="true" modal="true" draggable="false" position="center">
+			 	<h:form id="formAuxiliar">
+			 		<ui:include src="#{flowEditorView.auxiliarPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+			
+
+		</ui:define>
+	</ui:composition>
+</html>

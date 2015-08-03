@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			
+			<p:growl id="msgComplementPrompt" showDetail="true" />	
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/announce.png"  width="60px" height="60px"   />
+				<h:outputText value="#{promptEditorView.insert? 'Mode: Inserting' : 'Mode: Editing'}" />
+				
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_complement_prompt_id" for="complement_prompt_id" value="ID:" />
+	            <p:inputText id="complement_prompt_id" value="#{promptEditorView.prompt.id}" readonly="true" label="label_complement_prompt_id" />
+	 
+	            <h:outputLabel id="label_complement_prompt_name" for="complement_prompt_name" value="Name:" />
+	            <p:inputText id="complement_prompt_name" value="#{promptEditorView.prompt.name}" required="true" requiredMessage="Please,inform a Name" label="label_complement_prompt_name" />
+	            
+	            <p:column colspan="2">
+	            	<p:separator />
+            		<p:commandButton value="Add New Audio" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliartDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewAudio}"/>
+		        	<p:commandButton value="Add New Condition" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliartDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewCondition}"/>
+			        <p:separator />
+	            </p:column>
+	            
+	            <p:column colspan="2">
+	            	
+	            	<h:panelGrid columns="7" cellpadding="5">
+		 				<h:outputLabel id="label_complement_prompt_audio" for="complement_prompt_audio" value="Audio:" />
+			            <p:selectOneMenu required="true" 
+			 			                 requiredMessage="Please,select a Audio" 
+			 			                 value="#{promptEditorView.audioId}" 
+			 			                 id="complement_prompt_audio"
+			 			                 filter="true" filterMatchMode="startsWith" 
+			 			                 label="label_complement_prompt_audio">
+			 				<f:selectItem itemLabel="Select One" itemValue="" />
+			 				<f:selectItems value="#{promptEditorView.audios}" var="audio"
+								itemValue="#{audio.id}" itemLabel="#{audio.name}"  />
+			 			</p:selectOneMenu>
+			 			<h:outputLabel id="label_complement_prompt_audio_order" for="complement_prompt_audio_order" value="Order:" />		 		 
+			            <p:inputText id="complement_prompt_audio_order" type="number" value="#{promptEditorView.audioOrder}"  required="true" requiredMessage="Please,inform audio order" label="label_complement_prompt_audio_order" />
+			            <h:outputLabel id="label_complement_prompt_condition" for="complement_prompt_condition" value="Condition:" />
+			            <p:selectOneMenu value="#{promptEditorView.conditionId}" 
+			 			                 id="complement_prompt_condition"
+			 			                 filter="true" filterMatchMode="startsWith" 
+			 			                 label="label_complement_prompt_contition">
+			 				<f:selectItem itemLabel="Empty" itemValue="" />
+			 				<f:selectItems value="#{promptEditorView.conditions}" var="condition"
+								itemValue="#{condition.id}" itemLabel="#{condition.name}"  />
+			 			</p:selectOneMenu>
+			            
+			            <p:commandButton value="Add audio to prompt" update="formComplement" ajax="true" actionListener="#{promptEditorView.addAudioToPrompt}"/>			            				
+		 			</h:panelGrid>	 		
+				</p:column>
+				<p:column colspan="2">
+					 				
+		 			<p:panel id="panelPromptAudios" header="Audios" style="margin-bottom:20px">
+		 				<p:dataTable  
+		 						scrollable="true" 
+		 						scrollHeight="100"
+		 						value="#{promptEditorView.prompt.audios}"
+		 						var="promptAudio"
+		 						emptyMessage="No audio assigned to Prompt" 
+		 						sortBy="#{promptAudio.orderNum}"
+		 				    >
+					        <p:column headerText="Order" >
+					            <h:outputText value="#{promptAudio.orderNum}" />
+					        </p:column>
+					        <p:column headerText="Name" >
+					            <h:outputText value="#{promptAudio.audio.name}" />
+					        </p:column>
+					        <p:column headerText="Conditions" >
+					        	<h:outputText value="#{promptAudio.condition != null ? promptAudio.condition.name : 'N/A'}" />					            
+					        </p:column>
+					        <p:column style="width:32px;text-align: center">
+					             <p:commandButton update="@this" icon="ui-icon-close" title="Delete" />					                
+					        </p:column>
+					    </p:dataTable>
+		 						 				
+		 			</p:panel>
+		 		</p:column>
+	 			
+	 			<f:facet name="footer">
+	                <p:commandButton value="Save" oncomplete="handleComplementSaveRequest(xhr, status, args)" update="formComplement,formForm" actionListener="#{promptEditorView.save}"/>
+	            </f:facet>  
+	        </h:panelGrid>
+	        
+	        <p:separator />
+	        
+	        <p:panel id="panelPromptRegistered" header="Prompts Registered" style="margin-bottom:20px">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="p" value="#{promptEditorView.prompts}">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{p.id}" />
+			        </p:column>
+			        
+			        <p:column headerText="NAME" filterBy="#{a.name}" filterMatchMode="contains">
+			            <h:outputText value="#{a.name}" />
+			        </p:column>
+			        <p:column headerText="IN USE" >
+			            <h:outputText rendered="#{!promptEditorView.isUsed(p.id)}" value="NO" />
+			            <p:commandButton rendered="#{promptEditorView.isUsed(p.id)}" icon="ui-icon-search" title="Yes" />
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
+			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			        </p:column>
+				</p:dataTable>
+			</p:panel>	        	        
+	
+				
+</ui:composition>
+

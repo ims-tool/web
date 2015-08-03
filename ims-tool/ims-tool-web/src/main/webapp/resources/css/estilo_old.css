@@ -1,0 +1,420 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, Verdana, sans-serif;
+	font-family: Arial, sans-serif;
+}
+
+.ui-panelgrid td {
+	padding: 0 !important;
+}
+
+/*-----------Layout------------*/
+
+.ui-widget .ui-widget {
+	font-size: 12px !important;
+}
+
+html, body, form, #wrap {
+	height: 100%;
+}
+
+body > #wrap {
+	height: auto; 
+	min-height: 100%;
+	background: #fafafa;
+	font-size: 11px !important;
+}
+ 
+#main {
+	overflow:auto;
+	padding-bottom: 130px;
+	width: 75%;
+	margin: -20px auto 0 auto;
+}
+ 
+#rodape {
+	position: relative;
+	margin-top: -130px; /* valor negativo da altura do rodapé */
+	height: 130px;
+	clear:both;
+	background: #f36f21;
+	color: #fff;
+}
+
+#conteudoRodape {
+	width: 75%;
+	margin: 0 auto;
+	overflow: hidden;
+	font-size: 11px;
+}
+
+#conteudoRodape p {
+	padding-top: 20px;
+	width: 300px;
+}
+#conteudoRodape p img{
+	width: 100px;
+}
+
+#conteudoRodape .textoCapacidade {
+	float: left;	
+}
+
+#conteudoRodape .logoGVT {
+	float: right;	
+}
+
+#wrap h2 {
+	font-size: 30px;
+	color: #00548b;
+	font-weight: normal;
+	padding-left: 5px;
+	margin-bottom: 8px;
+}
+
+#wrap h3{
+	font-size: 18px;
+	color: #f36f21;
+	font-weight: normal;
+	margin-bottom: 8px;
+	margin-top: 5px;
+}
+
+#wrap h4 {
+	margin: 3px 0 3px 0;
+	color: #003159;
+}
+
+
+.painel .ui-paginator, .ui-paginator{
+	background: #BABABA;
+	border: 0 none;
+}
+
+ 
+/*Opera Fix*/
+body:before {
+	content:"";
+	height:100%;
+	float:left;
+	width:0;
+	margin-top:-32767px;/
+}
+
+h1#titulo {
+	margin-top: 25px;
+	float:left;
+}
+
+#titulo, #titulo a {	
+	color: #FFF;
+	text-decoration: none;
+	font-size: 44px;
+	border: 0 none !important;
+}
+
+#titulo a img {	
+	border: 0 none !important;
+}
+
+#titulo a .logoRadar{	
+	float: left;
+	display: block;
+	margin-top: -12px;
+}
+
+
+#titulo a .tituloRadar{	
+	float: left;
+	display: block;
+	margin-top: 30px;
+}
+
+#conteudoCabecalho {
+	width: 75%;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+#links {
+	float: right;
+	margin-top: 120px;
+}
+
+#links a {
+	color: #fff;
+	padding-right: 5px;
+}
+
+#links a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+#ajaxStatusPanel, #msgGlobal_container {
+	position: absolute;
+}
+
+
+#divFiltro a, #divFiltro img {
+	border: 0 none;
+}
+
+#divFiltro {
+	width: 100%;
+	z-index: 1000;
+	height: 25px;
+	padding: 10px 25px 10px 25px;
+	background: url("/RadarCapacidadeWeb/imagens/outros/fundoBusca.png") top center repeat-x #f36f21;
+}
+
+#divFiltro table td, #divFiltro table, #divFiltro tr {
+	border: 0 none;
+	background: none;
+}
+
+#divFiltro table td {
+	padding-left: 8px !important;	
+}
+
+#divFiltro table td label{
+	color: #003357;
+	font-size: 11px;
+}
+
+
+
+/******cabeçalho*****/
+
+#cabecalho {
+	background: url("/RadarCapacidadeWeb/imagens/outros/banner.png") top center no-repeat #00548b;
+	height: 170px;
+	width: 100%;
+	overflow: hidden;
+}
+
+
+/*********/
+
+.painel table, .painel table tr, .painel table td, .painel div{
+	border: 0 none !important;
+	background: #f3f3f3;
+}
+
+.painel .painelSolicitacao {
+	border: 1px #D9D9D9 solid !important;
+	margin-bottom: 10px;
+	background: #fff;	
+}
+
+.painel .painelSolicitacao table, .painel .painelSolicitacao td {
+	background: #fff;	
+}
+
+.painel .painelSolicitacao a {
+	color: #f36f21;	
+}
+
+.painel .painelSolicitacao a:hover {
+	text-decoration: none;
+}
+
+.imagemSolicitacao {
+	width: 350px;
+	border: solid 1px #D9D9D9;
+	padding: 5px;
+	background: #fff;
+	margin-right: 8px;
+}
+
+.grid {
+	margin-bottom: 20px;
+	border-bottom: 1px solid #DFDEDE !important;
+}
+
+.grid td {
+	padding: 5px 3px 10px 3px !important;
+	vertical-align: top;
+}
+
+#progressBar {
+	background: #A3A3A3; 
+	width: 100%; 
+	height:auto;
+	min-height:100%;
+	z-index: 1010;
+	opacity:0.3;
+	filter:alpha(opacity=30); /* For IE8 and earlier */
+	position: fixed;
+	display: block;
+	bottom: 0px;
+	margin-bottom: 0px;
+}
+
+#divStatus {
+	position: fixed; 
+	left: 41.6%; 
+	top: 47%; 
+	z-index: 1011;
+}
+
+
+#divUltimosTrabalhos {
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 20px;
+	background: #f3f3f3;
+	border: 1px solid #DBDBDB;
+}
+
+#divUltimosTrabalhos table td {
+	vertical-align: top;
+}
+
+#divAndamentoProximos {
+	overflow: hidden;
+	background: #f3f3f3;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 20px;
+	border: 1px solid #DBDBDB;
+}
+
+.solicEntregue .fc-event-skin {
+	background-color: #004299 !important;
+	border: 0 none !important;
+}
+
+.solicAndamento .fc-event-skin {
+	background-color: #009C36 !important;
+	border: 0 none !important;
+}
+
+.proxTrabalhos .fc-event-skin {
+	background-color: #FF7300 !important;
+	border: 0 none !important;
+}
+
+.legenda {
+	border: 1px solid #DBDBDB;
+	margin-top: 30px;
+	width: 180px !important;	
+}
+
+.legenda .legendaEntregue {
+	background-color: #004299;
+	width: 30px;
+}
+
+.legenda .legendaAndamento {
+	background-color: #009C36;
+	width: 30px;
+}
+
+.legenda .legendaProximos {
+	background-color: #FF7300;
+	width: 30px;
+}
+
+.fc-event-skin {
+	border: 0 none !important;
+	background: none !important;
+}
+
+.solicitacoesDivInferior .ui-datalist-content {
+	padding: 10px;
+}
+
+#wrap .solicitacoesDivInferior h3 {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.solicitacoesDivInferior table, .solicitacoesDivInferior table tr, .solicitacoesDivInferior table tr td{
+	border: 0 none;	
+}
+
+#solicitacoes {
+	width: 50%;
+	float: left;
+}
+
+#solicitacoes h4 {
+	margin: 0;
+}
+
+#calendario {
+	width: 40%;
+	float: right;
+	margin-top: 25px;
+}
+
+#calendario table {
+	width: 30%; !important;
+}
+
+#calendario table h2{
+	font-size: 13px;
+	font-weight: bold;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.sessaoExpirada {
+	font-family: Arial, sans-serif;
+	color: #FF7300;
+	text-align: center;
+	font-size: 20px;
+	margin-top: 100px;
+}
+
+.sessaoExpirada a {
+	color: #00548b;
+}
+
+.sessaoExpirada a:hover {
+	text-decoration: none;
+}
+
+
+.textoHTML table, .textoHTML table td, .textoHTML table th {
+	border: 1px solid #A8A8A8 !important;
+	border-collapse: collapse;
+}
+
+/**Pagina de solicitação única*/
+#divMenuSuperior {
+	width: 100%;
+	z-index: 1000;
+	height: 25px;
+	padding: 10px 25px 10px 25px;
+}
+
+
+.painel div div {
+	background: #fff;
+}
+
+/*Classificação por estrelas*/
+.ui-rating-star a {
+	background: url("/RadarCapacidadeWeb/imagens/icones/starcinza.png") !important;  
+}
+
+.ui-rating-star-on a {
+	background: url("/RadarCapacidadeWeb/imagens/icones/star.png") !important;  
+}
+
+.media-classificacao {
+	margin: 2px 0 5px 0;
+	color: #9C9C9C;
+	font-size: 10px;
+}
+
+.media-classificacao span{
+	line-height: 18px;
+	padding: 0 0 0 5px;
+}
+

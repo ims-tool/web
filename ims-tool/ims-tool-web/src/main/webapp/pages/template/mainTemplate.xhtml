@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+<h:head>
+        <title><ui:insert name="title">IMS Tools</ui:insert></title>
+		<link href='imagens/icones/favicon.ico' rel='shortcut icon'
+			type='imagens/x-icon' />
+		<script src="/#{request.contextPath}/resources/js/scripts.js" type="text/javascript"></script>
+		<script src="/#{request.contextPath}/resources/js/locale.js" type="text/javascript"></script>
+		<script src="/#{request.contextPath}/resources/js/jquery.js" type="text/javascript"></script>
+		<h:outputStylesheet name="estilo.css" library="css" />
+
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		    <script type="text/javascript">
+            //<![CDATA[
+				PrimeFaces.locales['pt_br'] = {
+				    closeText: 'Fechar',
+				    prevText: 'Anterior',
+				    nextText: 'Pr&oac',
+				    currentText: 'Come&ccedil;o',
+				    monthNames: ['Janeiro','Fevereiro','Mar&ccedil;o','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+				    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
+				    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','S&aacute;bado'],
+				    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','S&aacute;b'],
+				    dayNamesMin: ['D','S','T','Q','Q','S','S'],
+				    weekHeader: 'Semana',
+				    firstDay: 0,
+				    isRTL: false,
+				    showMonthAfterYear: false,
+				    yearSuffix: '',
+				    timeOnlyTitle: 'S&oacute; Horas',
+				    timeText: 'Tempo',
+				    hourText: 'Hora',
+				    minuteText: 'Minuto',
+				    secondText: 'Segundo',
+				    ampm: false,
+				    month: 'M&ecirc;s',
+				    week: 'Semana',
+				    day: 'Dia',
+				    allDayText : 'Todo o Dia'
+				};		
+		//]]>
+		
+		
+        </script>
+ 
+</h:head>
+
+<h:body>
+	<p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">
+			<f:facet name="start">
+				<div id="divStatus">
+					<p:panel>
+						<p:graphicImage value="/imagens/outros/loading.gif" />
+					</p:panel>
+				</div>
+				<div id="progressBar" />
+			</f:facet>
+			<f:facet name="complete">
+				<h:outputText value="" />
+			</f:facet>
+	</p:ajaxStatus>
+		
+	<div id="wrap">
+			<div id="cabecalho">
+				<div id="fundoCabecalho">
+					<div id="conteudoCabecalho">
+						<div id="containerLogos">						
+							<h1 id="titulo">
+								<p>IMS - Tools</p>								
+							</h1>							
+						</div>						
+						
+					</div>
+				</div>
+				<div class="menuPrincipal">
+					<h:form>  
+					    <p:menubar >  
+					        <p:submenu label="IVR Flow" id="FlowEditor" icon="ui-icon-pencil">  
+					           	<p:menuitem value="Flow Editor" url="/pages/floweditor.faces" />
+					           	<p:menuitem value="Flow Editor 1 " url="/pages/floweditor1.faces" />
+					           	<p:menuitem value="Flow Editor 2 " url="/pages/floweditor2.faces" />  								  
+					        </p:submenu>  
+					        <p:submenu label="Ajuda" id="Ajuda" icon="ui-icon-pencil">
+					        	<p:menuitem value="Ajudar" url="/pages/floweditor1.faces"/>					        						       
+					        </p:submenu>
+					    </p:menubar>
+					    <p:breadCrumb>
+						    <p:menuitem value="Flow Editor" url="/pages/floweditor.faces" />
+						    <p:menuitem value="Ajuda" url="/pages/floweditor.faces" />						    
+						</p:breadCrumb>  
+					  
+					</h:form>  
+				</div>				
+			</div>
+			<p:growl id="msgGlobal" showDetail="false" />
+				
+			<div id="conteudo">
+				<ui:insert name="conteudo">Default content</ui:insert>
+			</div>
+		</div>
+		<div id="rodape">
+			<div id="conteudoRodape">
+				<p class="textoCapacidade">E2E</p>				
+			</div>						
+		</div>
+</h:body>
+</html>

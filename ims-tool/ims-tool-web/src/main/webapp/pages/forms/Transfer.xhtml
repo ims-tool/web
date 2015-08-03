@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<h:form id="formAnnounce">
+				
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputLabel for="dialog_form_id" value="ANNOUNCE" />
+	            <h:outputLabel for="dialog_form_id" value="ID:" />
+	            <p:inputText id="dialog_form_id" value="#{flowEditorView.form.id}" required="true" label="dialog_form_id" />
+	 
+	            <h:outputLabel for="dialog_form_name" value="Name:" />
+	            <p:inputText id="dialog_form_name" value="#{flowEditorView.form.name}" required="true" label="dialog_form_name" />
+	 
+	            <f:facet name="footer">
+	                <p:commandButton value="Login" update="form" actionListener="#{flowEditorView.save}" />
+	            </f:facet>  
+	        </h:panelGrid>
+	</h:form>
+		
+</ui:composition>
+
