@@ -85,12 +85,18 @@ public class Node {
 	public void remTarget(Node target) {
 		listTarget.remove(target);
 	}
+	public void cleanTarget() {
+		listTarget.clear();
+	}
 	
 	public void addSource(Node target) {
 		listSource.add(target);
 	}
 	public void remSource(Node target) {
 		listSource.remove(target);
+	}
+	public void cleanSource() {
+		listSource.clear();
 	}
 
 	public Element getElement() {

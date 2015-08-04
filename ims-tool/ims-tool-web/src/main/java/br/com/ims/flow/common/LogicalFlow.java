@@ -49,8 +49,26 @@ public class LogicalFlow {
     	nodeTarget.addSource(nodeSource);
 	    nodeSource.setConnection(connection);
 	    listFirstNode.remove(nodeTarget);
+	    ((FormEntity)nodeSource.getElement().getData()).setFormId((FormEntity)target.getData());
     	
 	}
+	public void disconnect(Element source) {
+		Node nodeSource = getNode(source);
+		List<Node> targets = nodeSource.getListTarget();
+		for(Node target : targets) {
+			target.remSource(nodeSource);
+			if(target.getListSource().size() == 0) {
+				listFirstNode.add(target);
+			}
+		}
+		nodeSource.cleanTarget();
+		nodeSource.setConnection(null);
+		((FormEntity)nodeSource.getElement().getData()).setTag(null);
+		((FormEntity)nodeSource.getElement().getData()).setFormId(null);
+		
+		
+	}
+	
 	
 	public void validateNodes() {
 		for(Node node : listNode) {

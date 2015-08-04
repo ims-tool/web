@@ -26,7 +26,6 @@ import org.primefaces.model.diagram.endpoint.EndPointAnchor;
 import org.primefaces.model.diagram.endpoint.RectangleEndPoint;
 import org.primefaces.model.diagram.overlay.ArrowOverlay;
 
-import br.com.ims.businessDelegate.FlowEditorBusinessDelegate;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
@@ -125,14 +124,23 @@ public class FlowEditorBean extends AbstractBean {
 
 	public void onConnect(ConnectEvent event) {
         if(!suspendEvent) {
-        	FlowEditorBusinessDelegate.connectForm(model, flow, event);        	
+        	
+        	/**
+        	 * Só é permitido apenas um apontamento, então se tentar conectar em outro form eu desconecto o anterior  
+        	 */
+        	Node node = flow.getNode(event.getSourceElement());
+        	if(node.getListTarget().size() > 0) {
+        		ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
+        	}
+        	
+    		ServicesFactory.getInstance().getFlowEditorService().connectForm(model, flow, event.getSourceElement(),event.getTargetElement());
         	flow.validateNodes();
-            flow.align();
-            
-            this.node = flow.getNode(event.getSourceElement());
-            
+            flow.align();            
+            this.node = flow.getNode(event.getSourceElement());            
             ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
             this.auxiliarPageEditor = "/pages/auxiliar/TAG.xhtml";
+        	
+        	
             
         }
         else {
@@ -141,26 +149,26 @@ public class FlowEditorBean extends AbstractBean {
     }
      
     public void onDisconnect(DisconnectEvent event) {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Disconnected", 
-                    "From " + event.getSourceElement().getData()+ " To " + event.getTargetElement().getData());
-        
-         
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-         
-        RequestContext.getCurrentInstance().update("form:msgs");
+    	this.auxiliarPageEditor = "";
+    	ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
+    	flow.validateNodes();
+        flow.align();
     }
      
     public void onConnectionChange(ConnectionChangeEvent event) {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Connection Changed", 
-                    "Original Source:" + event.getOriginalSourceElement().getData() + 
-                    ", New Source: " + event.getNewSourceElement().getData() + 
-                    ", Original Target: " + event.getOriginalTargetElement().getData() + 
-                    ", New Target: " + event.getNewTargetElement().getData());
-         
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-         
-        RequestContext.getCurrentInstance().update("form:msgs");
-        suspendEvent = true;
+    	
+    	
+    	//ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getOriginalSourceElement());
+
+    	//ServicesFactory.getInstance().getFlowEditorService().connectForm(model, flow, event.getNewSourceElement(),event.getNewTargetElement());
+    	
+    	//flow.validateNodes();
+        //flow.align();            
+        //this.node = flow.getNode(event.getNewSourceElement());            
+        //ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
+        //this.auxiliarPageEditor = "/pages/auxiliar/TAG.xhtml";
+    	
+        //suspendEvent = true;
     }
      
     private EndPoint createDotEndPoint(EndPointAnchor anchor) {
@@ -187,16 +195,6 @@ public class FlowEditorBean extends AbstractBean {
 
 	public List<FormTypeEntity> getFormTypes() {
 		return formTypes;
-	}
-	
-	public void onSelect(SelectEvent selectEvent ) {
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "onSelect", 
-                "onSelect " );
-    
-     
-	    FacesContext.getCurrentInstance().addMessage(null, msg);
-	     
-	    RequestContext.getCurrentInstance().update("formFlow:msgs");
 	}
 	
 	public void onDropFormType(DragDropEvent ddEvent) {
@@ -229,32 +227,6 @@ public class FlowEditorBean extends AbstractBean {
 		flow.alingElementAlone();
     }
 	
-	private void OrderDisconnectElement(Element element) {
-		int countElementAlone=0;
-		List<Element> elements = model.getElements();
-		for (Element element2 : elements) {
-			boolean connected = false;
-			if(element2.getEndPoints() != null) {
-				for(EndPoint endPoint : element2.getEndPoints()) {
-					List<Connection> connections = model.getConnections();
-					for (Connection connection : connections) {
-						if(connection.getSource() == endPoint ||
-						   connection.getTarget() == endPoint) {
-							connected = true;
-						}
-					}
-				}
-			}
-			if(!connected) {
-				countElementAlone++;
-			}
-		}
-		
-		element.setX(String.valueOf(((countElementAlone % 3) * 5))+"em"); 
-		element.setY(String.valueOf(((countElementAlone / 3) * 7))+"em");
-	}
-	
-	
 	public void elementSelected() {
 		
 		this.formId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formFlow:elementId").toString();
@@ -273,7 +245,7 @@ public class FlowEditorBean extends AbstractBean {
 	
 	
 	public List<PromptEntity> getPrompts() {
-		this.prompts = FlowEditorBusinessDelegate.getAllPrompt();
+		this.prompts = ServicesFactory.getInstance().getPromptService().getAll();
 		return prompts;
 	}
 

@@ -10,7 +10,6 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
-import br.com.ims.businessDelegate.FlowEditorBusinessDelegate;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AnnounceEntity;
@@ -48,7 +47,7 @@ public class AnnounceEditorBean extends AbstractBean {
     }
    
     public List<PromptEntity> getPrompts() {
-		this.prompts = FlowEditorBusinessDelegate.getAllPrompt();
+		this.prompts = ServicesFactory.getInstance().getPromptService().getAll();
 		return prompts;
 	}
 

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.el.ELContext;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.event.diagram.ConnectEvent;
 import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.DefaultDiagramModel;
 import org.primefaces.model.diagram.Element;
@@ -14,6 +13,7 @@ import org.primefaces.model.diagram.endpoint.EndPoint;
 
 import br.com.ims.flow.bean.FlowEditorBean;
 import br.com.ims.flow.common.LogicalFlow;
+import br.com.ims.flow.common.Node;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.PromptEntity;
 
@@ -67,8 +67,8 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 		return this.bean.getFlow();
 	}
 	
-	public void connectForm(DefaultDiagramModel model, LogicalFlow flow, ConnectEvent event) {
-		List<Element> elements = model.getElements();
+	public void connectForm(DefaultDiagramModel model, LogicalFlow flow, Element sourceElement, Element targetElement) {
+		/*List<Element> elements = model.getElements();
         boolean find = false;
         for (int indexElement = 0; indexElement < elements.size() && !find; indexElement++ ) {
         	Element element = elements.get(indexElement);
@@ -93,7 +93,43 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 				}
 				
 			}
-        }
+        }*/
+		boolean find = false;
+		List<EndPoint> endpointsSourceElement = sourceElement.getEndPoints();
+		List<EndPoint> endpointsTargetElement = targetElement.getEndPoints();
+		List<Connection> connections = model.getConnections();
+		for (int index = 0; index < connections.size() && !find; index++) { 			
+			Connection connection = connections.get(index);
+			for (EndPoint endPointSource : endpointsSourceElement) {
+				if(connection.getSource().getId().equals(endPointSource.getId())) {
+					for(EndPoint endPointTarget : endpointsTargetElement) {
+						if(connection.getTarget().getId().equals(endPointTarget.getId())) {
+							flow.connect(sourceElement, targetElement, connection);
+							find = true;
+						}
+					}
+					
+				}
+			}
+			
+		}
+	}
+	public void disconnectForm(DefaultDiagramModel model,LogicalFlow flow, Element sourceElement) {
+		
+		Node node = flow.getNode(sourceElement);
+		List<Connection> connections = model.getConnections();
+		boolean find = false;
+		for(int index = 0; index < connections.size() && !find; index++ ){
+			Connection connection = connections.get(index) ;
+			if(node.getConnection().getTarget().getId().equals(connection.getTarget().getId()) &&
+			   node.getConnection().getSource().getId().equals(connection.getSource().getId()) ) {
+		//		model.getConnections().remove(index);
+				find = true;
+			}
+			
+		}
+			
+		flow.disconnect(sourceElement);
 	}
 	
 }
