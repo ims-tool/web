@@ -78,6 +78,7 @@ public class VersionFacadeREST extends AbstractFacade<Version> {
     @Path("count")
     @Produces("text/plain")
     public String countREST() {
+    	System.out.println("1");
         return String.valueOf(super.count());
     }
 
