@@ -37,4 +37,16 @@ public class AudioService extends AbstractEntityService <AudioEntity>{
 		return false;
 	}
 
+	@Override
+	public void update(AudioEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(AudioEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

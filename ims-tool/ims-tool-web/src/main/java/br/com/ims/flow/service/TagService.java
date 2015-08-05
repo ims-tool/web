@@ -22,6 +22,10 @@ public class TagService extends AbstractEntityService<TagEntity>{
 	public void save(TagEntity tag) {
 		DAOFactory.getInstance().getTagDAO().save(tag);
 	}
+	
+	public void update(TagEntity tag) {
+		DAOFactory.getInstance().getTagDAO().update(tag);
+	}
 
 	@Override
 	public boolean isUsed(String id) {
@@ -34,6 +38,12 @@ public class TagService extends AbstractEntityService<TagEntity>{
 			}					
 		}
 		return false;
+	}
+
+	@Override
+	public void delete(TagEntity object) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

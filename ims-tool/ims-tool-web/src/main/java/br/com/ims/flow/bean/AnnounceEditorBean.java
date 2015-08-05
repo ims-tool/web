@@ -87,6 +87,7 @@ public class AnnounceEditorBean extends AbstractBean {
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Announce",this.announce.getName()+" - Updated!");
 		 
+		ServicesFactory.getInstance().getFlowEditorService().getBean().setEditing(true);
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		context.addCallbackParam("formUpdated", formUpdated);		
 		flow.validateNodes();

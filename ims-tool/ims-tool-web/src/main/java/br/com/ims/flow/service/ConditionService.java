@@ -30,6 +30,18 @@ public class ConditionService extends AbstractEntityService <ConditionEntity>{
 		return false;
 	}
 
+	@Override
+	public void update(ConditionEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(ConditionEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 	

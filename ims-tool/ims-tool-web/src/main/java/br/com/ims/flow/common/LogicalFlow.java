@@ -54,6 +54,7 @@ public class LogicalFlow {
 	}
 	public void disconnect(Element source) {
 		Node nodeSource = getNode(source);
+
 		List<Node> targets = nodeSource.getListTarget();
 		for(Node target : targets) {
 			target.remSource(nodeSource);
@@ -78,7 +79,6 @@ public class LogicalFlow {
 			form.setFormError(false);
 			form.setErrorDescription("");
 			
-			
 			for(Node nodeAux : listNode) {
 				FormEntity formAux = (FormEntity)nodeAux.getElement().getData();
 				if(!formAux.getId().equalsIgnoreCase(form.getId()) && formAux.getName().equalsIgnoreCase(form.getName())) {
@@ -87,6 +87,12 @@ public class LogicalFlow {
 					continue;
 				}
 			}
+			
+			if(node.getListTarget().size() > 1) {
+				form.setFormError(true);
+				form.setErrorDescription("Name "+form.getName()+" already assigned to another Element.");
+			}
+			
 			if(validateFormByType(form)) {
 				continue;
 			}

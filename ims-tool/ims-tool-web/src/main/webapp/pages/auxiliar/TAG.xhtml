@@ -44,7 +44,7 @@
 	        </h:panelGrid>	
 	        <p:separator />
 	        <p:panel id="panelTags" header="Tags Registered" style="margin-bottom:20px">
- 				<p:dataTable  scrollable="true" scrollHeight="300" var="t" value="#{tagEditorView.tags}">
+ 				<p:dataTable  scrollable="true" scrollHeight="150" var="t" value="#{tagEditorView.tags}">
 			        <p:column headerText="ID" filterBy="#{t.id}" filterMatchMode="contains" >
 			            <h:outputText value="#{t.id}" />
 			        </p:column>

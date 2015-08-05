@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.com.ims.flow.model.AudioEntity;
 
-public class AudioDAO {
+public class AudioDAO extends AbstractDAO<AudioEntity>{
 	private List<AudioEntity> listAudios =  null;
 	private static AudioDAO instance = null;
 	private AudioDAO() {
@@ -47,6 +47,18 @@ public class AudioDAO {
 	}
 	public void save(AudioEntity audio) {
 		this.listAudios.add(audio);
+	}
+
+	@Override
+	public void update(AudioEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(AudioEntity entity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

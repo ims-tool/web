@@ -53,6 +53,7 @@ public class AnswerEditorBean extends AbstractBean {
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Answer",this.answer.getName()+" - Updated!");
 		 
+		ServicesFactory.getInstance().getFlowEditorService().getBean().setEditing(true);
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		context.addCallbackParam("formUpdated", formUpdated);		
 		flow.validateNodes();

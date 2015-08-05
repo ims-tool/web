@@ -29,6 +29,18 @@ public class FormService extends AbstractEntityService<FormEntity> {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public void update(FormEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(FormEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

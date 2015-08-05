@@ -20,6 +20,7 @@ import org.primefaces.model.diagram.DefaultDiagramModel;
 import org.primefaces.model.diagram.DiagramModel;
 import org.primefaces.model.diagram.Element;
 import org.primefaces.model.diagram.connector.FlowChartConnector;
+import org.primefaces.model.diagram.endpoint.BlankEndPoint;
 import org.primefaces.model.diagram.endpoint.DotEndPoint;
 import org.primefaces.model.diagram.endpoint.EndPoint;
 import org.primefaces.model.diagram.endpoint.EndPointAnchor;
@@ -57,6 +58,8 @@ public class FlowEditorBean extends AbstractBean {
 	
 	private PromptEntity prompt;
 	
+	private boolean editing;
+	
     
     public PromptEntity getPrompt() {
 		return prompt;
@@ -81,11 +84,14 @@ public class FlowEditorBean extends AbstractBean {
         connector.setHoverPaintStyle("{strokeStyle:'#5C738B'}");
 
         model.setDefaultConnector(connector);
+                
         
         formTypes = formTypeService.getAll();
+        
         flow = new LogicalFlow();        
         formTypeService = new FormTypeService();         
         listForm = new ArrayList<FormEntity>();
+        this.editing = false;
         
     }
      
@@ -123,21 +129,21 @@ public class FlowEditorBean extends AbstractBean {
 	}
 
 	public void onConnect(ConnectEvent event) {
-        if(!suspendEvent) {
+		this.editing = true;
+		if(!suspendEvent) {
         	
-        	/**
-        	 * Só é permitido apenas um apontamento, então se tentar conectar em outro form eu desconecto o anterior  
-        	 */
         	Node node = flow.getNode(event.getSourceElement());
         	if(node.getListTarget().size() > 0) {
+        		//continuar
         		ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
         	}
         	
-    		ServicesFactory.getInstance().getFlowEditorService().connectForm(model, flow, event.getSourceElement(),event.getTargetElement());
+        	ServicesFactory.getInstance().getFlowEditorService().connectForm(model, flow, event.getSourceElement(),event.getTargetElement());
         	flow.validateNodes();
             flow.align();            
             this.node = flow.getNode(event.getSourceElement());            
             ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
+            ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
             this.auxiliarPageEditor = "/pages/auxiliar/TAG.xhtml";
         	
         	
@@ -149,6 +155,7 @@ public class FlowEditorBean extends AbstractBean {
     }
      
     public void onDisconnect(DisconnectEvent event) {
+    	this.editing = true;
     	this.auxiliarPageEditor = "";
     	ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
     	flow.validateNodes();
@@ -156,25 +163,27 @@ public class FlowEditorBean extends AbstractBean {
     }
      
     public void onConnectionChange(ConnectionChangeEvent event) {
+    	this.editing = true;
     	
-    	
-    	//ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getOriginalSourceElement());
+    	ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getOriginalSourceElement());
 
-    	//ServicesFactory.getInstance().getFlowEditorService().connectForm(model, flow, event.getNewSourceElement(),event.getNewTargetElement());
+    	ServicesFactory.getInstance().getFlowEditorService().connectForm(model, flow, event.getNewSourceElement(),event.getNewTargetElement());
     	
-    	//flow.validateNodes();
-        //flow.align();            
-        //this.node = flow.getNode(event.getNewSourceElement());            
-        //ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
-        //this.auxiliarPageEditor = "/pages/auxiliar/TAG.xhtml";
+    	flow.validateNodes();
+        flow.align();            
+        this.node = flow.getNode(event.getNewSourceElement());            
+        ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
+        ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
+        this.auxiliarPageEditor = "/pages/auxiliar/TAG.xhtml";
     	
-        //suspendEvent = true;
+        suspendEvent = true;
     }
      
     private EndPoint createDotEndPoint(EndPointAnchor anchor) {
         DotEndPoint endPoint = new DotEndPoint(anchor);
         endPoint.setScope("formEntity");
         endPoint.setTarget(true);
+        endPoint.setSource(false);
         endPoint.setStyle("{fillStyle:'#98AFC7'}");
         endPoint.setHoverStyle("{fillStyle:'#5C738B'}");
          
@@ -184,6 +193,7 @@ public class FlowEditorBean extends AbstractBean {
     private EndPoint createRectangleEndPoint(EndPointAnchor anchor) {
         RectangleEndPoint endPoint = new RectangleEndPoint(anchor);
         endPoint.setScope("formEntity");
+        endPoint.setTarget(false);
         endPoint.setSource(true);
         endPoint.setStyle("{fillStyle:'#98AFC7'}");
         endPoint.setHoverStyle("{fillStyle:'#5C738B'}");
@@ -198,6 +208,8 @@ public class FlowEditorBean extends AbstractBean {
 	}
 	
 	public void onDropFormType(DragDropEvent ddEvent) {
+		
+		this.editing = true;
 		FormTypeEntity formType = ((FormTypeEntity) ddEvent.getData());
 		
 		FormEntity formEntityElement = new FormEntity();
@@ -209,16 +221,20 @@ public class FlowEditorBean extends AbstractBean {
 		listForm.add(formEntityElement);
 		
 		Element element = new Element(formEntityElement);
+
 		if(formType.getAllowInput() == 1) {
 			EndPoint endPoint = createDotEndPoint(EndPointAnchor.TOP);
-			endPoint.setTarget(true);
 			element.addEndPoint(endPoint);
 		}
 		if(formType.getAllowOutput() == 1) {
-			EndPoint endPoint = createDotEndPoint(EndPointAnchor.BOTTOM);
-			endPoint.setTarget(false);
-			endPoint.setSource(true);
+			EndPoint endPoint = createRectangleEndPoint(EndPointAnchor.BOTTOM);
 			element.addEndPoint(endPoint);
+		}else {
+			if(formType.getMandatoryOutput() == 1) {
+				EndPoint endPoint = new BlankEndPoint(EndPointAnchor.BOTTOM);
+				element.addEndPoint(endPoint);
+				
+			}
 		}
 		
 		model.addElement(element);
@@ -285,13 +301,7 @@ public class FlowEditorBean extends AbstractBean {
 		FacesContext.getCurrentInstance().addMessage(null, msg);
  
     }   
-	public void save1() {
-    	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "FormUpdated!",
-                "FormUpdated!");
-		 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
- 
-    }
+
 
 	@Override
 	public void update(ActionEvent event) {
@@ -310,5 +320,15 @@ public class FlowEditorBean extends AbstractBean {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public boolean isEditing() {
+		return editing;
+	}
+
+	public void setEditing(boolean editing) {
+		this.editing = editing;
+	}
+	
+	
     
 }

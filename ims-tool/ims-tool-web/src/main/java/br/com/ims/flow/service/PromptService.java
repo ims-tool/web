@@ -41,4 +41,16 @@ public class PromptService extends AbstractEntityService<PromptEntity>{
 		return false;
 	}
 
+	@Override
+	public void update(PromptEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(PromptEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

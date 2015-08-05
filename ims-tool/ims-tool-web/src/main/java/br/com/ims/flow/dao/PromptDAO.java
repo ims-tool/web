@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.com.ims.flow.model.PromptEntity;
 
-public class PromptDAO {
+public class PromptDAO extends AbstractDAO<PromptEntity> {
 	private List<PromptEntity> listPrompts =  null;
 	private static PromptDAO instance = null;
 	private PromptDAO() {
@@ -47,6 +47,18 @@ public class PromptDAO {
 	}
 	public void save(PromptEntity prompt) {
 		this.listPrompts.add(prompt);
+	}
+
+	@Override
+	public void update(PromptEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(PromptEntity entity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

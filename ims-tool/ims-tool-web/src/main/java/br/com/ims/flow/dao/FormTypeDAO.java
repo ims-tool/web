@@ -6,7 +6,7 @@ import java.util.List;
 import br.com.ims.flow.model.FormTypeEntity;
 import br.com.ims.flow.common.*;
 
-public class FormTypeDAO {
+public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 	public List<FormTypeEntity> getAll() {
 		List<FormTypeEntity> result = new ArrayList<FormTypeEntity>();
 		
@@ -53,7 +53,7 @@ public class FormTypeDAO {
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "menu.png");
 		formType.setImagePathError(Constants.ICON_FLOW_PATH + "menu_error.png");
 		formType.setAllowInput(1);
-		formType.setAllowOutput(1);
+		formType.setAllowOutput(0);
 		formType.setMandatoryInput(0);
 		formType.setMandatoryOutput(1);
 		result.add(formType);
@@ -83,6 +83,30 @@ public class FormTypeDAO {
 		result.add(formType);
 		
 		return result;
+	}
+
+	@Override
+	public FormTypeEntity get(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void save(FormTypeEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(FormTypeEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(FormTypeEntity entity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

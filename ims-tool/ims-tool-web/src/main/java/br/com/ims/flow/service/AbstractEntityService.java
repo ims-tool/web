@@ -12,6 +12,10 @@ public abstract class AbstractEntityService <T extends AbstractEntity> {
 	
 	public abstract void save(T object);
 	
+	public abstract void update(T object);
+	
+	public abstract void delete(T object);
+	
 	public abstract boolean isUsed(String id);
 
 }

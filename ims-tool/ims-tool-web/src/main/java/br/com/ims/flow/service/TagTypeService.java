@@ -35,4 +35,16 @@ public class TagTypeService extends AbstractEntityService<TagTypeEntity>{
 		
 	}
 
+	@Override
+	public void update(TagTypeEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(TagTypeEntity object) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

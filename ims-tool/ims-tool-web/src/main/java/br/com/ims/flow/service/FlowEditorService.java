@@ -10,6 +10,7 @@ import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.DefaultDiagramModel;
 import org.primefaces.model.diagram.Element;
 import org.primefaces.model.diagram.endpoint.EndPoint;
+import org.primefaces.model.diagram.overlay.ArrowOverlay;
 
 import br.com.ims.flow.bean.FlowEditorBean;
 import br.com.ims.flow.common.LogicalFlow;
@@ -68,32 +69,6 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 	}
 	
 	public void connectForm(DefaultDiagramModel model, LogicalFlow flow, Element sourceElement, Element targetElement) {
-		/*List<Element> elements = model.getElements();
-        boolean find = false;
-        for (int indexElement = 0; indexElement < elements.size() && !find; indexElement++ ) {
-        	Element element = elements.get(indexElement);
-			if(element.getEndPoints() != null) {
-				List<EndPoint> endpointsSourceElement = event.getSourceElement().getEndPoints();
-				List<EndPoint> endpointsTargetElement = event.getTargetElement().getEndPoints();
-				List<Connection> connections = model.getConnections();
-				for (Connection connection : connections) { 
-					
-					for (EndPoint endPointSource : endpointsSourceElement) {
-						if(connection.getSource() == endPointSource) {
-							for(EndPoint endPointTarget : endpointsTargetElement) {
-								if(connection.getTarget() == endPointTarget) {
-									flow.connect(event.getSourceElement(), event.getTargetElement(), connection);
-									find = true;
-								}
-							}
-							
-						}
-					}
-					
-				}
-				
-			}
-        }*/
 		boolean find = false;
 		List<EndPoint> endpointsSourceElement = sourceElement.getEndPoints();
 		List<EndPoint> endpointsTargetElement = targetElement.getEndPoints();
@@ -110,9 +85,17 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 					}
 					
 				}
-			}
-			
+			}		
 		}
+		/**
+		 * Se o primefaces bugou, eu crio a conexão manualmente
+		 */
+		if(!find) {
+			Connection conn = new Connection(sourceElement.getEndPoints().get(sourceElement.getEndPoints().size()-1), targetElement.getEndPoints().get(0));
+			model.connect(conn);
+			flow.connect(sourceElement, targetElement, conn);
+		}
+		
 	}
 	public void disconnectForm(DefaultDiagramModel model,LogicalFlow flow, Element sourceElement) {
 		
@@ -123,12 +106,12 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 			Connection connection = connections.get(index) ;
 			if(node.getConnection().getTarget().getId().equals(connection.getTarget().getId()) &&
 			   node.getConnection().getSource().getId().equals(connection.getSource().getId()) ) {
-		//		model.getConnections().remove(index);
+				model.getConnections().remove(index);
 				find = true;
 			}
 			
 		}
-			
+		
 		flow.disconnect(sourceElement);
 	}
 	

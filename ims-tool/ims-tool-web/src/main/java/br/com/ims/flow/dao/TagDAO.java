@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.com.ims.flow.model.TagEntity;
 
-public class TagDAO {
+public class TagDAO extends AbstractDAO<TagEntity>{
 	private List<TagEntity> listTags =  null;
 	private static TagDAO instance = null;
 	private TagDAO() {
@@ -34,6 +34,18 @@ public class TagDAO {
 	}
 	public void save(TagEntity tag) {
 		this.listTags.add(tag);
+	}
+
+	@Override
+	public void update(TagEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(TagEntity entity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -56,16 +56,18 @@ public class TagEditorBean extends AbstractBean {
 		return tag;
 	}
 
+	public void setTagFromExternal(TagEntity tag) {
+		if(tag != null) {
+			this.tag = tag;
+			this.insert = false;
+		}
+	}
+	
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
 		
-		if(this.node != null) {
-			Connection connection = this.node.getConnection();
-			connection.getOverlays().add(new LabelOverlay("Tag "+this.tag.getId(), "flow-label", 0.5));
-			
-			FormEntity form = (FormEntity)this.node.getElement().getData();
-			form.setTag(this.tag);
-		}		
+		updateExternalsBean();
+		
 		init();
 		
 	}
@@ -101,21 +103,21 @@ public class TagEditorBean extends AbstractBean {
 	@Override
 	public void save(ActionEvent event) {
 		
-		
-		this.tag.setType(ServicesFactory.getInstance().getTagTypeService().get(this.tagTypeId));		
-		ServicesFactory.getInstance().getTagService().save(this.tag);
-		
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "TAG",this.tag.getId()+" - Saved!");
+		FacesMessage msg = null;
+		this.tag.setType(ServicesFactory.getInstance().getTagTypeService().get(this.tagTypeId));
+		if(this.insert) {					
+			ServicesFactory.getInstance().getTagService().save(this.tag);			
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "TAG",this.tag.getId()+" - Saved!");
+		} else {
+			ServicesFactory.getInstance().getTagService().update(this.tag);			
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "TAG",this.tag.getId()+" - Updated!");
+		}
+			
 		 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
-		if(this.node != null) {
-			Connection connection = this.node.getConnection();
-			connection.getOverlays().add(new LabelOverlay("Tag "+this.tag.getId(), "flow-label", 0.5));
-			
-			FormEntity form = (FormEntity)this.node.getElement().getData();
-			form.setTag(this.tag);
-		}		
+		updateExternalsBean();
+		
 		init();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
@@ -142,7 +144,21 @@ public class TagEditorBean extends AbstractBean {
 		return ServicesFactory.getInstance().getTagService().isUsed(id);
 	}
 
-    
+    private void updateExternalsBean() {
+    	if(this.node != null) {
+			Connection connection = this.node.getConnection();
+			
+			if(connection.getOverlays().size() > 0) {
+				connection.getOverlays().clear();
+			} 
+
+			connection.getOverlays().add(new LabelOverlay("Tag "+this.tag.getId(), "flow-label", 0.5));
+			
+			
+			FormEntity form = (FormEntity)this.node.getElement().getData();
+			form.setTag(this.tag);
+		}		
+    }
    
  
 	

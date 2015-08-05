@@ -48,10 +48,30 @@
 			            	
 			        }			        
 				}
+				window.onbeforeunload = function (e) {
+				    e = e || window.event;
+
+				    if(document.getElementById('formFlow:editing').value) {
+					
+					    // For IE and Firefox prior to version 4
+					    if (e) {
+					        e.returnValue = "You have work does not save.\r\nIf you continue, your changes will be discarded.";
+					    }
+					
+					    // For Safari
+					    return "You have work does not save.\r\nIf you continue, your changes will be discarded.";
+					}
+				};
+				
 			</script>
+			
+			
 			<p:growl id="msgs" showDetail="true" />
 			
 			<h:form id="formFlow">
+			
+				<h:inputHidden id="editing" value="#{flowEditorView.editing}" />
+			
 			    <p:layout closeTitle="Cadastrar" resizeTitle="Cadastrar" collapseTitle="Cadastrar" expandTitle="Cadastrar"  id="layoutFlowEditor" style="min-width:600px;min-height:600px;" >
     				<p:layoutUnit position="west" resizable="false" size="80">
     				
@@ -81,7 +101,7 @@
 							    
 								<p:ajax event="connect" listener="#{flowEditorView.onConnect}" update="formFlow,settingAuxiliarDlgId,flowEditor" oncomplete="PF('settingAuxiliartDlg').show()"  />
 						        <p:ajax event="disconnect"  listener="#{flowEditorView.onDisconnect}" update="formFlow,settingAuxiliarDlgId,flowEditor"  />
-						        <p:ajax event="connectionChange" listener="#{flowEditorView.onConnectionChange}" />
+						        <p:ajax event="connectionChange" listener="#{flowEditorView.onConnectionChange}" update="formFlow,settingAuxiliarDlgId,flowEditor" oncomplete="PF('settingAuxiliartDlg').show()" />
 								  
 						    </p:diagram>
 						    
