@@ -12,7 +12,7 @@
 			<p:growl id="msgComplementPrompt" showDetail="true" />	
 			
 			<h:panelGrid columns="2" cellpadding="15">
-				<p:graphicImage library="images" value="/imagens/icones/flow/announce.png"  width="60px" height="60px"   />
+				<p:graphicImage library="images" value="/imagens/icones/flow/prompt.png"  width="60px" height="60px"   />
 				<h:outputText value="#{promptEditorView.insert? 'Mode: Inserting' : 'Mode: Editing'}" />
 				
 			</h:panelGrid>
@@ -27,8 +27,8 @@
 	            
 	            <p:column colspan="2">
 	            	<p:separator />
-            		<p:commandButton value="Add New Audio" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliartDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewAudio}"/>
-		        	<p:commandButton value="Add New Condition" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliartDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewCondition}"/>
+            		<p:commandButton value="Add New Audio" icon="buttonAddAudio" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliartDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewAudio}"/>
+		        	<p:commandButton value="Add New Condition" icon="buttonAddCondition" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliartDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewCondition}"/>
 			        <p:separator />
 	            </p:column>
 	            

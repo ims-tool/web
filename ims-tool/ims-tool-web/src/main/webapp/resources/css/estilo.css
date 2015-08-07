@@ -844,7 +844,15 @@ body:before {
 /*-----------Fim Row Colors -------------------------------*/
 
 .ui-icon.buttonAddPrompt {  
-    background-image: url("../../imagens/icones/flow/announce_16_16.png") !important;    
-} 
+    background-image: url("../imagens/icones/flow/prompt_16_16.png") !important;    
+}
+
+.ui-icon.buttonAddAudio {  
+    background-image: url("../imagens/icones/flow/audio_16_16.png") !important;    
+}
+
+.ui-icon.buttonAddCondition {  
+    background-image: url("../imagens/icones/flow/condition_16_16.png") !important;    
+}  
 
 
