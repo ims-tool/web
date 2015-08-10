@@ -12,9 +12,9 @@ import org.primefaces.context.RequestContext;
 
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.factory.ServicesFactory;
-import br.com.ims.flow.model.AnnounceEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.MenuEntity;
+import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.PromptEntity;
  
 @SuppressWarnings("serial")
@@ -23,7 +23,14 @@ import br.com.ims.flow.model.PromptEntity;
 public class MenuEditorBean extends AbstractBean {
      
 	
+	private List<PromptEntity> prompts;
+	private List<NoMatchInputEntity> noInputs;
+	private List<NoMatchInputEntity> noMatchs;
 	
+	
+	private String promptId;
+	private String noInputId;
+	private String noMatchId;
 	
 	private MenuEntity menu;
 	private FormEntity form;
@@ -117,6 +124,59 @@ public class MenuEditorBean extends AbstractBean {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public List<PromptEntity> getPrompts() {
+		this.prompts = ServicesFactory.getInstance().getPromptService().getAll();
+		return prompts;
+	}
+
+	public void setPrompts(List<PromptEntity> prompts) {
+		this.prompts = prompts;
+	}
+
+	public String getPromptId() {
+		return promptId;
+	}
+
+	public void setPromptId(String promptId) {
+		this.promptId = promptId;
+	}
+
+	public List<NoMatchInputEntity> getNoInputs() {
+		return noInputs;
+	}
+
+	public void setNoInputs(List<NoMatchInputEntity> noInputs) {
+		this.noInputs = noInputs;
+	}
+
+	public List<NoMatchInputEntity> getNoMatchs() {
+		return noMatchs;
+	}
+
+	public void setNoMatchs(List<NoMatchInputEntity> noMatchs) {
+		this.noMatchs = noMatchs;
+	}
+
+	public String getNoInputId() {
+		return noInputId;
+	}
+
+	public void setNoInputId(String noInputId) {
+		this.noInputId = noInputId;
+	}
+
+	public String getNoMatchId() {
+		return noMatchId;
+	}
+
+	public void setNoMatchId(String noMatchId) {
+		this.noMatchId = noMatchId;
+	}
+	
+	
+	
+	
 	
     
 }
