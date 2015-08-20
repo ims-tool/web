@@ -1,6 +1,5 @@
 package br.com.ims.facade;
 
-
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -22,12 +21,12 @@ import br.com.ims.tool.entity.Decision;
  * @author Cesar
  */
 @Stateless
-@Path("decision")
-public class DecisionFacadeREST extends AbstractFacade<Decision> {
+@Path("decisionchance")
+public class DecisionchanceFacadeREST extends AbstractFacade<Decision> {
     @PersistenceContext(unitName = "ivrPersistence")
     private EntityManager em;
 
-    public DecisionFacadeREST() {
+    public DecisionchanceFacadeREST() {
         super(Decision.class);
     }
 
@@ -85,5 +84,3 @@ public class DecisionFacadeREST extends AbstractFacade<Decision> {
     }
     
 }
-
-

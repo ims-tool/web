@@ -1,6 +1,5 @@
 package br.com.ims.facade;
 
-
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -15,33 +14,33 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import br.com.ims.tool.entity.Decision;
+import br.com.ims.tool.entity.Errorcode;
 
 /**
  *
  * @author Cesar
  */
 @Stateless
-@Path("decision")
-public class DecisionFacadeREST extends AbstractFacade<Decision> {
+@Path("errorcode")
+public class ErrorcodeFacadeREST extends AbstractFacade<Errorcode> {
     @PersistenceContext(unitName = "ivrPersistence")
     private EntityManager em;
 
-    public DecisionFacadeREST() {
-        super(Decision.class);
+    public ErrorcodeFacadeREST() {
+        super(Errorcode.class);
     }
 
     @POST
     @Override
     @Consumes({"application/xml", "application/json"})
-    public void create(Decision entity) {
+    public void create(Errorcode entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({"application/xml", "application/json"})
-    public void edit(@PathParam("id") Integer id, Decision entity) {
+    public void edit(@PathParam("id") Integer id, Errorcode entity) {
         super.edit(entity);
     }
 
@@ -54,21 +53,21 @@ public class DecisionFacadeREST extends AbstractFacade<Decision> {
     @GET
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
-    public Decision find(@PathParam("id") Integer id) {
+    public Errorcode find(@PathParam("id") Integer id) {
         return super.find(id);
     }
 
     @GET
     @Override
     @Produces({"application/xml", "application/json"})
-    public List<Decision> findAll() {
+    public List<Errorcode> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
     @Produces({"application/xml", "application/json"})
-    public List<Decision> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<Errorcode> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
@@ -85,5 +84,3 @@ public class DecisionFacadeREST extends AbstractFacade<Decision> {
     }
     
 }
-
-
