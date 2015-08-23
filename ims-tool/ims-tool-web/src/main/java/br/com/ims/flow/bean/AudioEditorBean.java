@@ -84,8 +84,8 @@ public class AudioEditorBean extends AbstractBean {
 		init();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
-		boolean auxiliarSaved = true;
-		context.addCallbackParam("auxiliarSaved", auxiliarSaved);
+		boolean saved = true;
+		context.addCallbackParam("saved", saved);
 		
     }
 

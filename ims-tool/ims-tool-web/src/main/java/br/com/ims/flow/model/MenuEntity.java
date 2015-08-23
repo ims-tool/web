@@ -1,5 +1,7 @@
 package br.com.ims.flow.model;
 
+import java.util.List;
+
 @SuppressWarnings("serial")
 public class MenuEntity extends AbstractFormEntity{
 	
@@ -10,6 +12,8 @@ public class MenuEntity extends AbstractFormEntity{
 	private Integer fetchTimeOut;
 	private Integer terminatingTimeOut;
 	private String terminatingCharacter;	
+	
+	private List<ChoiceEntity> choices;
 	
 	
 	public PromptEntity getPrompt() {
@@ -48,5 +52,13 @@ public class MenuEntity extends AbstractFormEntity{
 	public void setTerminatingCharacter(String terminatingCharacter) {
 		this.terminatingCharacter = terminatingCharacter;
 	}
+	public List<ChoiceEntity> getChoices() {
+		return choices;
+	}
+	public void setChoices(List<ChoiceEntity> choices) {
+		this.choices = choices;
+	}
+	
+	
 
 }

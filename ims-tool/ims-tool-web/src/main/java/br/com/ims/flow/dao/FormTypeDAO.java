@@ -82,6 +82,36 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setMandatoryOutput(0);
 		result.add(formType);
 		
+		formType = new FormTypeEntity();
+		formType.setId("9");
+		formType.setName("NoMatchInput");
+		formType.setDescription("NoMatchInput");
+		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "<NOMACHINPUT>.png");
+		formType.setImagePathError(Constants.ICON_FLOW_PATH + "<NOMACHINPUT>.png");
+		formType.setImageSizeHeight(30);
+		formType.setImageSizeWidth(30);
+
+		formType.setAllowInput(0);
+		formType.setAllowOutput(1);
+		formType.setMandatoryInput(1);
+		formType.setMandatoryOutput(1);
+		formType.setVisible(false);
+		result.add(formType);
+		
+				
+		formType = new FormTypeEntity();
+		formType.setId("10");
+		formType.setName("Choice");
+		formType.setDescription("Choice");
+		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "choice_<NUMBER>.png");
+		formType.setImagePathError(Constants.ICON_FLOW_PATH + "choice_<NUMBER>_error.png");
+		formType.setAllowInput(0);
+		formType.setAllowOutput(1);
+		formType.setMandatoryInput(0);
+		formType.setMandatoryOutput(1);
+		formType.setVisible(false);
+		result.add(formType);
+		
 		return result;
 	}
 

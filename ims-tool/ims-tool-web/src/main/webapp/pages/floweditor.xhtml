@@ -25,7 +25,7 @@
 				} 			   
 				function handleFormUpdateRequest(xhr, status, args) {		        						       
 			        if(!args.validationFailed) {				        	
-			        	if(args.formUpdated == true) {
+			        	if(args.saved == true) {
 			            	PF('settingFormDlg').hide();
 			            }
 			            	
@@ -33,7 +33,7 @@
 				} 
 				function handleComplementSaveRequest(xhr, status, args) {		        						       
 			        if(!args.validationFailed) {				        	
-			        	if(args.complementSaved == true) {
+			        	if(args.saved == true) {
 			            	PF('settingComplementDlg').hide();
 			            }
 			            	
@@ -42,8 +42,24 @@
 				
 				function handleAuxiliarSaveRequest(xhr, status, args) {		        						       
 			        if(!args.validationFailed) {				        	
-			        	if(args.auxiliarSaved == true) {
-			            	PF('settingAuxiliartDlg').hide();
+			        	if(args.saved == true) {
+			            	PF('settingAuxiliarDlg').hide();
+			            }
+			            	
+			        }			        
+				}
+				function handleUtilSaveRequest(xhr, status, args) {		        						       
+			        if(!args.validationFailed) {				        	
+			        	if(args.saved == true) {
+			            	PF('settingUtilDlg').hide();
+			            }
+			            	
+			        }			        
+				}
+				function handleOtherSaveRequest(xhr, status, args) {		        						       
+			        if(!args.validationFailed) {				        	
+			        	if(args.saved == true) {
+			            	PF('settingOtherDlg').hide();
 			            }
 			            	
 			        }			        
@@ -93,8 +109,8 @@
 						        
  
 							        <f:facet  name="element"  >
-							             <h:outputText value="#{el.name}" style="display:block;margin-top:1em;" />
-								         <p:graphicImage library="images" value="#{el.imagePath}"  width="60px" height="60px" alt="#{el.formError ?  el.errorDescription : el.name}, double click to edit" ondblclick="selectElement('#{el.id}')" />								         								                   						             						    			
+							             <h:outputText value="#{el.name}" style="display:block;margin-top:1em;margin-left: auto;margin-right: auto;text-align: center;" />
+								         <p:graphicImage library="images" value="#{el.imagePath}"  width="#{el.formType.imageSizeWidthStr}" height="#{el.formType.imageSizeHeightStr}" alt="#{el.formError ?  el.errorDescription : el.name}, double click to edit" ondblclick="selectElement('#{el.id}')" style="display:block;margin-bottom: 1em; margin-left: auto;margin-right: auto;text-align: center;" />								         								                   						             						    			
 								    </f:facet>
 								 
 							    
@@ -185,11 +201,22 @@
 			 		<ui:include src="#{flowEditorView.complementPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
-		    <p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliartDlg" resizable="true" modal="true" draggable="false" position="center">
+		    <p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" modal="true" draggable="false" position="center">
 			 	<h:form id="formAuxiliar">
 			 		<ui:include src="#{flowEditorView.auxiliarPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
+		    <p:dialog id="settingUtilDlgId" header="Auxiliar" widgetVar="settingUtilDlg" resizable="true" modal="true" draggable="false" position="center">
+			 	<h:form id="formUtil">
+			 		<ui:include src="#{flowEditorView.utilPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" modal="true" draggable="false" position="center">
+			 	<h:form id="formOther">
+			 		<ui:include src="#{flowEditorView.otherPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    
 			
 
 		</ui:define>

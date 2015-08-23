@@ -6,6 +6,7 @@ import java.util.List;
 import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.Element;
 
+import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.AnnounceEntity;
 import br.com.ims.flow.model.FormEntity;
 
@@ -37,11 +38,28 @@ public class LogicalFlow {
 		}
 		return null;
 	}
+	public Node getNode(FormEntity form) {
+		for(Node node : listNode) {
+			if((FormEntity)node.getElement().getData() == form) {
+				return node;
+			}
+		}
+		return null;
+	}
 	public void addNode(Element element) {
 		Node node = new Node(element);
 		listNode.add(node);
 		listFirstNode.add(node);
 	}
+	public void delNode(Element element) {
+		Node node = getNode(element);
+		
+		disconnectAll(element);
+		
+		listNode.remove(node);
+		listFirstNode.remove(node);
+	}
+	
 	public void connect(Element source,Element target, Connection connection) {
 		Node nodeSource = getNode(source);
     	Node nodeTarget = getNode(target);
@@ -49,8 +67,23 @@ public class LogicalFlow {
     	nodeTarget.addSource(nodeSource);
 	    nodeSource.setConnection(connection);
 	    listFirstNode.remove(nodeTarget);
-	    ((FormEntity)nodeSource.getElement().getData()).setFormId((FormEntity)target.getData());
-    	
+	    Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();
+	    ((AbstractFormEntity)formId).setNextForm((FormEntity)target.getData());
+	    
+	}
+	
+	public void disconnectAll(Element element) {
+		
+		Node node = getNode(element);
+
+		List<Node> sources = node.getListSource();
+		for(Node source : sources) {
+			disconnect(source.getElement());
+			
+		}
+		disconnect(element);
+		
+		
 	}
 	public void disconnect(Element source) {
 		Node nodeSource = getNode(source);
@@ -65,8 +98,8 @@ public class LogicalFlow {
 		nodeSource.cleanTarget();
 		nodeSource.setConnection(null);
 		((FormEntity)nodeSource.getElement().getData()).setTag(null);
-		((FormEntity)nodeSource.getElement().getData()).setFormId(null);
-		
+		Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();
+	    ((AbstractFormEntity)formId).setNextForm(null);
 		
 	}
 	
@@ -121,7 +154,7 @@ public class LogicalFlow {
 		return false;
 	}
 	private boolean validadeFormAnnounce(FormEntity form) {
-		AnnounceEntity announce = (AnnounceEntity)form.getObject();
+		AnnounceEntity announce = (AnnounceEntity)form.getFormId();
 		if(announce.getPrompt() == null) {
 			form.setFormError(true);
 			form.setErrorDescription("Prompt is missing");

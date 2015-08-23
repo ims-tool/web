@@ -44,11 +44,15 @@
 		 				<f:selectItems value="#{bean.noInputs}" var="noinput"
 							itemValue="#{noinput.id}" itemLabel="#{noinput.name}"  />
 		 			</p:selectOneMenu>
-		 			<p:commandButton value="Add NoInput" actionListener="#{bean.addNoInput}" 
-		 										 update="settingComplementDlgId"  
+
+		 			<p:column rowspan="2">
+		 				<p:commandButton value="Add NoInput/NoMatch" actionListener="#{bean.addNoMatchInput}" 
+		 										 update="settingOtherDlgId"  
 		 										 ajax="true" 
 								                 immediate="true" 
-								                 oncomplete="PF('settingComplementDlg').show()"  />
+								                 oncomplete="PF('settingOtherDlg').show()"  />
+		 			</p:column> 
+		 			
 		 			<p:message for="dialog_form_noinput" />	 			
 	 			</h:panelGrid>
 	 			<h:outputLabel id="label_dialog_form_nomatch" for="panel_dialog_form_nomatch" value="NoMatch:" />
@@ -63,18 +67,10 @@
 		 				<f:selectItems value="#{bean.noMatchs}" var="nomatch"
 							itemValue="#{nomatch.id}" itemLabel="#{nomatch.name}"  />
 		 			</p:selectOneMenu>
-		 			<p:commandButton value="Add NoMatch" actionListener="#{bean.addNoMatch}" 
-		 										 update="settingComplementDlgId"  
-		 										 ajax="true" 
-								                 immediate="true" 
-								                 oncomplete="PF('settingComplementDlg').show()"  />
+		 			
 		 			<p:message for="dialog_form_nomatch" />	 			
-	 			</h:panelGrid>		 
-	 			<h:outputLabel id="label_dialog_form_flush_prompt" for="dialog_form_flush_prompt" value="Flush Prompt:" />
-	 			<p:selectOneMenu id="dialog_form_flush_prompt" value="#{bean.announce.flushpront}" label="label_dialog_form_flush_prompt">
-	 				<f:selectItem itemLabel="No" itemValue="0" />
-	 				<f:selectItem itemLabel="Yes" itemValue="1" />
-	 			</p:selectOneMenu>	 			
+	 			</h:panelGrid>		 	 				 		
+
 	    </ui:define>
 	    
 		

@@ -33,7 +33,7 @@ public class PromptService extends AbstractEntityService<PromptEntity>{
 		for(FormEntity form :  forms) {
 			if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_ANNOUNCE) ||
 			   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_PROMPT_COLLECT)) {
-				if(((AbstractEntity)form.getObject()).getId().equals(id) ) {
+				if(((AbstractEntity)form.getFormId()).getId().equals(id) ) {
 					return true;
 				}
 			}

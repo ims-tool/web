@@ -46,8 +46,9 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 	}
 	
 	public void save(NoMatchInputEntity entity) {
-		DAOFactory.getInstance().getNoMatchInputDAO().save(entity);
+		DAOFactory.getInstance().getNoMatchInputDAO().save(entity);		
 	}
+
 
 	@Override
 	public boolean isUsed(String id) {
@@ -57,8 +58,8 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 		for(FormEntity form :  forms) {
 			if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_MENU)) {
 				
-				if(((MenuEntity)form.getObject()).getNoInput().getId().equals(id) ||
-					((MenuEntity)form.getObject()).getNoMatch().getId().equals(id)) {
+				if(((MenuEntity)form.getFormId()).getNoInput().getId().equals(id) ||
+					((MenuEntity)form.getFormId()).getNoMatch().getId().equals(id)) {
 					return true;
 				} 
 			}

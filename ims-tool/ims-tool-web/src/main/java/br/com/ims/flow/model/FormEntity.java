@@ -6,40 +6,42 @@ import br.com.ims.flow.common.Constants;
 public class FormEntity extends AbstractFormEntity{
 	
 	private FormTypeEntity formType;
-	private FormEntity formId;
+	private Object formId;
 	private TagEntity tag;
 	private ConditionEntity condition;
 	private FormEntity nextFormDefault;
 	private VersionEntity versionId;
+	private boolean clone;
 	
 	
 	
 	//controle interno
 	
-	private Object object;
+	
 	
 	private boolean formError;
 	private String errorDescription;
 	
 	public FormEntity() {
 		formType = new FormTypeEntity();
-		object = null;
+		formId = null;
 		formError = false;
 		errorDescription="";
+		clone = false;
 	}
 	
 	public void setName(String name) {
 		this.name = name;
-		if(this.object != null) {
-			((AbstractFormEntity)this.object).setName(name);
+		if(this.formId != null) {
+			((AbstractFormEntity)this.formId).setName(name);
 		}
 	}
 	
 	
 	public void setDescription(String description) {
 		this.description = description;
-		if(this.object != null) { 
-			((AbstractFormEntity)this.object).setDescription(description);
+		if(this.formId != null) { 
+			((AbstractFormEntity)this.formId).setDescription(description);
 		}
 	}
 	public FormTypeEntity getFormType() {
@@ -51,9 +53,9 @@ public class FormEntity extends AbstractFormEntity{
 			String entity = Constants.CLASS_ENTITY_PATH + this.formType.getName()+"Entity";
 			
 			try {
-				this.object = Class.forName(entity).newInstance();
-				((AbstractFormEntity)this.object).setName(this.name);
-				((AbstractFormEntity)this.object).setDescription(this.description);
+				this.formId = Class.forName(entity).newInstance();
+				((AbstractFormEntity)this.formId).setName(this.name);
+				((AbstractFormEntity)this.formId).setDescription(this.description);
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -68,14 +70,11 @@ public class FormEntity extends AbstractFormEntity{
 	}
 	
 
-	public FormEntity getFormId() {
+	public Object getFormId() {
 		return formId;
 	}
 
-	public void setFormId(FormEntity formId) {
-		this.formId = formId;
-	}
-
+	
 	public TagEntity getTag() {
 		return tag;
 	}
@@ -107,11 +106,6 @@ public class FormEntity extends AbstractFormEntity{
 	public void setVersionId(VersionEntity versionId) {
 		this.versionId = versionId;
 	}
-
-	public Object getObject() {
-		return object;
-	}
-
 	public String getImagePath() {
 		String imagePath = "";
 		if(this.formError) {
@@ -137,6 +131,16 @@ public class FormEntity extends AbstractFormEntity{
 	public void setErrorDescription(String errorDescription) {
 		this.errorDescription = errorDescription;
 	}
+
+	public boolean isClone() {
+		return clone;
+	}
+
+	public void setClone(boolean clone) {
+		this.clone = clone;
+	}
+	
+	
 
 	
 	

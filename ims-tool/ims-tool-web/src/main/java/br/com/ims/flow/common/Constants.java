@@ -15,5 +15,13 @@ public class Constants {
 	public final static String FORM_TYPE_FLOW_INTERNAL = "FlowInternal";
 	public final static String FORM_TYPE_THREAD = "Thread";
 	public final static String FORM_TYPE_CONDITION = "Condition";
+	public final static String FORM_TYPE_NOINPUT = "NoInput";
+	public final static String FORM_TYPE_NOMATCH = "NoMatch";
+	public final static String FORM_TYPE_NOMATCHINPUT = "NoMatchInput";
+	public final static String FORM_TYPE_CHOICE = "Choice";
+	
+	
+	public final static String NO_MATCH = "NOMATCH";
+	public final static String NO_INPUT = "NOINPUT";
 	
 }

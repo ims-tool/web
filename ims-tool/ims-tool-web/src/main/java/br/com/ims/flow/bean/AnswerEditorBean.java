@@ -29,7 +29,7 @@ public class AnswerEditorBean extends AbstractBean {
     
     public void init() {
     	this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
-    	this.answer = (AnswerEntity)this.form.getObject();
+    	this.answer = (AnswerEntity)this.form.getFormId();
     	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();
     	
     	if(form.isFormError())
@@ -47,16 +47,17 @@ public class AnswerEditorBean extends AbstractBean {
 
 
 	public void update(ActionEvent event) {
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean formUpdated = true;
-		
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Answer",this.answer.getName()+" - Updated!");
 		 
 		ServicesFactory.getInstance().getFlowEditorService().getBean().setEditing(true);
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		context.addCallbackParam("formUpdated", formUpdated);		
+				
 		flow.validateNodes();
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean saved = true;
+		context.addCallbackParam("saved", saved);
 
     }
 

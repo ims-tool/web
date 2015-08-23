@@ -38,7 +38,7 @@ public class AnnounceEditorBean extends AbstractBean {
     public void init() {
     	this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
     	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();
-    	this.announce = (AnnounceEntity)this.form.getObject();
+    	this.announce = (AnnounceEntity)this.form.getFormId();
     	if(this.announce.getPrompt() != null)
     		this.promptId = this.announce.getPrompt().getId();
     	
@@ -80,8 +80,8 @@ public class AnnounceEditorBean extends AbstractBean {
 	}
 
 	public void update(ActionEvent event) {
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean formUpdated = true;
+		
+		
 		
 		this.announce.setPrompt(ServicesFactory.getInstance().getPromptService().get(this.promptId));
 		
@@ -89,8 +89,12 @@ public class AnnounceEditorBean extends AbstractBean {
 		 
 		ServicesFactory.getInstance().getFlowEditorService().getBean().setEditing(true);
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		context.addCallbackParam("formUpdated", formUpdated);		
+				
 		flow.validateNodes();
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean saved = true;
+		context.addCallbackParam("saved", saved);
 
     }
 	

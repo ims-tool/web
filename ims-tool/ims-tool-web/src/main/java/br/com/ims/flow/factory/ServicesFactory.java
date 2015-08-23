@@ -6,6 +6,8 @@ import br.com.ims.flow.service.ConditionService;
 import br.com.ims.flow.service.FlowEditorService;
 import br.com.ims.flow.service.FormService;
 import br.com.ims.flow.service.FormTypeService;
+import br.com.ims.flow.service.NoMatchInputEditorService;
+import br.com.ims.flow.service.NoMatchInputService;
 import br.com.ims.flow.service.PromptEditorService;
 import br.com.ims.flow.service.PromptService;
 import br.com.ims.flow.service.TagEditorService;
@@ -70,5 +72,15 @@ public class ServicesFactory {
 	public TagEditorService getTagEditorService() {
 		return new TagEditorService();
 	}
+	
+	public NoMatchInputService getNoMatchInputService() {
+		return new NoMatchInputService();
+	}
+	
+	public NoMatchInputEditorService getNoMatchInputEditorService() {
+		return new NoMatchInputEditorService();
+	}
+	
+	
 
 }

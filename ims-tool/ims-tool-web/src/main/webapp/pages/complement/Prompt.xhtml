@@ -27,8 +27,8 @@
 	            
 	            <p:column colspan="2">
 	            	<p:separator />
-            		<p:commandButton value="Add New Audio" icon="buttonAddAudio" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliartDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewAudio}"/>
-		        	<p:commandButton value="Add New Condition" icon="buttonAddCondition" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliartDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewCondition}"/>
+            		<p:commandButton value="Add New Audio" icon="buttonAddAudio" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliarDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewAudio}"/>
+		        	<p:commandButton value="Add New Condition" icon="buttonAddCondition" update="settingAuxiliarDlgId" oncomplete="PF('settingAuxiliarDlg').show()" ajax="true" immediate="true" actionListener="#{promptEditorView.addNewCondition}"/>
 			        <p:separator />
 	            </p:column>
 	            
@@ -90,7 +90,7 @@
 		 		</p:column>
 	 			
 	 			<f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleComplementSaveRequest(xhr, status, args)" update="formComplement,formForm" actionListener="#{promptEditorView.save}"/>
+	                <p:commandButton value="Save" oncomplete="handleComplementSaveRequest(xhr, status, args)" update="formOther,formComplement,formForm" actionListener="#{promptEditorView.save}"/>
 	            </f:facet>  
 	        </h:panelGrid>
 	        
@@ -102,8 +102,8 @@
 			            <h:outputText value="#{p.id}" />
 			        </p:column>
 			        
-			        <p:column headerText="NAME" filterBy="#{a.name}" filterMatchMode="contains">
-			            <h:outputText value="#{a.name}" />
+			        <p:column headerText="NAME" filterBy="#{p.name}" filterMatchMode="contains">
+			            <h:outputText value="#{p.name}" />
 			        </p:column>
 			        <p:column headerText="IN USE" >
 			            <h:outputText rendered="#{!promptEditorView.isUsed(p.id)}" value="NO" />

@@ -9,22 +9,13 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.DragDropEvent;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.event.diagram.ConnectEvent;
 import org.primefaces.event.diagram.ConnectionChangeEvent;
 import org.primefaces.event.diagram.DisconnectEvent;
-import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.DefaultDiagramModel;
-import org.primefaces.model.diagram.DiagramModel;
 import org.primefaces.model.diagram.Element;
 import org.primefaces.model.diagram.connector.FlowChartConnector;
-import org.primefaces.model.diagram.endpoint.BlankEndPoint;
-import org.primefaces.model.diagram.endpoint.DotEndPoint;
-import org.primefaces.model.diagram.endpoint.EndPoint;
-import org.primefaces.model.diagram.endpoint.EndPointAnchor;
-import org.primefaces.model.diagram.endpoint.RectangleEndPoint;
 import org.primefaces.model.diagram.overlay.ArrowOverlay;
 
 import br.com.ims.flow.common.LogicalFlow;
@@ -53,6 +44,8 @@ public class FlowEditorBean extends AbstractBean {
 	private String formPageEditor;
 	private String complementPageEditor;
 	private String auxiliarPageEditor;
+	private String utilPageEditor;
+	private String otherPageEditor;
     
 	private List<PromptEntity> prompts;
 	
@@ -102,7 +95,7 @@ public class FlowEditorBean extends AbstractBean {
 	}
 
 
-	public DiagramModel getModel() {
+	public DefaultDiagramModel getModel() {
         return model;
     }
     
@@ -144,7 +137,7 @@ public class FlowEditorBean extends AbstractBean {
             this.node = flow.getNode(event.getSourceElement());            
             ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
             ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
-            this.auxiliarPageEditor = "/pages/auxiliar/TAG.xhtml";
+            this.utilPageEditor = "/pages/util/TAG.xhtml";
         	
         	
             
@@ -174,33 +167,12 @@ public class FlowEditorBean extends AbstractBean {
         this.node = flow.getNode(event.getNewSourceElement());            
         ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
         ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
-        this.auxiliarPageEditor = "/pages/auxiliar/TAG.xhtml";
+        this.utilPageEditor = "/pages/util/TAG.xhtml";
     	
         suspendEvent = true;
     }
      
-    private EndPoint createDotEndPoint(EndPointAnchor anchor) {
-        DotEndPoint endPoint = new DotEndPoint(anchor);
-        endPoint.setScope("formEntity");
-        endPoint.setTarget(true);
-        endPoint.setSource(false);
-        endPoint.setStyle("{fillStyle:'#98AFC7'}");
-        endPoint.setHoverStyle("{fillStyle:'#5C738B'}");
-         
-        return endPoint;
-    }
-     
-    private EndPoint createRectangleEndPoint(EndPointAnchor anchor) {
-        RectangleEndPoint endPoint = new RectangleEndPoint(anchor);
-        endPoint.setScope("formEntity");
-        endPoint.setTarget(false);
-        endPoint.setSource(true);
-        endPoint.setStyle("{fillStyle:'#98AFC7'}");
-        endPoint.setHoverStyle("{fillStyle:'#5C738B'}");
-         
-        return endPoint;
-    }
-     
+    
     
 
 	public List<FormTypeEntity> getFormTypes() {
@@ -221,21 +193,10 @@ public class FlowEditorBean extends AbstractBean {
 		listForm.add(formEntityElement);
 		
 		Element element = new Element(formEntityElement);
+		
 
-		if(formType.getAllowInput() == 1) {
-			EndPoint endPoint = createDotEndPoint(EndPointAnchor.TOP);
-			element.addEndPoint(endPoint);
-		}
-		if(formType.getAllowOutput() == 1) {
-			EndPoint endPoint = createRectangleEndPoint(EndPointAnchor.BOTTOM);
-			element.addEndPoint(endPoint);
-		}else {
-			if(formType.getMandatoryOutput() == 1) {
-				EndPoint endPoint = new BlankEndPoint(EndPointAnchor.BOTTOM);
-				element.addEndPoint(endPoint);
-				
-			}
-		}
+		ServicesFactory.getInstance().getFlowEditorService().setEndPoint(formType, element);
+		
 		
 		model.addElement(element);
 		flow.addNode(element);
@@ -292,6 +253,24 @@ public class FlowEditorBean extends AbstractBean {
 
 	public void setAuxiliarPageEditor(String auxiliarPageEditor) {
 		this.auxiliarPageEditor = auxiliarPageEditor;
+	}
+	
+	
+
+	public String getOtherPageEditor() {
+		return otherPageEditor;
+	}
+
+	public void setOtherPageEditor(String otherPageEditor) {
+		this.otherPageEditor = otherPageEditor;
+	}
+
+	public String getUtilPageEditor() {
+		return utilPageEditor;
+	}
+
+	public void setUtilPageEditor(String utilPageEditor) {
+		this.utilPageEditor = utilPageEditor;
 	}
 
 	public void save(ActionEvent event) {

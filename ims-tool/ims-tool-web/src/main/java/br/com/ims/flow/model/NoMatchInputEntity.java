@@ -1,16 +1,23 @@
 package br.com.ims.flow.model;
 
 @SuppressWarnings("serial")
-public class NoMatchInputEntity extends AbstractEntity{
+public class NoMatchInputEntity extends AbstractFormEntity{
 	
 	
+	private String name;		
 	private String type;		
 	private Integer threshold;
 	private PromptEntity prompt;
-	private FormEntity nextForm;
 	private TagEntity tag;
 	
 	
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getType() {
 		return type;
 	}

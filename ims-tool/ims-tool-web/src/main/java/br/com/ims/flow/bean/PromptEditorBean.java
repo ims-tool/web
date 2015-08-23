@@ -25,7 +25,10 @@ public class PromptEditorBean extends AbstractBean {
 	
 	
 	private PromptEntity prompt;
-	private AnnounceEditorBean announceBean;	
+	private AnnounceEditorBean announceBean;
+	private MenuEditorBean menuBean;
+	private NoMatchInputEditorBean noMatchInputBean;
+	
 	private List<AudioEntity> audios;
 	private List<ConditionEntity> conditions;
 	private String conditionId;
@@ -41,9 +44,12 @@ public class PromptEditorBean extends AbstractBean {
     
     public void init() {
     	this.prompt = new PromptEntity();
-    	this.prompt.setAudios(new ArrayList<PromptAudioEntity>());
-    	this.announceBean = null;
+    	this.prompt.setAudios(new ArrayList<PromptAudioEntity>());    	
     	this.insert = true;
+    	
+    	this.announceBean = null;
+    	this.menuBean = null;
+    	this.noMatchInputBean = null;
 
     	
     }
@@ -67,6 +73,42 @@ public class PromptEditorBean extends AbstractBean {
 		this.announceBean = announceBean;
 	}
 
+	
+	
+	public MenuEditorBean getMenuBean() {
+		return menuBean;
+	}
+
+	public void setMenuBean(MenuEditorBean menuBean) {
+		this.menuBean = menuBean;
+	}
+	
+	public NoMatchInputEditorBean getNoMatchInputBean() {
+		return noMatchInputBean;
+	}
+
+	public void setNoMatchInputBean(NoMatchInputEditorBean noMatchInputBean) {
+		this.noMatchInputBean = noMatchInputBean;
+	}
+
+	private void updateExternalsBean() {
+    
+		
+		if(this.announceBean != null) {
+			this.announceBean.setPromptId(this.prompt.getId());
+		}
+		
+		if(this.menuBean != null) {
+			this.menuBean.setPromptId(this.prompt.getId());
+		}
+		
+		if(this.noMatchInputBean != null) {
+			this.noMatchInputBean.setPromptId(this.prompt.getId());
+		}
+		
+		
+    }
+	
 	public void save(ActionEvent event) {
 		
 		if(this.prompt.getAudios().size() == 0) {
@@ -81,15 +123,15 @@ public class PromptEditorBean extends AbstractBean {
 		 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
-		if(this.announceBean != null) {
-			this.announceBean.setPromptId(this.prompt.getId());
-		}
+		
+		updateExternalsBean();
+		
 		
 		init();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
-		boolean complementSaved = true;
-		context.addCallbackParam("complementSaved", complementSaved);
+		boolean saved = true;
+		context.addCallbackParam("saved", saved);
 		
     }   
 	

@@ -7,12 +7,20 @@ public class FormTypeEntity extends AbstractEntity{
 	private String description;
 	private String imagePathSuccess;
 	private String imagePathError;
+	private Integer imageSizeWidth;
+	private Integer imageSizeHeight;
 	private Integer allowInput;
 	private Integer allowOutput;
 	private Integer mandatoryInput;
 	private Integer mandatoryOutput;
 	
+	private boolean visible;
 	
+	public FormTypeEntity() {
+		this.visible = true;
+		this.imageSizeWidth = 60;
+		this.imageSizeHeight = 60;
+	}
 	
 	public String getName() {
 		return name;
@@ -63,6 +71,36 @@ public class FormTypeEntity extends AbstractEntity{
 	public void setMandatoryOutput(Integer mandatoryOutput) {
 		this.mandatoryOutput = mandatoryOutput;
 	}
+	public boolean isVisible() {
+		return visible;
+	}
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public Integer getImageSizeWidth() {
+		return imageSizeWidth;
+	}
+
+	public void setImageSizeWidth(Integer imageSizeWidth) {
+		this.imageSizeWidth = imageSizeWidth;
+	}
+
+	public Integer getImageSizeHeight() {
+		return imageSizeHeight;
+	}
+
+	public void setImageSizeHeight(Integer imageSizeHeight) {
+		this.imageSizeHeight = imageSizeHeight;
+	}
+	public String getImageSizeWidthStr() {
+		return String.valueOf(imageSizeWidth)+"px";
+	}
+	
+	public String getImageSizeHeightStr() {
+		return String.valueOf(imageSizeHeight)+"px";
+	}
+	
 	
 	
 }

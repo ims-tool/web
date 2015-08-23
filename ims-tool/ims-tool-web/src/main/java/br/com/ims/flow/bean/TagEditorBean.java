@@ -15,6 +15,7 @@ import org.primefaces.model.diagram.overlay.LabelOverlay;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
+import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
  
@@ -25,6 +26,7 @@ public class TagEditorBean extends AbstractBean {
      
 	
 	private Node node;
+	private NoMatchInputEntity noMatchInput;
 	
 	private TagEntity tag;
 	
@@ -45,11 +47,17 @@ public class TagEditorBean extends AbstractBean {
     	
     	this.insert = true;
     	
-    	node = null;
+    	this.node = null;
+    	this.noMatchInput = null;
+    	
     }
 
 	public void setNode(Node node) {
 		this.node = node;
+	}
+	
+	public void setNoMatchInput(NoMatchInputEntity noMatchInput) {
+		this.noMatchInput = noMatchInput;
 	}
 
 	public TagEntity getTag() {
@@ -121,8 +129,8 @@ public class TagEditorBean extends AbstractBean {
 		init();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
-		boolean auxiliarSaved = true;
-		context.addCallbackParam("auxiliarSaved", auxiliarSaved);
+		boolean saved = true;
+		context.addCallbackParam("saved", saved);
 		
 	}
 
@@ -157,7 +165,10 @@ public class TagEditorBean extends AbstractBean {
 			
 			FormEntity form = (FormEntity)this.node.getElement().getData();
 			form.setTag(this.tag);
-		}		
+		}	
+    	if(this.noMatchInput != null) {
+    		this.noMatchInput.setTag(this.tag);
+    	}
     }
    
  
