@@ -121,11 +121,6 @@ public class LogicalFlow {
 				}
 			}
 			
-			if(node.getListTarget().size() > 1) {
-				form.setFormError(true);
-				form.setErrorDescription("Name "+form.getName()+" already assigned to another Element.");
-			}
-			
 			if(validateFormByType(form)) {
 				continue;
 			}

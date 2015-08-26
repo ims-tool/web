@@ -17,6 +17,7 @@ import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.ChoiceEntity;
+import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
 import br.com.ims.flow.model.MenuEntity;
@@ -36,8 +37,16 @@ public class MenuEditorBean extends AbstractBean {
 	
 	private String promptId;
 	private String noInputId;
-	private String noMatchId;	
+	private String noMatchId;
+	private String conditionId;
+	
+	private String choiceName;
+	private String choiceDtmf;
+	
 	private List<ChoiceEntity> choices;
+	private List<ConditionEntity> conditions;
+	
+	
 	
 	
 	private MenuEntity menu;
@@ -88,7 +97,11 @@ public class MenuEditorBean extends AbstractBean {
 	private void removeChoices() {
 		Node source = flow.getNode(this.form);
 		for(Node target : source.getListTarget()) {
-			ServicesFactory.getInstance().getFlowEditorService().deleteForm(target.getElement());
+			FormEntity formTarget = (FormEntity)target.getElement().getData();
+			if(!formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT)) {
+				ServicesFactory.getInstance().getFlowEditorService().deleteForm(target.getElement());
+			}
+			
 		}
 	}
 	
@@ -121,12 +134,20 @@ public class MenuEditorBean extends AbstractBean {
 	}
 
 	private void addNoInput() {
+		
+		
+		NoMatchInputEntity noInput = ServicesFactory.getInstance().getNoMatchInputService().get(this.noInputId);
+		if(this.menu.getNoInput() != null && noInput.getId().equals(this.menu.getNoInput().getId())) {
+			return;
+		}
+		
+		
+		
 		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
 		
-		FormEntity formNoInput = new FormEntity();
-		//pegar nomatchinput do services
-		formNoInput.setDescription(this.menu.getNoInput().getDescription());
-		formNoInput.setName(this.menu.getNoInput().getName());
+		FormEntity formNoInput = new FormEntity();		
+		formNoInput.setDescription(noInput.getDescription());
+		formNoInput.setName(noInput.getName());
 		formNoInput.setFormType(formType);
 		
 		String imgPath = formType.getImagePathSuccess();
@@ -150,11 +171,21 @@ public class MenuEditorBean extends AbstractBean {
 	
 	}
 	private void addNoMatch() {
+		
+		
+		NoMatchInputEntity noMatch = ServicesFactory.getInstance().getNoMatchInputService().get(this.noMatchId);
+		NoMatchInputEntity noInput = ServicesFactory.getInstance().getNoMatchInputService().get(this.noInputId);
+		if(this.menu.getNoInput() != null && noInput.getId().equals(this.menu.getNoInput().getId())) {
+			return;
+		}
+		
+		this.menu.setNoMatch(noMatch);
+		
 		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
 		
 		FormEntity formNoMatch = new FormEntity();
-		formNoMatch.setDescription(this.menu.getNoMatch().getDescription());
-		formNoMatch.setName(this.menu.getNoMatch().getName());
+		formNoMatch.setDescription(noMatch.getDescription());
+		formNoMatch.setName(noMatch.getName());
 		formNoMatch.setFormType(formType);
 		
 		String imgPath = formType.getImagePathSuccess();
@@ -227,14 +258,13 @@ public class MenuEditorBean extends AbstractBean {
 		
 		ServicesFactory.getInstance().getNoMatchInputEditorService().getBean().setMenuBean(this);
 		
-		
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Menu","Add NoInput Clicked!");
+    }
+	
+	public void addChoiceToMenu(ActionEvent event) {
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Menu","Add Choice Clicked!");
 		 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		
-
-    }
+	}
 
 	@Override
 	public void save(ActionEvent event) {
@@ -314,6 +344,40 @@ public class MenuEditorBean extends AbstractBean {
 	public void setNoMatchId(String noMatchId) {
 		this.noMatchId = noMatchId;
 	}
+
+	public String getConditionId() {
+		return conditionId;
+	}
+
+	public void setConditionId(String conditionId) {
+		this.conditionId = conditionId;
+	}
+
+	public String getChoiceName() {
+		return choiceName;
+	}
+
+	public void setChoiceName(String choiceName) {
+		this.choiceName = choiceName;
+	}
+
+	public String getChoiceDtmf() {
+		return choiceDtmf;
+	}
+
+	public void setChoiceDtmf(String choiceDtmf) {
+		this.choiceDtmf = choiceDtmf;
+	}
+
+	public List<ConditionEntity> getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(List<ConditionEntity> conditions) {
+		this.conditions = conditions;
+	}
+	
+	
 	
 	
 	

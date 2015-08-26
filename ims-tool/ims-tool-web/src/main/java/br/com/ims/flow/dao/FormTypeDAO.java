@@ -87,7 +87,7 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setName("NoMatchInput");
 		formType.setDescription("NoMatchInput");
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "<NOMACHINPUT>.png");
-		formType.setImagePathError(Constants.ICON_FLOW_PATH + "<NOMACHINPUT>.png");
+		formType.setImagePathError(Constants.ICON_FLOW_PATH + "<NOMACHINPUT>_error.png");
 		formType.setImageSizeHeight(30);
 		formType.setImageSizeWidth(30);
 
