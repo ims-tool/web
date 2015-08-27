@@ -1,5 +1,6 @@
 package br.com.ims.flow.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -15,7 +16,6 @@ import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
-import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.FormEntity;
@@ -43,6 +43,8 @@ public class MenuEditorBean extends AbstractBean {
 	private String choiceName;
 	private String choiceDtmf;
 	
+	private String selectedChoiceId;
+	
 	private List<ChoiceEntity> choices;
 	private List<ConditionEntity> conditions;
 	
@@ -61,7 +63,6 @@ public class MenuEditorBean extends AbstractBean {
     	this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
     	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();
     	this.menu = (MenuEntity)this.form.getFormId();
-    	
     	
     	if(form.isFormError())
     		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", form.getErrorDescription()));
@@ -261,8 +262,61 @@ public class MenuEditorBean extends AbstractBean {
     }
 	
 	public void addChoiceToMenu(ActionEvent event) {
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Menu","Add Choice Clicked!");
-		 
+		
+		
+		this.choiceName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:form_menu_choice_name").toString();
+		this.choiceDtmf = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:form_menu_choice_dtmf").toString();
+		this.conditionId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:form_menu_choice_condition_input").toString();
+		
+		FacesMessage msg = null;
+		
+		if(this.choiceName == null || this.choiceName.length() == 0) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: You have to fill the Name");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
+		if(this.choiceDtmf == null || this.choiceDtmf.length() == 0) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: You have to fill the DTMF");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
+		if(this.choices != null) {
+			for(ChoiceEntity choice : this.choices) {
+				if(choice.getName().equalsIgnoreCase(this.choiceName)) {
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: Name ("+this.choiceName+") already exists");
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+					return;
+				}
+				if(choice.getDtmf().equalsIgnoreCase(this.choiceDtmf)) {
+					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: DTMF ("+this.choiceDtmf+") already exists");
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+					return;
+				}
+			}
+		} else {
+			
+			this.choices = new ArrayList<ChoiceEntity>();
+			this.menu.setChoices(choices);
+			
+		}
+		ChoiceEntity choice = new ChoiceEntity();
+		choice.setName(this.choiceName);
+		choice.setDtmf(this.choiceDtmf);
+		
+		if(this.conditionId != null && this.conditionId.length() > 0) {
+			choice.setCondition(ServicesFactory.getInstance().getConditionService().get(this.conditionId));					
+		}
+		
+		choices.add(choice);
+		
+		this.choiceName = "";
+		this.choiceDtmf = "";
+		this.conditionId = "";
+		
+	}
+	
+	public void delChoiceToMenu(ActionEvent event) {
+		FacesMessage msg =new FacesMessage(FacesMessage.SEVERITY_INFO, "Menu","delChoiceToMenu clicked: "+selectedChoiceId);
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
@@ -294,6 +348,9 @@ public class MenuEditorBean extends AbstractBean {
 	}
 
 	public String getPromptId() {
+		if((this.promptId == null ||  this.promptId.length() == 0) && this.menu.getPrompt() != null) {
+			this.promptId = this.menu.getPrompt().getId();
+		}
 		return promptId;
 	}
 
@@ -309,7 +366,8 @@ public class MenuEditorBean extends AbstractBean {
 	
 
 	public List<ChoiceEntity> getChoices() {
-		return choices;
+		this.choices = this.menu.getChoices();
+		return this.choices;
 	}
 
 	public void setChoices(List<ChoiceEntity> choices) {
@@ -330,6 +388,9 @@ public class MenuEditorBean extends AbstractBean {
 	}
 
 	public String getNoInputId() {
+		if((this.noInputId == null ||  this.noInputId.length() == 0) && this.menu.getNoInput() != null) {
+			this.noInputId = this.menu.getNoInput().getId();
+		}
 		return noInputId;
 	}
 
@@ -338,6 +399,9 @@ public class MenuEditorBean extends AbstractBean {
 	}
 
 	public String getNoMatchId() {
+		if((this.noMatchId == null ||  this.noMatchId.length() == 0) && this.menu.getNoMatch() != null) {
+			this.noMatchId = this.menu.getNoMatch().getId();
+		}
 		return noMatchId;
 	}
 
@@ -375,6 +439,14 @@ public class MenuEditorBean extends AbstractBean {
 
 	public void setConditions(List<ConditionEntity> conditions) {
 		this.conditions = conditions;
+	}
+
+	public String getSelectedChoiceId() {
+		return selectedChoiceId;
+	}
+
+	public void setSelectedChoiceId(String selectedChoiceId) {
+		this.selectedChoiceId = selectedChoiceId;
 	}
 	
 	
