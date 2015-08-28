@@ -73,12 +73,12 @@
 	 			<h:outputLabel id="label_dialog_form_choices" for="panel_dialog_form_choices" value="Choices:" />
 	 			<h:panelGrid id="panel_dialog_form_choices" cellpadding="5">	 				 				
             		<p:separator />
-            		<h:panelGrid columns="7" cellpadding="5">
+            		<h:panelGrid id="panel_dialog_form_choice_add" columns="7" cellpadding="5">
 		 				<h:outputLabel id="label_form_menu_choice_name" for="form_menu_choice_name" value="Name:" />
 			            <p:inputText id="form_menu_choice_name" value="#{bean.choiceName}"  requiredMessage="Please,inform audio order" label="label_form_menu_choice_name"  />
 			            
 			            <h:outputLabel id="label_form_menu_choice_dtmf" for="form_menu_choice_dtmf" value="DTMF:" />
-			            <p:inputText id="form_menu_choice_dtmf" value="#{bean.choiceDtmf}"  requiredMessage="Please,inform audio order" label="label_form_menu_choice_dtmf" style="width:60px" />
+			            <p:inputText id="form_menu_choice_dtmf" value="#{bean.choiceDtmf}"  requiredMessage="Please,inform audio order" label="label_form_menu_choice_dtmf" style="width:60px" maxlength="1" />
 			            				 			
 			            <h:outputLabel id="label_form_menu_choice_condition" for="form_menu_choice_condition" value="Condition:" />
 			            <p:selectOneMenu value="#{bean.conditionId}" 
@@ -90,7 +90,7 @@
 								itemValue="#{condition.id}" itemLabel="#{condition.name}"  />
 			 			</p:selectOneMenu>
 			            
-			            <p:commandButton value="Add Choice" update="panel_dialog_form_choices,panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.addChoiceToMenu}"/>			            				
+			            <p:commandButton value="Add Choice" update="panel_dialog_form_choice_add,panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.addChoiceToMenu}"/>			            				
 		 			</h:panelGrid>	 		
 					<p:separator />
 					<p:panel id="panel_dialog_form_choices_list" header="Choices" style="margin-bottom:20px">
@@ -106,14 +106,14 @@
 					            <h:outputText value="#{choice.name}" />
 					        </p:column>
 					        <p:column headerText="DTMF" >
-					            <h:outputText value="#{choice.dtmf}" />
+					            <h:outputText value="#{choice.dtmf}"  />
 					        </p:column>
 					        <p:column headerText="Conditions" >
 					        	<h:outputText value="#{choice.condition != null ? choice.condition.name : 'N/A'}" />					            
 					        </p:column>
 					        <p:column style="width:32px;text-align: center">
-					             <p:commandButton icon="ui-icon-close" title="Delete" update="panel_dialog_form_choices,panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.delChoiceToMenu}" >
-					             	<f:setPropertyActionListener value="#{choice.od}" target="#{bean.selectedChoiceId}" />
+					             <p:commandButton icon="ui-icon-close" title="Delete" update="formForm:panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.delChoiceToMenu}" >
+					             	<f:setPropertyActionListener value="#{choice.id}" target="#{bean.selectedChoiceId}" />
 					             </p:commandButton>					                
 					        </p:column>
 					    </p:dataTable>

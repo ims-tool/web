@@ -18,6 +18,7 @@ import org.primefaces.model.diagram.Element;
 import org.primefaces.model.diagram.connector.FlowChartConnector;
 import org.primefaces.model.diagram.overlay.ArrowOverlay;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
@@ -69,7 +70,7 @@ public class FlowEditorBean extends AbstractBean {
     
     public void init() {
         model = new DefaultDiagramModel();
-        model.setMaxConnections(-1);
+        model.setMaxConnections(20);
         
         model.getDefaultConnectionOverlays().add(new ArrowOverlay(20, 20, 1, 1));
         FlowChartConnector connector = new FlowChartConnector();
@@ -210,6 +211,16 @@ public class FlowEditorBean extends AbstractBean {
 		
 		this.form = ServicesFactory.getInstance().getFlowEditorService().getForm(this, Integer.valueOf(this.formId)); 
 	
+
+		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE) || 
+		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCHINPUT)) {
+			Node node = flow.getNode(this.form);
+			Node parent = node.getListSource().get(0);
+			this.form = (FormEntity)parent.getElement().getData();
+			this.formId = this.form.getId();
+			
+		}
+		
 		
 		this.formPageEditor = "/pages/forms/"+form.getFormType().getName()+".xhtml";
 		

@@ -124,7 +124,8 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 		
 		flow.disconnect(sourceElement);
 	}
-	public void deleteForm(Element element) {
+	public void deleteForm(Element element) {		
+		
 		deleteForm(bean.getModel(),bean.getFlow(), element);
 	}
 	public void deleteForm(DefaultDiagramModel model,LogicalFlow flow, Element element) {
@@ -136,6 +137,7 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 		model.getElements().remove(node.getElement());
 		flow.delNode(node.getElement());
 		
+		this.bean.getListForm().remove((FormEntity)element.getData());				
 	}
 	
 	

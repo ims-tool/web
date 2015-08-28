@@ -1,7 +1,9 @@
 package br.com.ims.flow.model;
 
+import java.util.regex.Pattern;
+
 @SuppressWarnings("serial")
-public class ChoiceEntity extends AbstractEntity{
+public class ChoiceEntity extends AbstractFormEntity implements Comparable<ChoiceEntity>{
 	
 	private String name;
 	private Integer menuId;
@@ -46,6 +48,39 @@ public class ChoiceEntity extends AbstractEntity{
 	}
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
+	}
+	@Override
+	public int compareTo(ChoiceEntity o) {
+		// TODO Auto-generated method stub
+		if(this.dtmf != null && o.dtmf != null) {
+			int a;
+			int b;
+			if(Pattern.matches("[0-9]", this.dtmf)) {
+				a = Integer.valueOf(this.dtmf);
+			} else {
+				if(this.dtmf.equals("#")) {
+					a = 10;
+				} else {
+					a = 11;
+				}
+			}
+			if(Pattern.matches("[0-9]", o.dtmf)) {
+				b = Integer.valueOf(o.dtmf);
+			} else {
+				if(o.dtmf.equals("#")) {
+					b = 10;
+				} else {
+					b = 11;
+				}
+			}
+			
+			if(a < b) {
+				return -1;
+			} else if(a > b) {
+				return 1;
+			}
+		}
+		return 0;
 	}
 	
 	

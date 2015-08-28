@@ -1,7 +1,9 @@
 package br.com.ims.flow.bean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -59,10 +61,21 @@ public class MenuEditorBean extends AbstractBean {
     	//init();
     }
     
-    public void init() {
+    @SuppressWarnings("unchecked")
+	public void init() {
     	this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
     	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();
     	this.menu = (MenuEntity)this.form.getFormId();
+    	if(this.menu.getChoices() == null) {
+    		this.menu.setChoices(new ArrayList<ChoiceEntity>());
+    	}
+    	if(this.menu.getNoInput() != null) {
+    		this.noInputId = this.menu.getNoInput().getId(); 
+    	}
+    	if(this.menu.getNoMatch() != null) {
+    		this.noMatchId = this.menu.getNoMatch().getId(); 
+    	}    	
+    	this.choices = (List<ChoiceEntity>)((ArrayList<ChoiceEntity>)this.menu.getChoices()).clone();
     	
     	if(form.isFormError())
     		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", form.getErrorDescription()));
@@ -96,14 +109,39 @@ public class MenuEditorBean extends AbstractBean {
 		this.flow = flow;
 	}
 	private void removeChoices() {
-		Node source = flow.getNode(this.form);
-		for(Node target : source.getListTarget()) {
-			FormEntity formTarget = (FormEntity)target.getElement().getData();
-			if(!formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT)) {
-				ServicesFactory.getInstance().getFlowEditorService().deleteForm(target.getElement());
+		
+		
+		
+		if(this.menu.getChoices() != null) {
+			Node source = flow.getNode(this.form);
+			
+			for(ChoiceEntity menuChoice : this.menu.getChoices()) {
+				
+				for(Node target : source.getListTarget()) {
+					FormEntity formTarget = (FormEntity)target.getElement().getData();
+					if(!formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) &&
+						formTarget.getName().equals(menuChoice.getName())) {
+						
+						boolean remove = true;
+						for(ChoiceEntity choiceTemp : this.choices) {
+							if(menuChoice.getId().equals(choiceTemp.getId())) {
+								remove = false;
+							}
+						}
+						if(remove) {
+							this.menu.getChoices().remove(menuChoice);
+							ServicesFactory.getInstance().getFlowEditorService().deleteForm(target.getElement());
+						} 
+						 
+					}
+					
+				}								
 			}
 			
 		}
+		
+		
+		
 	}
 	
 	private void removeNoInput() {
@@ -142,8 +180,6 @@ public class MenuEditorBean extends AbstractBean {
 			return;
 		}
 		
-		
-		
 		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
 		
 		FormEntity formNoInput = new FormEntity();		
@@ -163,6 +199,8 @@ public class MenuEditorBean extends AbstractBean {
 		ServicesFactory.getInstance().getFlowEditorService().setEndPoint(formType, element);
 		
 		ServicesFactory.getInstance().getFlowEditorService().getBean().getModel().addElement(element);
+		ServicesFactory.getInstance().getFlowEditorService().getBean().getListForm().add(formNoInput);
+		
 		flow.addNode(element);
 		
 		Node source = flow.getNode(this.form);
@@ -175,8 +213,7 @@ public class MenuEditorBean extends AbstractBean {
 		
 		
 		NoMatchInputEntity noMatch = ServicesFactory.getInstance().getNoMatchInputService().get(this.noMatchId);
-		NoMatchInputEntity noInput = ServicesFactory.getInstance().getNoMatchInputService().get(this.noInputId);
-		if(this.menu.getNoInput() != null && noInput.getId().equals(this.menu.getNoInput().getId())) {
+		if(this.menu.getNoInput() != null && noMatch.getId().equals(this.menu.getNoMatch().getId())) {
 			return;
 		}
 		
@@ -201,6 +238,8 @@ public class MenuEditorBean extends AbstractBean {
 		ServicesFactory.getInstance().getFlowEditorService().setEndPoint(formType, element);
 		
 		ServicesFactory.getInstance().getFlowEditorService().getBean().getModel().addElement(element);
+		ServicesFactory.getInstance().getFlowEditorService().getBean().getListForm().add(formNoMatch);
+		
 		flow.addNode(element);
 		
 		Node source = flow.getNode(this.form);
@@ -209,28 +248,91 @@ public class MenuEditorBean extends AbstractBean {
 		ServicesFactory.getInstance().getFlowEditorService().connectForm(source.getElement(), element);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void addChoices() {
-		removeNoInput();
-		removeNoMatch();
 		
-		addNoInput();
-		addNoMatch();
+		Node source = flow.getNode(this.form);
+		
+		Collections.sort(this.choices);
+		
+		for(ChoiceEntity choice : this.choices) {
+			
+		
+			boolean insere = true;
+			if(this.menu.getChoices() != null) {
+				for(ChoiceEntity choiceMenu : this.menu.getChoices()) {
+					if(choiceMenu.getId().equals(choice.getId())) {						
+						insere = false;						
+					}
+				}
+			}
+			if(insere) {
+								
+				FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_CHOICE);
+				
+				FormEntity formChoice = new FormEntity();
+				formChoice.setDescription(this.menu.getName()+"_"+choice.getName());
+				formChoice.setName(this.menu.getName()+"_"+choice.getName());
+				formChoice.setFormType(formType);
+				
+				String imgPath = formType.getImagePathSuccess();
+				formType.setImagePathSuccess(imgPath.replace("<NUMBER>", choice.getDtmf().equals("*") ? "x" : choice.getDtmf()  ));
+				
+				imgPath = formType.getImagePathError();
+				formType.setImagePathError(imgPath.replace("<NUMBER>", choice.getDtmf().equals("*") ? "x" : choice.getDtmf() ));
+				
+				
+				Element element = new Element(formChoice);
+				
+				ServicesFactory.getInstance().getFlowEditorService().setEndPoint(formType, element);
+				
+				ServicesFactory.getInstance().getFlowEditorService().getBean().getModel().addElement(element);
+				ServicesFactory.getInstance().getFlowEditorService().getBean().getListForm().add(formChoice);
+				
+				flow.addNode(element);
+				
+				
+				ServicesFactory.getInstance().getFlowEditorService().connectForm(source.getElement(), element);
+			} 
+		}		
+		this.menu.setChoices(this.choices);
+		//atualiza nome dos form choices
+		for(Node nodeChoice : source.getListTarget()) {
+			
+			if(( (FormEntity) nodeChoice.getElement().getData()).getFormType().getName().equals(Constants.FORM_TYPE_CHOICE) ) {
+				for(ChoiceEntity choiceMenu : this.menu.getChoices()) {
+					
+					FormEntity formChoice = (FormEntity)nodeChoice.getElement().getData();
+					formChoice.setDescription(this.menu.getName()+"_"+choiceMenu.getName());
+					formChoice.setName(this.menu.getName()+"_"+choiceMenu.getName());
+					
+				}
+			}
+			
+			
+		}
 			
 		
 		
-		flow.validateNodes();
-		flow.align();
+		
 	}
 	
 	public void update(ActionEvent event) {
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean saved = true;
 		
+		removeNoInput();
+		removeNoMatch();
 		removeChoices();
 		
 		
-		
 		addChoices();
+		addNoInput();
+		addNoMatch();
+		
+		
+		flow.validateNodes();
+		flow.align();
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Menu",this.menu.getName()+" - Updated!");
 		
@@ -279,26 +381,25 @@ public class MenuEditorBean extends AbstractBean {
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: You have to fill the DTMF");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return;
+		} else if (!Pattern.matches("[0-9*#]", this.choiceDtmf)){
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: DTMF accept only numbers(0-9) or '*' or '#'");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
 		}
-		if(this.choices != null) {
-			for(ChoiceEntity choice : this.choices) {
-				if(choice.getName().equalsIgnoreCase(this.choiceName)) {
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: Name ("+this.choiceName+") already exists");
-					FacesContext.getCurrentInstance().addMessage(null, msg);
-					return;
-				}
-				if(choice.getDtmf().equalsIgnoreCase(this.choiceDtmf)) {
-					msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: DTMF ("+this.choiceDtmf+") already exists");
-					FacesContext.getCurrentInstance().addMessage(null, msg);
-					return;
-				}
+		
+		for(ChoiceEntity choice : this.choices) {
+			if(choice.getName().equalsIgnoreCase(this.choiceName)) {
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: Name ("+this.choiceName+") already exists");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				return;
 			}
-		} else {
-			
-			this.choices = new ArrayList<ChoiceEntity>();
-			this.menu.setChoices(choices);
-			
+			if(choice.getDtmf().equalsIgnoreCase(this.choiceDtmf)) {
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Menu","Choice: DTMF ("+this.choiceDtmf+") already exists");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				return;
+			}
 		}
+		
 		ChoiceEntity choice = new ChoiceEntity();
 		choice.setName(this.choiceName);
 		choice.setDtmf(this.choiceDtmf);
@@ -365,8 +466,7 @@ public class MenuEditorBean extends AbstractBean {
 
 	
 
-	public List<ChoiceEntity> getChoices() {
-		this.choices = this.menu.getChoices();
+	public List<ChoiceEntity> getChoices() {		
 		return this.choices;
 	}
 

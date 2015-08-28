@@ -90,7 +90,6 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setImagePathError(Constants.ICON_FLOW_PATH + "<NOMACHINPUT>_error.png");
 		formType.setImageSizeHeight(30);
 		formType.setImageSizeWidth(30);
-
 		formType.setAllowInput(0);
 		formType.setAllowOutput(1);
 		formType.setMandatoryInput(1);
@@ -105,9 +104,11 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setDescription("Choice");
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "choice_<NUMBER>.png");
 		formType.setImagePathError(Constants.ICON_FLOW_PATH + "choice_<NUMBER>_error.png");
+		formType.setImageSizeHeight(30);
+		formType.setImageSizeWidth(30);
 		formType.setAllowInput(0);
 		formType.setAllowOutput(1);
-		formType.setMandatoryInput(0);
+		formType.setMandatoryInput(1);
 		formType.setMandatoryOutput(1);
 		formType.setVisible(false);
 		result.add(formType);
