@@ -57,6 +57,9 @@ public class MenuEditorBean extends AbstractBean {
 	private FormEntity form;
 	private LogicalFlow flow;
 	
+	
+	private String originalName;
+	
     public MenuEditorBean() {
     	//init();
     }
@@ -76,6 +79,8 @@ public class MenuEditorBean extends AbstractBean {
     		this.noMatchId = this.menu.getNoMatch().getId(); 
     	}    	
     	this.choices = (List<ChoiceEntity>)((ArrayList<ChoiceEntity>)this.menu.getChoices()).clone();
+    	
+    	this.originalName = this.menu.getName();
     	
     	if(form.isFormError())
     		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", form.getErrorDescription()));
@@ -175,10 +180,17 @@ public class MenuEditorBean extends AbstractBean {
 	private void addNoInput() {
 		
 		
-		NoMatchInputEntity noInput = ServicesFactory.getInstance().getNoMatchInputService().get(this.noInputId);
-		if(this.menu.getNoInput() != null && noInput.getId().equals(this.menu.getNoInput().getId())) {
+		if(this.menu.getNoInput() != null && this.menu.getNoInput().getId().equals(this.noInputId)  ) {
 			return;
 		}
+		
+		
+		
+		NoMatchInputEntity noInput = ServicesFactory.getInstance().getNoMatchInputService().get(this.noInputId);
+		
+		
+		this.menu.setNoInput(noInput);
+		
 		
 		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
 		
@@ -211,11 +223,11 @@ public class MenuEditorBean extends AbstractBean {
 	}
 	private void addNoMatch() {
 		
-		
-		NoMatchInputEntity noMatch = ServicesFactory.getInstance().getNoMatchInputService().get(this.noMatchId);
-		if(this.menu.getNoInput() != null && noMatch.getId().equals(this.menu.getNoMatch().getId())) {
+		if(this.menu.getNoMatch() != null && this.menu.getNoMatch().getId().equals(this.noMatchId) ) {
 			return;
 		}
+		
+		NoMatchInputEntity noMatch = ServicesFactory.getInstance().getNoMatchInputService().get(this.noMatchId);
 		
 		this.menu.setNoMatch(noMatch);
 		
@@ -248,7 +260,7 @@ public class MenuEditorBean extends AbstractBean {
 		ServicesFactory.getInstance().getFlowEditorService().connectForm(source.getElement(), element);
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void addChoices() {
 		
 		Node source = flow.getNode(this.form);
@@ -273,7 +285,8 @@ public class MenuEditorBean extends AbstractBean {
 				FormEntity formChoice = new FormEntity();
 				formChoice.setDescription(this.menu.getName()+"_"+choice.getName());
 				formChoice.setName(this.menu.getName()+"_"+choice.getName());
-				formChoice.setFormType(formType);
+				formChoice.setFormType(formType,choice);
+				
 				
 				String imgPath = formType.getImagePathSuccess();
 				formType.setImagePathSuccess(imgPath.replace("<NUMBER>", choice.getDtmf().equals("*") ? "x" : choice.getDtmf()  ));
@@ -296,24 +309,31 @@ public class MenuEditorBean extends AbstractBean {
 			} 
 		}		
 		this.menu.setChoices(this.choices);
-		//atualiza nome dos form choices
+		//atualiza nome dos form choices e ordena as choices
 		for(Node nodeChoice : source.getListTarget()) {
 			
 			if(( (FormEntity) nodeChoice.getElement().getData()).getFormType().getName().equals(Constants.FORM_TYPE_CHOICE) ) {
 				for(ChoiceEntity choiceMenu : this.menu.getChoices()) {
-					
+				
+			
 					FormEntity formChoice = (FormEntity)nodeChoice.getElement().getData();
-					formChoice.setDescription(this.menu.getName()+"_"+choiceMenu.getName());
-					formChoice.setName(this.menu.getName()+"_"+choiceMenu.getName());
+					ChoiceEntity choice = (ChoiceEntity)formChoice.getFormId();
+					
+					if(choiceMenu.getId().equals(choice.getId()) ) { 
+						
+						if(!this.menu.getName().equalsIgnoreCase(this.originalName) && 
+								formChoice.getName().contains(this.originalName+"_")) {
+							String name = formChoice.getName().replace(this.originalName+"_", this.menu.getName()+"_");
+									
+							formChoice.setName(name);
+							formChoice.setDescription(name);
+						}																
+					}
 					
 				}
-			}
-			
-			
+			}						
 		}
-			
-		
-		
+		ServicesFactory.getInstance().getFlowEditorService().alingMenuChoices(source.getElement());
 		
 	}
 	

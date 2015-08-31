@@ -33,7 +33,7 @@ public class PromptEditorBean extends AbstractBean {
 	private List<ConditionEntity> conditions;
 	private String conditionId;
 	private String audioId;
-	private Integer audioOrder;
+	private String audioOrder;
 	private List<PromptEntity> prompts;
 	
 	
@@ -162,16 +162,12 @@ public class PromptEditorBean extends AbstractBean {
 	}
 	
 	
-	
 
-	
-
-	
-	public Integer getAudioOrder() {
+	public String getAudioOrder() {
 		return audioOrder;
 	}
 
-	public void setAudioOrder(Integer audioOrder) {
+	public void setAudioOrder(String audioOrder) {
 		this.audioOrder = audioOrder;
 	}
 
@@ -212,14 +208,26 @@ public class PromptEditorBean extends AbstractBean {
 	
 	public void addAudioToPrompt(ActionEvent event) {
 		
-		List<PromptAudioEntity> listAudios =  prompt.getAudios();		
-		if(audioOrder == null) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Please,inform audio order!");
+		List<PromptAudioEntity> listAudios =  prompt.getAudios();	
+		
+		this.audioId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_audio_input").toString();
+		this.audioOrder = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_audio_order").toString();
+		this.conditionId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_condition_input").toString();
+		
+		
+		if(this.audioId == null || this.audioId.length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Please, select an audio!");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
+		
+		if(audioOrder == null || audioOrder.length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Please, inform audio order!");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return;
 		}
 		for(PromptAudioEntity promptAudio : listAudios) {
-			if(promptAudio.getOrderNum() == this.audioOrder) {
+			if(promptAudio.getOrderNum() != null && promptAudio.getOrderNum().toString().equals(this.audioOrder)) {
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Audio Order: "+audioOrder+" already exists!");
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				return;

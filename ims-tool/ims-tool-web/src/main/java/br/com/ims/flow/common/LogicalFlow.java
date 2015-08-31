@@ -8,6 +8,7 @@ import org.primefaces.model.diagram.Element;
 
 import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.AnnounceEntity;
+import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.FormEntity;
 
 public class LogicalFlow {
@@ -365,6 +366,63 @@ public class LogicalFlow {
 		}
 		
 		
+	}
+	public void alingMenuChoices(Element element) {
+		Node menuNode = getNode(element);
+    	
+    	//empura no input/nomatch para o final da lista
+		
+		boolean first = true;
+		for(int indexA = 0; indexA < menuNode.getListTarget().size()-2; indexA++) {
+    		Node choiceNodeA = menuNode.getListTarget().get(indexA);
+    		FormEntity formChoiceA = (FormEntity)choiceNodeA.getElement().getData();
+    		
+    		if(formChoiceA.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCHINPUT)) {
+    			int indexB = 0;
+    			Node choiceNodeB = null;
+    			if(first) {
+    				first = false;
+    				indexB = menuNode.getListTarget().size()-2;
+    				choiceNodeB = menuNode.getListTarget().get(indexB);
+    				    				
+    			} else {
+    				indexB = menuNode.getListTarget().size()-1;
+    				choiceNodeB = menuNode.getListTarget().get(indexB);
+    			}
+    			menuNode.getListTarget().set(indexB, choiceNodeA);
+				menuNode.getListTarget().set(indexA, choiceNodeB);
+				indexA=-1;
+    			
+    		}
+		}
+		
+		//ordena as choices
+		for(int indexA = 0; indexA < menuNode.getListTarget().size(); indexA++) {
+    		Node choiceNodeA = menuNode.getListTarget().get(indexA);
+    		FormEntity formChoiceA = (FormEntity)choiceNodeA.getElement().getData();
+    		
+    		if(formChoiceA.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE)) {
+    			
+    			for(int indexB = indexA; indexB < menuNode.getListTarget().size(); indexB++) {
+        			Node choiceNodeB = menuNode.getListTarget().get(indexB);
+        			FormEntity formChoiceB = (FormEntity)choiceNodeB.getElement().getData();
+        			if(formChoiceB.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE)) { 
+        				
+        				
+        				if( ((ChoiceEntity)formChoiceA.getFormId()).compareTo((ChoiceEntity)formChoiceB.getFormId()) > 0) {
+        					
+        					menuNode.getListTarget().set(indexB, choiceNodeA);
+        					menuNode.getListTarget().set(indexA, choiceNodeB);
+        					
+        					indexA = -1;
+        					break;
+        					
+        				}
+        			}
+        			
+        		}
+    		}
+    	}    	
 	}
 	
 

@@ -47,6 +47,10 @@ public class FormEntity extends AbstractFormEntity{
 	public FormTypeEntity getFormType() {
 		return formType;
 	}
+	public void setFormType(FormTypeEntity formType, Object formId) {
+		this.formType = formType;
+		this.formId = formId;
+	}
 	public void setFormType(FormTypeEntity formType) {
 		this.formType = formType;
 		if(this.formType != null) {
@@ -74,6 +78,9 @@ public class FormEntity extends AbstractFormEntity{
 		return formId;
 	}
 
+	public void setFormId(Object formId) {
+		this.formId = formId;
+	}
 	
 	public TagEntity getTag() {
 		return tag;

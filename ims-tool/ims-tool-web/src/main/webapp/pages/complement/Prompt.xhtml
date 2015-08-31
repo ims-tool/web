@@ -47,7 +47,7 @@
 								itemValue="#{audio.id}" itemLabel="#{audio.name}"  />
 			 			</p:selectOneMenu>
 			 			<h:outputLabel id="label_complement_prompt_audio_order" for="complement_prompt_audio_order" value="Order:" />		 		 
-			            <p:inputText id="complement_prompt_audio_order" type="number" value="#{promptEditorView.audioOrder}"  required="true" requiredMessage="Please,inform audio order" label="label_complement_prompt_audio_order" />
+			            <p:inputText id="complement_prompt_audio_order" type="number" value="#{promptEditorView.audioOrder}"  required="true" requiredMessage="Please,inform audio order" label="label_complement_prompt_audio_order"/>
 			            <h:outputLabel id="label_complement_prompt_condition" for="complement_prompt_condition" value="Condition:" />
 			            <p:selectOneMenu value="#{promptEditorView.conditionId}" 
 			 			                 id="complement_prompt_condition"
@@ -58,7 +58,7 @@
 								itemValue="#{condition.id}" itemLabel="#{condition.name}"  />
 			 			</p:selectOneMenu>
 			            
-			            <p:commandButton value="Add audio to prompt" update="formComplement" ajax="true" actionListener="#{promptEditorView.addAudioToPrompt}"/>			            				
+			            <p:commandButton value="Add audio to prompt" update="formComplement" ajax="true" immediate="true" actionListener="#{promptEditorView.addAudioToPrompt}"/>			            				
 		 			</h:panelGrid>	 		
 				</p:column>
 				<p:column colspan="2">
@@ -72,8 +72,8 @@
 		 						emptyMessage="No audio assigned to Prompt" 
 		 						sortBy="#{promptAudio.orderNum}"
 		 				    >
-					        <p:column headerText="Order" >
-					            <h:outputText value="#{promptAudio.orderNum}" />
+					        <p:column headerText="Order" width="50px" >
+					            <h:outputText value="#{promptAudio.orderNum} " />
 					        </p:column>
 					        <p:column headerText="Name" >
 					            <h:outputText value="#{promptAudio.audio.name}" />
