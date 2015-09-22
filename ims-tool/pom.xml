@@ -137,7 +137,7 @@
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<!-- SPRING CORE -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -158,6 +158,7 @@
 
 
 	<modules>
+		<module>ims-tool-manager</module>
 		<module>ims-tool-server</module>
 		<module>ims-tool-util</module>
 		<module>ims-tool-web</module>

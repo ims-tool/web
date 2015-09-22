@@ -23,7 +23,7 @@ import br.com.ims.tool.entity.Audio;
  * @author Cesar
  */
 @Stateless
-@Path("br.com.ims.service.audio")
+@Path("audio")
 public class AudioFacadeREST extends AbstractFacade<Audio> {
     @PersistenceContext(unitName = "ivrPersistence")
     private EntityManager em;

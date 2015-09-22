@@ -54,6 +54,7 @@ public class FormFacadeREST extends AbstractFacade<Form> {
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Form find(@PathParam("id") Integer id) {
+    	System.out.println("teste");
         return super.find(id);
     }
 
