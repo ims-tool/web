@@ -215,17 +215,11 @@ public class NextFormService {
 				nextForm.setDisconnect(disconnect);
 				
 				//verifica se ligação passou por tag de retenção
-				if (LogUtils.isRetencao(Long.parseLong(MethodInvocationUtils.getContextValue(
-							jsonContext, MapValues.LOGID)))) {
-					LogUtils.finalizaLog(MethodInvocationUtils.getContextValue(
-							jsonContext, MapValues.LOGID), jsonContext, FormConstants.RETENCAO_STATUS);
+				if (LogUtils.isRetencao(Long.parseLong(MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID)))) {
+					LogUtils.finalizaLog(MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID), jsonContext, FormConstants.RETENCAO_STATUS);
 				} else {
-					LogUtils.finalizaLog(MethodInvocationUtils.getContextValue(
-							jsonContext, MapValues.LOGID), jsonContext, FormConstants.ABANDONO_STATUS);
+					LogUtils.finalizaLog(MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID), jsonContext, FormConstants.ABANDONO_STATUS);
 				}
-				
-				
-				
 				if (UraUtils.isNotNull(disconnect) && disconnect.getTag() > 0) {
 					LogUtils.createTrackTag(LogUtils.getTrackServiceId(), trackId, logId, disconnect.getTag());
 				}
@@ -233,6 +227,7 @@ public class NextFormService {
 			
 		} catch (Exception e) {
 		}
+		nextForm.setJsonContexto(jsonContext);
 		return nextForm;
 	}
 	
