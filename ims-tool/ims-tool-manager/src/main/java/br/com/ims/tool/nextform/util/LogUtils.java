@@ -19,8 +19,12 @@ public class LogUtils {
 	}
 	
 	public static String createLog(String jsonContext, NextFormDto nextForm) {
-		
-		String strLogId = MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID);
+		String strLogId = null;
+		try {
+			strLogId = MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		Long logId =  null;
 		
 		
@@ -50,6 +54,7 @@ public class LogUtils {
 			logger.info("Erro ao Recuperar ANI para a [instancia] "
 					+ MethodInvocationUtils.getContextValue(jsonContext, MapValues.INSTANCE));
 			log.setAni(null);
+			e.printStackTrace();
 		}
 		log.setDnis(MethodInvocationUtils.getContextValue(jsonContext, MapValues.DNIS));
 		log.setDocumento(MethodInvocationUtils.getContextValue(jsonContext, MapValues.DOCUMENT));
@@ -72,6 +77,7 @@ public class LogUtils {
 		try {
 			obtemLogDao().inserirLog(log);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return jsonContext;
 	}
@@ -93,7 +99,7 @@ public class LogUtils {
 				createTrackTag(getTrackServiceId(), trackId, logId, nextForm.getTag());
 			}
 			
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 		
 	}
 	
@@ -107,7 +113,7 @@ public class LogUtils {
 			
 			obtemLogDao().inserirTrack(track);
 			
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 		
 	}
 	
@@ -128,14 +134,14 @@ public class LogUtils {
 			
 			obtemLogDao().inserirTrackService(track);
 			
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 		
 	}
 	
 	public static void createTrackTag(long id, long trackId, long logId, long tagId) {
 		try {
 			obtemLogDao().inserirTrackTag(id, trackId, logId, tagId);
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 		
 	}
 	
@@ -143,7 +149,7 @@ public class LogUtils {
 
 		try {
 			obtemLogDao().updateLog(logId, jsonContext, status);
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 	}
 	
 	public static void createLogDetail(String paramName, String paramValue, long logId) {
@@ -156,7 +162,7 @@ public class LogUtils {
 			logDetail.setParamValue(paramValue);
 			obtemLogDao().inserirLogDetail(logDetail);
 			
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 		
 	}
 
@@ -165,7 +171,7 @@ public class LogUtils {
 			
 			obtemLogDao().inserirTrackDetail(trackId, paramName, paramValue, logId);
 			
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 		
 	}
 	public static String addLogContext(String jsonContext, long idLog) {
@@ -182,14 +188,14 @@ public class LogUtils {
 		Long retorno = null;
 		try {
 			retorno = obtemLogDao().buscarTrackServiceId();
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 		return retorno;
 	}
 	public static boolean  isRetencao(long logId) {
 		boolean retorno = false;
 		try {
 			retorno = obtemLogDao().isRetencao(logId);
-		} catch (Exception e) {}
+		} catch (Exception e) {e.printStackTrace();}
 		return retorno;
 	}
 	

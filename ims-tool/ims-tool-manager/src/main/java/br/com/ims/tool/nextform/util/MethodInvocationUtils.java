@@ -12,8 +12,9 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.primefaces.json.JSONException;
-import org.primefaces.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class MethodInvocationUtils {
 
@@ -184,6 +185,9 @@ public class MethodInvocationUtils {
 
 				return jsonObject.toString();
 			} catch (JSONException e) {
+				logger.error("Erro ao setar [key] " + key + " [value] " + value + " no contexto", e);
+			} catch (Exception e) {
+				e.printStackTrace();
 				logger.error("Erro ao setar [key] " + key + " [value] " + value + " no contexto", e);
 			}
 		}

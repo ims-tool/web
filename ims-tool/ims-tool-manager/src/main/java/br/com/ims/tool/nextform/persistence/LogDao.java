@@ -28,31 +28,31 @@ public class LogDao {
 			conn = new ConnectionDB();
 
 			
-			String query = " INSERT INTO FLOW.LOG (ID, STARTDATE, STOPDATE, UCID, DNIS, ANI, INSTANCE, DOCUMENT, PROTOCOLNUMBER, PROTOCOLID, FINALSTATUS, CONTEXT, PERFIL, DDD, CIDADE, UF, AGING, VDN) " +
-				       " VALUES (?, localtimestamp, NULL, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?) ";
+			String query = " INSERT INTO FLOW.LOG (ID, STARTDATE, STOPDATE, UCID, DNIS, ANI, INSTANCE, DOCUMENT, PROTOCOLID, FINALSTATUS, CONTEXT, PERFIL, DDD, CIDADE, UF, VDN) " +
+				       " VALUES (?, localtimestamp, NULL, ?, ?, ?, ?, ?, ?,  NULL, ?, ?, ?, ?, ?, ?) ";
 
 			stm = conn.getPreparedStatement(query);
 			stm.setLong(1, log.getId());
 			stm.setString(2, log.getUcid());
-			stm.setString(3, validNumber(log.getDnis()));
-			stm.setString(4, validNumber(log.getAni()));
+			stm.setLong(3, validNumber(log.getAni()));
+			stm.setLong(4, validNumber(log.getAni()));
 			stm.setString(5, log.getInstance());
 			stm.setString(6, log.getDocumento());
-			stm.setString(7, log.getProtocolNumber());
-			stm.setString(8, log.getProtocolId());
-			stm.setString(9, log.getContext());
-			stm.setString(10, validNumber(log.getPerfil()));
-			stm.setString(11, log.getDdd());
-			stm.setString(12, log.getCidade());
-			stm.setString(13, log.getUf());
-			stm.setString(14, validNumber(log.getAging()));
-			stm.setString(15, log.getVdn());
+			
+			stm.setString(7, log.getProtocolId());
+			stm.setString(8, log.getContext());
+			stm.setLong(9, validNumber(log.getPerfil()));
+			stm.setString(10, log.getDdd());
+			stm.setString(11, log.getCidade());
+			stm.setString(12, log.getUf());
+			stm.setString(13, log.getVdn());
 
 			stm.executeQuery();
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir Log ", e);
 			logger.info(log.toString());
+			e.printStackTrace();
 			throw new Exception("Erro ao Inserir Log ", e);
 		} finally {
 			conn.finalize();
@@ -96,18 +96,18 @@ public class LogDao {
 			stm.setString(2, contexto);
 			
 			
-			stm.setString(3, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.PERFIL)));
-			stm.setString(4, validNumber(ddd));
+			stm.setLong(3, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.PERFIL)));
+			stm.setLong(4, validNumber(ddd));
 			stm.setString(5, MethodInvocationUtils.getContextValue(contexto, MapValues.CIDADE));
 			stm.setString(6, MethodInvocationUtils.getContextValue(contexto, MapValues.UF));
-			stm.setString(7, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.AGING)));
+			stm.setLong(7, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.AGING)));
 			stm.setString(8, MethodInvocationUtils.getContextValue(contexto, MapValues.VDN));
 			
 			stm.setString(9, instancia);
 			stm.setString(10, MethodInvocationUtils.getContextValue(contexto, MapValues.DOCUMENT));
 			stm.setString(11, MethodInvocationUtils.getContextValue(contexto, MapValues.PROTOCOLNUMBER));
 			stm.setString(12, MethodInvocationUtils.getContextValue(contexto, MapValues.PROTOCOLID));
-			stm.setString(13, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.ANI)));
+			stm.setLong(13, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.ANI)));
 			
 			stm.setString(14, logId);
 			
@@ -495,14 +495,14 @@ public boolean isRetencao(long logId) throws Exception {
 	}
 	
 	
-	private String validNumber(String value) {
+	private Long validNumber(String value) {
 		
 		if(value != null){
 			Long i = null;
 			
 			try {
 				i = Long.parseLong(value);
-				return i.toString(); 
+				return i; 
 			} catch (Exception e) {
 				logger.error("Erro ao validar numero valor= "+value, e);
 			}

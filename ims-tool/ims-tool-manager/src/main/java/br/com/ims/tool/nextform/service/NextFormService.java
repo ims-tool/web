@@ -50,6 +50,7 @@ public class NextFormService {
 	@Produces({ "application/json" })
 	public NextFormDto getNextFormId(Request request) {
 		String jsonContext = request.getContext();
+		System.out.println(jsonContext);
 		NextFormDto nextForm = getNextFormByNextId(jsonContext, request.getNextId());
 		return nextForm;
 	}
@@ -69,7 +70,6 @@ public class NextFormService {
 				LogUtils.createLogDetail(FormConstants.FORM_NAO_ENCONTRADO, String.valueOf(nextFormId), logId);
 				nextForm = dao.getNextFormByNextId(FormConstants.FORM_DEFAULT);
 			}
-			
 			trackId = LogUtils.getTrackId();
 			LogUtils.createTrack(jsonContext, nextForm, trackId);
 			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.TRACKID, String.valueOf(trackId), true);
@@ -226,6 +226,7 @@ public class NextFormService {
 			}
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		nextForm.setJsonContexto(jsonContext);
 		return nextForm;

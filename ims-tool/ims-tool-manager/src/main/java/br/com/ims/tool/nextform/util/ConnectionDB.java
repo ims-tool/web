@@ -23,6 +23,7 @@ public class ConnectionDB {
 				ctx = new InitialContext();
 				ds = (DataSource)ctx.lookup("jdbc/ivr_flow");
 				conn = ds.getConnection();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -48,17 +49,17 @@ public class ConnectionDB {
 			}
 		}
 
-//		public ResultSet ExecuteQuery(String sql) throws SQLException {
-//			rs = null;
-//			stmt = null;
-//			try {
-//				stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
-//				rs = stmt.executeQuery(sql);
-//		    } catch (Exception e) {
-//		      e.printStackTrace();
-//		    }
-//		    return rs;
-//		}
+		public ResultSet ExecuteQuery(String sql) throws SQLException {
+			rs = null;
+			stmt = null;
+			try {
+				stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+				rs = stmt.executeQuery(sql);
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
+		    return rs;
+		}
 		
 		public PreparedStatement getPreparedStatement (String sql) throws SQLException{
 			return conn.prepareStatement(sql);
@@ -68,10 +69,10 @@ public class ConnectionDB {
 			rs = null;
 			try {
 				rs = pst.executeQuery();
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}finally{
-				try {rs.close();} catch (SQLException e) {}
 				try {pst.close();} catch (SQLException e) {}
 			}
 			return rs;

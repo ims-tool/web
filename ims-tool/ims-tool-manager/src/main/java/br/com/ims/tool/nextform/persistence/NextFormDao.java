@@ -51,11 +51,11 @@ public class NextFormDao {
 		try {
 			conn = new ConnectionDB();
 			String query = " SELECT NF.ID, NF.NAME, NF.DESCRIPTION, NF.FORMTYPE, NF.FORMID, NF.TAG, FT.ID, FT.NAME, NF.NEXTFORMDEFAULT " +
-							" FROM FLOW.FORM NF, FLOW.FORMTYPE FT  WHERE NF.ID = ?  AND NF.FORMTYPE = FT.ID ";
+							" FROM FLOW.FORM NF, FLOW.FORMTYPE FT  WHERE NF.ID = "+nextId+"  AND NF.FORMTYPE = FT.ID ";
 			
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, nextId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
+			 
+			
 			if (rs.next()) {
 				nextForm = new NextFormDto();
 				
@@ -75,7 +75,6 @@ public class NextFormDao {
 			logger.error("Erro ao Recuperar o NextForm de ID: " + nextId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return nextForm;
 	}
@@ -84,43 +83,39 @@ public class NextFormDao {
 	public AnnounceDto getAnnounceById(long idAnnounce, String jsonContext) throws Exception {
 		AnnounceDto announce = null;
 
-		ResultSet rs = null;
+		ResultSet rs2 = null;
 		ConnectionDB conn = null;
 		PreparedStatement stm = null;
-		PreparedStatement stm2 = null;
 		try {
 			conn = new ConnectionDB();
 			
 			String query = " SELECT AN.ID, AN.NAME, AN.DESCRIPTION, AN.FLUSHPROMPT, AN.PROMPT, AN.NEXTFORM, PR.ID, PR.NAME, AN.TAG " +
-							" FROM FLOW.ANNOUNCE AN, FLOW.PROMPT PR  WHERE AN.ID = ?  AND AN.PROMPT = PR.ID ";
+							" FROM FLOW.ANNOUNCE AN, FLOW.PROMPT PR  WHERE AN.ID = "+idAnnounce+"  AND AN.PROMPT = PR.ID ";
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, idAnnounce);
-			rs = stm.executeQuery();
-			if (rs.next()) {
+			rs2 = conn.ExecuteQuery(query);
+			if (rs2.next()) {
 				announce = new AnnounceDto();
-				announce.setId(rs.getLong(1));
-				announce.setName(rs.getString(2));
-				announce.setDescription(rs.getString(3));
-				announce.setFlushprompt(rs.getLong(4));
-				announce.setPrompt(rs.getLong(5));
-				announce.setNextForm(rs.getLong(6));
-				announce.setTag(rs.getLong(9));
+				announce.setId(rs2.getLong(1));
+				announce.setName(rs2.getString(2));
+				announce.setDescription(rs2.getString(3));
+				announce.setFlushprompt(rs2.getLong(4));
+				announce.setPrompt(rs2.getLong(5));
+				announce.setNextForm(rs2.getLong(6));
+				announce.setTag(rs2.getLong(9));
 
 				PromptDto prompt = new PromptDto();
-				prompt.setId(rs.getLong(7));
-				prompt.setName(rs.getString(8));
+				prompt.setId(rs2.getLong(7));
+				prompt.setName(rs2.getString(8));
 				prompt.setListaPromptAudio(getListPromptAudioByPromptId(prompt.getId(), jsonContext));
 
 				announce.setPromptDto(prompt);
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			logger.error("Erro ao Recuperar o Announce de ID: " + idAnnounce, e);
 			throw new Exception("Erro ao Recuperar o Announce de ID: " + idAnnounce, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
-			try {stm2.close();} catch (SQLException e) {}
 		}
 		return announce;
 	}
@@ -137,11 +132,9 @@ public class NextFormDao {
 					" PC.NOINPUT, PC.NOMATCH, PC.FETCHTIMEOUT, PC.INTERDIGITTIMEOUT,   PC.TERMINATINGTIMEOUT," +
 					" PC.TERMINATINGCHARACTER, PC.NEXTFORM, PR.ID,   PR.NAME, GR.ID, GR.NAME, GR.DESCRIPTION," +
 					" GR.TYPE, GR.SIZEMAX, GR.SIZEMIN, PC.TAG  FROM FLOW.PROMPTCOLLECT PC   LEFT OUTER JOIN FLOW.GRAMMAR GR ON " +
-					" PC.GRAMMAR = GR.ID  LEFT OUTER JOIN FLOW.PROMPT PR ON PC.PROMPT = PR.ID   WHERE PC.ID = ? ";
+					" PC.GRAMMAR = GR.ID  LEFT OUTER JOIN FLOW.PROMPT PR ON PC.PROMPT = PR.ID   WHERE PC.ID ="+idpromptCollect;
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, idpromptCollect);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			if (rs.next()) {
 				promptCollect.setId(rs.getLong(1));
 				promptCollect.setName(rs.getString(2));
@@ -162,8 +155,7 @@ public class NextFormDao {
 				PromptDto prompt = new PromptDto();
 				prompt.setId(rs.getLong(14));
 				prompt.setName(rs.getString(15));
-				prompt.setListaPromptAudio(getListPromptAudioByPromptId(prompt
-						.getId(), jsonContext));
+				prompt.setListaPromptAudio(getListPromptAudioByPromptId(prompt.getId(), jsonContext));
 
 				promptCollect.setPromptDto(prompt);
 
@@ -187,7 +179,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o PromptCollect de ID: " + idpromptCollect, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return promptCollect;
 	}
@@ -197,17 +188,14 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 
 			String query = 	" SELECT PA.PROMPT, PA.AUDIO, PA.ORDERNUM, AU.ID, AU.TYPE, AU.NAME, AU.DESCRIPTION, " +
 							" AU.PATH, PA.CONDITION FROM FLOW.PROMPTAUDIO PA, FLOW.AUDIO AU  " +
-							" WHERE PA.PROMPT = ?  AND PA.AUDIO = AU.ID  ORDER BY PA.ORDERNUM ";
+							" WHERE PA.PROMPT = "+promptId+"  AND PA.AUDIO = AU.ID  ORDER BY PA.ORDERNUM ";
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, promptId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			while (rs.next()) {
 				boolean condition = true;
 				if (rs.getLong(9) > 0) {
@@ -258,7 +246,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o PromptAudio de ID: " + promptId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return listaPromptAudio;
 	}
@@ -268,16 +255,12 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 
-			String query = " SELECT ID, AUDIOID, PARAMNAME, PARAMVALUE FROM FLOW.AUDIOVAR WHERE AUDIOID = ? ";
+			String query = " SELECT ID, AUDIOID, PARAMNAME, PARAMVALUE FROM FLOW.AUDIOVAR WHERE AUDIOID = "+audioId;
 
-			stm = conn.getPreparedStatement(query);
-			conn.getPreparedStatement(query);
-			stm.setLong(1, audioId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			
 			while (rs.next()) {
 				AudioVarDto audioVar= new AudioVarDto();
@@ -293,7 +276,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o AudioVar de ID: " + audioId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return listaAudioVar;
 	}
@@ -303,15 +285,12 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 			String query = " SELECT NMI.ID, NMI.TYPE, NMI.THRESHOLD,  NMI.PROMPT, NMI.NEXTFORM, PR.ID, PR.NAME, NMI.TAG  " +
-					" FROM FLOW.NOMATCHINPUT NMI, FLOW.PROMPT PR  WHERE NMI.ID = ?  AND NMI.PROMPT = PR.ID ";
+					" FROM FLOW.NOMATCHINPUT NMI, FLOW.PROMPT PR  WHERE NMI.ID = "+id+"  AND NMI.PROMPT = PR.ID ";
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, id);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			if (rs.next()) {
 				noMatchInput = new NoMatchInputDto();
 				noMatchInput.setId(rs.getLong(1));
@@ -334,7 +313,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o NextForm de ID: " + id,	e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return noMatchInput;
 	}
@@ -344,16 +322,13 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 			String query = " SELECT MN.ID, MN.NAME, MN.DESCRIPTION, MN.PROMPT, MN.NOINPUT, MN.NOMATCH,  MN.FETCHTIMEOUT," +
 					"MN.TERMINATINGTIMEOUT, MN.TERMINATINGCHARACTER, PR.ID, PR.NAME  FROM FLOW.MENU MN, FLOW.PROMPT PR  " +
-					"WHERE MN.ID = ?  AND MN.PROMPT = PR.ID ";
+					"WHERE MN.ID = "+menuId+"  AND MN.PROMPT = PR.ID ";
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, menuId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			if (rs.next()) {
 				menuDto = new MenuDto();
 				menuDto.setId(rs.getLong(1));
@@ -384,26 +359,22 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o Menu de ID: " + menuId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return menuDto;
 	}
 
-	public Collection<ChoiceDto> getListChoiceByMenuId(long menuId, String jsonContext)
-			throws Exception {
+	public Collection<ChoiceDto> getListChoiceByMenuId(long menuId, String jsonContext) throws Exception {
 		Collection<ChoiceDto> listaChoice = new ArrayList<ChoiceDto>();
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 
-			String query = " SELECT ID, NAME, MENU, DTMF, NEXTFORM, CONDITION, TAG FROM FLOW.CHOICE WHERE MENU = ? ORDER BY ID ";
+			String query = " SELECT ID, NAME, MENU, DTMF, NEXTFORM, CONDITION, TAG FROM FLOW.CHOICE WHERE MENU = "+menuId+" ORDER BY ID ";
+			
+			rs = conn.ExecuteQuery(query);
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, menuId);
-			rs = stm.executeQuery();
 			while (rs.next()) {
 				boolean condition = true;
 				if (rs.getLong(6) > 0) {
@@ -427,17 +398,14 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar a Lista Choice de ID: " + menuId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return listaChoice;
 	}
 	
 	public DecisionDto getDecisionById(long decisionId) throws Exception {
 		DecisionDto dto = new DecisionDto();
-		
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 
@@ -446,14 +414,12 @@ public class NextFormDao {
 							" DM.DESCRIPTION, DM.TYPE, DM.METHODREFERENCE, DM.LOG_ACTIVE, CP.STATUS, CP.TIMEOUT " +
 							" FROM FLOW.DECISION DC, FLOW.DECISIONGROUP DG, FLOW.DECISIONMAP DM " +
 							" LEFT JOIN FLOW.CONTROLPANEL CP ON DM.METHODREFERENCE = CP.METHODNAME  " +
-							" WHERE DC.ID = ?   " +
+							" WHERE DC.ID = "+decisionId+"   " +
 							" AND DC.ID = DG.DECISIONID  " +
 							" AND DG.DECISIONMAPID = DM.ID  " +
 							" ORDER BY DG.ORDERNUM ASC ";
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, decisionId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			
 			Collection<DecisionGroupDto> listaDecisionGroup = new ArrayList<DecisionGroupDto>();
 			boolean first = true;
@@ -498,7 +464,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar a Decision de ID: " + decisionId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		
 		return dto;
@@ -509,18 +474,14 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 
 			String query = 	" SELECT ID, DECISIONGROUPID, ORDERNUM, OPERATION, VALUE1, " +
 							" VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7, VALUE8, " +
 							" VALUE9, VALUE10, DECISIONGROUPCHILD, NEXTFORMID, TAG  " +
-							" FROM FLOW.DECISIONCHANCE WHERE DECISIONGROUPID = ? ORDER BY ORDERNUM ";
-
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, groupId);
-			rs = stm.executeQuery();
+							" FROM FLOW.DECISIONCHANCE WHERE DECISIONGROUPID = "+groupId+" ORDER BY ORDERNUM ";
+			rs = conn.ExecuteQuery(query);
 			while (rs.next()) {
 				DecisionChanceDto dto = new DecisionChanceDto();
 
@@ -548,7 +509,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar a Lista DECISION CHANCE de ID: " + groupId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return listaChance;
 	}
@@ -558,16 +518,13 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 
 			String query = 	" SELECT ID, DECISIONGROUPID, PARAMNAME, PARAMVALUE " +
-							" FROM FLOW.DECISIONPARAMETERS WHERE DECISIONGROUPID = ? ORDER BY ID ASC ";
+							" FROM FLOW.DECISIONPARAMETERS WHERE DECISIONGROUPID = "+groupId+" ORDER BY ID ASC ";
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, groupId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			while (rs.next()) {
 				DecisionParametersDto dto = new DecisionParametersDto();
 				
@@ -583,7 +540,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar a Lista DECISION Parameters de ID: " + groupId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return lista;
 	}
@@ -593,7 +549,6 @@ public class NextFormDao {
 		
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 
@@ -602,14 +557,12 @@ public class NextFormDao {
 							" OM.DESCRIPTION, OM.METHODREFERENCE, OP.TAG, OM.LOG_ACTIVE, CP.STATUS, CP.TIMEOUT " +
 							" FROM FLOW.OPERATION OP, FLOW.OPERATIONGROUP OG, FLOW.OPERATIONMAP OM " +
 							" LEFT JOIN FLOW.CONTROLPANEL CP ON OM.METHODREFERENCE = CP.METHODNAME " +
-							" WHERE OP.ID = ? " +
+							" WHERE OP.ID =  "+operationId +
 							" AND OP.ID = OG.OPERATIONID " +
 							" AND OG.OPERATIONMAPID = OM.ID " +
 							" ORDER BY OG.ORDERNUM ASC ";
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, operationId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			
 			Collection<OperationGroupDto> listaOperationGroup = new ArrayList<OperationGroupDto>();
 					
@@ -654,7 +607,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar Operation de ID: " + operationId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		
 		return dto;
@@ -665,16 +617,13 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
 
 			String query = 	" SELECT ID, OPERATIONGROUPID, PARAMNAME, PARAMVALUE " +
-							" FROM FLOW.OPERATIONPARAMETERS WHERE OPERATIONGROUPID = ? ORDER BY ID ASC ";
+							" FROM FLOW.OPERATIONPARAMETERS WHERE OPERATIONGROUPID = "+groupId+" ORDER BY ID ASC ";
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, groupId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			while (rs.next()) {
 				OperationParametersDto dto = new OperationParametersDto();
 				
@@ -691,7 +640,6 @@ public class NextFormDao {
 					"Erro ao Recuperar a Lista Operation Parameters de ID: " + groupId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return lista;
 	}
@@ -701,15 +649,11 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = " SELECT ID, NAME, DESCRIPTION, FLOWNAME, NEXTFORM, TAG FROM FLOW.FLOW WHERE ID = ? ";
+			String query = " SELECT ID, NAME, DESCRIPTION, FLOWNAME, NEXTFORM, TAG FROM FLOW.FLOW WHERE ID = "+flowId;
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, flowId);
-			rs = stm.executeQuery();
-			
+			rs = conn.ExecuteQuery(query);			
 			if (rs.next()) {
 				flow = new FlowDto();
 				
@@ -725,7 +669,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o Flow de ID: " + flowId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return flow;
 		
@@ -736,14 +679,11 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = " SELECT ID, NAME, DESCRIPTION, TRANSFERRULEID, TAG FROM FLOW.TRANSFER WHERE ID = ? ";
+			String query = " SELECT ID, NAME, DESCRIPTION, TRANSFERRULEID, TAG FROM FLOW.TRANSFER WHERE ID = "+ transferId;
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, transferId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			
 			if (rs.next()) {
 				transfer = new TransferDto();
@@ -759,7 +699,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o Transfer de ID: " + transferId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return transfer;
 		
@@ -770,14 +709,11 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = " SELECT ID, NAME, DESCRIPTION, TAG FROM FLOW.DISCONNECT WHERE ID = ? ";
+			String query = " SELECT ID, NAME, DESCRIPTION, TAG FROM FLOW.DISCONNECT WHERE ID = "+disconnectId;
 
-			stm = conn.getPreparedStatement(query);
-			stm.setLong(1, disconnectId);
-			rs = stm.executeQuery();
+			rs = conn.ExecuteQuery(query);
 			
 			if (rs.next()) {
 				disconnect = new DisconnectDto();
@@ -792,7 +728,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o Transfer de ID: " + disconnectId, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return disconnect;
 		
@@ -803,15 +738,11 @@ public class NextFormDao {
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = " SELECT ID FROM FLOW.FORM WHERE NAME = ? ";
+			String query = " SELECT ID FROM FLOW.FORM WHERE NAME = "+flowName;
 
-			stm = conn.getPreparedStatement(query);
-			stm.setString(1, flowName);
-			rs = stm.executeQuery();
-			
+			rs = conn.ExecuteQuery(query);			
 			if (rs.next()) {
 				retorno = rs.getLong(1);
 			}
@@ -820,7 +751,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o Form de Name: " + flowName, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return retorno;
 		
@@ -830,15 +760,11 @@ public class NextFormDao {
 		PromptDto prompt = null;
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = " SELECT ID, NAME  FROM FLOW.PROMPT WHERE NAME = ? ";
+			String query = " SELECT ID, NAME  FROM FLOW.PROMPT WHERE NAME = "+name;
 
-			stm = conn.getPreparedStatement(query);
-			stm.setString(1, name);
-			rs = stm.executeQuery();
-			
+			rs = conn.ExecuteQuery(query);			
 			if (rs.next()) {
 				prompt = new PromptDto();
 				prompt.setId(rs.getLong(1));
@@ -851,7 +777,6 @@ public class NextFormDao {
 			throw new Exception("Erro ao Recuperar o Prompt de Name: " + name, e);
 		} finally {
 			conn.finalize();
-			try {stm.close();} catch (SQLException e) {}
 		}
 		return prompt;
 	}
