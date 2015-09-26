@@ -29,6 +29,10 @@ public class ConnectionDB {
 			}
 		}
 
+		public Connection getConnection() {
+			return conn;
+		}
+		
 		public void finalize() {
 			try {rs.close();} catch(Exception e) {}
 			try {stmt.close();} catch(Exception e) {}

@@ -20,12 +20,9 @@ public class LogUtils {
 	
 	public static String createLog(String jsonContext, NextFormDto nextForm) {
 		String strLogId = null;
-		try {
+		
 			strLogId = MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		Long logId =  null;
+			Long logId =  null;
 		
 		
 		try {
@@ -38,6 +35,7 @@ public class LogUtils {
 				return jsonContext;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			try {
 				logId = obtemLogDao().buscarLogId();
 				jsonContext = addLogContext(jsonContext, logId);

@@ -22,32 +22,34 @@ public class LogDao {
 	
 	public void inserirLog(LogDto log) throws Exception {
 		
-		ConnectionDB conn = null;
+		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
-			conn = new ConnectionDB();
+			conn = new ConnectionDB().getConnection();
 
 			
-			String query = " INSERT INTO FLOW.LOG (ID, STARTDATE, STOPDATE, UCID, DNIS, ANI, INSTANCE, DOCUMENT, PROTOCOLID, FINALSTATUS, CONTEXT, PERFIL, DDD, CIDADE, UF, VDN) " +
-				       " VALUES (?, localtimestamp, NULL, ?, ?, ?, ?, ?, ?,  NULL, ?, ?, ?, ?, ?, ?) ";
+			String query = " INSERT INTO FLOW.LOG (ID, STARTDATE, STOPDATE, UCID, DNIS, ANI, INSTANCE, DOCUMENT, CONTEXT, PERFIL, DDD, CIDADE, UF, VDN) " +
+				       " VALUES (?, localtimestamp, NULL, ?, ?, ?, ?, ?, ?,  NULL, ?, ?, ?, ?) ";
+			
+//			String query = " INSERT INTO FLOW.LOG (ID, STARTDATE, STOPDATE) " +
+//				       " VALUES (?, localtimestamp, NULL) ";
 
-			stm = conn.getPreparedStatement(query);
+			stm = conn.prepareStatement(query);
 			stm.setLong(1, log.getId());
 			stm.setString(2, log.getUcid());
-			stm.setLong(3, validNumber(log.getAni()));
+			stm.setLong(3, validNumber(log.getDnis()));
 			stm.setLong(4, validNumber(log.getAni()));
 			stm.setString(5, log.getInstance());
 			stm.setString(6, log.getDocumento());
-			
-			stm.setString(7, log.getProtocolId());
-			stm.setString(8, log.getContext());
-			stm.setLong(9, validNumber(log.getPerfil()));
-			stm.setString(10, log.getDdd());
-			stm.setString(11, log.getCidade());
-			stm.setString(12, log.getUf());
-			stm.setString(13, log.getVdn());
+			stm.setString(7, log.getContext());
+			stm.setString(8, log.getDdd());
+			stm.setString(9, log.getCidade());
+			stm.setString(10, log.getUf());
+			stm.setString(11, log.getVdn());
 
-			stm.executeQuery();
+			
+
+			stm.executeUpdate();
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir Log ", e);
@@ -55,7 +57,7 @@ public class LogDao {
 			e.printStackTrace();
 			throw new Exception("Erro ao Inserir Log ", e);
 		} finally {
-			conn.finalize();
+			conn.close();
 			try {stm.close();} catch (SQLException e) {}
 		}
 		
@@ -242,28 +244,28 @@ public class LogDao {
 	
 	public void inserirTrack(TrackDto track) throws Exception {
 		
-		ConnectionDB conn = null;
+		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
-			conn = new ConnectionDB();
+			conn = new ConnectionDB().getConnection();
 
 			String query = " INSERT INTO FLOW.TRACK (ID, LOGID, ROWDATE, FORMID, TAGID, LOG_TYPE) VALUES (?, ?, localtimestamp, ?, ?, ?) ";
 
-			stm = conn.getPreparedStatement(query);
+			stm = conn.prepareStatement(query);
 			stm.setLong(1, track.getId());
 			stm.setLong(2, track.getLogId());
 			stm.setLong(3, track.getFormId());
 			stm.setLong(4, track.getTagId());
 			stm.setString(5, track.getLogType());
 
-			stm.executeQuery();
+			stm.executeUpdate();
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir Track ", e);
 			logger.info(track.toString());
 			throw new Exception("Erro ao Inserir Track ", e);
 		} finally {
-			conn.finalize();
+			conn.close();
 			try {stm.close();} catch (SQLException e) {}
 		}
 		
@@ -307,27 +309,27 @@ public class LogDao {
 	
 	public void inserirTrackDetail(long trackId, String paramName, String paramValue, long logId) throws Exception {
 			
-		ConnectionDB conn = null;
+		Connection conn = null;
 		PreparedStatement stm = null;
 		try {
-			conn = new ConnectionDB();
+			conn = new ConnectionDB().getConnection();
 	
 			String query = " INSERT INTO FLOW.TRACKDETAIL (ID, TRACKID, PARAMNAME, PARAMVALUE, ROWDATE, LOGID) " +
 						   " VALUES (NEXTVAL ('flow.SEQ_TRACKDETAIL'), ?, ?, ?, localtimestamp, ?) ";
 	
-			stm = conn.getPreparedStatement(query);
+			stm = conn.prepareStatement(query);
 			stm.setLong(1, trackId);
 			stm.setString(2, paramName);
 			stm.setString(3, paramValue);
 			stm.setLong(4, logId);
 	
-			stm.executeQuery();
+			stm.executeUpdate();
 	
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir TRACKDETAIL ", e);
 			throw new Exception("Erro ao Inserir TRACKDETAIL ", e);
 		} finally {
-			conn.finalize();
+			conn.close();
 			try {stm.close();} catch (SQLException e) {}
 		}
 			
@@ -439,27 +441,27 @@ public class LogDao {
 	
 	public void inserirTrackTag(long id, long trackId, long logId, long tagId) throws Exception {
 		
-		ConnectionDB conn = null;
+		Connection conn = null;
 		PreparedStatement stm = null;
 		
 		try {
-			conn = new ConnectionDB();
+			conn = new ConnectionDB().getConnection();
 
 			String query = " INSERT INTO FLOW.TRACKTAG (ID, TRACKID, LOGID, TAGID, ROWDATE) " +
 			   " VALUES (?, ?, ?, ?, localtimestamp) ";
 			
-			stm = conn.getPreparedStatement(query);
+			stm = conn.prepareStatement(query);
 			stm.setLong(1, id);
 			stm.setLong(2, trackId);
 			stm.setLong(3, logId);
 			stm.setLong(4, tagId);
-			stm.executeQuery();
+//			stm.executeUpdate();
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir TRACKTAG ", e);
 			throw new Exception("Erro ao Inserir TRACKTAG ", e);
 		}  finally {
-			conn.finalize();
+			conn.close();
 			try {stm.close();} catch (SQLException e) {}
 		}
 		

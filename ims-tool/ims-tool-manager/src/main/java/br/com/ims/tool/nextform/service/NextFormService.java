@@ -50,7 +50,6 @@ public class NextFormService {
 	@Produces({ "application/json" })
 	public NextFormDto getNextFormId(Request request) {
 		String jsonContext = request.getContext();
-		System.out.println(jsonContext);
 		NextFormDto nextForm = getNextFormByNextId(jsonContext, request.getNextId());
 		return nextForm;
 	}
@@ -168,7 +167,7 @@ public class NextFormService {
 				transferenciaIn.setPontoLog(String.valueOf(transfer.getTransferRuleId()));
 				
 				StringBuffer parametros = new StringBuffer();
-				UraUtils.concatenaParametros("ANI", MethodInvocationUtils.getContextValue(jsonContext, MapValues.ANI), parametros);
+			 	UraUtils.concatenaParametros("ANI", MethodInvocationUtils.getContextValue(jsonContext, MapValues.ANI), parametros);
 				UraUtils.concatenaParametros("INSTANCIA", MethodInvocationUtils.getContextValue(jsonContext, MapValues.INSTANCE), parametros);
 				UraUtils.concatenaParametros("DNIS", MethodInvocationUtils.getContextValue(jsonContext, MapValues.DNIS), parametros);
 				UraUtils.concatenaParametros("DOCUMENTO", MethodInvocationUtils.getContextValue(jsonContext, MapValues.DOCUMENT), parametros);
@@ -321,7 +320,7 @@ public class NextFormService {
 					param = map.toString();
 				}
 				try {
-					serviceReturn = null; //this.invocationService.invoke(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
+					serviceReturn =  null;//this.invocationService.invoke(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
 					nextForm.setJsonContexto(serviceReturn.getJsonContext());
 					
 					if (decisionGroup.getDecisionMap().getLogActive() > 0) {
@@ -414,6 +413,11 @@ public class NextFormService {
 		return nextformdefault;
 	}
 	
+	private MethodInvocationVO invokeMethod() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private boolean processaOperacao(String operacao, String type,
 			String resultado, DecisionChanceDto decisionChance, String jsonContext, long logId) {
 		try {
