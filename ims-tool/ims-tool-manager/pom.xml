@@ -10,7 +10,7 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>ims-tool-util</artifactId>
 			<version>0.0.1</version>
-		</dependency>
+		</dependency>		
 	</dependencies>
   <artifactId>ims-tool-manager</artifactId>
   <packaging>war</packaging>
