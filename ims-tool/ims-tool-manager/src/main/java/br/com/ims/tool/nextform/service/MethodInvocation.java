@@ -80,4 +80,10 @@ public class MethodInvocation  {
 		return methodInvocationVO;
 	}
 
+
+	public MethodInvocationVO invokeExternalService(String jsonContext, String methodReference, Map<String, String> parameters, Integer timeout, Boolean isActive) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.print.DocFlavor.READER;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -45,6 +46,8 @@ import br.com.ims.tool.nextform.util.UraUtils;
 @Stateless
 @Path("nextformid")
 public class NextFormService {
+	
+
 
 	@POST
 	@Produces({ "application/json" })
@@ -261,7 +264,8 @@ public class NextFormService {
 					param = map.toString();
 				}
 				try {
-					serviceReturn = null;//this.invocationService.invoke(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
+					MethodInvocation invocationService = new MethodInvocation();
+					serviceReturn = invocationService.invoke(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
 					
 					context = serviceReturn.getJsonContext();
 					
@@ -320,7 +324,8 @@ public class NextFormService {
 					param = map.toString();
 				}
 				try {
-					serviceReturn =  null;//this.invocationService.invoke(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
+					MethodInvocation invocationService = new MethodInvocation();
+					serviceReturn =  invocationService.invoke(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
 					nextForm.setJsonContexto(serviceReturn.getJsonContext());
 					
 					if (decisionGroup.getDecisionMap().getLogActive() > 0) {
