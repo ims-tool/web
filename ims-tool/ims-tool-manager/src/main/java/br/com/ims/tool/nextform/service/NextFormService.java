@@ -418,10 +418,6 @@ public class NextFormService {
 		return nextformdefault;
 	}
 	
-	private MethodInvocationVO invokeMethod() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	private boolean processaOperacao(String operacao, String type,
 			String resultado, DecisionChanceDto decisionChance, String jsonContext, long logId) {

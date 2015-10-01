@@ -501,5 +501,7 @@ public interface MapValues extends Serializable {
 	public static final String TEL_FAX = "temp.TelefoneFax";
 	
 	public static final String VDN_FAX = "temp.VdnFax";
+
+	public static final String EXTERNAL_SERVICE = "temp.externalService";
 	
 }

@@ -17,6 +17,7 @@ public class MethodsCatalog {
 	private static InitialContext ctx = null;
 	
 	public MethodInvocationVO getContextValue(String jsonContext, Map<String, String> parameters) {
+		
 		String contextValue = null;
 		for (String key : parameters.keySet()) {
 
