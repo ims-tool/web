@@ -435,13 +435,13 @@ function createElementManager(top){
 	var url;
 	
 	//LOCAL
-//	var urlJson = 'http://localhost:8888/telefonia-ivr-operator-web/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
+	var urlJson = 'http://localhost:7001/ims-tool-operator-web/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
 
 	//QA3
 //	var urlJson = 'http://svuxqsoa71.gvt.net.br:8010/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
 	
 	//PRODUÇÃO
-	var urlJson = 'http://urasan/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
+	//var urlJson = 'http://urasan/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
 	
 	
 	url = urlJson.replace(/;/g, ' ');
