@@ -15,6 +15,7 @@ public class DecisionMapDto implements Serializable {
 	
 	private int timeout;
 	private boolean isActive;
+	private boolean isInternalService;
 	
 	public long getId() {
 		return id;
@@ -64,12 +65,18 @@ public class DecisionMapDto implements Serializable {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+	public boolean isInternalService() {
+		return isInternalService;
+	}
+	public void setInternalService(boolean isInternalService) {
+		this.isInternalService = isInternalService;
+	}
 	@Override
 	public String toString() {
 		return "DecisionMapDto [id=" + id + ", name=" + name + ", description="
 				+ description + ", type=" + type + ", methodReference="
 				+ methodReference + ", logActive=" + logActive + ", timeout="
-				+ timeout + ", isActive=" + isActive + "]";
+				+ timeout + ", isActive=" + isActive + ", isInternalService="+isInternalService+"]";
 	}
 
 }

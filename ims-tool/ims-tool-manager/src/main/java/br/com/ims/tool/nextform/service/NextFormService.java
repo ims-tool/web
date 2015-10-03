@@ -265,7 +265,11 @@ public class NextFormService {
 				}
 				try {
 					MethodInvocation invocationService = new MethodInvocation();
-					serviceReturn = invocationService.invoke(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
+					if (operationGroup.getOperationMap().isInternalService()){
+						serviceReturn = invocationService.invoke(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
+					}else{
+						serviceReturn = invocationService.invokeExternalService(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
+					}
 					
 					context = serviceReturn.getJsonContext();
 					
@@ -324,8 +328,13 @@ public class NextFormService {
 					param = map.toString();
 				}
 				try {
+					
 					MethodInvocation invocationService = new MethodInvocation();
-					serviceReturn =  invocationService.invoke(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
+					if(decisionGroup.getDecisionMap().isInternalService()){
+						serviceReturn =  invocationService.invoke(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
+					}else{
+						serviceReturn = invocationService.invokeExternalService(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
+					}
 					nextForm.setJsonContexto(serviceReturn.getJsonContext());
 					
 					if (decisionGroup.getDecisionMap().getLogActive() > 0) {

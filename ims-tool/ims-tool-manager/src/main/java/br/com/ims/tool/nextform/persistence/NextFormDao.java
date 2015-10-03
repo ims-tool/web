@@ -411,7 +411,7 @@ public class NextFormDao {
 
 			String query = 	" SELECT DC.ID, DC.NAME, DC. DESCRIPTION, " + 
 							" DG.DECISIONID, DG.ID, DG.ORDERNUM, DG.DECISIONMAPID, DM.ID, DM.NAME, " +
-							" DM.DESCRIPTION, DM.TYPE, DM.METHODREFERENCE, DM.LOG_ACTIVE, CP.STATUS, CP.TIMEOUT " +
+							" DM.DESCRIPTION, DM.TYPE, DM.METHODREFERENCE, DM.LOG_ACTIVE, CP.STATUS, CP.TIMEOUT, CP.INTERNALSERVICE " +
 							" FROM FLOW.DECISION DC, FLOW.DECISIONGROUP DG, FLOW.DECISIONMAP DM " +
 							" LEFT JOIN FLOW.CONTROLPANEL CP ON DM.METHODREFERENCE = CP.METHODNAME  " +
 							" WHERE DC.ID = "+decisionId+"   " +
@@ -447,6 +447,7 @@ public class NextFormDao {
 				decisionMap.setLogActive(rs.getInt(13));
 				decisionMap.setActive("true".equalsIgnoreCase(rs.getString(14)) ? true : false);
 				decisionMap.setTimeout(rs.getInt(15));
+				decisionMap.setInternalService(rs.getBoolean(16));
 				
 				//buscar lista de chance
 				decisionGroup.setListaDecisionChance(getListDecisionChance(decisionGroup.getId()));
@@ -554,7 +555,7 @@ public class NextFormDao {
 
 			String query =  " SELECT OP.ID, OP.NAME, OP.DESCRIPTION, OP.NEXTFORMID, " +
 							" OG.OPERATIONID, OG.ID, OG.ORDERNUM, OG.OPERATIONMAPID, OM.ID, OM.NAME,  " +
-							" OM.DESCRIPTION, OM.METHODREFERENCE, OP.TAG, OM.LOG_ACTIVE, CP.STATUS, CP.TIMEOUT " +
+							" OM.DESCRIPTION, OM.METHODREFERENCE, OP.TAG, OM.LOG_ACTIVE, CP.STATUS, CP.TIMEOUT, CP.INTERNALSERVICE " +
 							" FROM FLOW.OPERATION OP, FLOW.OPERATIONGROUP OG, FLOW.OPERATIONMAP OM " +
 							" LEFT JOIN FLOW.CONTROLPANEL CP ON OM.METHODREFERENCE = CP.METHODNAME " +
 							" WHERE OP.ID =  "+operationId +
@@ -592,6 +593,8 @@ public class NextFormDao {
 				operationMap.setLogActive(rs.getInt(14));
 				operationMap.setActive("true".equalsIgnoreCase(rs.getString(15)) ? true : false);
 				operationMap.setTimeout(rs.getInt(16));
+				operationMap.setInternalService(rs.getBoolean(17));
+				
 
 				//buscar lista de parameters
 				operationGroup.setListaOperationParameters(getListOperationParameters(operationGroup.getId()));

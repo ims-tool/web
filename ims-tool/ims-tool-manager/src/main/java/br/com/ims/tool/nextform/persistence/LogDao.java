@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
+import br.com.ims.tool.nextform.exception.DaoException;
 import br.com.ims.tool.nextform.model.LogDetailDto;
 import br.com.ims.tool.nextform.model.LogDto;
 import br.com.ims.tool.nextform.model.TrackDto;
@@ -20,7 +21,7 @@ public class LogDao {
 	
 	private static Logger logger = Logger.getLogger(LogDao.class);
 	
-	public void inserirLog(LogDto log) throws Exception {
+	public void inserirLog(LogDto log) throws DaoException{
 		
 		Connection conn = null;
 		PreparedStatement stm = null;
@@ -31,8 +32,6 @@ public class LogDao {
 			String query = " INSERT INTO FLOW.LOG (ID, STARTDATE, STOPDATE, UCID, DNIS, ANI, INSTANCE, DOCUMENT, CONTEXT, PERFIL, DDD, CIDADE, UF, VDN) " +
 				       " VALUES (?, localtimestamp, NULL, ?, ?, ?, ?, ?, ?,  NULL, ?, ?, ?, ?) ";
 			
-//			String query = " INSERT INTO FLOW.LOG (ID, STARTDATE, STOPDATE) " +
-//				       " VALUES (?, localtimestamp, NULL) ";
 
 			stm = conn.prepareStatement(query);
 			stm.setLong(1, log.getId());
@@ -55,15 +54,15 @@ public class LogDao {
 			logger.error("Erro ao Inserir Log ", e);
 			logger.info(log.toString());
 			e.printStackTrace();
-			throw new Exception("Erro ao Inserir Log ", e);
+			throw new DaoException("Erro ao Inserir Log ", e);
 		} finally {
-			conn.close();
+			try {conn.close();} catch (SQLException e1) {}
 			try {stm.close();} catch (SQLException e) {}
 		}
 		
 	}
 	
-	public void updateLog(String logId, String contexto, String status) throws Exception {
+	public void updateLog(String logId, String contexto, String status) throws DaoException {
 		
 		ConnectionDB conn = null;
 		PreparedStatement stm = null;
@@ -81,7 +80,9 @@ public class LogDao {
 			if(ddd == null || ddd.isEmpty()) {
 				ddd = instancia.substring(0, 2);
 			}
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			throw new DaoException("Erro ao Inserir Log ", e);
+		}
 		
 		
 		try {
@@ -117,7 +118,7 @@ public class LogDao {
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Finalizar Log LogId= "+logId, e);
-			throw new Exception("Erro ao Finalizar Log ", e);
+			throw new DaoException("Erro ao Finalizar Log ", e);
 		} finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
@@ -127,7 +128,7 @@ public class LogDao {
 	
 	
 
-	public void inserirLogDetail(LogDetailDto logDetail) throws Exception {
+	public void inserirLogDetail(LogDetailDto logDetail) throws DaoException {
 		
 		ConnectionDB conn = null;
 		PreparedStatement stm = null;
@@ -146,7 +147,7 @@ public class LogDao {
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir LogDetail ", e);
 			logger.info(logDetail.toString());
-			throw new Exception("Erro ao Inserir LogDetail ", e);
+			throw new DaoException("Erro ao Inserir LogDetail ", e);
 		} finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
@@ -174,7 +175,7 @@ public class LogDao {
 			}
 		} catch (SQLException e) {
 			logger.error("Erro ao Recuperar id do Log", e);
-			throw new Exception("Erro ao Recuperar id do Log", e);
+			throw new DaoException("Erro ao Recuperar id do Log", e);
 		} finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
@@ -182,7 +183,7 @@ public class LogDao {
 		return retorno;
 	}
 	
-	public long buscarTrackId() throws Exception {
+	public long buscarTrackId() throws DaoException {
 		
 		ResultSet rs = null;
 		ConnectionDB conn = null;
@@ -204,7 +205,7 @@ public class LogDao {
 			}
 		} catch (SQLException e) {
 			logger.error("Erro ao Recuperar id do Track", e);
-			throw new Exception("Erro ao Recuperar id do Track", e);
+			throw new DaoException("Erro ao Recuperar id do Track", e);
 		} finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
@@ -212,7 +213,7 @@ public class LogDao {
 		return retorno;
 	}
 	
-	public long buscarTrackServiceId() throws Exception {
+	public long buscarTrackServiceId() throws DaoException {
 		
 		ResultSet rs = null;
 		ConnectionDB conn = null;
@@ -234,7 +235,7 @@ public class LogDao {
 			}
 		} catch (SQLException e) {
 			logger.error("Erro ao Recuperar id do Track", e);
-			throw new Exception("Erro ao Recuperar id do Track", e);
+			throw new DaoException("Erro ao Recuperar id do Track", e);
 		} finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
@@ -242,7 +243,7 @@ public class LogDao {
 		return retorno;
 	}
 	
-	public void inserirTrack(TrackDto track) throws Exception {
+	public void inserirTrack(TrackDto track) throws DaoException {
 		
 		Connection conn = null;
 		PreparedStatement stm = null;
@@ -263,15 +264,15 @@ public class LogDao {
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir Track ", e);
 			logger.info(track.toString());
-			throw new Exception("Erro ao Inserir Track ", e);
+			throw new DaoException("Erro ao Inserir Track ", e);
 		} finally {
-			conn.close();
+			try {conn.close();} catch (SQLException e1) {}
 			try {stm.close();} catch (SQLException e) {}
 		}
 		
 	}
 	
-	public void inserirTrackService(TrackServiceDto track) throws Exception {
+	public void inserirTrackService(TrackServiceDto track) throws DaoException {
 		
 		ConnectionDB conn = null;
 		PreparedStatement stm = null;
@@ -299,7 +300,7 @@ public class LogDao {
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir TRACKSERVICE ", e);
 			logger.info(track.toString());
-			throw new Exception("Erro ao Inserir TRACKSERVICE ", e);
+			throw new DaoException("Erro ao Inserir TRACKSERVICE ", e);
 		} finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
@@ -307,7 +308,7 @@ public class LogDao {
 		
 	}
 	
-	public void inserirTrackDetail(long trackId, String paramName, String paramValue, long logId) throws Exception {
+	public void inserirTrackDetail(long trackId, String paramName, String paramValue, long logId) throws DaoException {
 			
 		Connection conn = null;
 		PreparedStatement stm = null;
@@ -327,15 +328,15 @@ public class LogDao {
 	
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir TRACKDETAIL ", e);
-			throw new Exception("Erro ao Inserir TRACKDETAIL ", e);
+			throw new DaoException("Erro ao Inserir TRACKDETAIL ", e);
 		} finally {
-			conn.close();
+			try {conn.close();} catch (SQLException e1) {}
 			try {stm.close();} catch (SQLException e) {}
 		}
 			
 	}
 	
-	public String getRecallForm(String instance, String tag, String parameter, String status) throws Exception{
+	public String getRecallForm(String instance, String tag, String parameter, String status) throws DaoException{
 		String form = null;
 		ConnectionDB conn = null;
 		PreparedStatement stm = null;
@@ -382,7 +383,7 @@ public class LogDao {
 			
 		} catch (SQLException e) {
 			logger.error("Erro ao consultar instancia", e);
-			throw new Exception("Erro ao consultar instancia", e);
+			throw new DaoException("Erro ao consultar instancia", e);
 		}  finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
@@ -391,7 +392,7 @@ public class LogDao {
 		return form;
 	}
 	
-	public String getRecallForm(String instance, String parameter) throws Exception{
+	public String getRecallForm(String instance, String parameter) throws DaoException{
 		String form = null;
 		ConnectionDB conn = null;
 		PreparedStatement stm = null;
@@ -430,7 +431,7 @@ public class LogDao {
 			
 		} catch (SQLException e) {
 			logger.error("Erro ao consultar instancia", e);
-			throw new Exception("Erro ao consultar instancia ", e);
+			throw new DaoException("Erro ao consultar instancia ", e);
 		}  finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
@@ -439,7 +440,7 @@ public class LogDao {
 		return form;
 	}
 	
-	public void inserirTrackTag(long id, long trackId, long logId, long tagId) throws Exception {
+	public void inserirTrackTag(long id, long trackId, long logId, long tagId) throws DaoException {
 		
 		Connection conn = null;
 		PreparedStatement stm = null;
@@ -459,15 +460,15 @@ public class LogDao {
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir TRACKTAG ", e);
-			throw new Exception("Erro ao Inserir TRACKTAG ", e);
+			throw new DaoException("Erro ao Inserir TRACKTAG ", e);
 		}  finally {
-			conn.close();
+			try {conn.close();} catch (SQLException e1) {}
 			try {stm.close();} catch (SQLException e) {}
 		}
 		
 	}
 	
-public boolean isRetencao(long logId) throws Exception {
+public boolean isRetencao(long logId) throws DaoException {
 		
 		ResultSet rs = null;
 		ConnectionDB conn = null;
@@ -488,7 +489,7 @@ public boolean isRetencao(long logId) throws Exception {
 			}
 		} catch (SQLException e) {
 			logger.error("Erro ao Recuperar id do Log", e);
-			throw new Exception("Erro ao Recuperar id do Log", e);
+			throw new DaoException("Erro ao Recuperar id do Log", e);
 		} finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}

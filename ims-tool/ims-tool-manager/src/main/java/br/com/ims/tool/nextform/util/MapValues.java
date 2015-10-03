@@ -504,4 +504,6 @@ public interface MapValues extends Serializable {
 
 	public static final String EXTERNAL_SERVICE = "temp.externalService";
 	
+	public static final String TEMPO_MENU = "tempo.menu";
+	
 }

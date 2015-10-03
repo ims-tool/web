@@ -13,6 +13,7 @@ public class OperationMapDto implements Serializable {
 	private int logActive;
 	private int timeout;
 	private boolean isActive;
+	private boolean isInternalService;
 	
 	public long getId() {
 		return id;
@@ -56,12 +57,20 @@ public class OperationMapDto implements Serializable {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+	
+	
+	public boolean isInternalService() {
+		return isInternalService;
+	}
+	public void setInternalService(boolean isInternalService) {
+		this.isInternalService = isInternalService;
+	}
 	@Override
 	public String toString() {
 		return "OperationMapDto [id=" + id + ", name=" + name
 				+ ", description=" + description + ", methodReference="
 				+ methodReference + ", logActive=" + logActive + ", timeout="
-				+ timeout + ", isActive=" + isActive + "]";
+				+ timeout + ", isActive=" + isActive + ", isInternalService="+isInternalService+"]";
 	}
 
 }
