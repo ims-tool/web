@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import br.com.ims.tool.nextform.model.AnnounceDto;
@@ -441,11 +442,12 @@ public class NextFormDao {
 				decisionMap.setId(rs.getLong(8));
 				decisionMap.setName(rs.getString(9));
 				decisionMap.setDescription(rs.getString(10));
-				decisionMap.setType(rs.getString(11));
-				decisionMap.setMethodReference(rs.getString(12));
+				decisionMap.setType(rs.getString(11).trim());
+				decisionMap.setMethodReference(rs.getString(12).trim());
 				
 				decisionMap.setLogActive(rs.getInt(13));
-				decisionMap.setActive("true".equalsIgnoreCase(rs.getString(14)) ? true : false);
+				String s = rs.getString(14);
+				decisionMap.setActive("true".equalsIgnoreCase(s.trim()) ? true : false);
 				decisionMap.setTimeout(rs.getInt(15));
 				decisionMap.setInternalService(rs.getBoolean(16));
 				
@@ -489,8 +491,16 @@ public class NextFormDao {
 				dto.setId(rs.getLong(1));
 				dto.setDecisionGroupId(rs.getLong(2));
 				dto.setOrder(rs.getLong(3));
-				dto.setOperation(rs.getString(4));
-				dto.setValue1(rs.getString(5));
+				if(StringUtils.isNotBlank(rs.getString(4))){
+					dto.setOperation(rs.getString(4).trim());
+				}else{
+					dto.setOperation(rs.getString(4));
+				}
+				if(StringUtils.isNotBlank(rs.getString(5))){
+					dto.setValue1(rs.getString(5).trim());
+				}else{
+					dto.setValue1(rs.getString(5));
+				}
 				dto.setValue2(rs.getString(6));
 				dto.setValue3(rs.getString(7));
 				dto.setValue4(rs.getString(8));
@@ -531,8 +541,8 @@ public class NextFormDao {
 				
 				dto.setId(rs.getLong(1));
 				dto.setDecisionGroupId(rs.getLong(2));
-				dto.setParamName(rs.getString(3));
-				dto.setParamValue(rs.getString(4));
+				dto.setParamName(rs.getString(3).trim());
+				dto.setParamValue(rs.getString(4).trim());
 
 				lista.add(dto);
 			}
@@ -571,8 +581,8 @@ public class NextFormDao {
 			while (rs.next()) {
 				if (first) {
 					dto.setId(rs.getLong(1));
-					dto.setName(rs.getString(2));
-					dto.setDescription(rs.getString(3));
+					dto.setName(rs.getString(2).trim());
+					dto.setDescription(rs.getString(3).trim());
 					dto.setNextform(rs.getLong(4));
 					dto.setTag(rs.getLong(13));
 					first = false;
@@ -586,12 +596,12 @@ public class NextFormDao {
 				
 				OperationMapDto operationMap = new OperationMapDto();
 				operationMap.setId(rs.getLong(9));
-				operationMap.setName(rs.getString(10));
-				operationMap.setDescription(rs.getString(11));
-				operationMap.setMethodReference(rs.getString(12));
+				operationMap.setName(rs.getString(10).trim());
+				operationMap.setDescription(rs.getString(11).trim());
+				operationMap.setMethodReference(rs.getString(12).trim());
 				
 				operationMap.setLogActive(rs.getInt(14));
-				operationMap.setActive("true".equalsIgnoreCase(rs.getString(15)) ? true : false);
+				operationMap.setActive("true".equalsIgnoreCase(rs.getString(15).trim()) ? true : false);
 				operationMap.setTimeout(rs.getInt(16));
 				operationMap.setInternalService(rs.getBoolean(17));
 				

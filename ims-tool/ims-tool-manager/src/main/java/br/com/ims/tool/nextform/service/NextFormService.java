@@ -273,10 +273,9 @@ public class NextFormService {
 					
 					context = serviceReturn.getJsonContext();
 					
-					if  (operationGroup.getOperationMap().getLogActive() > 0) {
-						LogUtils.createTrackService(LogUtils.getTrackServiceId(), trackId, operationGroup.getId(), operationGroup.getOperationMap()
-								.getMethodReference(), serviceReturn.getValue(), param, serviceReturn.getErrorCode(), logId, serviceReturn.getTimeService());
-					}
+//					if  (operationGroup.getOperationMap().getLogActive() > 0) {
+//						LogUtils.createTrackService(LogUtils.getTrackServiceId(), trackId, operationGroup.getId(), operationGroup.getOperationMap().getMethodReference(), serviceReturn.getValue(), param, serviceReturn.getErrorCode(), logId, serviceReturn.getTimeService());
+//					}
 					
 				} catch (Exception e) {
 					LogUtils.createTrackService(LogUtils.getTrackServiceId(), trackId, operationGroup.getId(), e.getMessage(), serviceReturn.getValue(), param, FormConstants.ERROR_GENERIC_EXCEPTION, logId, 0);
@@ -316,8 +315,7 @@ public class NextFormService {
 
 				decisionGroupChild = null;
 				Map<String, String> map = null;
-				if (UraUtils.isNotNull(decisionGroup.getListaDecisionParameters())
-						&& !decisionGroup.getListaDecisionParameters().isEmpty()) {
+				if (UraUtils.isNotNull(decisionGroup.getListaDecisionParameters()) && !decisionGroup.getListaDecisionParameters().isEmpty()) {
 					map = new HashMap<String, String>();
 					for (DecisionParametersDto decisionParameters : decisionGroup.getListaDecisionParameters()) {
 						map.put(decisionParameters.getParamName(), decisionParameters.getParamValue());
@@ -337,16 +335,13 @@ public class NextFormService {
 					}
 					nextForm.setJsonContexto(serviceReturn.getJsonContext());
 					
-					if (decisionGroup.getDecisionMap().getLogActive() > 0) {
-						LogUtils.createTrackService(trackServiceId, trackId, decisionGroup.getId(), decisionGroup
-								.getDecisionMap().getMethodReference(), serviceReturn.getValue(),
-								param, serviceReturn.getErrorCode(), logId, serviceReturn.getTimeService());
-					}
+//					if (decisionGroup.getDecisionMap().getLogActive() > 0) {
+//						LogUtils.createTrackService(trackServiceId, trackId, decisionGroup.getId(), decisionGroup.getDecisionMap().getMethodReference(), serviceReturn.getValue(),param, serviceReturn.getErrorCode(), logId, serviceReturn.getTimeService());
+//					}
 					
 				} catch (Exception e) {
 					
-					LogUtils.createTrackService(trackServiceId, trackId, decisionGroup.getId(), decisionGroup
-							.getDecisionMap().getMethodReference(), e.getMessage(),param, FormConstants.ERROR_GENERIC_EXCEPTION, logId, 0);
+					LogUtils.createTrackService(trackServiceId, trackId, decisionGroup.getId(), decisionGroup.getDecisionMap().getMethodReference(), e.getMessage(),param, FormConstants.ERROR_GENERIC_EXCEPTION, logId, 0);
 					LogUtils.createLogDetail(FormConstants.ERRO, e.getMessage(), logId);
 					serviceReturn = MethodInvocationVO.getInstance(nextForm.getJsonContexto());
 				}
@@ -354,9 +349,7 @@ public class NextFormService {
 				for (DecisionChanceDto decisionChance : decisionGroup.getListaDecisionChance()) {
 
 					if (UraUtils.isNotNull(decisionChance.getOperation())) {
-						if (processaOperacao(decisionChance.getOperation(),
-								decisionGroup.getDecisionMap().getType(), serviceReturn.getValue(), decisionChance, serviceReturn.getJsonContext(), logId)) {
-							
+						if (processaOperacao(decisionChance.getOperation(), decisionGroup.getDecisionMap().getType(), serviceReturn.getValue(), decisionChance, serviceReturn.getJsonContext(), logId)) {
 							
 							if (UraUtils.isNotNull(decisionChance) && decisionChance.getTag() > 0) {
 								LogUtils.createTrackTag(trackServiceId, trackId, logId, decisionChance.getTag());
