@@ -1,8 +1,11 @@
 function startNewContext(){
 	var valueTimeStamp = new Date().getTime();
 	var ani = localStorage.getItem('cellphone');
+	if(ani == null) {
+		ani = "4100000000";
+	}
 	var instance = localStorage.getItem('instance');
-	var context ='{"startDate":"'+ valueTimeStamp + '","call":{"dnis":"UraSanWeb","ani":"' + ani + '","log":"","protocol":"","protocolId":"","ura":"412626"},"customer":{"document":""},"instance":{"numberPhone":"' + ani + '"},"urasan":{"tentativa":"NO"}}'; 
+	var context ='{"startDate":"'+ valueTimeStamp + '","call":{"dnis":"010101","ani":"' + ani + '","log":"","protocol":"","protocolId":"","ura":"412626"},"customer":{"document":""},"instance":{"numberPhone":"' + ani + '"},"urasan":{"tentativa":"NO"}}'; 
 	localStorage.setItem('context', context);
 	//console.log('Contexto carregado com sucesso');
 }
@@ -429,7 +432,7 @@ function createMenuTransfer(top, obj){
 function createElementManager(top){
 	
 	if(localStorage.getItem('context') === null){
-		localStorage.setItem('context', '{"call":{"channel":"web","ani":"4130252525"}}');
+		localStorage.setItem('context', '{"call":{"channel":"web","ani":"4100000000"}}');
 	}
 	
 	var url;
