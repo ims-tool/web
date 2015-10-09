@@ -127,25 +127,29 @@ function removeElement(top){
 
 	var nodeTop = document.getElementById(top);
 	while (nodeTop.hasChildNodes()) {
-    nodeTop.removeChild(nodeTop.lastChild);
+		nodeTop.removeChild(nodeTop.lastChild);
 	}
 }
 
 function createMenu(top, obj){
 	var nodeTop = document.getElementById(top);
-	var arrayMenu = obj.menu.listaChoice;
+	var arrayMenu = obj.menu.listaChoiceDto;
+	
 	var index;
 	//Adicionar o t�tulo referente ao menu
 	//console.log(obj.name);
 	//console.log(top);
 	
 	var textTitleMenu = obj.name;
+	
 	var lastIdAnnounce = localStorage.getItem('lastIdAnnounce');
 	//validar qual ser� o componente a ser executado.
 	for (var i in arrayMenu){
+		
 		//Verifica se o announce chama ele mesmo para n�o montar o bot�o.
 		//Verifica se o nextform � disconnect para n�o montar o bot�o.
 		if(lastIdAnnounce == arrayMenu[i].nextForm || arrayMenu[i].nextForm == '999'){
+		
 			continue;
 		}
 		var txtMenu = arrayMenu[i].name;
@@ -267,6 +271,7 @@ function createPrompt(top, obj){
 	formPrompt.appendChild(document.createElement('br'));
 	
 	//criar botao de enviar
+	console.log(obj.promptCollect.nextForm);
 	var buttonSendPrompt = document.createElement("button");
 	buttonSendPrompt.setAttribute('onclick', 'promptToNextForm('+obj.promptCollect.nextForm+')');
 	buttonSendPrompt.setAttribute('class', 'btn btn-success btnNormal btn-lg sizeButton text-center');
@@ -466,30 +471,33 @@ function createElementManager(top){
 						var obj = interaction.form;
 						var typeElement = 'nc';
 						try {
-							 typeElement = interaction.form.formType.name;
+							 typeElement = interaction.form.formtype;
 						} catch (e) {
 							typeElement = 'nc';
 						}
-						//console.log(JSON.stringify(obj));
+						console.log(JSON.stringify(typeElement));
 						
 						switch(typeElement){
-						case 'Menu':
-							createMenu(top, obj);
-							break;
-						case 'Announce':
+						case '1':
 							localStorage.setItem('lastIdAnnounce', interaction.form.id);
 							createAnnounce(top, obj);
 							break;
-						case 'PromptCollect':
+						case '2':
 							createPrompt(top, obj);
+							console.log(JSON.stringify(obj));
 							break;
-						case 'Disconnect':
-							createDisconnect(top, obj);
+						case '3':							
+							createMenu(top, obj);
 							break;
-						case 'Transfer':
+						case '7':
 							localStorage.setItem('vdn', obj.transfer.vdn );
 							createMenuTransfer(top, obj);
 							break;		
+						
+						case '8':
+							createDisconnect(top, obj);
+							break;
+						
 						default:
 							createDisconnect(top, obj);
 							break;

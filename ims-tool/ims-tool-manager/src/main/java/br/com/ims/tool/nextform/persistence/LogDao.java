@@ -488,8 +488,8 @@ public boolean isRetencao(long logId) throws DaoException {
 				retorno = true;
 			}
 		} catch (SQLException e) {
-			logger.error("Erro ao Recuperar id do Log", e);
-			throw new DaoException("Erro ao Recuperar id do Log", e);
+			logger.error("Erro ao Recuperar Log para validar se e de retencao", e);
+			throw new DaoException("Erro ao Recuperar Log para validar se e de retencao", e);
 		} finally {
 			conn.finalize();
 			try {stm.close();} catch (SQLException e) {}
