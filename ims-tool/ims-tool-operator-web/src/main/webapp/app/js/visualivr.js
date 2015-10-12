@@ -29,16 +29,16 @@ function finishFlow(){
 function registerClient(){
 	
 	var valueTimeStamp = new Date().getTime();
-	var valuePrompt = document.getElementById('loginNumberGVT').value;
-	var valuePromptCellphone = document.getElementById('celularGVT').value;
+	var valuePrompt = document.getElementById('loginNumber').value;
+	var valuePromptCellphone = document.getElementById('celular').value;
 	
 	//limpar Campos
-	document.getElementById('loginNumberGVT').value = '';
-	document.getElementById('celularGVT').value = '';
+	document.getElementById('loginNumber').value = '';
+	document.getElementById('celula').value = '';
 	
 	
 	if(valuePrompt===''){ 
-			alert('Favor preencher o Numero GVT.');
+			alert('Favor preencher o numero de telefone residencial.');
 	}else{
 		localStorage.setItem('instance', valuePrompt);
 		if(valuePromptCellphone != null  && valuePromptCellphone != ""){
@@ -334,7 +334,7 @@ function createMenuTransfer(top, obj){
 //	divAnnounceRow.appendChild(divAnnounce);
 //	nodeTop.appendChild(divAnnounceRow);
 	
-	//Botão para ligar no telefone GVT cadastrado.
+	//Botão para ligar no telefone cadastrado.
 //	nodeTop.appendChild(document.createElement('br'));
 //	nodeTop.appendChild(document.createElement('br'));
 	//criar botao para finalizar atendimento
@@ -446,10 +446,10 @@ function createElementManager(top){
 	var urlJson = 'http://localhost:7001/ims-tool-operator-web/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
 
 	//QA3
-//	var urlJson = 'http://svuxqsoa71.gvt.net.br:8010/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
+//	var urlJson = 'http://<TBD>/ims-tool-operator-web/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
 	
 	//PRODUÇÃO
-	//var urlJson = 'http://urasan/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
+	//var urlJson = 'http://<TBD>/ims-tool-operator-web/rest/interaction/get//'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
 	
 	
 	url = urlJson.replace(/;/g, ' ');
