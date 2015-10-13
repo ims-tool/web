@@ -5,7 +5,7 @@ function startNewContext(){
 		ani = "4100000000";
 	}
 	var instance = localStorage.getItem('instance');
-	var context ='{"startDate":"'+ valueTimeStamp + '","call":{"dnis":"010101","ani":"' + ani + '","log":"","protocol":"","protocolId":"","ura":"412626"},"customer":{"document":""},"instance":{"numberPhone":"' + ani + '"},"urasan":{"tentativa":"NO"}}'; 
+	var context ='{"startDate":"'+ valueTimeStamp + '","call":{"dnis":"010101","ani":"' + ani + '","log":"","protocol":"","protocolId":"","ura":"412626"},"customer":{"document":"","aging":"0"},"instance":{"numberPhone":"' + ani + '","perfil":"0"}}'; 
 	localStorage.setItem('context', context);
 	//console.log('Contexto carregado com sucesso');
 }

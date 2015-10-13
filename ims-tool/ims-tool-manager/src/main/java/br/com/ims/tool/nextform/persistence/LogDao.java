@@ -90,7 +90,7 @@ public class LogDao {
 
 			String query = " UPDATE FLOW.LOG SET STOPDATE = localtimestamp, FINALSTATUS = ?, CONTEXT = ?," +
 					   " PERFIL = ?, DDD = ?, CIDADE = ?, UF = ?, AGING = ?, VDN = ?, " +
-					   " INSTANCE = ?, DOCUMENT = ?, PROTOCOLNUMBER = ?, PROTOCOLID = ?, ANI = ? " +	
+					   " INSTANCE = ?, DOCUMENT = ?, PROTOCOLID = ?, ANI = ? " +	
 					   " WHERE ID = ? ";
 
 			stm = conn.getPreparedStatement(query);
@@ -100,7 +100,7 @@ public class LogDao {
 			
 			
 			stm.setLong(3, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.PERFIL)));
-			stm.setLong(4, validNumber(ddd));
+			stm.setString(4, ddd);
 			stm.setString(5, MethodInvocationUtils.getContextValue(contexto, MapValues.CIDADE));
 			stm.setString(6, MethodInvocationUtils.getContextValue(contexto, MapValues.UF));
 			stm.setLong(7, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.AGING)));
@@ -108,11 +108,10 @@ public class LogDao {
 			
 			stm.setString(9, instancia);
 			stm.setString(10, MethodInvocationUtils.getContextValue(contexto, MapValues.DOCUMENT));
-			stm.setString(11, MethodInvocationUtils.getContextValue(contexto, MapValues.PROTOCOLNUMBER));
-			stm.setString(12, MethodInvocationUtils.getContextValue(contexto, MapValues.PROTOCOLID));
-			stm.setLong(13, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.ANI)));
+			stm.setString(11, MethodInvocationUtils.getContextValue(contexto, MapValues.PROTOCOLID));
+			stm.setLong(12, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.ANI)));
 			
-			stm.setString(14, logId);
+			stm.setLong(13, Long.valueOf(logId));
 			
 			stm.executeQuery();
 
