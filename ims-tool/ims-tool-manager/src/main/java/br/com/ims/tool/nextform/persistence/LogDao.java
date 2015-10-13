@@ -113,7 +113,7 @@ public class LogDao {
 			
 			stm.setLong(13, Long.valueOf(logId));
 			
-			stm.executeQuery();
+			stm.executeUpdate();
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Finalizar Log LogId= "+logId, e);
