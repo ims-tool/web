@@ -84,17 +84,18 @@ header {
     text-align: center;
     color: #fff;
     background: #FFFFFF;
-/*     background: #F90; */
-/*	background-image: url(../img/imgFundo.jpg);
-	background-image: url(../img/imgFundoIE.jpg)\9;*/
+/*     background: #F90; */	
+	background-image: url(../img/imgFundo.jpg);
+	background-image: url(../img/imgFundoIE.jpg)\9;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: 100% 64%;
+    background-size: 100% 85%;
 }
 
 header .container {
     padding-top: 100px;
     padding-bottom: 50px;
+    
 }
 
 header img {
@@ -178,7 +179,7 @@ header .intro-text .skills {
 }
 
 section {
-    padding: 100px 0;
+    padding: 40px 0;
 }
 
 section h2 {
