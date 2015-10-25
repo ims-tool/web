@@ -10,24 +10,27 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.gvt.infra.dao.AbstractSqlDao;
-import br.com.gvt.infra.exceptions.DaoException;
-import br.com.gvt.telefonia.portal.co.model.Parameters;
+import br.com.ims.exception.DaoException;
+import model.Parameters;
 
-public class ParametersDao extends AbstractSqlDao {
+
+
+public class ParametersDao {
 	
 	private static Logger logger = LoggerFactory.getLogger(ParametersDao.class);
 	
 	public List<Parameters> getAll() throws DaoException {
 		
-		ResultSet rs = null;
+		
 		Connection conn = null;
 		PreparedStatement stm = null;
+		ResultSet rs = null;
+		
 		
 		List<Parameters> listaParameters = new ArrayList<Parameters>();
 		
 		try {
-			conn = super.getConnection();
+			conn = new ConnectionDB().getConnection();
 			stm = conn.prepareStatement(" SELECT * FROM ivr_owner.parameters where owner = 'CO' ORDER BY ID ");
 			rs = stm.executeQuery();
 			
@@ -46,8 +49,9 @@ public class ParametersDao extends AbstractSqlDao {
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erro ao Regras de Transferencia.", e);
-		} finally {
-			super.closeResources(rs, stm, conn);
+		}finally {
+			try {conn.close();} catch (SQLException e1) {}
+			try {stm.close();} catch (SQLException e) {}
 		}
 		
 		return listaParameters;
@@ -62,7 +66,7 @@ public class ParametersDao extends AbstractSqlDao {
 		Parameters parameters = null;
 		
 		try {
-			conn = super.getConnection();
+			conn = new ConnectionDB().getConnection();
 			stm = conn.prepareStatement(" SELECT * FROM ivr_owner.parameters where id = ? ORDER BY ID ");
 			stm.setLong(1, id);
 			
@@ -82,8 +86,9 @@ public class ParametersDao extends AbstractSqlDao {
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erro ao Regras de Transferencia.", e);
-		} finally {
-			super.closeResources(rs, stm, conn);
+		}finally {
+			try {conn.close();} catch (SQLException e1) {}
+			try {stm.close();} catch (SQLException e) {}
 		}
 		
 		return parameters;
@@ -95,7 +100,7 @@ public class ParametersDao extends AbstractSqlDao {
 		ResultSet rs = null;
 		
 		try{
-			conn = super.getConnection();
+			conn = new ConnectionDB().getConnection();
 			stm = conn.prepareStatement("update ivr_owner.parameters set name=?,description=?,type=?,value=?,startdate=sysdate,loginid=?,owner=? where id = ?");
 			stm.setString(1, Parameters.getName());
 			stm.setString(2, Parameters.getDescription());
@@ -109,7 +114,8 @@ public class ParametersDao extends AbstractSqlDao {
 			throw new DaoException("Erro ao salvar parametro", e);
 			
 		} finally {
-			super.closeResources(rs, stm, conn);
+			try {conn.close();} catch (SQLException e1) {}
+			try {stm.close();} catch (SQLException e) {}
 		}
 	}
 	

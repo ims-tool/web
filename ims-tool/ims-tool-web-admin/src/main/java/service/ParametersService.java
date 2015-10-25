@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ims.exception.DaoException;
+import dao.ParametersDao;
 import model.Parameters;
 
 
@@ -12,8 +14,12 @@ import model.Parameters;
 @Service
 public class ParametersService {
 	
-
-
+	@Autowired
+	ParametersDao dao;
+	
+	public ParametersService(){
+		dao = new ParametersDao();
+	}
 	
 	public List<Parameters> getAll() {
 		try {

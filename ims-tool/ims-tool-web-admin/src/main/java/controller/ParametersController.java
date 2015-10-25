@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import br.com.gvt.telefonia.portal.co.config.Constants;
-import br.com.gvt.telefonia.portal.co.model.Parameters;
-import br.com.gvt.telefonia.portal.co.service.ParametersService;
+import model.Parameters;
+import service.ParametersService;
 
-import com.gvt.accessControl.vo.User;
 
 @Controller
 @RequestMapping("/parameters")
@@ -56,15 +54,11 @@ public class ParametersController {
 		model.addAttribute(Constants.PARAM_TITLE, Constants.TITULO_PARAMETERS_EDICAO);
 		Parameters parameters  = service.getById(id);
 			
-		User user = (User) request.getSession().getAttribute("user");
 		
 		parameters.setName(request.getParameter("name"));
 		parameters.setDescription(request.getParameter("description"));
 		parameters.setType(request.getParameter("type"));
 		parameters.setValue(request.getParameter("value"));
-		if (user == null) parameters.setLoginid("");
-		else parameters.setLoginid(user.getLogin());
-		parameters.setOwner(request.getParameter("owner"));
 			
 		if(service.save(parameters)){
 			request.getSession().setAttribute("successMessage", "Parametro salvo com sucesso!");
