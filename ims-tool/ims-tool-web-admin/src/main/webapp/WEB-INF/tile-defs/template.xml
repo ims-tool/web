@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+    <definition name="defaultTemplate" template="/WEB-INF/views/template/template.jsp">
+        <put-attribute name="title" value="Telefonia IVR Administrator" />
+        <put-attribute name="navigation_bar" value="/WEB-INF/views/template/default_navigation_bar.jsp" />
+        <put-attribute name="breadcrumb" value="/WEB-INF/views/template/breadcrumb.jsp" />
+        <put-attribute name="content" value="/WEB-INF/views/template/content.jsp"/>
+        <put-attribute name="errorsMessage" value="/WEB-INF/views/template/errorsMessage.jsp"/>
+        <put-attribute name="successMessage" value="/WEB-INF/views/template/successMessage.jsp"/>
+        <put-attribute name="infoMessage" value="/WEB-INF/views/template/infoMessage.jsp"/>
+        <put-list-attribute name="javascripts"></put-list-attribute>
+    </definition>
+    
+    <definition name="startPage" extends="defaultTemplate">
+	</definition>
+	
+	<definition name="horario.index" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/horario/index.jsp"/>
+		<put-attribute name="breadcrumb" value="/WEB-INF/views/horario/breadcrumb.jsp" />
+		<put-attribute name="customJs" value="/static/js/horario.js"/>
+		<put-attribute name="Horario" value="/static/css/horario.css"/>
+		<put-list-attribute name="javascripts" inherit="true">
+	        <add-attribute value="/static/js/horario.js" />
+	    </put-list-attribute>
+	</definition>
+	
+	<definition name="horario.editar" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/horario/editar.jsp"/>
+		<put-attribute name="breadcrumb" value="/WEB-INF/views/horario/breadcrumb.jsp" />
+		<put-attribute name="customJs" value="/static/js/horario.js"/>
+		<put-list-attribute name="javascripts" inherit="true">
+	        <add-attribute value="/static/js/jquery-mask.js" />
+	        <add-attribute value="/static/js/horario.js" />
+	    </put-list-attribute>
+	</definition>
+	
+	<definition name="mensagens.index" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/mensagens/index.jsp"/>
+		<put-attribute name="breadcrumb" value="/WEB-INF/views/mensagens/breadcrumb.jsp" />
+		<put-attribute name="customJs" value="/static/js/mensagens.js"/>
+		<put-list-attribute name="javascripts" inherit="true">
+			<add-attribute value="/static/js/jquery-mask.js" />
+	        <add-attribute value="/static/js/mensagens.js" />
+	    </put-list-attribute>
+	</definition>
+	
+	<definition name="mensagens.editar" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/mensagens/editar.jsp"/>
+		<put-attribute name="breadcrumb" value="/WEB-INF/views/mensagens/breadcrumb.jsp" />
+		<put-attribute name="customJs" value="/static/js/mensagens.js"/>
+		<put-list-attribute name="javascripts" inherit="true">
+	        <add-attribute value="/static/js/jquery-mask.js" />
+	        <add-attribute value="/static/js/mensagens.js" />
+	    </put-list-attribute>
+	</definition>	
+	
+	<definition name="parameters.listagem" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/parameters/listagem.jsp"/>
+		<put-attribute name="breadcrumb" value="/WEB-INF/views/parameters/breadcrumb.jsp" />
+		<put-attribute name="customJs" value="/static/js/parameters.js"/>
+		<put-list-attribute name="javascripts" inherit="true">
+	        <add-attribute value="/static/js/parameters.js" />
+	        <add-attribute value="/static/js/consulta-parameters.js" />
+	    </put-list-attribute>
+	</definition>
+	
+	<definition name="parameters.editar" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/views/parameters/editar.jsp"/>
+		<put-attribute name="breadcrumb" value="/WEB-INF/views/parameters/breadcrumb.jsp" />
+		<put-attribute name="customJs" value="/static/js/parameters.js"/>
+		<put-list-attribute name="javascripts" inherit="true">
+	        <add-attribute value="/static/js/parameters.js" />
+	        <add-attribute value="/static/js/consulta-parameters.js" />
+	    </put-list-attribute>
+	</definition>
+	
+	
+	<definition name="acesso.negado" extends="defaultTemplate">
+		<put-attribute name="navigation_bar" value="" />
+		<put-attribute name="content" value="/WEB-INF/views/pages/acessoNegado.jsp"/>
+		<put-attribute name="breadcrumb" value="" />
+	</definition>
+</tiles-definitions>

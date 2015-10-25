@@ -1,0 +1,20 @@
+.colunaCentralizada{
+	    		text-align: center;
+	    		white-space: nowrap;
+	    	}
+	    	.colunaEsquerda{
+	    		text-align: left;
+	    	}
+	    	.estiloDiv{
+	    		/*display: inline-block; */
+	    		min-width: 100%;
+	    	}
+	    	.outracor { 
+	    		background: #e0e0e0; 
+	    	}
+	    	.primary { 
+	    		background-color: #003366;
+	    		color: white;
+	    		vertical-align: middle !important;
+	    		    font-weight: bold;
+	    	}
