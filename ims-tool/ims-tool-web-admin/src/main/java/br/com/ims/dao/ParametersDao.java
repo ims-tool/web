@@ -1,4 +1,4 @@
-package dao;
+package br.com.ims.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,13 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.ims.exception.DaoException;
-import model.Parameters;
+import br.com.ims.model.Parameters;
 
 
 
 public class ParametersDao {
 	
-	private static Logger logger = LoggerFactory.getLogger(ParametersDao.class);
+	//private static Logger logger = LoggerFactory.getLogger(ParametersDao.class);
 	
 	public List<Parameters> getAll() throws DaoException {
 		

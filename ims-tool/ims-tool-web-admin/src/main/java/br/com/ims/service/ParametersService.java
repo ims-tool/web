@@ -1,13 +1,13 @@
-package service;
+package br.com.ims.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ims.dao.ParametersDao;
 import br.com.ims.exception.DaoException;
-import dao.ParametersDao;
-import model.Parameters;
+import br.com.ims.model.Parameters;
 
 
 

@@ -1,4 +1,4 @@
-package controller;
+package br.com.ims.controller;
 
 
 

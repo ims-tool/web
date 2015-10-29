@@ -1,4 +1,4 @@
-package model;
+package br.com.ims.model;
 
 import java.io.Serializable;
 import java.util.Date;

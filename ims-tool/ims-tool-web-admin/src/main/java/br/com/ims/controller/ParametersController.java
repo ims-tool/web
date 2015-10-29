@@ -1,4 +1,4 @@
-package controller;
+package br.com.ims.controller;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import model.Parameters;
-import service.ParametersService;
+import br.com.ims.model.Parameters;
+import br.com.ims.service.ParametersService;
 
 
 @Controller

@@ -10,17 +10,18 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.ejb.Local;
-import javax.ejb.Remote;
-import javax.ejb.Stateless;
-
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 
 import br.com.ims.tool.nextform.model.MethodInvocationVO;
 import br.com.ims.tool.nextform.util.FormConstants;
 import br.com.ims.tool.nextform.util.MapValues;
 import br.com.ims.tool.nextform.util.MethodInvocationUtils;
 import br.com.ims.tool.nextform.util.UraConstants;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 public class MethodInvocation  {
 
@@ -88,18 +89,17 @@ public class MethodInvocation  {
 		methodInvocationVO = MethodInvocationVO.getInstance(jsonContext, UraConstants.NULL);
 		
 		long time = System.currentTimeMillis();		
-		
+		final Integer paramTimeOut = timeout > 0 ? timeout : 5;
 		try {
 			if (isAtivo) {
 				ExecutorService executor = Executors.newSingleThreadExecutor();
 				Future<String> future = executor.submit(new Callable() {
 				    public String call() throws Exception {
-				    	execTimeoutExternalService(jsonContext, methodName, parameters);
+				    	execTimeoutExternalService(jsonContext, methodName, parameters,paramTimeOut);
 						return "OK";
 				    }
-				});
-				timeout = timeout > 0 ? timeout : 5;
-				future.get(timeout, TimeUnit.SECONDS);
+				}); 
+				future.get(paramTimeOut, TimeUnit.SECONDS);
 			} else {
 				methodInvocationVO.setErrorCode(FormConstants.ERROR_METHOD_OFF);
 			}
@@ -119,24 +119,61 @@ public class MethodInvocation  {
 		
 	}
 	
-	public MethodInvocationVO execTimeoutExternalService(String jsonContext, String methodName, Map<String, String> parameters) throws Exception {
+	public MethodInvocationVO execTimeoutExternalService(String jsonContext, String methodName, Map<String, String> parameters, Integer timeout) throws Exception {
 		try {
-			Class<?> cls = Class.forName("br.com.ims.tool.nextform.util.MethodsCatalogExternalService");
-			methodName = "getExternalMethod";
-			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.EXTERNAL_SERVICE, methodName, true);
-			Method method = cls.getDeclaredMethod(methodName, String.class, Map.class);
-			
-			if (parameters == null) {
-				parameters = new HashMap<String, String>();
-			}
-			
-			Object obj = cls.newInstance();
-			methodInvocationVO = (MethodInvocationVO) method.invoke(obj, jsonContext, parameters);
 
-		} catch (NoSuchMethodException e) {
-			logger.error("Método " + methodName + " não encontrado", e);
-		} 
+	        Client client = Client.create();
+
+	        //criar properties para buscar o endpoint correto
+	        WebResource webResource = client.resource("http://localhost:7001/ims-integration-service/InvokeMethod/execute");
+
+	        //crriando Json de entrada
+	        String input = "{\"method\": \""+methodName+"\",\"timeout\": \""+timeout.toString()+"\",\"active\":\"true\",\"context\": "+jsonContext;
+	        
+	        if(parameters == null) {
+	        	input+= "}";
+	        } else {
+	        	input+= ",\"parameters\": "+makeJsonParameters(parameters)+" }";
+	        }
+	        
+	        ClientResponse response = webResource.type("application/json").post(ClientResponse.class, input);
+
+	        if (response.getStatus() != 200) {
+	        	logger.error("Failed : HTTP error code : "+ response.getStatus());
+	            throw new RuntimeException("Failed : HTTP error code : "+ response.getStatus());
+	        }	        
+	        
+	        
+	        JSONObject output = new JSONObject(response.getEntity(String.class));
+	        
+	        methodInvocationVO.setErrorCode(Long.valueOf(output.get("returnCode").toString()));
+	        methodInvocationVO.setValue(output.get("returnValue").toString());
+	        methodInvocationVO.setJsonContext(output.get("context").toString());
+
+	    } catch (Exception e) {
+
+	        e.printStackTrace();
+
+	    }
+
+	    
+		
+		
 		return methodInvocationVO;
+	}
+	private String makeJsonParameters(Map<String, String> parameters) {
+		String retorno = "{";
+		boolean first = true;
+		for(java.util.Map.Entry<String, String> entry : parameters.entrySet() ) {
+			if(!first) {
+				retorno+= ", ";
+			} else {
+				first = false;
+			}
+			retorno+= "\""+entry.getKey().toString()+"\": \""+entry.getValue().toString()+"\"";
+		}
+		retorno += "}";
+		return retorno;
 	}
 
 }

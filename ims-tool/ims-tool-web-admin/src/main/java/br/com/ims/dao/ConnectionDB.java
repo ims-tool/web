@@ -1,4 +1,4 @@
-package dao;
+package br.com.ims.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +24,16 @@ public class ConnectionDB {
 			//ctx = new InitialContext();
 			Context envCtx = (Context) ctx.lookup("java:comp/env");
 			ds = (DataSource) envCtx.lookup("jdbc/flow");
+			conn = ds.getConnection();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public ConnectionDB(String dataSource) {
+		try {
+			//ctx = new InitialContext();
+			Context envCtx = (Context) ctx.lookup("java:comp/env");
+			ds = (DataSource) envCtx.lookup("jdbc/"+dataSource);
 			conn = ds.getConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
