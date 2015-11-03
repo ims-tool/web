@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import br.com.ims.control.ParametersCtrl;
 import br.com.ims.tool.entity.Parameters;
 
 /**
@@ -60,7 +61,8 @@ public class ParametersFacadeREST extends AbstractFacade<Parameters> {
     @Override
     @Produces({"application/xml", "application/json"})
     public List<Parameters> findAll() {
-        return super.findAll();
+    	System.out.println("teste");
+        return ParametersCtrl.findAll();
     }
 
     @GET

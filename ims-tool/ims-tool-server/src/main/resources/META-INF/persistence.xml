@@ -6,8 +6,9 @@
 
 	<persistence-unit name="ivrPersistence"
 		transaction-type="JTA">
-		<jta-data-source>jdbc/ivr_flow</jta-data-source>
+		<jta-data-source>jdbc/flow</jta-data-source>
 		<class>br.com.ims.tool.entity.Version</class>
+		<class>br.com.ims.tool.entity.Parameters</class>
 	</persistence-unit>
 
 </persistence>

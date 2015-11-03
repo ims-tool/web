@@ -16,6 +16,6 @@ public class ApplicationConfig extends Application {
 
 	private void addRestResourceClasses(Set<Class<?>> resources) {
 		resources.add(br.com.ims.facade.VersionFacadeREST.class);
-		resources.add(br.com.ims.facade.FormFacadeREST.class);
+		resources.add(br.com.ims.facade.ParametersFacadeREST.class);
 	}
 }
