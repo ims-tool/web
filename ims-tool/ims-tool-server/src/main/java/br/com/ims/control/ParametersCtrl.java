@@ -11,4 +11,12 @@ public class ParametersCtrl {
 		return ParametersDao.findAll();
 	}
 
+	public static Parameters find(Integer id) {
+		return ParametersDao.find(id);
+	}
+
+	public static void save(Parameters entity) {
+		ParametersDao.save(entity);
+	}
+
 }

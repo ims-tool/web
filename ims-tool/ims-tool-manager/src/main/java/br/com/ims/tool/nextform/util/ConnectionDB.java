@@ -21,9 +21,8 @@ public class ConnectionDB {
 
 	public ConnectionDB() {
 		try {
-			//ctx = new InitialContext();
-			Context envCtx = (Context) ctx.lookup("java:comp/env");
-			ds = (DataSource) envCtx.lookup("jdbc/flow");
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/flow");
 			conn = ds.getConnection();
 		} catch (Exception e) {
 			e.printStackTrace();

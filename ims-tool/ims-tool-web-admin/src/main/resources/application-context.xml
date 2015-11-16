@@ -120,13 +120,7 @@
 		<property name="exceptionMappings"> <props> <prop key="java.lang.Exception">friendlyError</prop> 
 		</props> </property> </bean> -->
 	
-	<mvc:interceptors>
-	    <mvc:interceptor>
-	    	<mvc:mapping path="/**"/>
-	    	<mvc:exclude-mapping path="/acessonegado"/>
-	    	<bean class="br.com.gvt.telefonia.portal.co.config.Interceptor" />
-	    </mvc:interceptor>
-	</mvc:interceptors>
+
 		
 			
 </beans>

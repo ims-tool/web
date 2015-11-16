@@ -31,7 +31,7 @@ private static Logger logger = Logger.getLogger(ParametersDao.class);
 			
 			rs = conn.ExecuteQuery(query);
 			
-			if (rs.next()) {
+			while (rs.next()) {
 				parameter = new Parameters();
 				parameter.setId(rs.getInt(1));
 				parameter.setName(rs.getString(2));
@@ -52,6 +52,76 @@ private static Logger logger = Logger.getLogger(ParametersDao.class);
 			conn.finalize();
 		}
 		return listParameters;
+	}
+
+
+	public static Parameters find(Integer id) {
+		
+		Parameters parameter = null;
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = new ConnectionDB();
+			String query = "select * from flow.parameters where id="+id+ " order by id";
+			
+			rs = conn.ExecuteQuery(query);
+			
+			if (rs.next()) {
+				parameter = new Parameters();
+				parameter.setId(rs.getInt(1));
+				parameter.setName(rs.getString(2));
+				parameter.setDescription(rs.getString(3));
+				parameter.setType(rs.getString(4));
+				parameter.setValue(rs.getString(5));
+				parameter.setLoginid(rs.getString(6));
+				parameter.setStartdate(rs.getDate(7));
+				parameter.setOwner(rs.getString(8));
+				parameter.setVersionid(rs.getInt(9));
+			
+			}
+		} catch (SQLException e) {
+			logger.error("Erro ao Recuperar parametros ", e);
+		} finally {
+			conn.finalize();
+		}
+		return parameter;
+	}
+
+
+	public static void save(Parameters entity) {
+		Parameters parameter = null;
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = new ConnectionDB();
+			String query = "select * from flow.parameters where id="+entity.getId();
+			
+			rs = conn.ExecuteQuery(query);
+			
+			if (!rs.next()) {
+				parameter = new Parameters();
+				parameter.setId(rs.getInt(1));
+				parameter.setName(rs.getString(2));
+				parameter.setDescription(rs.getString(3));
+				parameter.setType(rs.getString(4));
+				parameter.setValue(rs.getString(5));
+				parameter.setLoginid(rs.getString(6));
+				parameter.setStartdate(rs.getDate(7));
+				parameter.setOwner(rs.getString(8));
+				parameter.setVersionid(rs.getInt(9));
+				//não implementado pois não existe a necessidade de salvar um novo parametro.
+				query = "insert into flow.parameters order by id";
+			}else{
+				query = "update flow.parameters set value= '"+entity.getValue()+"', startdate = current_timestamp  where id="+entity.getId();
+				conn.ExecuteSql(query);
+			}
+		} catch (SQLException e) {
+			logger.error("Erro ao Recuperar parametros ", e);
+		} finally {
+			conn.finalize();
+		}
 	}
 	
 

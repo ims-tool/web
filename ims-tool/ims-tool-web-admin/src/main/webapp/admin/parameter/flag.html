@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<html lang="en" ng-app="angularTable">
+<head>
+<meta charset="utf-8">
+<title>IMS Tool - Admin Flag</title>
+
+<link href="/ims-tool-web-admin/css/bootstrap.min.css" rel="stylesheet">
+<link href="/ims-tool-web-admin/css/style.css" rel="stylesheet">
+<link href="/ims-tool-web-admin/css/bootstrap-toggle.css"
+	rel="stylesheet">
+<link href="/ims-tool-web-admin/css/highlight.css" rel="stylesheet">
+
+</head>
+<body>
+	<div role="main" class="container theme-showcase">
+		<div class="" style="margin-top: 90px;">
+			<div class="col-lg-8">
+				<div class="page-header">
+					<h2 id="tables">IMS Tool - Admin Flag</h2>
+				</div>
+				<div class="bs-component" ng-controller="listdata"></div>
+			</div>
+
+			<div class="bs-component" ng-controller="listdata">
+				<table class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Nome</th>
+							<th>Descrição</th>
+							<th>Tipo</th>
+							<th>Flag</th>
+							<th>Login</th>
+							<th>Data alteração</th>
+							<th>Owner</th>
+							<th>Versão</th>
+						<!--	<th>Editar</th>-->
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="parameter in parameters | filter: { type: 'Boolean'} | orderBy:'id'" >
+							<td>{{parameter.id}}</td>
+							<td>{{parameter.name}}</td>
+							<td>{{parameter.description}}</td>
+							<td>{{parameter.type}}</td>
+							<td>
+									<input type="checkbox" ng-model="parameter.value" ng-true-value="'true'" ng-false-value="'false'" ng-click="verifyStatus(parameter)" data-toggle="toggle">
+							</td>
+							<td>{{parameter.loginid}}</td>
+							<td>{{parameter.startdate}}</td>
+							<td>{{parameter.owner}}</td>
+							<td>{{parameter.versionid}}</td>
+							<!--  <td><div class="btn-group" role="group" aria-label="...">
+									<button type="button" class="btn btn-default" name="editBtn" ng-click="editParameters(parameter.id)">Edit</button>
+									<button type="button" class="btn btn-default" name="deleteBtn" ng-click="deleteParameters(parameter.id)">Delete</button>
+							</td>-->
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+	<script src="/ims-tool-web-admin/js/angular.min.js"></script>
+	<script src="/ims-tool-web-admin/js/app.js"></script>
+	<script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
+	<script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
+	<script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
+	<script src="/ims-tool-web-admin/js/highlight.js"></script>
+	<script src="/ims-tool-web-admin/js/parameters.js"></script>
+</body>
+</html>
+
+
