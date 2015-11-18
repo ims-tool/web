@@ -1,0 +1,858 @@
+/*------------Reset CSS------------*/
+html, body, div, span, applet, object, iframe, table, caption,
+tbody, tfoot, thead, tr, th, td, del, dfn, em, font, img, ins,
+kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr,
+acronym, address, big, cite, code, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend {
+    vertical-align: baseline;
+    font-family: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+:focus {
+    outline: 0;
+}
+body {
+    background: white;
+    line-height: 1;
+    color: black;
+    font-family: Arial, Verdana, sans-serif;
+	font-family: Arial, sans-serif;
+}
+
+table {
+    border-collapse: separate;
+}
+
+caption, th, td {
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: "";
+}
+
+blockquote, q {
+    quotes: "" "";
+}
+
+.ui-panelgrid td, .ui-panelgrid table, .ui-panelgrid tr {
+	padding: 0 !important;
+	border: 0 none !important;
+	background: none !important;
+}
+
+
+/*------------Fim Reset CSS------------*/
+
+/*-------------------Fontes-----------------------------*/
+@font-face {
+    font-family: 'GothamBook';
+    src: url('../fontes/fontesgotham-book.eot');
+    src: local('gotham-book'), url('../fontes/gotham-book.eot') format('embedded-opentype'),
+         url('../fontes/gotham-book.woff') format('woff'),
+         url('../fontes/gotham-book.ttf') format('truetype'),
+         url('../fontes/gotham-book.svg#GothamBook') format('svg');
+}
+
+
+@font-face {
+    font-family: 'GothamBold';
+    src: url('../fontes/gotham-bold.eot');
+    src: local('gotham-bold'), url('../fontes/gotham-bold.eot') format('embedded-opentype'),
+         url('../fontes/gotham-bold.woff') format('woff'),
+         url('../fontes/gotham-bold.ttf') format('truetype'),
+         url('../fontes/gotham-bold.svg#GothamBold') format('svg');
+}
+
+@font-face {
+    font-family: 'GothamMedium';
+    src: url('../fontes/gotham-medium.eot');
+    src: local('gotham-medium'), url('../fontes/gotham-medium.eot') format('embedded-opentype'),
+         url('../fontes/gotham-medium.woff') format('woff'),
+         url('../fontes/gotham-medium.ttf') format('truetype'),
+         url('../fontes/gotham-medium.svg#GothamMedium') format('svg');
+}
+
+/*----------------Fim Fontes-----------------------------------------*/
+
+
+/*-----------Layout------------*/
+
+.ui-widget .ui-widget {
+	font-size: 12px !important;
+}
+
+html, body, form, #wrap {
+	height: 99%;
+}
+
+body > #wrap {
+	height: auto; 
+	min-height: 100%;
+	font-size: 11px !important;
+	/*background: url("../imagens/outros/fundoGeral.png") top left;*/
+	background: url("../imagens/outros/fundoGeral.png") top left;
+}
+
+#containerBarraEsquerda {
+	background: url("../imagens/outros/fundoEsquerda.png") left 200px no-repeat fixed;
+	width: 100%;
+	overflow: hidden;
+}
+
+#containerBarraDireita {
+	background: url("../imagens/outros/fundoDireita.png") right 200px no-repeat fixed;
+	width: 100%;
+	overflow: hidden;
+}
+ 
+#main {
+	padding-bottom: 92px;
+	width: 75%;
+	margin: 0px auto 0 auto;	
+}
+
+#container {
+	width: 100%;
+    float: left;
+    margin-right: -258px;
+    background: url("../imagens/outros/fundoSidebar2.png") top right repeat-y;
+}
+
+#conteudo {
+	padding-bottom: 42px;
+	margin-top: 20px;
+ 	margin-right: 20px;
+ 	margin-left: 20px;
+ 	min-height: 200px;	
+}
+ 
+.clearing {
+  height: 0;
+  clear: both;
+}
+
+#rodape {
+	position: relative;
+	margin-top: -42px; /* valor negativo da altura do rodapé */
+	height: 42px;
+	clear:both;
+	background: #de5728;
+	color: #fff;
+}
+
+#conteudoRodape {
+	width: 75%;
+	margin: 0 auto;
+	overflow: hidden;
+	font-size: 11px;
+}
+
+#conteudoRodape .textoCapacidade {
+	padding-top: 15px;
+	width: 300px;
+}
+
+#conteudoRodape p img{
+	padding-top: 10px;
+	margin-right: 20px;
+}
+
+#conteudoRodape .textoCapacidade {
+	float: left;	
+}
+
+#conteudoRodape .logoGVT {
+	float: right;	
+}
+
+
+/*Opera Fix*/
+body:before {
+	content:"";
+	height:100%;
+	float:left;
+	width:0;
+	margin-top:-32767px;/
+}
+
+
+/*-----------cabeçalho------------*/
+
+#cabecalho {
+	background: url("../imagens/outros/fundoGeralCabecalho.png") top left repeat-x;
+	width: 100%;	
+	overflow: visible;
+	style="z-index: 2000; 
+}
+
+#fundoCabecalho {
+	background: url("../imagens/outros/fundoCabecalho.png") top center no-repeat;
+	width: 100%;	
+	overflow: hidden;
+}
+
+#conteudoCabecalho {
+	width: 75%;
+	height: 64px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+#titulo {
+	margin-top: 10px;
+	float:left;
+}
+
+#titulo, #titulo a {	
+	color: #FFF;
+	text-decoration: none;
+	font-size: 44px;
+	border: 0 none !important;
+}
+
+#titulo a img {	
+	border: 0 none !important;
+}
+
+#titulo a .logoRadar{	
+	float: left;
+	display: block;
+}
+
+
+#titulo a .tituloRadar{	
+	float: left;
+	display: block;
+	margin-top: 14px;
+}
+
+#titulo a .logoRadar{	
+	float: left;
+	display: block;
+}
+
+#logoGVT {
+	float: right;
+	margin-top: 8px;
+	margin-right: 20px;
+}
+
+#containerLogos {
+	width: 100%;
+	overflow: hidden;		
+}
+
+#links {
+	float: right;
+	margin-right: 3px;
+	font-size: 10px;
+}
+
+#links a {
+	color: #182955;
+	padding-right: 5px;
+}
+
+#links a:hover {
+	color: #182955;
+	text-decoration: none;
+}
+
+#ajaxStatusPanel, #msgGlobal_container {
+	position: absolute;
+}
+/*------------------Fim Cabeçalho----------------*/
+
+
+/*------------------Menu Principal---------------*/
+.menuPrincipal {
+	background: #182955;
+	font-family: 'GothamBook';
+	font-size: 13px;
+}
+
+.menuPrincipal ul {
+	width: 100%;
+	margin: 0 auto 0 auto;		
+}
+
+.menuPrincipal ul li {
+	float: left;
+	list-style: none;
+}
+
+.menuPrincipal ul li a {
+	display: block;
+	text-align: center;
+	padding: 0 5px 0 35px;
+	line-height: 40px;
+	color: #fff;
+	text-decoration: none;
+}
+
+.menuPrincipal ul li a:hover {
+	background: #999;
+}
+
+.menuAtivo {
+	background: #999;
+}
+
+.selecionado {
+	background: #999;
+}
+
+.menuGvt {
+	background: white;
+	color: green;
+	font-family: 'GothamBook';
+	font-size: 13px;
+}
+
+.ui-menuitem-text{
+	color: #182955;
+}
+
+
+/*-----------------Fim Menu Principal------------*/
+
+
+/*-----------------Filtro------------------------*/
+.divFiltro {
+	background: url("../imagens/outros/fundoBusca.png") top left;
+	padding: 8px 15px 8px 15px;
+}
+
+.divFiltro table{
+	border: 0 none !important;
+	
+}
+
+#divFiltro table td, #divFiltro table, #divFiltro tr {
+	border: 0 none;
+	background: none;
+}
+
+.divFiltro table td {
+	border: 0 none !important;
+	margin: 0;
+	padding: 0 !important;
+	vertical-align: center;
+}
+
+.divFiltro label {
+	color: #182955;
+	font-size: 11px;
+}
+
+.divFiltro a {
+	display: block;
+	margin-left: 10px;
+}
+
+.divFiltro a img{
+	display: block;
+	margin-bottom: -8px;
+}
+
+.buscaTitulo, .buscaChamado {
+	background: #fff !important;
+	border: 1px solid #e5e5e5 !important;
+	border-top-right-radius: 0px;
+	border-top-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	margin-left: 8px !important;
+}
+
+/*------------------Sidebar----------------------*/
+#sidebar {
+	width: 202px;
+	float: right;
+	padding: 10px 28px 30px 28px;
+}
+
+#sidebar ul li {
+	list-style-type: none;
+}
+
+#sidebar ul li p {
+	color: #707070;
+	font-size: 13px;
+	line-height: 18px;
+	text-align: justify;
+}
+
+#sidebar h2 {
+	color: #122c5d;
+	font-family: 'GothamBold', Arial;
+	text-transform: uppercase;
+	font-size: 17px;
+	border-bottom: 1px solid #d2d1d6;
+	margin-bottom: 8px;
+	margin-top: 20px;
+	font-weight: bold;
+	padding-bottom: 2px;
+}
+
+#sidebar .dataListNoticias .ui-widget-content {
+	border: 0 none !important;
+	background: none;
+}
+
+#sidebar .dataListNoticias h3 {
+	color: #e2571e;
+	font-family: 'GothamMedium', Arial;
+	font-size: 16px;
+	margin-bottom: 10px;
+	margin-top: 15px;
+	font-weight: bold;
+}
+
+
+#sidebar .dataListNoticias p, #sidebar .dataListNoticias span {
+	color: #707070;
+	font-size: 13px;
+	line-height: 18px;
+	text-align: justify !important;
+}
+
+#sidebar .dataListNoticias .linkSaibaMais {
+	font-weight: bold;
+	color: #122c5d;
+	font-size: 14px;
+	text-decoration: none;
+	display: block;
+	margin-top: 10px;
+}
+
+#sidebar p {
+	color: #707070;
+	font-size: 13px;
+	line-height: 18px;
+}
+
+#sidebar p a {
+	color: #e2571e;
+	text-decoration: underline;
+}
+
+#sidebar p a:hover {
+	color: #e2571e;
+	text-decoration: none;
+}
+
+#sidebar #avisoChrome {
+	padding-top: 8px;
+	color: #e2571e;
+	display: none;
+}
+
+/*-----------------Div Solicitações--------------------*/
+.divSolicitacoes {
+	padding: 20px 20px 50px 20px;	
+}
+
+
+.divSolicitacoes h2 {
+	display: block;
+	color: #122c5d;
+	font-family: 'GothamBold', Arial;
+	text-transform: uppercase;
+	font-size: 22px;
+	border-bottom: 1px solid #d2d1d6;
+	margin-bottom: 8px;
+	font-weight: bold;
+	padding-bottom: 2px;
+}
+
+.dataListSolicitacoes .ui-widget-content {
+	border: 0 none !important;
+	background: none;
+}
+
+.dataListSolicitacoes ul li {
+	list-style-type: none;
+	padding: 20px 0 20px 0;
+	border-bottom: 1px solid #f0a470;
+	overflow: hidden;	
+}
+
+.dataListSolicitacoes .ui-widget-header {
+	background: none;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 1px solid #f0a470;
+}
+
+.dataListSolicitacoes .ui-state-default, .dataListSolicitacoes .ui-state-active {
+	background: none !important;
+}
+
+.ui-paginator span {
+	border: 0 none !important;
+	font-size: 14px;
+}
+
+.ui-paginator-current {
+	color: #f0a470 !important;
+	font-size: 10px !important;
+}
+
+.divSolicitacoes h3 {
+	color: #e2571e;
+	font-family: 'GothamMedium', Arial;
+	font-size: 18px;
+	margin-bottom: 5px;
+}
+
+.divSolicitacoes h3 a {
+	color: #e2571e;
+	text-decoration: underline;
+}
+
+.divSolicitacoes h3 a:hover{
+	text-decoration: none;
+}
+
+.ui-corner-all {
+	/*border-bottom-right-radius: 0 !important;
+	border-bottom-left-radius: 0 !important;*/
+}
+.divSolicitacoes dt {
+	clear: left;
+	float: left;
+	color: #f2911e;
+	font-size: 14px;
+	padding-bottom: 10px;
+	font-weight: bold;
+	margin-right: 5px;
+	line-height: 18px;
+}
+
+.divSolicitacoes dd {
+	float: left;
+	color: #707070;
+	font-size: 14px;
+	padding-bottom: 10px;
+	line-height: 18px;
+}
+
+.divSolicitacoes .textoGrande {
+	width: 80%;
+}
+
+.divSolicitacoes .textoGrandeConclusao,  .divSolicitacoes .textoGrandeResultado {
+	width: 70%;
+}
+
+.divSolicitacoes dd a {
+	color: #e2571e;
+}
+
+.divSolicitacoes dd a:hover {
+	text-decoration: none;
+}
+
+
+.divSolicitacoes .divImagem, .divSolicitacoes .resultado {
+	padding: 0 !important;
+}
+
+.divSolicitacoes .divImagem div, .divSolicitacoes .resultado div {
+	padding: 0 !important;	
+}
+
+.divSolicitacoes .divImagem{
+	margin: 0 auto 20px auto;
+	width: 500px;
+}
+
+.divSolicitacoes img {
+	border: 1px solid #dfdede;
+	width: 500px;
+}
+
+.divSolicitacoes .textoHTML table {
+	border-collapse: collapse;
+	margin: 10px 0 10px 0;
+}
+
+
+.divSolicitacoes .textoHTML table td {
+	border: 1px solid #dfdede;
+	padding: 5px;
+}
+
+.divSolicitacoes .textoHTML table th {
+	border: 1px solid #dfdede;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.mensagemErro p {
+	padding: 10px 0 0 0;
+}
+
+.mensagemErro p a {
+	font-size: 14px;
+	color: #e2571e;
+}
+
+.mensagemErro p a:hover {
+	text-decoration: none;
+}
+
+/*-----------------Fim Div Solicitações--------------------*/
+
+/*-----------------Div Noticia-----------------------------*/
+.divNoticia h4 {
+	color: #707070;
+	font-size: 14px;
+	padding-bottom: 15px;
+	line-height: 18px;
+	color: #122c5d;
+	font-weight: bold;
+}
+
+.divNoticia h3 {
+	margin-bottom: 5px;
+}
+
+.divNoticia p {
+	color: #707070;
+	font-size: 14px;
+	padding-bottom: 10px;
+	line-height: 18px;
+}
+
+/*------------------Fim Div Noticia------------------------*/
+
+
+/*---------------------Calendario--------------------------*/
+
+#calendario {
+	margin: 20px auto 0 auto;
+	padding: 0 20px 0 20px;
+}
+
+
+#calendario .agenda h2{
+	display: block;
+	color: #122c5d;
+	font-family: 'GothamBold', Arial;
+	text-transform: uppercase;
+	font-size: 22px;
+	border-bottom: 1px solid #d2d1d6;
+	margin-bottom: 30px;
+	font-weight: bold;
+	padding-bottom: 2px;
+}
+
+.agenda {
+	width: 70%;
+	float: left;
+}
+
+.agenda .fc-event-skin, .agenda .fc-event-inner {
+	border: 0 none !important;	
+}
+
+.agenda .ui-widget-header {
+	border: 0 none;
+	font-size: 15px;
+	color: #e2571e;
+	background: none;
+	padding-bottom: 8px;
+	text-transform: uppercase;
+	border-bottom: 1px solid #dfdede !important;
+}
+
+
+.agenda .solicEntregue .fc-event-skin {
+	background-color: #00558C !important;
+	border: 0 none !important;
+	padding: 2px 2px 2px 2px;
+}
+
+.agenda .solicAndamento .fc-event-skin {
+	background-color: #F56E23 !important;
+	border: 0 none !important;
+	padding: 2px 2px 2px 2px;
+}
+
+.agenda .proxTrabalhos .fc-event-skin {
+	background-color: #BCC6D0 !important;
+	border: 0 none !important;
+	color: #00558C !important;
+	padding: 2px 2px 2px 2px;
+}
+
+.agenda .ui-state-highlight {
+	border-left: 1px solid #dfdede;
+	border-top: 1px solid #dfdede;
+	background: #FCEBDE;
+}
+
+.agenda .fc-day-number {
+	font-family: 'GothamBook', Arial;
+	font-size: 13px;
+	color: #e2571e !important;
+	padding: 2px !important;
+}
+
+.legenda {
+	margin-left: 25px;
+	width: 25%;
+	float: right;
+}
+
+.legenda table{
+	margin-top: 75px;
+	width: 100%;
+	border-collapse: colapse;
+	color: #707070;
+}
+
+
+.legenda table td.texto{
+	padding: 5px;
+}
+
+.legenda table .legendaEntregue {
+	background-color: #00558C;
+	width: 30px;
+}
+
+.legenda table .legendaAndamento {
+	background-color: #F56E23;
+	width: 30px;
+}
+
+.legenda table .legendaProximos {
+	background-color: #BCC6D0;
+	width: 30px;
+}
+
+/*--------------Fim Calendario-------------------------*/
+
+/*-------------Classificação por estrelas--------------*/
+.ui-rating-star a {
+	background: url("../imagens/icones/starcinza.png") !important;  
+}
+
+.ui-rating-star-on a {
+	background: url("../imagens/icones/star.png") !important;  
+}
+
+.media-classificacao {
+	margin: 2px 0 22px 0;
+	color: #9C9C9C;
+	font-size: 10px;
+}
+
+.media-classificacao span{
+	line-height: 12px;
+	padding: 0 0 0 5px;
+}
+
+.media-classificacao .ui-rating-star a {
+	height: 12px;
+	width: 12px;
+	background: url("../imagens/icones/starcinzamini.png") !important;  
+}
+
+.media-classificacao .ui-rating-star-on a {
+	background: url("../imagens/icones/starmini.png") !important;  
+}
+
+#progressBar {
+	background: #A3A3A3; 
+	width: 100%; 
+	height:auto;
+	min-height:100%;
+	z-index: 1010;
+	opacity:0.3;
+	filter:alpha(opacity=30); /* For IE8 and earlier */
+	position: fixed;
+	display: block;
+	bottom: 0px;
+	margin-bottom: 0px;
+}
+
+#divStatus {
+	position: fixed; 
+	left: 41.6%; 
+	top: 47%; 
+	z-index: 1011;
+}
+/*-------------Fim Classificação por estrelas--------------*/
+
+#conteudoHelp {
+	background: #fff;
+	border: 1px #eee solid;
+	padding: 6px 6px;
+	font-size: 12px;
+}
+
+#conteudoHelp h1,#conteudoHelp h2,#conteudoHelp h3,#conteudoHelp h4,#conteudoHelp h5 {
+	margin-bottom: 10px;
+}
+
+.infoList {
+	margin: 10px 30px;
+}
+
+
+
+/*-------------Row Colors ---------------------------------*/
+.yellow {
+    background-color: #f9ff8d;
+    background: #f9ff8d;
+}
+
+.red{
+    background-color: #ff7d7d;
+    background: #ff7d7d;
+}
+
+.blue {
+    background-color: #89d1e5;
+    background: #89d1e5;
+}
+
+.green {
+    background-color: #a1f396;
+    background: #a1f396;
+}
+
+.gray {
+    background-color: #cbcbcb;
+    background: #cbcbcb;
+}
+/*-----------Fim Row Colors -------------------------------*/
+
+.ui-icon.buttonAddPrompt {  
+    background-image: url("../imagens/icones/flow/prompt_16_16.png") !important;    
+}
+
+.ui-icon.buttonAddAudio {  
+    background-image: url("../imagens/icones/flow/audio_16_16.png") !important;    
+}
+
+.ui-icon.buttonAddCondition {  
+    background-image: url("../imagens/icones/flow/condition_16_16.png") !important;    
+}  
+
+
