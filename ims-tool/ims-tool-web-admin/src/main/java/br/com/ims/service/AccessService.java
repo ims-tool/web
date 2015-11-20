@@ -1,6 +1,7 @@
 package br.com.ims.service;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,7 +17,7 @@ import br.com.ims.model.User;
 
 
 
-@Path("/Access")
+@Path("/access")
 public class AccessService {
 
 	  public User login(String userLogin,String password) {
@@ -42,7 +43,7 @@ public class AccessService {
 	  }
 	
 	  @Path("/login")	  
-	  @POST
+	  @GET
 	  @Produces("application/json")	  
 	  @Consumes(MediaType.APPLICATION_JSON)
 	  public Response login(String object) throws JSONException {
