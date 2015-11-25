@@ -12,9 +12,9 @@ app.controller('listdata',function($scope, $http){
 	    });
 	
 	    // callback for ng-click 'editUser':
-        $scope.editParameters = function (parametersId) {
-        		alert("editParametrs " + parametersId);
-//            $location.path('/user-detail/' + userId);
+        $scope.editParameters = function (parameterid) {
+        	
+        	window.location.replace("/ims-tool-web-admin/admin/parameter/edit.html?id="+parameterid);
         };
         // callback for ng-click 'deleteUser':
         $scope.deleteUser = function (userId) {

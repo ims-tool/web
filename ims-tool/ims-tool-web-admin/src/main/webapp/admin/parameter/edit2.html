@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" ng-app="angularTable">
+<head>
+<meta charset="utf-8">
+<title>IMS Tool - Admin Parameters</title>
+
+<link href="/ims-tool-web-admin/css/bootstrap.min.css" rel="stylesheet">
+<link href="/ims-tool-web-admin/css/style.css" rel="stylesheet">
+<link href="/ims-tool-web-admin/css/bootstrap-toggle.css"
+	rel="stylesheet">
+<link href="/ims-tool-web-admin/css/highlight.css" rel="stylesheet">
+
+</head>
+<body>
+	<div role="main" class="container theme-showcase">
+		<div class="" style="margin-top: 90px;">
+			<div class="container">
+				<h1>Detalhe do parâmetro</h1>
+
+				<form novalidate="novalidate" class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="inputName">Nome:</label>
+						<div class="controls">
+							<input type="text" id="inputName" ng-model="parameter.name" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputDescription">Descrição:</label>
+						<div class="controls">
+							<input type="text" id="inputDescription" ng-model="parameter.description" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputType">Tipo:</label>
+						<div class="controls">
+							<input type="text" id="inputType" ng-model="parameter.type" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputValue">Valor:</label>
+						<div class="controls">
+							<input type="text" id="inputValue" ng-model="parameter.value" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputLogin">Usuário:</label>
+						<div class="controls">
+							<input type="text" id="inputLogin" ng-model="parameter.loginid" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputOwner">Owner:</label>
+						<div class="controls">
+							<input type="text" id="inputOwner" ng-model="parameter.owner" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="inputVersion">Versão:</label>
+						<div class="controls">
+							<input type="text" id="inputVersion" ng-model="parameter.version" />
+						</div>
+					</div>
+					
+					<div class="control-group">
+						<div class="controls">
+							<!-- user-detail.html: -->
+							<a ng-click="cancel()" class="btn btn-small">cancel</a> <a
+								ng-click="updateUser()" class="btn btn-small btn-primary">update
+								user</a>
+
+							<!-- user-creation.html: -->
+							<a ng-click="createNewUser()" class="btn btn-small btn-primary">create
+								new user</a>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+	<script src="/ims-tool-web-admin/js/angular.min.js"></script>
+	<script src="/ims-tool-web-admin/js/app.js"></script>
+	<script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
+	<script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
+	<script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
+	<script src="/ims-tool-web-admin/js/highlight.js"></script>
+	<script src="/ims-tool-web-admin/js/parameters.js"></script>
+</body>
+</html>
+
+
