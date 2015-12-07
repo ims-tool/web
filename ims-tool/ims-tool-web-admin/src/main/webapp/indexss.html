@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+<meta charset="utf-8" />
 <title>IMS - Tool - Web Admin</title>
 
 <link href="/ims-tool-web-admin/css/bootstrap.min.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/style.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/bootstrap-toggle.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/highlight.css" rel="stylesheet">
-<script src="js/jquery-2.1.4.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+
+<!--<link href="/ims-tool-web-admin/css/app.css" rel="stylesheet" />-->
 
 <script src="/ims-tool-web-admin/js/angular.min.js"></script>
-<!--  <script src="/ims-tool-web-admin/js/angular-route.min.js"></script>-->
-<script src="/ims-tool-web-admin/js/angular-ui-router.js"></script>
-
+<script src="/ims-tool-web-admin/js/angular-route.min.js"></script>
+<script src="/ims-tool-web-admin/js/angular-cookies.js"></script>
 <script src="/ims-tool-web-admin/app/app.js"></script>
-<script src="/ims-tool-web-admin/app/controllers/loginModal.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/controllers.js"></script>
-<script src="/ims-tool-web-admin/app/routes/router.js"></script>
-<script src="/ims-tool-web-admin/app/controllers/loginctrl.js"></script>
 <script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
 <script src="/ims-tool-web-admin/js/highlight.js"></script>
+
+<script src="/ims-tool-web-admin/app/app-services/authentication.service.js"></script>
+<script src="/ims-tool-web-admin/app/app-services/flash.service.js"></script>
+
+<!-- Real user service that uses an api -->
+<!-- <script src="app-services/user.service.js"></script> -->
+
+<!-- Fake user service for demo that uses local storage -->
+<script src="/ims-tool-web-admin/app/app-services/user.service.local-storage.js"></script>
+
 </head>
 <body>
 
@@ -42,23 +48,33 @@
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#">In&iacute;cio</a></li>
-					
+
 					<li><a href="#">Ajuda</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
- </br>
- </br>
- </br>
+	</br>
+	</br>
+	</br>
 
 	<ul class="nav nav-tabs">
-		<li ui-class="{active: activetab == '/'}"><a ui-sref="welcome">Home</a></li>
-		<li ui-class="{active: activetab == '/flag'}"><a ui-sref="flag">Flag</a></li>
-		<li ui-class="{active: activetab == '/parameter'}"><a ui-sref="parameter">Parâmetro</a></li>
+		<li ng-class="{active: activetab == '/'}"><a href="#/home">Home</a></li>
+		<li ng-class="{active: activetab == '/flag'}"><a href="#/flag">Flag</a></li>
+		<li ng-class="{active: activetab == '/parameter'}"><a
+			href="#/parameter">ParÃ¢metro</a></li>
 	</ul>
 
-	<div ui-view></div>
+
+		<div class="container">
+			<div class="col-sm-8 col-sm-offset-2">
+				<div
+					ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+				<div ng-view></div>
+			</div>
+		</div>
+	<div class="credits text-center"></div>
+
 
 </body>
 </html>

@@ -3,6 +3,7 @@ var app = angular.module('angularTable', []);
 
 
 app.controller('listdata',function($scope, $http){
+	
 	$scope.parameters = []; //declare an empty array
 	
 	
