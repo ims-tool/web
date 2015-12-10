@@ -34,6 +34,15 @@
 		      
 		   })
 		   
+		    .state('hour', {
+			   url : '/hour',
+			   templateUrl: 'app/views/hour.html',
+			   data: {
+			        requireLogin: true
+			      }
+		      
+		   })
+		   
 		   .state('/login', {
 			   url: 'app/views/login.html',
 			   data: {

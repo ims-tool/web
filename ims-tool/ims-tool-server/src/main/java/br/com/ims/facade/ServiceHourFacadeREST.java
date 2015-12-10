@@ -1,6 +1,7 @@
 package br.com.ims.facade;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -17,34 +18,33 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.json.JSONObject;
 
-import br.com.ims.control.ParametersCtrl;
-import br.com.ims.tool.entity.Parameters;
-import br.com.ims.util.Parametros;
+import br.com.ims.control.ServiceHourCtrl;
+import br.com.ims.tool.entity.ServiceHour;
+import br.com.ims.tool.entity.ServiceHourType;
 
 /**
  *
  * @author Cesar
  */
 @Stateless
-@Path("parameters")
-public class ParametersFacadeREST extends AbstractFacade<Parameters> {
+@Path("servicehour")
+public class ServiceHourFacadeREST extends AbstractFacade<ServiceHour> {
     @PersistenceContext(unitName = "ivrPersistence")
     private EntityManager em;
 
-    public ParametersFacadeREST() {
-        super(Parameters.class);
+    public ServiceHourFacadeREST() {
+        super(ServiceHour.class);
     }
 
     @POST
     @Override
     @Consumes({"application/xml", "application/json"})
-    public void create(Parameters entity) {
+    public void create(ServiceHour entity) {
         super.create(entity);
     }
     
@@ -52,17 +52,22 @@ public class ParametersFacadeREST extends AbstractFacade<Parameters> {
     @Path("/update")
     @Consumes("application/json")
     public void update(String entity) {
+    	
+    	
     	JSONObject jsonObj = new JSONObject(entity);
-    	Parameters parameter = new Parameters();
-    	parameter.setId((Integer) jsonObj.get("id"));
-    	parameter.setValue((String) jsonObj.get("value"));
-    	ParametersCtrl.save(parameter);
+    	
+    	ServiceHour serviceHour = new ServiceHour();
+    	serviceHour.setId((Integer) jsonObj.get("id"));
+    	serviceHour.setStarthour((String) jsonObj.get("starthour"));
+    	serviceHour.setStophour((String) jsonObj.get("stophour"));
+    	serviceHour.setLastlogin((String) jsonObj.get("lastlogin"));
+    	ServiceHourCtrl.save(serviceHour);
     }
 
     @PUT
     @Path("{id}")
     @Consumes({"application/xml", "application/json"})
-    public void edit(@PathParam("id") Integer id, Parameters entity) {
+    public void edit(@PathParam("id") Integer id, ServiceHour entity) {
         super.edit(entity);
     }
 
@@ -76,8 +81,8 @@ public class ParametersFacadeREST extends AbstractFacade<Parameters> {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("id") Integer id) {
-    	Parameters p = new Parameters();
-    	p = ParametersCtrl.find(id);
+    	ServiceHour p = new ServiceHour();
+    	p = ServiceHourCtrl.find(id);
     	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     	String json = "";
 		try {
@@ -96,16 +101,16 @@ public class ParametersFacadeREST extends AbstractFacade<Parameters> {
     }
 
     @GET
-    @Path("findAll")
+    @Path("find/{type}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String findParameters() {
+    public String findServiceHour(@PathParam("type") String type) {
     	
-    	List<Parameters> listParameters = ParametersCtrl.findAll();
+    	List<ServiceHour> listServiceHour = ServiceHourCtrl.findAll(type);
     	
     	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     	String json = "";
 		try {
-			json = ow.writeValueAsString(listParameters);
+			json = ow.writeValueAsString(listServiceHour);
 		} catch (JsonGenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,11 +124,36 @@ public class ParametersFacadeREST extends AbstractFacade<Parameters> {
     	return json;
     	
     }
+    
+    @GET
+    @Path("findType")
+    @Produces("application/json")
+    public String findType() {
+    	
+    	List<ServiceHourType> lista = ServiceHourCtrl.findType();
+    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    	String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return json;
+        
+    }
+
 
     @GET
     @Path("{from}/{to}")
     @Produces("application/json")
-    public List<Parameters> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    public List<ServiceHour> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 

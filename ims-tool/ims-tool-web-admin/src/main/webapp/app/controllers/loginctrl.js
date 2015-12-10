@@ -1,4 +1,4 @@
-angular.module('app',[require('angular-ui-router')])
+angular.module('app',require[('angular-ui-router')])
 
 .controller('LoginModalCtrl', function ($scope, UsersApi) {
 

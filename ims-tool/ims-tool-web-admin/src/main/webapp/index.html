@@ -14,16 +14,17 @@
 <script src="/ims-tool-web-admin/js/angular.min.js"></script>
 <!--  <script src="/ims-tool-web-admin/js/angular-route.min.js"></script>-->
 <script src="/ims-tool-web-admin/js/angular-ui-router.js"></script>
-
+<script src="/ims-tool-web-admin/js/require.js"></script>
 <script src="/ims-tool-web-admin/app/app.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/loginModal.js"></script>
+<script src="/ims-tool-web-admin/app/controllers/loginctrl.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/controllers.js"></script>
 <script src="/ims-tool-web-admin/app/routes/router.js"></script>
-<script src="/ims-tool-web-admin/app/controllers/loginctrl.js"></script>
 <script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
 <script src="/ims-tool-web-admin/js/highlight.js"></script>
+
 </head>
 <body>
 
@@ -56,6 +57,7 @@
 		<li ui-class="{active: activetab == '/'}"><a ui-sref="welcome">Home</a></li>
 		<li ui-class="{active: activetab == '/flag'}"><a ui-sref="flag">Flag</a></li>
 		<li ui-class="{active: activetab == '/parameter'}"><a ui-sref="parameter">Parâmetro</a></li>
+		<li ui-class="{active: activetab == '/hour'}"><a ui-sref="hour">Horário</a></li>
 	</ul>
 
 	<div ui-view></div>
