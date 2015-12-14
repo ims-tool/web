@@ -1,3 +1,4 @@
+
 app.controller('HomeCtrl', function($rootScope, $location) {
 	$rootScope.activetab = $location.path();
 });
@@ -35,10 +36,6 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 								contentType : "application/json",
 								dataType : 'json'
 							});
-					window.location.reload();
-				} else {
-					// cancel
-					window.location.reload();
 				}
 			};   
 
@@ -76,18 +73,13 @@ app.controller(
 						var data = parameter;
 						var box = confirm("Deseja realmente alterar a flag?");
 						if (box === true) {
-							$
-									.ajax({
+							$.ajax({
 										type : "POST",
 										data : JSON.stringify(data),
 										url : "http://localhost:8080/ims-tool-server/rest/parameters/update",
 										contentType : "application/json",
 										dataType : 'json'
 									});
-							window.location.reload();
-						} else {
-							// cancel
-							window.location.reload();
 						}
 					};
 				});
@@ -100,7 +92,38 @@ app.controller('LoginController', function($rootScope, $location) {
 	$rootScope.activetab = $location.path();
 });
 
-app.controller('RegisterController', function($rootScope, $location) {
+app.controller('tabCtrl', function($rootScope, $location) {
 	$rootScope.activetab = $location.path();
 });
 
+appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
+	
+	var user;
+
+	$scope.getLogin = function(user) {
+		user.system = '1';
+		
+		jQuery.ajax({
+		    headers: { 
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json' 
+		    },
+		    'type': 'POST',
+		    'url': "http://localhost:8080/ims-tool-server/rest/access/login",
+		    'data': JSON.stringify(user),
+		    'dataType': 'json',
+		    'success': function(data){
+		    	if(data.result !== 'OK'){
+		    		alert("Login inválido");
+		    	}else{
+		    		localStorage.setItem("login", user.login);
+		    		window.location.href = '../ims-tool-web-admin/';
+		    		
+		    	}
+		    }
+		    });
+		
+		
+		
+	};
+});

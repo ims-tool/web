@@ -19,7 +19,6 @@
 							<th>Data alteração</th>
 							<th>Owner</th>
 							<th>Versão</th>
-							<th>Editar</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -30,23 +29,14 @@
 							<td>{{parameter.description}}</td>
 							<td>{{parameter.type}}</td>
 							<td>
-									<span ng-hide="editing" >{{parameter.value}}</span>
-									<form ng-show="editing" ng-submit="verifyStatus(parameter)" >
-										<label>Value:</label> 
-										<input type="text" ng-model="parameter.value" placeholder="Parameter" ng-required /> 
-										<br />
-										<button class="btn" type="submit">Save</button>
-										<a class="btn" onclick="window.location='parameter.html'">Cancel</a>
-									</form>
+							
+								<a href="#" editable-text="parameter.value"onaftersave="verifyStatus(parameter)">{{ parameter.value || "empty"}}</a>
 									
 							</td>
 							<td>{{parameter.loginid}}</td>
 							<td>{{parameter.startdate}}</td>
 							<td>{{parameter.owner}}</td>
 							<td>{{parameter.versionid}}</td>
-							<td><div class="btn-group" role="group" aria-label="...">
-									<button type="button" class="btn btn-default" name="editBtn" ng-click="editing = true">Editar</button>
-									<!--	<button type="button" class="btn btn-default" name="deleteBtn" ng-click="deleteParameters(parameter.id)">Delete</button> --></td>
 						</tr>
 					</tbody>
 				</table>

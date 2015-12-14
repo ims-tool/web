@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="app">
+<html ng-app="app" >
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
 <title>IMS - Tool - Web Admin</title>
@@ -8,22 +8,24 @@
 <link href="/ims-tool-web-admin/css/style.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/bootstrap-toggle.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/highlight.css" rel="stylesheet">
+<link href="/ims-tool-web-admin/css/xeditable.css" rel="stylesheet">
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-
 <script src="/ims-tool-web-admin/js/angular.min.js"></script>
 <!--  <script src="/ims-tool-web-admin/js/angular-route.min.js"></script>-->
 <script src="/ims-tool-web-admin/js/angular-ui-router.js"></script>
 <script src="/ims-tool-web-admin/js/require.js"></script>
 <script src="/ims-tool-web-admin/app/app.js"></script>
+<script src="/ims-tool-web-admin/app/routes/router.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/loginModal.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/loginctrl.js"></script>
+<script src="/ims-tool-web-admin/js/xeditable.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/controllers.js"></script>
-<script src="/ims-tool-web-admin/app/routes/router.js"></script>
 <script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
 <script src="/ims-tool-web-admin/js/highlight.js"></script>
+<script src="/ims-tool-web-admin/js/webadmin.js"></script>
 
 </head>
 <body>
@@ -44,7 +46,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="#">In&iacute;cio</a></li>
 					
-					<li><a href="#">Ajuda</a></li>
+					<li><a href="#" onclick="releaseUser()">Logout</a></li>
 				</ul>
 			</div>
 		</div>
@@ -53,12 +55,14 @@
  </br>
  </br>
 
+	<div ng-controller="tabCtrl">
 	<ul class="nav nav-tabs">
 		<li ui-class="{active: activetab == '/'}"><a ui-sref="welcome">Home</a></li>
 		<li ui-class="{active: activetab == '/flag'}"><a ui-sref="flag">Flag</a></li>
 		<li ui-class="{active: activetab == '/parameter'}"><a ui-sref="parameter">Parâmetro</a></li>
 		<li ui-class="{active: activetab == '/hour'}"><a ui-sref="hour">Horário</a></li>
 	</ul>
+	</div>
 
 	<div ui-view></div>
 

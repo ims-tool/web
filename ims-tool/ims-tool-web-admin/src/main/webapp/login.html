@@ -1,44 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br" ng-app="appLogin">
 <head>
-<meta charset="UTF-8">
-<title>IMS - Tool - Login</title>
-
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>IMS - Web admin - Login</title>
+<meta name="generator" content="Bootply" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
 <link href="/ims-tool-web-admin/css/bootstrap.min.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/style.css" rel="stylesheet">
-<link href="/ims-tool-web-admin/css/bootstrap-toggle.css" rel="stylesheet">
+<link href="/ims-tool-web-admin/css/bootstrap-toggle.css"
+	rel="stylesheet">
 <link href="/ims-tool-web-admin/css/highlight.css" rel="stylesheet">
+<link href="/ims-tool-web-admin/css/xeditable.css" rel="stylesheet">
 <script src="js/jquery-2.1.4.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/angular.min.js"></script>
+<script src="/ims-tool-web-admin/js/angular.min.js"></script>
+<!--  <script src="/ims-tool-web-admin/js/angular-route.min.js"></script>-->
+<script src="/ims-tool-web-admin/js/angular-ui-router.js"></script>
+<script src="/ims-tool-web-admin/js/require.js"></script>
+<script src="/ims-tool-web-admin/app/app.js"></script>
+<script src="/ims-tool-web-admin/app/routes/router.js"></script>
+<script src="/ims-tool-web-admin/app/controllers/loginModal.js"></script>
+<script src="/ims-tool-web-admin/app/controllers/loginctrl.js"></script>
+<script src="/ims-tool-web-admin/js/xeditable.js"></script>
+<script src="/ims-tool-web-admin/app/controllers/controllers.js"></script>
+<script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
+<script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
+<script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
+<script src="/ims-tool-web-admin/js/highlight.js"></script>
+
 </head>
 <body>
-
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-					aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#"> IMS Admin</a>
-			</div>
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">In&iacute;cio</a></li>
-					<li><a href="/ims-tool-web-admin/admin/flag/flag.html">Flags</a></li>
-					<li><a href="/ims-tool-web-admin/admin/parameter/parameter.html">Parametros</a></li>
-					<li><a href="#">Ajuda</a></li>
-				</ul>
+	<!--login modal-->
+	<div id="loginModal" class="modal show" tabindex="-1" role="dialog"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="text-center">IMS Web Admin Login</h1>
+				</div>
+				<div class="modal-body" ng-controller="LoginCtrl">
+					<form class="form col-md-12 center-block" ng-submit="getLogin(user)">
+						<div class="form-group">
+							<input type="text" class="form-control input-lg"
+								placeholder="Usuário" ng-model="user.login" required>
+								 <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-lg"
+								placeholder="Senha" ng-model="user.password" required>
+								<span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+							<span><a href="#">Need help?</a></span>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<div class="col-md-12">
+					</div>
+				</div>
 			</div>
 		</div>
-	</nav>
-	
-
-	<p>Admin Services</p>
-
+	</div>
 </body>
 </html>
+
