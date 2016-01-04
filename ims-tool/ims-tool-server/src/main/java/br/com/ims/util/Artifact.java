@@ -9,6 +9,7 @@ public class Artifact {
 	private Integer userid;
 	private Integer accesstypeid;
 	private List<Integer> userprofiles;
+	private Boolean access;
 	
 	
 	public Artifact() {
@@ -41,8 +42,4 @@ public class Artifact {
 	public void add(Integer profileid) {
 		this.userprofiles.add(profileid);
 	}
-	
-	
-	
-
 }

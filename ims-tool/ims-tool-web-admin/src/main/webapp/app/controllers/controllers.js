@@ -117,6 +117,7 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    		alert("Login inválido");
 		    	}else{
 		    		localStorage.setItem("login", user.login);
+		    		localStorage.setItem("artifact", JSON.stringify(data.artifact));
 		    		window.location.href = '../ims-tool-web-admin/';
 		    		
 		    	}

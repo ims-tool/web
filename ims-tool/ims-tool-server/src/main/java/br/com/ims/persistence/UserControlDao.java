@@ -177,24 +177,24 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		ResultSet rs = null;
 		String response = "";
 		JSONObject objectOut = new JSONObject();
-		Map<Integer, Artifact> mapArtifact = new HashMap<Integer, Artifact>(); 
+		Map<String, Artifact> mapArtifact = new HashMap<String, Artifact>(); 
 		try {
 			conn = new ConnectionDB();
 			
-			String query = "select a.id, ua.userid, ua.acesstypeid, up.profileid "
+			String query = "select a.id id, a.description, ua.userid, ua.acesstypeid, up.profileid "
 					+ "from access.artifact a, access.user_artifact ua, access.user_profile up "
 					+ "where up.userid = ua.userid and ua.artifactid = a.id and ua.userid = (select id from access.user where upper(login) = '"+userLogin.toUpperCase()+"') and a.systemid = "+ system;
 			
 			rs = conn.ExecuteQuery(query);
 			
 			while(rs.next()) {
-				Integer id = rs.getInt("id");
+				String id = rs.getString("description");
 				
 				if (mapArtifact.containsKey(id)){
 					mapArtifact.get(id).add(rs.getInt("profileid"));
 				}else{
 					Artifact a = new Artifact();
-					a.setArtifactid(id);
+					a.setArtifactid(rs.getInt("id"));
 					a.setUserid(rs.getInt("userid"));
 					a.setAccesstypeid(rs.getInt("acesstypeid"));
 					a.add(rs.getInt("profileid"));
