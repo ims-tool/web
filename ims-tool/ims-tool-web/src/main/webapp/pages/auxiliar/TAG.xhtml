@@ -8,7 +8,7 @@
 		
 	<p:tooltip />
 	
-			<p:growl id="msgAuxiliarTag" showDetail="true" />
+			<p:growl id="msgUtilTag" showDetail="true" />
 			
 			
 			<h:panelGrid columns="2" cellpadding="15">
@@ -19,39 +19,40 @@
 			
 			<h:panelGrid cellpadding="5">
 				
-				<h:outputLabel id="label_auxiliar_tag_id" for="auxiliar_tag_id" value="ID:" />
-	            <p:inputText id="auxiliar_tag_id" value="#{tagEditorView.tag.id}" readonly="true" label="label_auxiliar_tag_id" />
+				<h:outputLabel id="label_util_tag_id" for="util_tag_id" value="ID:" />
+	            <p:inputText id="util_tag_id" value="#{tagEditorView.tag.id}" readonly="true" label="label_util_tag_id" />
 	            
-	            <h:outputLabel id="label_auxiliar_tag_type" for="auxiliar_tag_type" value="TYPE:" />
+	            <h:outputLabel id="label_util_tag_type" for="util_tag_type" value="TYPE:" />
 	            <p:selectOneMenu required="true" 
 	 			                 requiredMessage="Please,select a Type" 
 	 			                 value="#{tagEditorView.tagTypeId}" 
-	 			                 id="auxiliar_tag_type"
+	 			                 id="util_tag_type"
 	 			                 filter="true" filterMatchMode="startsWith" 
-	 			                 label="label_auxiliar_tag_type">
+	 			                 label="label_util_tag_type">
 	 				<f:selectItem itemLabel="Select One" itemValue="" />
 	 				<f:selectItems value="#{tagEditorView.tagTypes}" var="tagtype"
 						itemValue="#{tagtype.id}" itemLabel="#{tagtype.name}"  />
 	 			</p:selectOneMenu>
 	 
-	            <h:outputLabel id="label_auxiliar_tag_description" for="auxiliar_tag_description" value="Description:" />
-	            <p:inputText id="auxiliar_tag_description" value="#{tagEditorView.tag.description}" required="true" requiredMessage="Please,inform a Description" label="label_auxiliar_tag_description" />
+	            <h:outputLabel id="label_util_tag_description" for="util_tag_description" value="Description:" />
+	            <p:inputText id="util_tag_description" value="#{tagEditorView.tag.description}" required="true" requiredMessage="Please,inform a Description" label="label_util_tag_description" />
 	            
 	            
 	            <f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="formForm,formFlow,formAuxiliar" actionListener="#{tagEditorView.save}"/>
+	            	<p:commandButton value="New" disabled="#{tagEditorView.insert}"  update="formForm,formFlow,formUtil" actionListener="#{tagEditorView.init}"/>
+	                <p:commandButton value="Save" oncomplete="handleUtilSaveRequest(xhr, status, args)"  update="formForm,formFlow,formUtil" actionListener="#{tagEditorView.save}"/>
 	            </f:facet>  	           
 	        </h:panelGrid>	
 	        <p:separator />
 	        <p:panel id="panelTags" header="Tags Registered" style="margin-bottom:20px">
- 				<p:dataTable  scrollable="true" scrollHeight="150" var="t" value="#{tagEditorView.tags}">
-			        <p:column headerText="ID" filterBy="#{t.id}" filterMatchMode="contains" >
+ 				<p:dataTable  scrollable="true" scrollHeight="150" var="t" value="#{tagEditorView.tags}" >
+			        <p:column headerText="ID" filterBy="#{t.id}" filterMatchMode="contains" width="100px" >
 			            <h:outputText value="#{t.id}" />
 			        </p:column>
-			        <p:column headerText="TYPE" filterBy="#{t.type.name}" filterMatchMode="contains">
+			        <p:column headerText="TYPE" filterBy="#{t.type.name}" filterMatchMode="contains" width="100px">
 			            <h:outputText value="#{t.type.name}" />
 			        </p:column>
-			        <p:column headerText="DESCRIPTION" filterBy="#{t.description}" filterMatchMode="contains">
+			        <p:column headerText="DESCRIPTION" filterBy="#{t.description}" filterMatchMode="contains" width="400px">
 			            <h:outputText value="#{t.description}" />
 			        </p:column>
 			        
@@ -60,10 +61,10 @@
 			            <p:commandButton rendered="#{tagEditorView.isUsed(t.id)}" icon="ui-icon-search" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
-			             <p:commandButton icon="ui-icon-close" title="Delete" />
-			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
+			             <p:commandButton icon="ui-icon-close" title="Delete" update="formForm,formFlow,formUtil"/>
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" update="formForm,formFlow,formUtil"/>
 			             
-			             <p:commandButton  oncomplete="PF('settingAuxiliartDlg').hide()" update="formForm,formFlow,formAuxiliar" ajax="true" immediate="true" icon="ui-icon-check" title="Select">
+			             <p:commandButton  oncomplete="handleUtilSaveRequest(xhr, status, args)" ajax="true" immediate="true" update="formForm,formFlow,settingUtilDlgId,formUtil"  icon="ui-icon-check" title="Select" rendered="#{tagEditorView.isRendered}" >
 			                <f:setPropertyActionListener value="#{t}" target="#{tagEditorView.tag}" />
 			            </p:commandButton>
 			             
