@@ -5,7 +5,7 @@ public class GrammarEntity extends AbstractEntity {
 	
 	private String name;
 	private String description;
-	private String type;
+	private String type;/*list box DIGITS*/
 	private Integer sizeMax;
 	private Integer sizeMin;
 

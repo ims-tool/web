@@ -28,6 +28,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	
 	private NoMatchInputEntity noMatchInput;
 	private MenuEditorBean menuBean;
+	private PromptCollectorEditorBean promptCollectBean;
 	
 	
 	
@@ -40,6 +41,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
     	this.noMatchInput = new NoMatchInputEntity();    	
     	this.insert = true;
     	this.menuBean = null;
+    	this.promptCollectBean = null;
     	
     }
     
@@ -92,6 +94,15 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	public void setMenuBean(MenuEditorBean menuBean) {
 		this.menuBean = menuBean;
 	}
+	
+
+	public PromptCollectorEditorBean getPromptCollectBean() {
+		return promptCollectBean;
+	}
+
+	public void setPromptCollectBean(PromptCollectorEditorBean promptCollectBean) {
+		this.promptCollectBean = promptCollectBean;
+	}
 
 	private void updateExternalsBean() {
     	if(this.menuBean != null) {
@@ -102,7 +113,14 @@ public class NoMatchInputEditorBean extends AbstractBean {
 				
 			}
 		}	
-    	
+    	if(this.promptCollectBean != null) {
+    		if(this.noMatchInput.getType().equalsIgnoreCase(Constants.NO_INPUT)) {
+				this.promptCollectBean.setNoInputId(this.noMatchInput.getId());
+			} else {
+				this.promptCollectBean.setNoMatchId(this.noMatchInput.getId());
+				
+			}
+    	}
     }
 	
 	public void save(ActionEvent event) {

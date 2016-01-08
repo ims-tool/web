@@ -1,8 +1,8 @@
 package br.com.ims.flow.bean;
 
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -15,7 +15,7 @@ import br.com.ims.flow.model.FormEntity;
  
 @SuppressWarnings("serial")
 @ManagedBean(name = "answerEditorView")
-@RequestScoped
+@ViewScoped
 public class AnswerEditorBean extends AbstractBean {
      
 	

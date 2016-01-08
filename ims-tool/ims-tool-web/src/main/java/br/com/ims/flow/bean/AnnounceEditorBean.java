@@ -105,11 +105,6 @@ public class AnnounceEditorBean extends AbstractBean {
 		
 		ServicesFactory.getInstance().getPromptEditorService().getBean().setAnnounceBean(this);
 		
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Announce","Add Prompt Clicked!");
-		 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		
 
     }
 

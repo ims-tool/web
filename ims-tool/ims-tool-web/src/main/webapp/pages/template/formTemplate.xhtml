@@ -7,8 +7,24 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"	>
 		
 	<p:tooltip />
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
 	
-			<p:graphicImage library="images" value="#{bean.form.imagePath}"  width="60px" height="60px" alt="#{bean.form.name}"  />
+	
+			<h:panelGrid columns="2" cellpadding="5">
+				<p:graphicImage library="images" value="#{bean.form.imagePath}"  width="60px" height="60px" alt="#{bean.form.name}"  />
+				<h2>#{bean.form.formType.name}</h2>
+				
+	    	</h:panelGrid>
 			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />	
 			<h:panelGrid columns="2" cellpadding="5">
 				
