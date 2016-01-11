@@ -63,6 +63,13 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 					return true;
 				} 
 			}
+			if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+				
+				if(((MenuEntity)form.getFormId()).getNoInput().getId().equals(id) ||
+					((MenuEntity)form.getFormId()).getNoMatch().getId().equals(id)) {
+					return true;
+				} 
+			}
 		}
 		return false;
 	}

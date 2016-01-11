@@ -6,6 +6,8 @@ import br.com.ims.flow.service.ConditionService;
 import br.com.ims.flow.service.FlowEditorService;
 import br.com.ims.flow.service.FormService;
 import br.com.ims.flow.service.FormTypeService;
+import br.com.ims.flow.service.GrammarEditorService;
+import br.com.ims.flow.service.GrammarService;
 import br.com.ims.flow.service.NoMatchInputEditorService;
 import br.com.ims.flow.service.NoMatchInputService;
 import br.com.ims.flow.service.PromptEditorService;
@@ -81,6 +83,12 @@ public class ServicesFactory {
 		return new NoMatchInputEditorService();
 	}
 	
+	public GrammarService getGrammarService() {
+		return new GrammarService();
+	}
+	public GrammarEditorService getGrammarEditorService() {
+		return new GrammarEditorService();
+	}
 	
 
 }

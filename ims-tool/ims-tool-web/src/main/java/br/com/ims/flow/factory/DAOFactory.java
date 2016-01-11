@@ -3,6 +3,7 @@ package br.com.ims.flow.factory;
 import br.com.ims.flow.dao.AudioDAO;
 import br.com.ims.flow.dao.FormDAO;
 import br.com.ims.flow.dao.FormTypeDAO;
+import br.com.ims.flow.dao.GrammarDAO;
 import br.com.ims.flow.dao.NoMatchInputDAO;
 import br.com.ims.flow.dao.PromptDAO;
 import br.com.ims.flow.dao.TagDAO;
@@ -49,6 +50,11 @@ public class DAOFactory {
 	
 	public NoMatchInputDAO getNoMatchInputDAO() {
 		return NoMatchInputDAO.getInstance(); 
+	}
+	
+	
+	public GrammarDAO getGrammarDAO() {
+		return GrammarDAO.getInstance(); 
 	}
 
 }
