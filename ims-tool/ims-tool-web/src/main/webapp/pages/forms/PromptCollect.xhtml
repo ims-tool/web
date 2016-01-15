@@ -9,12 +9,93 @@
 	<ui:composition
 		template="/pages/template/formTemplate.xhtml">
 
-		<ui:param name="bean" value="#{promptCollectorEditorView}" />
+		<ui:param name="bean" value="#{promptcollectEditorView}" />
 		
-		<ui:define name="newContent">	
-	 			 			
-	    </ui:define>
-	    
-		
+		<ui:define name="newContent">
+			<h:outputLabel id="label_dialog_form_grammar" for="panel_dialog_form_grammar" value="Grammar:" />
+ 			<h:panelGrid columns="3" cellpadding="5" id="panel_dialog_form_grammar">
+	 			<p:selectOneMenu required="true" 
+	 			                 requiredMessage="Please,select a Grammar" 
+	 			                 value="#{bean.grammarId}" 
+	 			                 id="dialog_form_grammar"
+	 			                 filter="true" filterMatchMode="startsWith" 
+	 			                 label="label_dialog_form_grammar">
+	 				<f:selectItem itemLabel="Select One" itemValue="" />
+	 				<f:selectItems value="#{bean.grammars}" var="grammar"
+						itemValue="#{grammar.id}" itemLabel="#{grammar.name}"  />
+	 			</p:selectOneMenu>
+	 			<p:commandButton value="Add Grammar" actionListener="#{bean.addGrammar}" 
+	 										 update="settingComplementDlgId" 
+	 										 icon="buttonAddPrompt" 
+	 										 ajax="true" 
+							                 immediate="true" 
+							                 oncomplete="PF('settingComplementDlg').show()"  />
+	 			<p:message for="dialog_form_grammar" />	 			
+ 			</h:panelGrid>	
+	 		<h:outputLabel id="label_dialog_form_prompt" for="panel_dialog_form_prompt" value="Prompt:" />
+ 			<h:panelGrid columns="3" cellpadding="5" id="panel_dialog_form_prompt">
+	 			<p:selectOneMenu required="true" 
+	 			                 requiredMessage="Please,select a Prompt" 
+	 			                 value="#{bean.promptId}" 
+	 			                 id="dialog_form_prompt"
+	 			                 filter="true" filterMatchMode="startsWith" 
+	 			                 label="label_dialog_form_prompt">
+	 				<f:selectItem itemLabel="Select One" itemValue="" />
+	 				<f:selectItems value="#{bean.prompts}" var="prompt"
+						itemValue="#{prompt.id}" itemLabel="#{prompt.name}"  />
+	 			</p:selectOneMenu>
+	 			<p:commandButton value="Add Prompt" actionListener="#{bean.addPrompt}" 
+	 										 update="settingComplementDlgId" 
+	 										 icon="buttonAddPrompt" 
+	 										 ajax="true" 
+							                 immediate="true" 
+							                 oncomplete="PF('settingComplementDlg').show()"  />
+	 			<p:message for="dialog_form_prompt" />	 			
+ 			</h:panelGrid>	 
+ 			<h:outputLabel id="label_dialog_form_flush_prompt" for="dialog_form_flush_prompt" value="Flush Prompt:" />
+ 			<p:selectOneMenu id="dialog_form_flush_prompt" value="#{bean.promptCollect.flushprompt}" label="label_dialog_form_flush_prompt">
+ 				<f:selectItem itemLabel="No" itemValue="0" />
+ 				<f:selectItem itemLabel="Yes" itemValue="1" />
+ 			</p:selectOneMenu>
+ 			<h:outputLabel id="label_dialog_form_noinput" for="panel_dialog_form_noinput" value="NoInput:" />
+	 			<h:panelGrid columns="3" cellpadding="5" id="panel_dialog_form_noinput">
+		 			<p:selectOneMenu required="true" 
+		 			                 requiredMessage="Please,select a NoInput" 
+		 			                 value="#{bean.noInputId}" 
+		 			                 id="dialog_form_noinput"
+		 			                 filter="true" filterMatchMode="startsWith" 
+		 			                 label="label_dialog_form_noinput">
+		 				<f:selectItem itemLabel="Select One" itemValue="" />
+		 				<f:selectItems value="#{bean.noInputs}" var="noinput"
+							itemValue="#{noinput.id}" itemLabel="#{noinput.name}"  />
+		 			</p:selectOneMenu>
+
+		 			<p:column rowspan="2">
+		 				<p:commandButton value="Add NoInput/NoMatch" actionListener="#{bean.addNoMatchInput}" 
+		 										 update="settingOtherDlgId"  
+		 										 ajax="true" 
+								                 immediate="true" 
+								                 oncomplete="PF('settingOtherDlg').show()"  />
+		 			</p:column> 
+		 			
+		 			<p:message for="dialog_form_noinput" />	 			
+	 			</h:panelGrid>
+	 			<h:outputLabel id="label_dialog_form_nomatch" for="panel_dialog_form_nomatch" value="NoMatch:" />
+	 			<h:panelGrid columns="3" cellpadding="5" id="panel_dialog_form_nomatch">
+		 			<p:selectOneMenu required="true" 
+		 			                 requiredMessage="Please,select a NoMatch" 
+		 			                 value="#{bean.noMatchId}" 
+		 			                 id="dialog_form_nomatch"
+		 			                 filter="true" filterMatchMode="startsWith" 
+		 			                 label="label_dialog_form_nomatch">
+		 				<f:selectItem itemLabel="Select One" itemValue="" />
+		 				<f:selectItems value="#{bean.noMatchs}" var="nomatch"
+							itemValue="#{nomatch.id}" itemLabel="#{nomatch.name}"  />
+		 			</p:selectOneMenu>
+		 			
+		 			<p:message for="dialog_form_nomatch" />	 			
+	 			</h:panelGrid>	 			
+	    </ui:define>	    		
 	</ui:composition>			
 </ui:composition>
+

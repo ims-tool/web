@@ -28,7 +28,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	
 	private NoMatchInputEntity noMatchInput;
 	private MenuEditorBean menuBean;
-	private PromptCollectorEditorBean promptCollectBean;
+	private PromptCollectEditorBean promptCollectBean;
 	
 	
 	
@@ -96,11 +96,11 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	}
 	
 
-	public PromptCollectorEditorBean getPromptCollectBean() {
+	public PromptCollectEditorBean getPromptCollectBean() {
 		return promptCollectBean;
 	}
 
-	public void setPromptCollectBean(PromptCollectorEditorBean promptCollectBean) {
+	public void setPromptCollectBean(PromptCollectEditorBean promptCollectBean) {
 		this.promptCollectBean = promptCollectBean;
 	}
 

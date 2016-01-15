@@ -27,7 +27,7 @@ public class PromptEditorBean extends AbstractBean {
 	private PromptEntity prompt;
 	private AnnounceEditorBean announceBean;
 	private MenuEditorBean menuBean;
-	private PromptCollectorEditorBean promptCollectorBean;
+	private PromptCollectEditorBean promptCollectorBean;
 	private NoMatchInputEditorBean noMatchInputBean;
 	
 	
@@ -96,11 +96,11 @@ public class PromptEditorBean extends AbstractBean {
 
 	
 	
-	public PromptCollectorEditorBean getPromptCollectorBean() {
+	public PromptCollectEditorBean getPromptCollectorBean() {
 		return promptCollectorBean;
 	}
 
-	public void setPromptCollectorBean(PromptCollectorEditorBean promptCollectorBean) {
+	public void setPromptCollectorBean(PromptCollectEditorBean promptCollectorBean) {
 		this.promptCollectorBean = promptCollectorBean;
 	}
 
