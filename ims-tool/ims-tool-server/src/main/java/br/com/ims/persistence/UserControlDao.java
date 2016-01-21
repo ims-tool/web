@@ -31,10 +31,6 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 	
 //private static Logger logger = LoggerFactory.getLogger(AccessDao.class);
 
-
-
-
-
 	public boolean isInternalUser() throws DaoException{
 		Connection conn = null;
 		PreparedStatement stm = null;

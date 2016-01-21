@@ -1,0 +1,45 @@
+<div class="modal fade" id="versionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Versão</h4>
+      </div>
+      <div class="modal-body">
+      	
+      	<div class="row">
+			<div class="form-group">
+            	<label for="name" class="control-label">Version: </label>
+				<input class="selecao-version input-xlarge" type="hidden"/>
+				<button class="btn btn-info btn-edit-element" type="button">Editar</button>
+				<button class="btn btn-success btn-add-element right" type="button">Adicionar um novo</button>
+			</div>
+        </div>
+      
+        <form class="form-version">
+        	
+        	<input type="hidden" name="id" value="" />
+        	
+			<div class="form-group">
+            	<label for="description" class="control-label">Descrição: </label>
+				<textarea class="form-control" name="description"></textarea>
+			</div>
+			
+			<div class="form-group">
+				<div class="input-append date form_datetime">
+					<div class="col-sm-9">
+		            	<label for="deploydate" class="control-label">Data de Publicação: </label>
+						<input class="form-control" style="width: 90%; float: left;" name="deploydate" readonly/>
+						<span class="add-on"><i class="icon-th glyphicon glyphicon-calendar datetimepicker-icon"></i></span>
+					</div>
+				</div>
+			</div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-version" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

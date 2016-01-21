@@ -1,0 +1,55 @@
+<div class="modal fade" id="decisionChanceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Decision Chance</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-decisionChance">
+        	<div class="form-group">
+            	<label for="name" class="control-label">Operação: </label>
+				<select name="operation">
+					<option value=""></option>
+					<option value="Igual">Igual</option>
+					<option value="MaiorIgual">Maior ou igual</option>
+					<option value="MenorIgual">Menor ou igual</option>
+					<option value="Maior">Maior</option>
+					<option value="Menor">Menor</option>
+					<option value="IN">IN</option>
+					<option value="Diferente">Diferente</option>
+				</select>
+			</div>
+			
+			<div class="form-group">
+            	<label for="name" class="control-label">Valores: </label>
+            	<input type="text" class="form-control" name="values" />
+			</div>
+			
+			<div class="form-group">
+            	<label for="tag" class="control-label">Tag: </label>
+				<input class="selecao-tag input-xlarge" type="hidden" name="tag"/>
+				<a href="javascript:Tag.showAdd()">Adicionar novo</a>
+			</div>
+			
+			
+			<div class="form-group">
+            	<label for="decisiongroupchild" class="control-label">Decisiongroupchild: </label>
+				<input class="selecao-decisiongroupchild input-xlarge" type="hidden" name="decisiongroupchild"/>
+			</div>
+			
+			<div class="form-group">
+            	<label for="nextformid" class="control-label">NextFormId: </label>
+				<input class="selecao-nextformid input-xlarge" type="hidden" name="nextformid"/>
+			</div>
+			
+			
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-decisionChance" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

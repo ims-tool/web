@@ -1,0 +1,76 @@
+<div class="modal fade" id="promptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Prompt</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-prompt">
+        	
+        	<div class="row row-buttons">
+	        	<div class="form-group">
+	            	<label for="name" class="control-label">Prompt: </label>
+					<input class="selecao-prompt input-xlarge" type="hidden"/>
+					
+					<button class="btn btn-info edit-button-element" type="button">Editar</button>
+					<button class="btn btn-success add-button-element"  type="button">Adicionar um novo</button>
+				</div>
+			</div>
+        	
+        	<div class="form-container-prompt">
+        		<input type="hidden" class="form-control" name="id" value="" />
+	            <div class="form-group">
+	            	<label for="name" class="control-label">Nome: </label>
+					<input type="text" class="form-control" name="name" value="" />
+				</div>
+				
+				<div class="form-group">
+	            	<label for="versionid" class="control-label">Versão: </label>
+	            	<input class="selecao-version input-xlarge" type="hidden" name="versionid" /> <a href="javascript:Version.showAdd()">Adicionar novo</a>
+				</div>
+				
+				<hr />
+				<h5><b>Audios</b></h5>
+				<hr />
+				
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th style="width: 14%">ID</th>
+							<th style="width: 8%">Tipo</th>
+							<th>Audio</th>
+							<th>Descrição</th>
+							<th>Path</th>
+							<th>Versão</th>
+							<th>Condition</th>
+						</tr>
+					</thead>
+				</table>
+				<div class="div-table-content">
+					 <table class="table table-condensed table-audio">
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			
+				<hr />
+				
+				<div class="row">
+					<button class="btn btn-warning btn-pesquisar-audio" type="button">Pesquisar</button>
+					<button class="btn btn-success btn-add-audio" type="button">Adicionar</button>
+					<button class="btn btn-info btn-editar-audio" type="button">Editar</button>
+					<button class="btn btn-danger btn-excluir-audio" type="button">Excluir</button>
+				</div>
+			</div>
+        </form>
+      </div>
+      <div class="form-container-prompt">
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+	        <button type="button" class="btn btn-primary btn-save-prompt" elementId="" elementType="">Salvar</button>
+	      </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

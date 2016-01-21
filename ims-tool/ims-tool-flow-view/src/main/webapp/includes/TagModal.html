@@ -1,0 +1,56 @@
+<div class="modal fade" id="tagModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Tag</h4>
+      </div>
+      <div class="modal-body">
+      	
+      	<div class="row">
+				<div class="form-group">
+	            	<label for="name" class="control-label">Tag: </label>
+					<input class="selecao-tag input-xlarge" type="hidden"/>
+					<button class="btn btn-info btn-edit-element" type="button">Editar</button>
+					<button class="btn btn-success btn-add-element right" type="button">Adicionar um novo</button>
+				</div>	        	
+        </div>
+      
+        <form class="form-tag">
+        	
+        	<input type="hidden" name="id" value="" />
+        	
+			<div class="form-tag">
+            	<label for="nome" class="control-label">Tag type: </label>
+				<select name="tagtypeid">
+					<option value=""></option>
+					<option value="1">Retenção</option>
+					<option value="2">Transferência BC</option>
+					<option value="5">Navegação</option>
+					<option value="300">ReincCheckList</option>
+					<option value="3">No Input</option>
+					<option value="4">No Match</option>
+					<option value="-1">Retry</option>
+					<option value="6">RetornoBC</option>
+					<option value="7">Roteamento URA BC</option>				
+				</select>
+			</div>
+			
+			<div class="form-group">
+            	<label for="description" class="control-label">Descrição: </label>
+				<textarea class="form-control" name="description"></textarea>
+			</div>
+			
+			<div class="form-group">
+            	<label for="versionid" class="control-label">Versão: </label>
+            	<input class="selecao-version input-xlarge" type="hidden" name="versionid"/> <a href="javascript:Version.showAdd()">Adicionar novo</a>
+			</div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-tag" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

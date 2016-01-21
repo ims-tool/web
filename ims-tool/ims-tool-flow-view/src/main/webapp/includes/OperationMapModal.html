@@ -1,0 +1,46 @@
+<div class="modal fade" id="operationMapModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">OperationMap</h4>
+      </div>
+      <div class="modal-body">
+      	
+        <form class="form-operationmap">
+        	
+        	<input type="hidden" name="id" value="" />
+        	
+        	<div class="form-group">
+            	<label for="description" class="control-label">Nome: </label>
+				<input type="text" class="form-control" name="name" />
+			</div>
+        	
+			<div class="form-group">
+            	<label for="description" class="control-label">Descrição: </label>
+				<textarea class="form-control" name="description"></textarea>
+			</div>
+			
+			<div class="form-group">
+            	<label for="methodreference" class="control-label">Metodo: </label>
+				<input type="text" class="form-control" name="methodreference" />
+			</div>
+			
+			<div class="form-group">
+            	<label for="log_ative" class="control-label">Log Ativo: </label>
+				<input type="checkbox" name="log_ative" />
+			</div>
+			
+			<div class="form-group">
+	            	<label for="versionid" class="control-label">Versão: </label>
+	            	<input class="selecao-version input-xlarge" type="hidden" name="versionid" /> <a href="javascript:Version.showAdd()">Adicionar novo</a>
+				</div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-operationmap" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

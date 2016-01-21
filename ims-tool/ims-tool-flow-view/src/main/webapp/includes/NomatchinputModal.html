@@ -1,0 +1,64 @@
+<div class="modal fade" id="nomatchinputModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">No Match Input</h4>
+      </div>
+      <div class="modal-body">
+      	
+      	<div class="row">
+				<div class="form-group">
+	            	<label for="name" class="control-label">No match/input: </label>
+					<input class="selecao-nomatchinput input-xlarge" type="hidden"/>
+					<button class="btn btn-info btn-edit-element" type="button">Editar</button>
+					<button class="btn btn-success btn-add-element right" type="button">Adicionar um novo</button>
+				</div>	        	
+        </div>
+      
+        <form class="form-nomatchinput">
+        	
+        	<input type="hidden" name="id" value="" />
+        	
+			<div class="form-group">
+            	<label for="nome" class="control-label">Tipo: </label> <br />
+				<select name="type">
+					<option value=""></option>
+					<option value="NOINPUT">NOINPUT</option>
+					<option value="NOMATCH">NOMATCH</option>				
+				</select>
+			</div>
+			
+			<div class="form-group">
+            	<label for="threshold" class="control-label">Threshold: </label>
+				<input type="number" class="form-control" name="threshold" />
+			</div>
+			
+			<div class="form-group">
+            	<label for="prompt" class="control-label">Prompt: </label> <br />
+				<input class="selecao-prompt input-xlarge" type="hidden" name="prompt" /> <a href="javascript:Prompt.showAdd()">Adicionar novo</a>
+			</div>
+			
+			<div class="form-group">
+            	<label for="name" class="control-label">Nome: </label>
+				<input type="text" class="form-control" name="name" />
+			</div>
+			
+			<div class="form-group">
+            	<label for="tag" class="control-label">Tag: </label> <br />
+				<input class="selecao-tag input-xlarge" type="hidden" name="tag" /> <a href="javascript:Tag.showAdd()">Adicionar novo</a>
+			</div>
+			
+			<div class="form-group">
+            	<label for="versionid" class="control-label">Versão: </label> <br />
+            	<input class="selecao-version input-xlarge" type="hidden" name="versionid"/> <a href="javascript:Version.showAdd()">Adicionar novo</a>
+			</div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-nomatchinput" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,83 @@
+<div class="modal fade" id="promptCollectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Prompt Collect</h4>
+      </div>
+      <div class="modal-body">
+      	
+      	<div class="row">
+				<div class="form-group">
+	            	<label for="name" class="control-label">Prompt Collect: </label>
+					<input class="selecao-promptcollect input-xlarge" type="hidden"/>
+					<button class="btn btn-info btn-edit-element" type="button">Editar</button>
+					<button class="btn btn-success btn-add-element right" type="button">Adicionar um novo</button>
+				</div>	        	
+        </div>
+      
+        <form class="form-promptcollect" style="overflow: auto;height: 300px;">        	
+	        	<input type="hidden" name="id" value="" />
+	        	
+				<div class="form-group">
+	            	<label for="name" class="control-label">Nome: </label>
+					<input type="text" class="form-control" name="name" />
+				</div>
+				
+				<div class="form-group">
+	            	<label for="description" class="control-label">Descrição: </label>
+					<textarea class="form-control" name="description"></textarea>
+				</div>
+				
+				<div class="form-group">
+	            	<label for="grammar" class="control-label">Grammar: </label> <br />
+					<input class="selecao-grammar input-xlarge" type="hidden" name="grammar"/> <a href="javascript:Grammar.showAdd()">Adicionar novo</a>
+				</div>
+				
+				<div class="form-group">
+	            	<label for="prompt" class="control-label">Prompt: </label> <br />
+					<input class="selecao-prompt input-xlarge" type="hidden" name="prompt"/> <a href="javascript:Prompt.showAdd()">Adicionar novo</a>
+				</div>
+				
+				<div class="form-group">
+	            	<label for="noinput" class="control-label">Noinput: </label> <br />
+					<input class="selecao-noinput input-xlarge" type="hidden" name="noinput"/> <a href="javascript:Nomatchinput.showAdd()">Adicionar novo</a>
+				</div>
+				
+				<div class="form-group">
+	            	<label for="nomatch" class="control-label">Nomatch: </label> <br />
+					<input class="selecao-nomatch input-xlarge" type="hidden" name="nomatch"/> <a href="javascript:Nomatchinput.showAdd()">Adicionar novo</a>
+				</div>
+				<div class="form-group">
+	            	<label for="fetchtimeout" class="control-label">Fetch time out</label>
+					<input type="number" class="form-control" name="fetchtimeout" />
+				</div>
+				
+				<div class="form-group">
+	            	<label for="interdigittimeout" class="control-label">Interdigit time out</label>
+					<input type="number" class="form-control" name="interdigittimeout" />
+				</div>
+				
+				<div class="form-group">
+	            	<label for="terminatingtimeout" class="control-label">Terminating time out</label>
+					<input type="number" class="form-control" name="terminatingtimeout" />
+				</div>
+				
+				<div class="form-group">
+	            	<label for="tag" class="control-label">Tag: </label> <br />
+					<input class="selecao-tag input-xlarge" type="hidden" name="tag"/> <a href="javascript:Tag.showAdd()">Adicionar novo</a>
+				</div>
+				
+				<div class="form-group">
+	            	<label for="versionid" class="control-label">Versão: </label> <br />
+	            	<input class="selecao-version input-xlarge" type="hidden" name="versionid"/> <a href="javascript:Version.showAdd()">Adicionar novo</a>
+				</div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-promptcollect" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

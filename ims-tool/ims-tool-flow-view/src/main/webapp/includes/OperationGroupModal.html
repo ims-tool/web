@@ -1,0 +1,52 @@
+<div class="modal fade" id="operationGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">OperationGroup</h4>
+      </div>
+      <div class="modal-body">
+      	
+        <form class="form-operationgroup">
+        	
+        	<input type="hidden" name="id" value="" />
+        	
+			<div class="form-group">
+            	<label for="operationgroup.description" class="control-label">Descrição: </label>
+				<textarea class="form-control" name="operationgroup.description"></textarea>
+			</div>
+			
+			<div class="form-group">
+            	<label for="operationgroup.operationmapid" class="control-label">Map: </label>
+				<!-- <select class="selecao-operationmap" name="operationmapid"></select> -->
+				<input class="selecao-operationmap input-xlarge" type="hidden" name="operationgroup.operationmapid"/>
+				<a href="javascript:OperationMap.showAdd()">Adicionar novo</a>
+			</div>
+			
+			<hr />
+			Parametros
+			<hr />
+			
+			<table class="table table-condensed table-operationParameters">
+				<thead>
+					<tr>
+						<th>Nome</th>
+						<th>Valor</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			
+			<div class="row">
+					<button class="btn btn-success btn-add-operationparameters" type="button">Adicionar</button>
+					<button class="btn btn-danger btn-excluir-operationparameters" type="button">Excluir</button>
+				</div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-operationgroup" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

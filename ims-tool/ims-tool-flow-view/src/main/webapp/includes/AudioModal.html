@@ -1,0 +1,116 @@
+<div class="modal fade" id="audioModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Audio</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-audio">
+        	
+        	<input type="hidden" name="id" value="" />
+        
+            <div class="form-group">
+            	<label for="tipo" class="control-label">Tipo: </label>
+				<select class="form-control" name="type">
+					<option value=""></option>
+					<option value="WAV">WAV</option>
+					<option value="V_WAV">V_WAV</option>
+					<option value="TTS">TTS</option>
+					<option value="VAR">VAR</option>
+					
+				</select>
+			</div>
+			
+			<div class="form-group">
+            	<label for="nome" class="control-label">Nome: </label>
+				<input type="text" class="form-control" name="name" value="" />
+			</div>
+			
+			<div class="form-group">
+            	<label for="description" class="control-label">Descrição: </label>
+				<textarea class="form-control" name="description"></textarea>
+			</div>
+			
+			<div class="form-group">
+            	<label for="path" class="control-label">Path: </label>
+				<input type="text" class="form-control" name="path" value="" />
+			</div>
+			
+			<div class="form-group">
+            	<label for="versionid" class="control-label">Versão: </label><br />
+            	<input class="selecao-version input-xlarge" type="hidden" name="versionid" /> <a href="javascript:Version.showAdd()">Adicionar novo</a>
+			</div>
+			
+			<div class="audiovar-params-container">
+				<div class="form-group">
+					<label class="control-label">Tipo:</label>
+					<select class="formatName selecao-style">
+						<option class="emptyDefault" value=""></option>
+						<option value="number">number</option>
+						<option value="date">date</option>
+						<option value="time">time</option>
+						<option value="currency">currency</option>
+						<option value="digits">digits</option>
+						<option value="tts">tts</option>
+						<option value="digits-200ms">digits-200ms</option>
+						<option value="digits-500ms">digits-500ms</option>
+						<option value="digits-1s">digits-1s</option>
+					</select>
+				</div>
+				
+				<div class="form-group">
+					<label class="control-label">FormatParameters:</label>
+					<select class="formatParameters selecao-style">
+						<option class="emptyDefault" value=""></option>
+						<option class="number" value="numberType">numberType</option>
+						<option class="number" value="gender">gender</option>
+						<option class="date" value="datefmt">datefmt</option>
+						<option class="time" value="timetype">timetype</option>
+						<option class="currency" value="currencytype">currencytype</option>
+						<option class="digits date number time currency" value="inflection">inflection</option>
+					</select>
+					
+					<label class="control-label">FormatParametersValue:</label>
+					<select class="formatParametersValue selecao-style">
+						<option class="emptyDefault" value=""></option>
+						<option class="numberType" value="integer">integer</option>
+						<option class="numberType" value="decimal">decimal</option>
+						<option class="gender" value="masculine">masculine</option>
+						<option class="gender" value="feminine">feminine</option>
+						<option class="date digits inflection" value="neutral">neutral</option>
+						<option class="inflection" value="raising">raising</option>
+						<option class="inflection" value="falling">falling</option>
+						<option class="datefmt" value="wdmy">wdmy</option>
+						<option class="datefmt" value="dmy">dmy</option>
+						<option class="datefmt" value="dm">dm</option>
+						<option class="timetype" value="12">12</option>
+						<option class="timetype" value="24">24</option>
+						<option class="currencytype" value="reais">reais</option>
+						<option class="currencytype" value="reaiscentavos">reaiscentavos</option>
+					</select>
+					
+					<button type="button" class="btn btn-primary btn-xs add-audiovar-param">Adicionar</button>
+				</div>
+				
+				<table class="table table-audiovar">
+					<thead>
+						<tr>
+							<th>Parametro</th>
+							<th>Valor</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-audio" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

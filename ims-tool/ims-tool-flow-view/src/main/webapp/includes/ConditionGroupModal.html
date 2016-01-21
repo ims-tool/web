@@ -1,0 +1,71 @@
+<div class="modal fade" id="conditionGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Condition Group</h4>
+      </div>
+      <div class="modal-body">
+      	
+        <form class="form-conditiongroup">
+        	
+        	<input type="hidden" name="id" value="" />
+        	
+			<div class="form-group">
+            	<label for="conditiongroup.description" class="control-label">Descrição: </label>
+				<textarea class="form-control" name="conditiongroup.description"></textarea>
+			</div>
+			
+			<div class="form-group">
+            	<label for="conditiongroup.conditionmapid" class="control-label">Metodo: </label>
+				<input class="selecao-conditionmap input-xlarge" type="hidden" name="conditiongroup.conditionmapid"/>
+				<a href="javascript:ConditionMap.showAdd()">Adicionar novo</a>
+			</div>
+			
+			<hr />
+			Parametros
+			
+			<table class="table table-condensed table-conditionParameters">
+				<thead>
+					<tr>
+						<th>Nome</th>
+						<th>Valor</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			
+			<div class="row">
+				<button class="btn btn-success btn-add-conditionparameters" type="button">Adicionar</button>
+				<button class="btn btn-danger btn-excluir-conditionparameters" type="button">Excluir</button>
+			</div>
+			
+			<hr />
+			Tratamento Resultado
+			
+			<table class="table table-condensed table-conditionvalue">
+				<thead>
+					<tr>
+						<th>Operação</th>
+						<th>Valores</th>
+						<th>Tag TRUE</th>
+						<th>Tag FALSE</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			
+			<div class="row">
+				<button class="btn btn-success btn-add-conditionvalue" type="button">Adicionar</button>
+				<button class="btn btn-danger btn-excluir-conditionvalue" type="button">Excluir</button>
+			</div>
+			
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-save-conditiongroup" elementId="" elementType="">Salvar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
