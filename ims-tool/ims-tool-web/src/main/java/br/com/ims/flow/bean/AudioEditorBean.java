@@ -77,9 +77,7 @@ public class AudioEditorBean extends AbstractBean {
 		 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		
-		if(this.promptBean != null) {
-			this.promptBean.setAudioId(this.audio.getId());
-		}
+		updateExternalsBean();
 		
 		init();
 		
@@ -99,6 +97,14 @@ public class AudioEditorBean extends AbstractBean {
 	public void delete(ActionEvent event) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected void updateExternalsBean() {
+		// TODO Auto-generated method stub
+		if(this.promptBean != null) {
+			this.promptBean.setAudioId(this.audio.getId());
+		}
 	}   
 	
 	

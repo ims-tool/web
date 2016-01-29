@@ -30,5 +30,5 @@ public abstract class AbstractBean implements Serializable {
 	public abstract void update(ActionEvent event);
 	public abstract void delete(ActionEvent event);
 	public abstract boolean isUsed(String id);
-    
+	protected abstract void updateExternalsBean();
 }

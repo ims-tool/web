@@ -104,7 +104,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 		this.promptCollectBean = promptCollectBean;
 	}
 
-	private void updateExternalsBean() {
+	protected void updateExternalsBean() {
     	if(this.menuBean != null) {
 			if(this.noMatchInput.getType().equalsIgnoreCase(Constants.NO_INPUT)) {
 				this.menuBean.setNoInputId(this.noMatchInput.getId());

@@ -1,12 +1,14 @@
 package br.com.ims.flow.model;
 
+import java.util.List;
+
 @SuppressWarnings("serial")
 public class ConditionEntity extends AbstractEntity{
 	
 	private String name;
 	private String description;
 	private TagEntity tag;	
-	private ConditionGroupEntity conditionGroup;
+	private List<ConditionGroupEntity> listConditionGroup;
 	
 	
 	
@@ -28,14 +30,16 @@ public class ConditionEntity extends AbstractEntity{
 	public void setTag(TagEntity tag) {
 		this.tag = tag;
 	}
-	public ConditionGroupEntity getConditionGroup() {
-		return conditionGroup;
+	public List<ConditionGroupEntity> getListConditionGroup() {
+		return listConditionGroup;
 	}
-	public void setConditionGroup(ConditionGroupEntity conditionGroup) {
-		this.conditionGroup = conditionGroup;
+	public void setListConditionGroup(List<ConditionGroupEntity> listConditionGroup) {
+		this.listConditionGroup = listConditionGroup;
 	}
+
 	
 	
+
 	
 	
 }

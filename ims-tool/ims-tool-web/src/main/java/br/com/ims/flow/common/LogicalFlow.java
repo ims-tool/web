@@ -115,7 +115,11 @@ public class LogicalFlow {
 			
 			for(Node nodeAux : listNode) {
 				FormEntity formAux = (FormEntity)nodeAux.getElement().getData();
-				if(!formAux.getId().equalsIgnoreCase(form.getId()) && formAux.getName().equalsIgnoreCase(form.getName())) {
+				if(!formAux.getId().equalsIgnoreCase(form.getId()) 
+						&& formAux.getName().equalsIgnoreCase(form.getName())
+						&& !(formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE) 
+								|| formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOINPUT) 
+								|| formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCH))) {
 					form.setFormError(true);
 					form.setErrorDescription("Name "+form.getName()+" already assigned to another Element.");
 					continue;

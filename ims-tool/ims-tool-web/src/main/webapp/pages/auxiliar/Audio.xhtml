@@ -55,7 +55,8 @@
 	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" required="true" requiredMessage="Please,inform a Name" label="label_complement_audio_name" />
 	            
 	            <h:outputLabel id="label_complement_audio_description" for="complement_audio_description" value="Description:" />
-	            <p:inputText id="complement_audio_description" value="#{audioEditorView.audio.description}" required="true" requiredMessage="Please,inform a Description" label="label_complement_audio_description" />
+	            <p:inputTextarea id="complement_audio_description" value="#{audioEditorView.audio.description}" required="true" requiredMessage="Please,inform a Description" label="label_complement_audio_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            
 	            
 	            <h:outputLabel id="label_complement_audio_path" for="complement_audio_path" value="Path:" />
 	            <p:inputText id="complement_audio_path" value="#{audioEditorView.audio.path}" label="label_complement_audio_path" />

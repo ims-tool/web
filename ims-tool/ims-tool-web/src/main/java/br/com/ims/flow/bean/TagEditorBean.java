@@ -154,7 +154,7 @@ public class TagEditorBean extends AbstractBean {
 	}
 
 	
-    private void updateExternalsBean() {
+    protected void updateExternalsBean() {
     	boolean hasExternalBean = false;
     	
     	if(this.node != null) {

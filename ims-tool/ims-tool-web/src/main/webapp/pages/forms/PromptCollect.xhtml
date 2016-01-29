@@ -26,7 +26,7 @@
 	 			</p:selectOneMenu>
 	 			<p:commandButton value="Add Grammar" actionListener="#{bean.addGrammar}" 
 	 										 update="settingComplementDlgId" 
-	 										 icon="buttonAddPrompt" 
+	 										 icon="buttonAddGrammar" 
 	 										 ajax="true" 
 							                 immediate="true" 
 							                 oncomplete="PF('settingComplementDlg').show()"  />
@@ -72,10 +72,11 @@
 
 		 			<p:column rowspan="2">
 		 				<p:commandButton value="Add NoInput/NoMatch" actionListener="#{bean.addNoMatchInput}" 
-		 										 update="settingOtherDlgId"  
-		 										 ajax="true" 
-								                 immediate="true" 
-								                 oncomplete="PF('settingOtherDlg').show()"  />
+		 								 icon="buttonAddNoInputNoMatch"
+ 										 update="settingOtherDlgId"  
+ 										 ajax="true" 
+						                 immediate="true" 
+						                 oncomplete="PF('settingOtherDlg').show()"  />
 		 			</p:column> 
 		 			
 		 			<p:message for="dialog_form_noinput" />	 			
@@ -94,7 +95,19 @@
 		 			</p:selectOneMenu>
 		 			
 		 			<p:message for="dialog_form_nomatch" />	 			
-	 			</h:panelGrid>	 			
+	 			</h:panelGrid>	 	
+	 			<h:outputLabel id="label_dialog_form_fetchtimeout" for="dialog_form_fetchtimeout" value="Fetch TimeOut:" />
+				<p:inputText id="dialog_form_fetchtimeout" value="#{bean.promptCollect.fetchTimeout}" type="number" label="label_dialog_form_fetchtimeout" />
+				
+				<h:outputLabel id="label_dialog_form_interDigitTimeout" for="dialog_form_interDigitTimeout" value="Inter Digit TimeOut:" />
+				<p:inputText id="dialog_form_interDigitTimeout" value="#{bean.promptCollect.interDigitTimeout}" type="number" label="label_dialog_form_interDigitTimeout" />
+				
+				<h:outputLabel id="label_dialog_form_terminatingTimeout" for="dialog_form_terminatingTimeout" value="Terminating TimeOut:" />
+				<p:inputText id="dialog_form_terminatingTimeout" value="#{bean.promptCollect.terminatingTimeout}" type="number" label="label_dialog_form_terminatingTimeout" />
+				
+				<h:outputLabel id="label_dialog_form_terminatingCharacter" for="dialog_form_terminatingCharacter" value="Terminating Character:" />
+				<p:inputText id="dialog_form_terminatingCharacter" value="#{bean.promptCollect.terminatingCharacter}" maxlength="1" label="label_dialog_form_terminatingCharacter" />
+	 	
 	    </ui:define>	    		
 	</ui:composition>			
 </ui:composition>

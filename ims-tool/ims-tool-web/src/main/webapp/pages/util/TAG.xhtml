@@ -57,8 +57,7 @@
 	 			</p:selectOneMenu>
 	 
 	            <h:outputLabel id="label_util_tag_description" for="util_tag_description" value="Description:" />
-	            <p:inputText id="util_tag_description" value="#{tagEditorView.tag.description}" required="true" requiredMessage="Please,inform a Description" label="label_util_tag_description" />
-	            
+	            <p:inputTextarea id="util_tag_description" value="#{tagEditorView.tag.description}" required="true" requiredMessage="Please,inform a Description" label="label_util_tag_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
 	            
 	            <f:facet name="footer">
 	            	<p:commandButton value="New" disabled="#{tagEditorView.insert}"  update="formForm,formFlow,formUtil" actionListener="#{tagEditorView.init}"/>

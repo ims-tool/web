@@ -2,6 +2,9 @@ package br.com.ims.flow.factory;
 
 import br.com.ims.flow.service.AudioEditorService;
 import br.com.ims.flow.service.AudioService;
+import br.com.ims.flow.service.ConditionEditorService;
+import br.com.ims.flow.service.ConditionGroupEditorService;
+import br.com.ims.flow.service.ConditionMapService;
 import br.com.ims.flow.service.ConditionService;
 import br.com.ims.flow.service.FlowEditorService;
 import br.com.ims.flow.service.FormService;
@@ -62,6 +65,11 @@ public class ServicesFactory {
 		return new ConditionService();
 	}
 	
+
+	public ConditionEditorService getConditionEditorService() {
+		return new ConditionEditorService();
+	}
+	
 	public TagService getTagService() {
 		return new TagService();
 	}
@@ -88,6 +96,14 @@ public class ServicesFactory {
 	}
 	public GrammarEditorService getGrammarEditorService() {
 		return new GrammarEditorService();
+	}
+	
+	public ConditionGroupEditorService getConditionGroupEditorService() {
+		return new ConditionGroupEditorService();
+	}
+	
+	public ConditionMapService getConditionMapService() {
+		return new ConditionMapService();
 	}
 	
 

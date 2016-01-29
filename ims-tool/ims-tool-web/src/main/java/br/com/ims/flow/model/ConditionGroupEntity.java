@@ -1,25 +1,22 @@
 package br.com.ims.flow.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
 public class ConditionGroupEntity extends AbstractEntity{
 	
-	
-	private Integer conditionGroupId;
 	private Integer orderNum;
 	private ConditionMapEntity conditionMap;
 	private String description;	
-	private List<ConditionParameterEntity> conditionParameters;
-	private List<ConditionValueEntity> conditionValues;
+	private List<ConditionParameterEntity> listConditionParameters;
+	private List<ConditionValueEntity> listConditionValues;
 	
+	public ConditionGroupEntity() {
+		listConditionParameters = new ArrayList<ConditionParameterEntity>();
+		listConditionValues = new ArrayList<ConditionValueEntity>();
+	}
 
-	public Integer getConditionGroupId() {
-		return conditionGroupId;
-	}
-	public void setConditionGroupId(Integer conditionGroupId) {
-		this.conditionGroupId = conditionGroupId;
-	}
 	public Integer getOrderNum() {
 		return orderNum;
 	}
@@ -38,19 +35,17 @@ public class ConditionGroupEntity extends AbstractEntity{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	public List<ConditionParameterEntity> getConditionParameters() {
-		return conditionParameters;
+	public List<ConditionParameterEntity> getListConditionParameters() {
+		return listConditionParameters;
 	}
-	public void setConditionParameters(
-			List<ConditionParameterEntity> conditionParameters) {
-		this.conditionParameters = conditionParameters;
+	public void setListConditionParameters(List<ConditionParameterEntity> listConditionParameters) {
+		this.listConditionParameters = listConditionParameters;
 	}
-	public List<ConditionValueEntity> getConditionValues() {
-		return conditionValues;
+	public List<ConditionValueEntity> getListConditionValues() {
+		return listConditionValues;
 	}
-	public void setConditionValues(List<ConditionValueEntity> conditionValues) {
-		this.conditionValues = conditionValues;
+	public void setListConditionValues(List<ConditionValueEntity> listConditionValues) {
+		this.listConditionValues = listConditionValues;
 	}
 	
 	

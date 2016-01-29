@@ -104,7 +104,7 @@ public class PromptEditorBean extends AbstractBean {
 		this.promptCollectorBean = promptCollectorBean;
 	}
 
-	private void updateExternalsBean() {
+	protected void updateExternalsBean() {
     
 		
 		if(this.announceBean != null) {

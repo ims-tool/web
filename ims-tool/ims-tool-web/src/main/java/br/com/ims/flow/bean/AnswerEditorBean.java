@@ -78,6 +78,12 @@ public class AnswerEditorBean extends AbstractBean {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	protected void updateExternalsBean() {
+		// TODO Auto-generated method stub
+		
+	}
 	
     
 }
