@@ -3,18 +3,18 @@ package br.com.ims.flow.model;
 @SuppressWarnings("serial")
 public class AnnounceEntity extends AbstractFormEntity{
 	
-	private Integer flushpront;
+	private Integer flushprompt;
 	private PromptEntity prompt;
 	private FormEntity nextform;
 	private TagEntity tag;
 		
-	public Integer getFlushpront() {
-		return flushpront;
-	}
-	public void setFlushpront(Integer flushpront) {
-		this.flushpront = flushpront;
-	}
 	
+	public Integer getFlushprompt() {
+		return flushprompt;
+	}
+	public void setFlushprompt(Integer flushprompt) {
+		this.flushprompt = flushprompt;
+	}
 	public PromptEntity getPrompt() {
 		return prompt;
 	}

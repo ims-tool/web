@@ -47,10 +47,11 @@
 
 		 			<p:column rowspan="2">
 		 				<p:commandButton value="Add NoInput/NoMatch" actionListener="#{bean.addNoMatchInput}" 
-		 										 update="settingOtherDlgId"  
-		 										 ajax="true" 
-								                 immediate="true" 
-								                 oncomplete="PF('settingOtherDlg').show()"  />
+ 										 icon="buttonAddNoInputNoMatch"
+ 										 update="settingOtherDlgId"  
+ 										 ajax="true" 
+						                 immediate="true" 
+						                 oncomplete="PF('settingOtherDlg').show()"  />
 		 			</p:column> 
 		 			
 		 			<p:message for="dialog_form_noinput" />	 			
@@ -89,9 +90,15 @@
 			 				<f:selectItems value="#{bean.conditions}" var="condition"
 								itemValue="#{condition.id}" itemLabel="#{condition.name}"  />
 			 			</p:selectOneMenu>
-			            
-			            <p:commandButton value="Add Choice" update="panel_dialog_form_choice_add,panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.addChoiceToMenu}"/>			            				
-		 			</h:panelGrid>	 		
+
+			            <p:commandButton value="Add Condition" actionListener="#{bean.addCondition}" 
+ 										 icon="buttonAddCondition"
+ 										 update="settingAuxiliarDlgId"  
+ 										 ajax="true" 
+						                 immediate="true" 
+						                 oncomplete="PF('settingAuxiliarDlg').show()"  />			            				
+		 			</h:panelGrid>
+		 			<p:commandButton value="Add Choice" update="panel_dialog_form_choice_add,panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.addChoiceToMenu}"/>	 		
 					<p:separator />
 					<p:panel id="panel_dialog_form_choices_list" header="Choices" style="margin-bottom:20px">
 		 				<p:dataTable  

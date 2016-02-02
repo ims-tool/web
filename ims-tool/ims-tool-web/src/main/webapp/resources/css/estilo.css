@@ -853,6 +853,23 @@ body:before {
 
 .ui-icon.buttonAddCondition {  
     background-image: url("../imagens/icones/flow/condition_16_16.png") !important;    
+}
+
+.ui-icon.buttonAddGrammar {  
+    background-image: url("../imagens/icones/flow/grammar_16_16.png") !important;    
+}
+
+.ui-icon.buttonAddNoInputNoMatch {  
+    background-image: url("../imagens/icones/flow/noinputnomatch_16_16.png") !important;    
+}
+
+.ui-icon.buttonAddMap {  
+    background-image: url("../imagens/icones/flow/map_16_16.png") !important;    
+}
+
+
+.ui-icon.buttonAddTag {  
+    background-image: url("../imagens/icones/flow/tag_16_16.png") !important;    
 }  
 
 

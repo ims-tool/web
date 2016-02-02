@@ -41,6 +41,9 @@ public class TagEditorBean extends AbstractBean {
     	init();
     }
     
+    
+    
+    
     public void init() {
     	
     	this.tag = new TagEntity();
@@ -76,7 +79,8 @@ public class TagEditorBean extends AbstractBean {
 		
 		updateExternalsBean();
 		
-		init();
+		
+		//init();
 		
 	}
 	
@@ -108,6 +112,7 @@ public class TagEditorBean extends AbstractBean {
 		this.tagTypeId = tagTypeId;
 	}
 
+	
 	@Override
 	public void save(ActionEvent event) {
 		
@@ -126,11 +131,7 @@ public class TagEditorBean extends AbstractBean {
 		
 		updateExternalsBean();
 		
-		init();
 		
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean saved = true;
-		context.addCallbackParam("saved", saved);
 		
 	}
 
@@ -152,7 +153,10 @@ public class TagEditorBean extends AbstractBean {
 		return ServicesFactory.getInstance().getTagService().isUsed(id);
 	}
 
-    private void updateExternalsBean() {
+	
+    protected void updateExternalsBean() {
+    	boolean hasExternalBean = false;
+    	
     	if(this.node != null) {
 			Connection connection = this.node.getConnection();
 			
@@ -165,12 +169,32 @@ public class TagEditorBean extends AbstractBean {
 			
 			FormEntity form = (FormEntity)this.node.getElement().getData();
 			form.setTag(this.tag);
+			hasExternalBean = true;
 		}	
     	if(this.noMatchInput != null) {
     		this.noMatchInput.setTag(this.tag);
+    		hasExternalBean = true;
+    	}
+    	
+    	if(hasExternalBean) {
+    		init();
+    		
+    		RequestContext context = RequestContext.getCurrentInstance();
+    		boolean saved = true;
+    		context.addCallbackParam("saved", saved);
     	}
     }
+    
+    public boolean isRendered() {
+    	if(this.node != null || this.noMatchInput != null) {
+    		return true;
+    	}
+    	return false;
+    }
+
+	
    
+    
  
 	
     

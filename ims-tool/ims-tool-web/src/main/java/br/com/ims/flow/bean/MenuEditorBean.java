@@ -371,8 +371,14 @@ public class MenuEditorBean extends AbstractBean {
 		
 		ServicesFactory.getInstance().getPromptEditorService().getBean().setMenuBean(this);
 		
-		
     }
+	public void addCondition(ActionEvent event) {
+		ServicesFactory.getInstance().getFlowEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
+		
+		ServicesFactory.getInstance().getConditionEditorService().getBean().setMenuBean(this);
+		
+	}
+	
 	public void addNoMatchInput(ActionEvent event) {
 		
 		
@@ -567,6 +573,12 @@ public class MenuEditorBean extends AbstractBean {
 
 	public void setSelectedChoiceId(String selectedChoiceId) {
 		this.selectedChoiceId = selectedChoiceId;
+	}
+
+	@Override
+	protected void updateExternalsBean() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

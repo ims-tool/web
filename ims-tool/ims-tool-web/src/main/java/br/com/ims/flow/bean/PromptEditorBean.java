@@ -27,7 +27,9 @@ public class PromptEditorBean extends AbstractBean {
 	private PromptEntity prompt;
 	private AnnounceEditorBean announceBean;
 	private MenuEditorBean menuBean;
+	private PromptCollectEditorBean promptCollectorBean;
 	private NoMatchInputEditorBean noMatchInputBean;
+	
 	
 	private List<AudioEntity> audios;
 	private List<ConditionEntity> conditions;
@@ -50,6 +52,7 @@ public class PromptEditorBean extends AbstractBean {
     	this.announceBean = null;
     	this.menuBean = null;
     	this.noMatchInputBean = null;
+    	this.promptCollectorBean = null;
 
     	
     }
@@ -91,7 +94,17 @@ public class PromptEditorBean extends AbstractBean {
 		this.noMatchInputBean = noMatchInputBean;
 	}
 
-	private void updateExternalsBean() {
+	
+	
+	public PromptCollectEditorBean getPromptCollectorBean() {
+		return promptCollectorBean;
+	}
+
+	public void setPromptCollectorBean(PromptCollectEditorBean promptCollectorBean) {
+		this.promptCollectorBean = promptCollectorBean;
+	}
+
+	protected void updateExternalsBean() {
     
 		
 		if(this.announceBean != null) {
@@ -106,7 +119,9 @@ public class PromptEditorBean extends AbstractBean {
 			this.noMatchInputBean.setPromptId(this.prompt.getId());
 		}
 		
-		
+		if(this.promptCollectorBean != null) {
+			this.getPromptCollectorBean().setPromptId(this.prompt.getId());
+		}
     }
 	
 	public void save(ActionEvent event) {

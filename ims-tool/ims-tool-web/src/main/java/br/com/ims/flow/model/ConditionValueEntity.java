@@ -2,7 +2,7 @@ package br.com.ims.flow.model;
 
 
 @SuppressWarnings("serial")
-public class ConditionValueEntity extends AbstractEntity{
+public class ConditionValueEntity extends AbstractEntity implements Comparable <ConditionValueEntity>{
 	
 	private Integer conditionGroupId;
 	private Integer orderNum;
@@ -19,6 +19,10 @@ public class ConditionValueEntity extends AbstractEntity{
 	private String value10;
 	private TagEntity tagTrue;
 	private TagEntity tagFalse;
+	
+	public ConditionValueEntity() {
+		this.operation = "=";
+	}
 	
 	
 	public Integer getConditionGroupId() {
@@ -111,6 +115,16 @@ public class ConditionValueEntity extends AbstractEntity{
 	}
 	public void setTagFalse(TagEntity tagFalse) {
 		this.tagFalse = tagFalse;
+	}
+	@Override
+	public int compareTo(ConditionValueEntity arg0) {
+		// TODO Auto-generated method stub
+		if( this.orderNum < arg0.getOrderNum()) {
+			return -1;
+		} else if(this.orderNum > arg0.getOrderNum()) {
+			return 1;
+		}
+		return 0;
 	}
 	
 	

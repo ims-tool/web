@@ -105,11 +105,6 @@ public class AnnounceEditorBean extends AbstractBean {
 		
 		ServicesFactory.getInstance().getPromptEditorService().getBean().setAnnounceBean(this);
 		
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Announce","Add Prompt Clicked!");
-		 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		
 
     }
 
@@ -129,6 +124,12 @@ public class AnnounceEditorBean extends AbstractBean {
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	protected void updateExternalsBean() {
+		// TODO Auto-generated method stub
+		
 	}
 	
     

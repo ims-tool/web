@@ -318,6 +318,12 @@ public class FlowEditorBean extends AbstractBean {
 	public void setEditing(boolean editing) {
 		this.editing = editing;
 	}
+
+	@Override
+	protected void updateExternalsBean() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
     

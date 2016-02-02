@@ -16,13 +16,10 @@ import org.primefaces.model.diagram.endpoint.EndPointAnchor;
 import org.primefaces.model.diagram.endpoint.RectangleEndPoint;
 
 import br.com.ims.flow.bean.FlowEditorBean;
-import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
-import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
-import br.com.ims.flow.model.MenuEntity;
 import br.com.ims.flow.model.PromptEntity;
 
 public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
@@ -179,6 +176,9 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 		}
 		if(formType.getAllowOutput() == 1) {
 			EndPoint endPoint = createRectangleEndPoint(EndPointAnchor.BOTTOM);
+			element.addEndPoint(endPoint);
+			
+			endPoint = new BlankEndPoint(EndPointAnchor.LEFT);
 			element.addEndPoint(endPoint);
 		}else {
 			if(formType.getMandatoryOutput() == 1) {
