@@ -22,10 +22,10 @@ public class AudioEditorBean extends AbstractBean {
 	
 	private AudioEntity audio;
 	private List<AudioEntity> audios;
+	
 	private PromptEditorBean promptBean;
-
 	
-	
+		
     public AudioEditorBean() {
     	init();
     }
@@ -33,6 +33,7 @@ public class AudioEditorBean extends AbstractBean {
     public void init() {
     	this.audio = new AudioEntity();
     	this.promptBean = null;
+    	
     	this.insert = true;
     	
     }
@@ -56,6 +57,7 @@ public class AudioEditorBean extends AbstractBean {
 	}
 
 	
+
 	public List<AudioEntity> getAudios() {
 		this.audios = ServicesFactory.getInstance().getAudioService().getAll();
 		return audios;
@@ -93,18 +95,26 @@ public class AudioEditorBean extends AbstractBean {
 		
 	}
 
-	@Override
-	public void delete(ActionEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	protected void updateExternalsBean() {
 		// TODO Auto-generated method stub
 		if(this.promptBean != null) {
 			this.promptBean.setAudioId(this.audio.getId());
 		}
+		
+	}
+
+	@Override
+	public void edit(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(String id) {
+		// TODO Auto-generated method stub
+		
 	}   
 	
 	

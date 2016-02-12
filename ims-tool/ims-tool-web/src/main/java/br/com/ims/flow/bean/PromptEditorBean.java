@@ -29,7 +29,7 @@ public class PromptEditorBean extends AbstractBean {
 	private MenuEditorBean menuBean;
 	private PromptCollectEditorBean promptCollectorBean;
 	private NoMatchInputEditorBean noMatchInputBean;
-	
+	private TransferEditorBean transferBean;
 	
 	private List<AudioEntity> audios;
 	private List<ConditionEntity> conditions;
@@ -53,7 +53,8 @@ public class PromptEditorBean extends AbstractBean {
     	this.menuBean = null;
     	this.noMatchInputBean = null;
     	this.promptCollectorBean = null;
-
+    	this.transferBean = null;
+    	
     	
     }
     
@@ -104,6 +105,16 @@ public class PromptEditorBean extends AbstractBean {
 		this.promptCollectorBean = promptCollectorBean;
 	}
 
+	
+	
+	public TransferEditorBean getTransferBean() {
+		return transferBean;
+	}
+
+	public void setTransferBean(TransferEditorBean transferBean) {
+		this.transferBean = transferBean;
+	}
+
 	protected void updateExternalsBean() {
     
 		
@@ -121,6 +132,9 @@ public class PromptEditorBean extends AbstractBean {
 		
 		if(this.promptCollectorBean != null) {
 			this.getPromptCollectorBean().setPromptId(this.prompt.getId());
+		}
+		if(this.transferBean != null) {
+			this.transferBean.setConditionId(this.prompt.getId());
 		}
     }
 	
@@ -208,6 +222,8 @@ public class PromptEditorBean extends AbstractBean {
 
 	public void addNewAudio(ActionEvent event) {
 		
+		collect();
+		
 		ServicesFactory.getInstance().getFlowEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Audio.xhtml");
 		
 		ServicesFactory.getInstance().getAudioEditorService().getBean().setPromptBean(this);
@@ -215,8 +231,11 @@ public class PromptEditorBean extends AbstractBean {
 	
 	public void addNewCondition(ActionEvent event) {
 		
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Prompt","Method not implemented");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		this.collect();
+		
+		ServicesFactory.getInstance().getFlowEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
+		
+		ServicesFactory.getInstance().getConditionEditorService().getBean().setPromptBean(this);
 	}
 
 	
@@ -267,10 +286,25 @@ public class PromptEditorBean extends AbstractBean {
 		
 	}
 
+	
+
 	@Override
-	public void delete(ActionEvent event) {
+	public void edit(String id) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void delete(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+	protected void collect() {
+		this.prompt.setName(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_name").toString());
+		
+		this.audioId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_audio_input").toString();
+		this.audioOrder = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_audio_order").toString();
+		this.conditionId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_condition_input").toString();
 	}
 	
     

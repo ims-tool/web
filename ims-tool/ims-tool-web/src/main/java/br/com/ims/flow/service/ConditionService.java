@@ -15,6 +15,11 @@ public class ConditionService extends AbstractEntityService<ConditionEntity>{
 		return DAOFactory.getInstance().getConditionDAO().getAll();
 	}
 	
+	public ConditionEntity getByName(String name) {
+		
+		return DAOFactory.getInstance().getConditionDAO().getByName(name);
+	}
+	
 	public ConditionEntity get(String id) {
 		
 		return DAOFactory.getInstance().getConditionDAO().get(id);

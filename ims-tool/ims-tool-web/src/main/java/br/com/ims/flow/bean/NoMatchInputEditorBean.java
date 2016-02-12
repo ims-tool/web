@@ -143,7 +143,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	
 	
 	public void addPrompt(ActionEvent event) {
-		
+		this.collect();
 		
 		ServicesFactory.getInstance().getFlowEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
 		
@@ -157,16 +157,38 @@ public class NoMatchInputEditorBean extends AbstractBean {
 		
 	}
 
-	@Override
-	public void delete(ActionEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 		return ServicesFactory.getInstance().getNoMatchInputService().isUsed(id);
+		
+	}
+
+	@Override
+	public void edit(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+	protected void collect() {
+		this.noMatchInput.setType(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_type_input").toString());
+		this.noMatchInput.setName(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_name").toString());
+
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_threshold") != null && 
+				FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_threshold").toString().length() > 0) {
+			this.noMatchInput.setThreshold(Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_threshold")));
+		} else {
+			this.noMatchInput.setThreshold(null);
+		}
+		this.promptId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_prompt_input").toString();
+		
 		
 	}
 	

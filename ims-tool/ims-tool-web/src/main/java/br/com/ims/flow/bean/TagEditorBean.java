@@ -27,6 +27,7 @@ public class TagEditorBean extends AbstractBean {
 	
 	private Node node;
 	private NoMatchInputEntity noMatchInput;
+
 	
 	private TagEntity tag;
 	
@@ -36,6 +37,9 @@ public class TagEditorBean extends AbstractBean {
 	
 	private String tagTypeId;
 	
+	
+	private ConditionGroupEditorBean conditionGroupBean;
+	private TransferEditorBean transferBean;
 	
     public TagEditorBean() { 
     	init();
@@ -52,6 +56,9 @@ public class TagEditorBean extends AbstractBean {
     	
     	this.node = null;
     	this.noMatchInput = null;
+    	
+    	this.conditionGroupBean = null;
+    	this.transferBean = null;
     	
     }
 
@@ -141,11 +148,7 @@ public class TagEditorBean extends AbstractBean {
 		
 	}
 
-	@Override
-	public void delete(ActionEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public boolean isUsed(String id) {
@@ -175,6 +178,21 @@ public class TagEditorBean extends AbstractBean {
     		this.noMatchInput.setTag(this.tag);
     		hasExternalBean = true;
     	}
+    	if(this.conditionGroupBean != null) {
+    		if(this.conditionGroupBean.getTagTrueId() == null || 
+    				this.conditionGroupBean.getTagTrueId().length() == 0 ||
+    						this.conditionGroupBean.getTagTrueId().equals("0"))
+    		{
+    			this.conditionGroupBean.setTagTrueId(this.tag.getId());
+    		} else {
+    			this.conditionGroupBean.setTagFalseId(this.tag.getId());
+    		}
+    		hasExternalBean = true;
+    	}
+    	if(this.transferBean != null) {
+    		this.transferBean.setTagId(this.tag.getId());
+    		hasExternalBean = true;
+    	}
     	
     	if(hasExternalBean) {
     		init();
@@ -186,13 +204,60 @@ public class TagEditorBean extends AbstractBean {
     }
     
     public boolean isRendered() {
-    	if(this.node != null || this.noMatchInput != null) {
+    	if(this.node != null || this.noMatchInput != null || this.conditionGroupBean != null) {
     		return true;
     	}
     	return false;
     }
 
+
+
+
+	public ConditionGroupEditorBean getConditionGroupBean() {
+		return conditionGroupBean;
+	}
+
+
+
+
+	public void setConditionGroupBean(ConditionGroupEditorBean conditionGroupBean) {
+		this.conditionGroupBean = conditionGroupBean;
+	}
+
+
 	
+
+
+	public TransferEditorBean getTransferBean() {
+		return transferBean;
+	}
+
+
+
+
+	public void setTransferBean(TransferEditorBean transferBean) {
+		this.transferBean = transferBean;
+	}
+
+
+
+
+	@Override
+	public void edit(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	public void delete(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+    
    
     
  

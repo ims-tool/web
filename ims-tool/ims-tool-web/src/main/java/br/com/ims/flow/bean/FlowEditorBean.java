@@ -299,11 +299,7 @@ public class FlowEditorBean extends AbstractBean {
 		
 	}
 
-	@Override
-	public void delete(ActionEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public boolean isUsed(String id) {
@@ -321,6 +317,18 @@ public class FlowEditorBean extends AbstractBean {
 
 	@Override
 	protected void updateExternalsBean() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void edit(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(String id) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -119,9 +119,8 @@
 					        	<h:outputText value="#{choice.condition != null ? choice.condition.name : 'N/A'}" />					            
 					        </p:column>
 					        <p:column style="width:32px;text-align: center">
-					             <p:commandButton icon="ui-icon-close" title="Delete" update="formForm:panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.delChoiceToMenu}" >
-					             	<f:setPropertyActionListener value="#{choice.id}" target="#{bean.selectedChoiceId}" />
-					             </p:commandButton>					                
+					             <p:commandButton icon="ui-icon-close" title="Delete" update="formForm:panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.deleteChoice(choice.id)}" />
+					             						                
 					        </p:column>
 					    </p:dataTable>
 		 						 				

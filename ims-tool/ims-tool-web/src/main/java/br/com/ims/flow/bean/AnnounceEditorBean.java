@@ -10,7 +10,6 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
-import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AnnounceEntity;
 import br.com.ims.flow.model.FormEntity;
@@ -21,23 +20,19 @@ import br.com.ims.flow.model.PromptEntity;
 @ViewScoped
 public class AnnounceEditorBean extends AbstractBean {
      
-	
-	
 	private List<PromptEntity> prompts;
 	
 	private String promptId;
 	
 	private AnnounceEntity announce;
-	private FormEntity form;
-	private LogicalFlow flow;
+	
 	
     public AnnounceEditorBean() {
     	//init();
     }
     
     public void init() {
-    	this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
-    	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();
+    	super.init();
     	this.announce = (AnnounceEntity)this.form.getFormId();
     	if(this.announce.getPrompt() != null)
     		this.promptId = this.announce.getPrompt().getId();
@@ -100,6 +95,7 @@ public class AnnounceEditorBean extends AbstractBean {
 	
 	public void addPrompt(ActionEvent event) {
 		
+		this.collect();
 				
 		ServicesFactory.getInstance().getFlowEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
 		
@@ -115,7 +111,7 @@ public class AnnounceEditorBean extends AbstractBean {
 	}
 
 	@Override
-	public void delete(ActionEvent event) {
+	public void delete(String id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -131,6 +127,19 @@ public class AnnounceEditorBean extends AbstractBean {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void edit(String id) {
+		// TODO Auto-generated method stub
+		
+	}
 	
+	protected void collect() {
+		super.collect();
+		
+		this.promptId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_prompt_input").toString();
+		this.announce.setFlushprompt(Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_flush_prompt_input")));
+						
+	}
     
 }

@@ -6,21 +6,124 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"	>
 		
-	<h:form id="formAnnounce">
-				
-			<h:panelGrid columns="2" cellpadding="5">
-				<h:outputLabel for="dialog_form_id" value="ANNOUNCE" />
-	            <h:outputLabel for="dialog_form_id" value="ID:" />
-	            <p:inputText id="dialog_form_id" value="#{flowEditorView.form.id}" required="true" label="dialog_form_id" />
-	 
-	            <h:outputLabel for="dialog_form_name" value="Name:" />
-	            <p:inputText id="dialog_form_name" value="#{flowEditorView.form.name}" required="true" label="dialog_form_name" />
-	 
-	            <f:facet name="footer">
-	                <p:commandButton value="Login" update="form" actionListener="#{flowEditorView.save}" />
-	            </f:facet>  
-	        </h:panelGrid>
-	</h:form>
-		
-</ui:composition>
+	<ui:composition
+		template="/pages/template/formTemplate.xhtml">
 
+		<ui:param name="bean" value="#{transferEditorView}" />
+		
+		<ui:define name="newContent">	
+				<h:outputLabel id="label_transfer_rule" for="panel_transfer_rule" value="Rule:"  />
+				
+				<p:panelGrid id="panel_transfer_rule" cellpadding="5" >
+	 			
+	 				
+		 			<p:separator />
+		 			
+		 			<p:panelGrid columns="2" cellpadding="5" >
+		 				<h:outputLabel id="label_transfer_orderNum" for="transfer_orderNum" value="Order:"  />
+						<p:inputText id="transfer_orderNum" value="#{bean.orderNum}" label="label_transfer_orderNum" type="number" required="true" requiredMessage="Please, inform the Order Number" style="width:30px;margin-bottom:5px" />
+					
+				 			
+				 		<h:outputLabel id="label_transfer_number" for="transfer_number" value="Number:"  />
+						<p:inputText id="transfer_number" value="#{bean.number}" label="label_transfer_number" type="number" required="true" requiredMessage="Please, inform the Number" style="width:100px;margin-bottom:5px" />
+					
+		 			</p:panelGrid>
+		 			<p:panelGrid columns="3" cellpadding="5" >
+		 				<h:outputLabel id="label_transfer_condition" for="transfer_condition" value="Condition:" />
+			 	            					            	
+		            	<p:selectOneMenu value="#{bean.conditionId}" 
+			 			                 id="transfer_condition"
+			 			                 filter="true" filterMatchMode="startsWith" 
+			 			                 style="margin-bottom:5px">
+			 				<f:selectItem itemLabel="Empty" itemValue="" />			 				
+			 				<f:selectItems value="#{bean.conditions}" var="condition"
+								itemValue="#{condition.id}" itemLabel="#{condition.name}"  />
+			 			</p:selectOneMenu>
+			 			<p:commandButton value="Add Condition" actionListener="#{bean.addNewCondition}" 
+										 icon="buttonAddCondition"
+										 update="settingAuxiliarDlgId"  
+										 ajax="true" 
+					                 immediate="true" 
+					                 oncomplete="PF('settingAuxiliarDlg').show()" style="margin-left:5px" />
+				 	
+				 		<h:outputLabel id="label_transfer_prompt" for="transfer_prompt" value="Prompt:" />
+				 	
+				 		<p:selectOneMenu value="#{bean.promptId}" 
+				 			                 id="transfer_prompt"
+				 			                 filter="true" filterMatchMode="startsWith" 
+				 			                 style="margin-bottom:5px">
+				 				<f:selectItem itemLabel="Empty" itemValue="" />
+				 				
+				 				<f:selectItems value="#{bean.prompts}" var="prompt"
+									itemValue="#{prompt.id}" itemLabel="#{prompt.name}"  />
+				 		</p:selectOneMenu>
+				 		<p:commandButton value="Add Prompt" actionListener="#{bean.addNewPrompt}" 
+		 										 update="settingComplementDlgId" 
+		 										 icon="buttonAddPrompt" 
+		 										 ajax="true" 
+								                 immediate="true" 
+								                 oncomplete="PF('settingComplementDlg').show()" style="margin-left:5px"  />
+				 	
+				 		<h:outputLabel id="label_transfer_tag" for="transfer_tag" value="Tag:" />
+				 	
+				 		<p:selectOneMenu value="#{bean.tagId}" 
+				 			                 id="transfer_tag"
+				 			                 filter="true" filterMatchMode="startsWith" 
+				 			                 label="label_transfer_tag"
+				 			                 style="margin-bottom:5px">
+				 				<f:selectItem itemLabel="Empty" itemValue="" />
+				 				
+				 				<f:selectItems value="#{bean.tags}" var="tag"
+										itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />								
+				 		</p:selectOneMenu>
+			 			<p:commandButton value="Add Tag" 
+			 							 icon="buttonAddTag" 
+			 							 oncomplete="PF('settingUtilDlg').show()"  
+			 							 update="settingUtilDlgId" ajax="true" immediate="true" 
+			 							 actionListener="#{bean.addNewTag}" style="margin-left:5px"/>
+		 			</p:panelGrid>
+		 			<p:commandButton value="Add" update="panel_transfer_rules"   ajax="true" immediate="true" actionListener="#{bean.addValue}"/>
+		 			<p:separator />
+		 			<p:panel id="panel_transfer_rules" header="Rules" style="margin-bottom:20px">
+						<p:dataTable  
+		 						scrollable="true" 
+		 						scrollHeight="70"
+		 						value="#{bean.rules}"
+		 						var="rule"
+		 						emptyMessage="No Rule" >
+					        <p:column headerText="Order" >
+					            <h:outputText value="#{rule.orderNum}" />
+					        </p:column>
+					        <p:column headerText="Condition" >
+					            <h:outputText value="#{rule.condition.getConditionName()}" />
+					        </p:column>
+					        <p:column headerText="Prompt" >
+					            <h:outputText value="#{rule.condition.getPromptName()}" />
+					        </p:column>
+					        <p:column headerText="Tag" >
+					            <h:outputText value="#{rule.condition.getTagName()}" />
+					        </p:column>
+					        <p:column headerText="Number" >
+					            <h:outputText value="#{rule.number}" />
+					        </p:column>
+					        
+					        <p:column style="width:32px;text-align: center">
+					        	 <p:commandButton update="formForm:panelRulesList" 
+					        	 					ajax="true" 
+					        	 					immediate="true" 
+					        	 					actionListener="#{bean.delete(rule.id)}" 
+					        	 					icon="ui-icon-close" title="Delete" />					                
+					        					                
+					        </p:column>
+					    </p:dataTable>
+					</p:panel>
+		 			<p:separator />				 
+			 	</p:panelGrid>
+			 	
+					 		
+	 					
+	    </ui:define>
+	    
+		
+	</ui:composition>			
+</ui:composition>

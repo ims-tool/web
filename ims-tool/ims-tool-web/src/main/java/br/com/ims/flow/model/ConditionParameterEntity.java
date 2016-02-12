@@ -4,16 +4,18 @@ package br.com.ims.flow.model;
 public class ConditionParameterEntity extends AbstractEntity {
 	
 	
-	private Integer conditionGroupId;
+	private String conditionGroupId;
 	private String paramName;
 	private String paramValue;
 	
 	
-	public Integer getConditionGroupId() {
+	
+
+	public String getConditionGroupId() {
 		return conditionGroupId;
 	}
 
-	public void setConditionGroupId(Integer conditionGroupId) {
+	public void setConditionGroupId(String conditionGroupId) {
 		this.conditionGroupId = conditionGroupId;
 	}
 

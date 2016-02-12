@@ -4,6 +4,7 @@ import br.com.ims.flow.service.AudioEditorService;
 import br.com.ims.flow.service.AudioService;
 import br.com.ims.flow.service.ConditionEditorService;
 import br.com.ims.flow.service.ConditionGroupEditorService;
+import br.com.ims.flow.service.ConditionMapEditorService;
 import br.com.ims.flow.service.ConditionMapService;
 import br.com.ims.flow.service.ConditionService;
 import br.com.ims.flow.service.FlowEditorService;
@@ -104,6 +105,9 @@ public class ServicesFactory {
 	
 	public ConditionMapService getConditionMapService() {
 		return new ConditionMapService();
+	}
+	public ConditionMapEditorService getConditionMapEditorService() {
+		return new ConditionMapEditorService();
 	}
 	
 

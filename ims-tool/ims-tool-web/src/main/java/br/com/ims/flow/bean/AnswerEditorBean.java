@@ -20,18 +20,18 @@ public class AnswerEditorBean extends AbstractBean {
      
 	
 	private AnswerEntity answer;
-	private FormEntity form;
-	private LogicalFlow flow;
+	
 	
     public AnswerEditorBean() {
     	//init();
     }
     
     public void init() {
-    	this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
-    	this.answer = (AnswerEntity)this.form.getFormId();
-    	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();
+    
+    	super.init();
     	
+    	this.answer = (AnswerEntity)this.form.getFormId();
+    	    	
     	if(form.isFormError())
     		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", form.getErrorDescription()));
     }
@@ -68,7 +68,7 @@ public class AnswerEditorBean extends AbstractBean {
 	}
 
 	@Override
-	public void delete(ActionEvent event) {
+	public void delete(String id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -76,11 +76,18 @@ public class AnswerEditorBean extends AbstractBean {
 	@Override
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	@Override
 	protected void updateExternalsBean() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void edit(String id) {
 		// TODO Auto-generated method stub
 		
 	}

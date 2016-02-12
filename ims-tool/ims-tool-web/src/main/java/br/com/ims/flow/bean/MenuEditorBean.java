@@ -54,8 +54,6 @@ public class MenuEditorBean extends AbstractBean {
 	
 	
 	private MenuEntity menu;
-	private FormEntity form;
-	private LogicalFlow flow;
 	
 	
 	private String originalName;
@@ -66,8 +64,8 @@ public class MenuEditorBean extends AbstractBean {
     
     @SuppressWarnings("unchecked")
 	public void init() {
-    	this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
-    	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();
+    	super.init();
+    	
     	this.menu = (MenuEntity)this.form.getFormId();
     	if(this.menu.getChoices() == null) {
     		this.menu.setChoices(new ArrayList<ChoiceEntity>());
@@ -366,13 +364,15 @@ public class MenuEditorBean extends AbstractBean {
 	
 	public void addPrompt(ActionEvent event) {
 		
-				
+		this.collect();		
 		ServicesFactory.getInstance().getFlowEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
 		
 		ServicesFactory.getInstance().getPromptEditorService().getBean().setMenuBean(this);
 		
     }
 	public void addCondition(ActionEvent event) {
+		collect();
+		
 		ServicesFactory.getInstance().getFlowEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
 		
 		ServicesFactory.getInstance().getConditionEditorService().getBean().setMenuBean(this);
@@ -381,7 +381,7 @@ public class MenuEditorBean extends AbstractBean {
 	
 	public void addNoMatchInput(ActionEvent event) {
 		
-		
+		this.collect();
 
 		ServicesFactory.getInstance().getFlowEditorService().getBean().setOtherPageEditor("/pages/other/NoMatchInput.xhtml");
 		
@@ -442,9 +442,15 @@ public class MenuEditorBean extends AbstractBean {
 		
 	}
 	
-	public void delChoiceToMenu(ActionEvent event) {
-		FacesMessage msg =new FacesMessage(FacesMessage.SEVERITY_INFO, "Menu","delChoiceToMenu clicked: "+selectedChoiceId);
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+	public void deleteChoice(String id) {
+		
+		for(int index = 0; index < this.choices.size(); index++) {
+			ChoiceEntity choice = this.choices.get(index);
+			if(choice.getId().equals(id)) {
+				this.choices.remove(index);
+				return;
+			}
+		}		
 	}
 
 	@Override
@@ -453,12 +459,7 @@ public class MenuEditorBean extends AbstractBean {
 		
 	}
 
-	@Override
-	public void delete(ActionEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
@@ -560,6 +561,7 @@ public class MenuEditorBean extends AbstractBean {
 	}
 
 	public List<ConditionEntity> getConditions() {
+		this.conditions = ServicesFactory.getInstance().getConditionService().getAll();
 		return conditions;
 	}
 
@@ -578,6 +580,31 @@ public class MenuEditorBean extends AbstractBean {
 	@Override
 	protected void updateExternalsBean() {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void edit(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	protected void collect() {
+		super.collect();
+		
+		this.promptId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_prompt_input").toString();
+		this.noInputId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_noinput_input").toString();
+		this.noMatchId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_nomatch_input").toString();
+		
+		this.choiceName = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:form_menu_choice_name").toString();
+		this.choiceDtmf = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:form_menu_choice_dtmf").toString();
+		
 		
 	}
 	
