@@ -60,7 +60,7 @@ public class ServiceHourFacadeREST extends AbstractFacade<ServiceHour> {
     	serviceHour.setId((Integer) jsonObj.get("id"));
     	serviceHour.setStarthour((String) jsonObj.get("starthour"));
     	serviceHour.setStophour((String) jsonObj.get("stophour"));
-    	serviceHour.setLastlogin((String) jsonObj.get("lastlogin"));
+    	//serviceHour.setLastlogin((String) jsonObj.get("lastlogin"));
     	ServiceHourCtrl.save(serviceHour);
     }
 

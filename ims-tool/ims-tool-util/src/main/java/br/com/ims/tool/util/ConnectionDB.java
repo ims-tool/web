@@ -32,14 +32,15 @@ public class ConnectionDB {
 	
 	public ConnectionDB(String dataSource) {
 		try {
-			//ctx = new InitialContext();
-			Context envCtx = (Context) ctx.lookup("java:comp/env");
-			ds = (DataSource) envCtx.lookup("jdbc/"+dataSource);
+			Context ctx = new InitialContext();
+			//Context envCtx = (Context) ctx.lookup("java:comp/env");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/access");
 			conn = ds.getConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public Connection getConnection() {
 		return conn;

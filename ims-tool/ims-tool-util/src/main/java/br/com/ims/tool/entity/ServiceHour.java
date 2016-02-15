@@ -49,6 +49,7 @@ public class ServiceHour implements Serializable {
     @Size(max = 50)
     @Column(name = "weekday")
     private Integer weekday;
+    private String lastchange;
     
     public Integer getId() {
 		return id;
@@ -134,5 +135,15 @@ public class ServiceHour implements Serializable {
     public String toString() {
         return "br.com.ims.service.Parameters[ id=" + id + " ]";
     }
+
+	public String getLastchange() {
+		return lastchange;
+	}
+
+	public void setLastchange(String lastchange) {
+		this.lastchange = lastchange;
+	}
+    
+    
     
 }

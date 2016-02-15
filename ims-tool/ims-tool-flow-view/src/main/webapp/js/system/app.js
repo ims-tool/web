@@ -161,6 +161,7 @@ var APP = {
 		showEditElement: function (id,type)
 		{
 			if(type.toUpperCase() == "MENU" ) {
+				console.log('IRRAAAAA');
 				Menu.show();
 				Menu.loadMenu(id);
 			} else if ( type.toUpperCase() == "CHOICE" ) {

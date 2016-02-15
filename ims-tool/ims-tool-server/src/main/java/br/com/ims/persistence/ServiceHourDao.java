@@ -3,6 +3,7 @@ package br.com.ims.persistence;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,19 +29,20 @@ private static Logger logger = Logger.getLogger(ServiceHourDao.class);
 		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = "select * from flow.Service_Hour where type='"+type+"'";
+			String query = "select id, weekday, type, changedate, starthour, stophour from flow.service_hour where type='"+type+"'";
 			
 			rs = conn.ExecuteQuery(query);
 			
 			while (rs.next()) {
 				serviceHour = new ServiceHour();
 				serviceHour.setId(rs.getInt(1));
-				serviceHour.setStarthour(rs.getString(2));
-				serviceHour.setStophour(rs.getString(3));
-				serviceHour.setType(rs.getString(4));
-				serviceHour.setLastlogin(rs.getString(5));
-				serviceHour.setChangedate(rs.getDate(6));
-				serviceHour.setWeekday(rs.getInt(7));
+				serviceHour.setWeekday(rs.getInt(2));
+				serviceHour.setType(rs.getString(3));
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+				serviceHour.setLastchange(sdf.format(rs.getTimestamp(4)));
+//				serviceHour.setChangedate(rs.getDate(4));
+				serviceHour.setStarthour(rs.getString(5));
+				serviceHour.setStophour(rs.getString(6));
 				
 				listServiceHour.add(serviceHour);
 			
@@ -67,23 +69,22 @@ private static Logger logger = Logger.getLogger(ServiceHourDao.class);
 		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = "select * from flow.Service_Hour where id="+entity.getId();
+			String query = "select id, weekday, type, lastchange, startdate, stopdate  from flow.Service_Hour where id="+entity.getId();
 			
 			rs = conn.ExecuteQuery(query);
 			
 			if (!rs.next()) {
 				serviceHour = new ServiceHour();
 				serviceHour.setId(rs.getInt(1));
-				serviceHour.setStarthour(rs.getString(2));
-				serviceHour.setStophour(rs.getString(3));
-				serviceHour.setType(rs.getString(4));
-				serviceHour.setLastlogin(rs.getString(5));
-				serviceHour.setChangedate(rs.getDate(6));
-				serviceHour.setWeekday(rs.getInt(7));
+				serviceHour.setWeekday(rs.getInt(2));
+				serviceHour.setType(rs.getString(3));
+				serviceHour.setChangedate(rs.getDate(4));
+				serviceHour.setStarthour(rs.getString(5));
+				serviceHour.setStophour(rs.getString(6));
 				//não implementado pois não existe a necessidade de salvar um novo parametro.
 				query = "insert into flow.ServiceHour order by id";
 			}else{
-				query = "update flow.Service_Hour set stophour= '"+entity.getStophour()+"', starthour= '"+entity.getStarthour()+"', lastlogin= '"+entity.getLastlogin()+"', changedate = current_timestamp  where id="+entity.getId();
+				query = "update flow.Service_Hour set stopdate= '"+entity.getStophour()+"', startdate= '"+entity.getStarthour()+"', lastchange = current_timestamp  where id="+entity.getId();
 				conn.ExecuteSql(query);
 			}
 		} catch (SQLException e) {

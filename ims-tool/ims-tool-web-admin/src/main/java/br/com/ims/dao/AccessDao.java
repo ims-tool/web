@@ -58,7 +58,7 @@ public class AccessDao {
 		try {
 			if(isInternalUser()) {
 				conn = new ConnectionDB("access").getConnection();
-				stm = conn.prepareStatement(" SELECT id,login,password, name,email FROM user WHERE login = "+login);
+				stm = conn.prepareStatement(" SELECT id,login,password, name,email FROM users WHERE login = "+login);
 				rs = stm.executeQuery();
 				
 				if(rs.next()) {

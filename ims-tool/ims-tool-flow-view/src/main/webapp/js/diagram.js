@@ -236,6 +236,7 @@ $(document).ready(function (){
 			parent.APP.hideLoading();
 		} catch(e){}
 		
+		
 		var customMermaidInit = mermaid.init;
 		mermaid.changeColor = function (){
 			$('#mermaid').css('color','#000');
@@ -245,7 +246,6 @@ $(document).ready(function (){
 		mermaid.init = function (){
 			customMermaidInit();
 			mermaid.changeColor();
-			
 			$.each($('.relInfo'),function (index,obj){
 				$(obj).text($(obj).text()+"%");
 				$(obj).parent().parent().parent().width($(obj).parent().parent().parent().width()+60);
