@@ -69,7 +69,7 @@ private static Logger logger = Logger.getLogger(ServiceHourDao.class);
 		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = "select id, weekday, type, lastchange, startdate, stopdate  from flow.Service_Hour where id="+entity.getId();
+			String query = "select id, weekday, type, changedate, starthour, stophour  from flow.Service_Hour where id="+entity.getId();
 			
 			rs = conn.ExecuteQuery(query);
 			
@@ -84,7 +84,7 @@ private static Logger logger = Logger.getLogger(ServiceHourDao.class);
 				//não implementado pois não existe a necessidade de salvar um novo parametro.
 				query = "insert into flow.ServiceHour order by id";
 			}else{
-				query = "update flow.Service_Hour set stopdate= '"+entity.getStophour()+"', startdate= '"+entity.getStarthour()+"', lastchange = current_timestamp  where id="+entity.getId();
+				query = "update flow.Service_Hour set stophour= '"+entity.getStophour()+"', starthour= '"+entity.getStarthour()+"', changedate = current_timestamp  where id="+entity.getId();
 				conn.ExecuteSql(query);
 			}
 		} catch (SQLException e) {

@@ -14,6 +14,10 @@ window.onload = function(){
 		artifact = localStorage.getItem('artifact');
 		var obj = JSON.parse(artifact);
 		console.log(obj.webflag);
+		
+		//verificar quais artefatos ficarão disponíveis.
+		
+		
 		//console.log("---> profiles" + artifact.web-admin-hour.userprofiles);
 		
 	}	

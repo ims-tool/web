@@ -66,8 +66,8 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		try {
 			conn = new ConnectionDB();
 			
-			String query = "SELECT * FROM USERS u, "
-					+ "ARTIFACT_ACCESS_TYPE_USER UA, ARTIFACT A, SYSTEM S "
+			String query = "SELECT * FROM ACCESS.USER u, "
+					+ "ACCESS.USER_ARTIFACT UA, ARTIFACT A, SYSTEM S "
 					+ "WHERE upper(u.LOGIN) = '"+login.toUpperCase()+"' and upper(u.password) = '"+password.toUpperCase()+"' "
 							+ "and u.id = ua.userid and a.id = ua.artifactid and s.id = a.systemid and "
 							+ "s.id = "+system;
@@ -178,7 +178,7 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 			conn = new ConnectionDB();
 			
 			String query = "select a.id id, a.description, ua.userid, ua.acesstypeid, up.profileid "
-					+ "from artifact a, user_artifact ua, user_profile up "
+					+ "from access.artifact a, access.user_artifact ua, access.user_profile up "
 					+ "where up.userid = ua.userid and ua.artifactid = a.id and ua.userid = (select id from users where upper(login) = '"+userLogin.toUpperCase()+"') and a.systemid = "+ system;
 			
 			rs = conn.ExecuteQuery(query);

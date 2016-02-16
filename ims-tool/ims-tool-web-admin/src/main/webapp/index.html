@@ -58,7 +58,7 @@
 	<div ng-controller="tabCtrl">
 	<ul class="nav nav-tabs">
 		<li ui-class="{active: activetab == '/'}"><a ui-sref="welcome">Home</a></li>
-		<li ui-class="{active: activetab == '/flag'}"><a ui-sref="flag">Flag</a></li>
+		<li ui-class="{deactive: activetab == '/flag'}"><a ui-sref="flag">Flag</a></li>
 		<li ui-class="{active: activetab == '/parameter'}"><a ui-sref="parameter">Parâmetro</a></li>
 		<li ui-class="{active: activetab == '/hour'}"><a ui-sref="hour">Horário</a></li>
 	</ul>
