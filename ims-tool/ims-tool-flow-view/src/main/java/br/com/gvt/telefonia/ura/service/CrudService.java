@@ -311,7 +311,7 @@ public class CrudService {
 		else
 			field = "name";
 		
-		List<Entity<?>> entityList = (List<Entity<?>>) DaoFactory.getInstance().getDao(type).findAllBy(" LOWER("+field+") like LOWER('%"+search+"%') or id like '%"+search+"%' ");
+		List<Entity<?>> entityList = (List<Entity<?>>) DaoFactory.getInstance().getDao(type).findAllBy(" LOWER("+field+") like LOWER('%"+search+"%') or CAST(id AS TEXT) like '%"+search+"%' ");
 		
 		String idElement = "";
 		

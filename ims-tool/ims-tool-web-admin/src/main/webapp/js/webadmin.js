@@ -14,9 +14,18 @@ window.onload = function(){
 		artifact = localStorage.getItem('artifact');
 		var obj = JSON.parse(artifact);
 		console.log(obj.webflag);
-		
+		console.log(obj.webhour);
+		console.log(obj.webparameter);
 		//verificar quais artefatos ficarão disponíveis.
-		
+		if(obj.webflag === null){
+			document.getElementById('webflag').className = 'hidden';
+		}
+		if(obj.webparameter === null){
+			document.getElementById('webparameter').className = 'hidden';
+		}
+		if(obj.webhour === null){
+			document.getElementById('webhour').className = 'hidden';
+		}
 		
 		//console.log("---> profiles" + artifact.web-admin-hour.userprofiles);
 		
