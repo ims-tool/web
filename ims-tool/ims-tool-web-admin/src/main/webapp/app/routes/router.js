@@ -48,7 +48,29 @@
 			   data: {
 			        requireLogin: false
 			      }
-		   });
+		   })
+		   
+		  
+		    .state('access', {
+			   url : '/access',
+			   templateUrl: 'app/views/access.html',
+			   data: {
+			        requireLogin: true
+			      }
+		      
+		   })
+		   
+		   .state('access_system', {
+			   url : '/access_system',
+			   templateUrl: 'app/views/access_system.html',
+			   data: {
+			        requireLogin: true
+			      }
+		      
+		   })
+		   
+		   ;
+			 
 		   		    
 		   
 		});

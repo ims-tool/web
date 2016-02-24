@@ -35,6 +35,12 @@ app.config(function($routeProvider, $locationProvider)
                 controller: 'LoginCtrl',
                 controllerAs: 'vm'
    })
+   
+   .when('/access', {
+                templateUrl: 'app/views/access.html',
+                controller: 'AccessCtrl',
+                controllerAs: 'vm'
+   })
  
    // caso não seja nenhum desses, redirecione para a rota '/'
    .otherwise ({ redirectTo: '/' });
