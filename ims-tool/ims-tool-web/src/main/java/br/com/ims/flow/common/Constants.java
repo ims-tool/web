@@ -19,6 +19,7 @@ public class Constants {
 	public final static String FORM_TYPE_NOMATCH = "NoMatch";
 	public final static String FORM_TYPE_NOMATCHINPUT = "NoMatchInput";
 	public final static String FORM_TYPE_CHOICE = "Choice";
+	public final static String FORM_TYPE_DECISION_CHANCE = "DecisionChance";
 	
 	
 	public final static String NO_MATCH = "NOMATCH";

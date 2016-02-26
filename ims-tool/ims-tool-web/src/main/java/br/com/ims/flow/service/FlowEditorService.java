@@ -109,13 +109,15 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 	}
 	public void disconnectForm(DefaultDiagramModel model,LogicalFlow flow, Element sourceElement) {
 		
-		Node node = flow.getNode(sourceElement);
+		Node nodeSource = flow.getNode(sourceElement);
 		List<Connection> connections = model.getConnections();
 		boolean find = false;
 		for(int index = 0; index < connections.size() && !find; index++ ){
 			Connection connection = connections.get(index) ;
-			if(node.getConnection().getTarget().getId().equals(connection.getTarget().getId()) &&
-			   node.getConnection().getSource().getId().equals(connection.getSource().getId()) ) {
+
+			if(nodeSource.getConnection() != null &&
+			   nodeSource.getConnection().getTarget().getId().equals(connection.getTarget().getId()) &&
+			   nodeSource.getConnection().getSource().getId().equals(connection.getSource().getId()) ) {
 				model.getConnections().remove(index);
 				find = true;
 			}
@@ -124,19 +126,44 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 		
 		flow.disconnect(sourceElement);
 	}
+	public void disconnectForm(DefaultDiagramModel model,LogicalFlow flow, Element sourceElement, Element targetElement) {
+		
+		List<Connection> connections = model.getConnections();
+		boolean find = false;
+		
+		for(int index = 0; index < connections.size() && !find; index++ ){
+			Connection connection = connections.get(index);
+			
+			for(EndPoint sourceEndPoint : sourceElement.getEndPoints()) {
+				if(connection.getSource().equals(sourceEndPoint)) {
+					for(EndPoint targetEndPoint : targetElement.getEndPoints()) {
+						if(connection.getTarget().equals(targetEndPoint)) {
+							model.getConnections().remove(index);
+							find = true;
+						}
+					}
+				}
+			}
+			
+		}
+				
+		flow.disconnect(sourceElement,targetElement);
+	}
 	public void deleteForm(Element element) {		
 		
 		deleteForm(bean.getModel(),bean.getFlow(), element);
 	}
 	public void deleteForm(DefaultDiagramModel model,LogicalFlow flow, Element element) {
 		Node node = flow.getNode(element);
-		for(Node source : node.getListSource()) {
-			disconnectForm(model, flow, source.getElement());
+		if(node != null) {
+			while(node.getListSource().size() > 0) {
+				Node source = node.getListSource().get(0);
+				disconnectForm(model, flow, source.getElement(), node.getElement());
+			}
+			disconnectForm(model, flow, node.getElement());
+			model.getElements().remove(node.getElement());
+			flow.delNode(node.getElement());		
 		}
-		disconnectForm(model, flow, node.getElement());
-		model.getElements().remove(node.getElement());
-		flow.delNode(node.getElement());
-		
 		this.bean.getListForm().remove((FormEntity)element.getData());				
 	}
 	

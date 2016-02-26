@@ -59,6 +59,18 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		result.add(formType);
 		
 		formType = new FormTypeEntity();
+		formType.setId("5");
+		formType.setName("Decision");
+		formType.setDescription("Decision");
+		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "decision.png");
+		formType.setImagePathError(Constants.ICON_FLOW_PATH + "decision_error.png");
+		formType.setAllowInput(1);
+		formType.setAllowOutput(0);
+		formType.setMandatoryInput(0);
+		formType.setMandatoryOutput(1);
+		result.add(formType);
+		
+		formType = new FormTypeEntity();
 		formType.setId("7");
 		formType.setName("Transfer");
 		formType.setDescription("Transfer");
@@ -104,6 +116,21 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setDescription("Choice");
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "choice_<NUMBER>.png");
 		formType.setImagePathError(Constants.ICON_FLOW_PATH + "choice_<NUMBER>_error.png");
+		formType.setImageSizeHeight(30);
+		formType.setImageSizeWidth(30);
+		formType.setAllowInput(0);
+		formType.setAllowOutput(1);
+		formType.setMandatoryInput(1);
+		formType.setMandatoryOutput(1);
+		formType.setVisible(false);
+		result.add(formType);
+		
+		formType = new FormTypeEntity();
+		formType.setId("11");
+		formType.setName("DecisionChance");
+		formType.setDescription("DecisionChance");
+		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "decision_chance.png");
+		formType.setImagePathError(Constants.ICON_FLOW_PATH + "decision_chance_error.png");
 		formType.setImageSizeHeight(30);
 		formType.setImageSizeWidth(30);
 		formType.setAllowInput(0);

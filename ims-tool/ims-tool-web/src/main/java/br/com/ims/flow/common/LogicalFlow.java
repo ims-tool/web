@@ -33,7 +33,7 @@ public class LogicalFlow {
 	
 	public Node getNode(Element element) {
 		for(Node node : listNode) {
-			if(node.getElement() == element) {
+			if(node.getElement().getId().equals(element.getId())) {
 				return node;
 			}
 		}
@@ -86,6 +86,21 @@ public class LogicalFlow {
 		
 		
 	}
+	
+	public void disconnect(Element source, Element target) {
+		Node nodeSource = getNode(source);
+		Node nodeTarget = getNode(target);
+		List<Node> targets = nodeSource.getListTarget();
+		for(Node targetAux : targets) {
+			if(targetAux.equals(nodeTarget)) {
+				targetAux.remSource(nodeSource);
+				if(targetAux.getListSource().size() == 0) {
+					listFirstNode.add(targetAux);
+				}
+			}
+		}
+	}
+			
 	public void disconnect(Element source) {
 		Node nodeSource = getNode(source);
 

@@ -25,8 +25,30 @@ public abstract class AbstractBean implements Serializable {
 	public void setInsert(boolean insert) {
 		this.insert = insert;
 	}
+	
+	
 
 	
+	public FormEntity getForm() {
+		return form;
+	}
+
+
+	public void setForm(FormEntity form) {
+		this.form = form;
+	}
+
+
+	public LogicalFlow getFlow() {
+		return flow;
+	}
+
+
+	public void setFlow(LogicalFlow flow) {
+		this.flow = flow;
+	}
+
+
 	public void init() {
 		this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
     	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();

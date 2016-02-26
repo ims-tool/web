@@ -21,11 +21,11 @@
 		 			
 		 			<p:panelGrid columns="2" cellpadding="5" >
 		 				<h:outputLabel id="label_transfer_orderNum" for="transfer_orderNum" value="Order:"  />
-						<p:inputText id="transfer_orderNum" value="#{bean.orderNum}" label="label_transfer_orderNum" type="number" required="true" requiredMessage="Please, inform the Order Number" style="width:30px;margin-bottom:5px" />
+						<p:inputText id="transfer_orderNum" value="#{bean.orderNum}" label="label_transfer_orderNum" type="number" requiredMessage="Please, inform the Order Number" style="width:30px;margin-bottom:5px" />
 					
 				 			
 				 		<h:outputLabel id="label_transfer_number" for="transfer_number" value="Number:"  />
-						<p:inputText id="transfer_number" value="#{bean.number}" label="label_transfer_number" type="number" required="true" requiredMessage="Please, inform the Number" style="width:100px;margin-bottom:5px" />
+						<p:inputText id="transfer_number" value="#{bean.number}" label="label_transfer_number" type="number" requiredMessage="Please, inform the Number" style="width:100px;margin-bottom:5px" />
 					
 		 			</p:panelGrid>
 		 			<p:panelGrid columns="3" cellpadding="5" >
@@ -82,7 +82,7 @@
 			 							 update="settingUtilDlgId" ajax="true" immediate="true" 
 			 							 actionListener="#{bean.addNewTag}" style="margin-left:5px"/>
 		 			</p:panelGrid>
-		 			<p:commandButton value="Add" update="panel_transfer_rules"   ajax="true" immediate="true" actionListener="#{bean.addValue}"/>
+		 			<p:commandButton value="Add" update="panel_transfer_rules"   ajax="true" immediate="true" actionListener="#{bean.addRule}"/>
 		 			<p:separator />
 		 			<p:panel id="panel_transfer_rules" header="Rules" style="margin-bottom:20px">
 						<p:dataTable  
@@ -95,20 +95,20 @@
 					            <h:outputText value="#{rule.orderNum}" />
 					        </p:column>
 					        <p:column headerText="Condition" >
-					            <h:outputText value="#{rule.condition.getConditionName()}" />
+					            <h:outputText value="#{rule.getConditionName()}" />
 					        </p:column>
 					        <p:column headerText="Prompt" >
-					            <h:outputText value="#{rule.condition.getPromptName()}" />
+					            <h:outputText value="#{rule.getPromptName()}" />
 					        </p:column>
 					        <p:column headerText="Tag" >
-					            <h:outputText value="#{rule.condition.getTagName()}" />
+					            <h:outputText value="#{rule.getTagName()}" />
 					        </p:column>
 					        <p:column headerText="Number" >
 					            <h:outputText value="#{rule.number}" />
 					        </p:column>
 					        
 					        <p:column style="width:32px;text-align: center">
-					        	 <p:commandButton update="formForm:panelRulesList" 
+					        	 <p:commandButton update="formForm:panel_transfer_rules" 
 					        	 					ajax="true" 
 					        	 					immediate="true" 
 					        	 					actionListener="#{bean.delete(rule.id)}" 
