@@ -27,35 +27,7 @@ import br.com.ims.util.Artifact;
 public class UserControlDao {
 	
 private static Logger logger = Logger.getLogger(UserControlDao.class);
-	
-	
-//private static Logger logger = LoggerFactory.getLogger(AccessDao.class);
 
-	public boolean isInternalUser() throws DaoException{
-		Connection conn = null;
-		PreparedStatement stm = null;
-		ResultSet rs = null;
-		
-		boolean retorno = true;
-		
-		try {
-			conn = new ConnectionDB("access").getConnection();
-			stm = conn.prepareStatement(" SELECT internal_user FROM access_type");
-			rs = stm.executeQuery();
-			
-			if(rs.next()) {
-				
-				retorno = rs.getBoolean("internal_user");				
-			}
-		} catch (SQLException e) {
-			throw new DaoException("Erro AccessDao:isInternalUser", e);
-		}finally {
-			try {conn.close();} catch (SQLException e1) {}
-			try {stm.close();} catch (SQLException e) {}
-		}
-		return retorno;
-		
-	}
 	
 	public String getSystemAccess(String login, String password, String system){
 		
@@ -67,7 +39,7 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 			conn = new ConnectionDB();
 			
 			String query = "SELECT * FROM ACCESS.USER u, "
-					+ "ACCESS.USER_ARTIFACT UA, ARTIFACT A, SYSTEM S "
+					+ "ACCESS.artifact_access_type_user UA, ARTIFACT A, SYSTEM S "
 					+ "WHERE upper(u.LOGIN) = '"+login.toUpperCase()+"' and upper(u.password) = '"+password.toUpperCase()+"' "
 							+ "and u.id = ua.userid and a.id = ua.artifactid and s.id = a.systemid and "
 							+ "s.id = "+system;
@@ -85,87 +57,7 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		return response;
 	}
 	
-	public User getUser(String login) throws DaoException{
-		Connection conn = null;
-		PreparedStatement stm = null;
-		ResultSet rs = null;
-		
-		User user = null;
-		
-		try {
-			if(isInternalUser()) {
-				conn = new ConnectionDB("access").getConnection();
-				stm = conn.prepareStatement(" SELECT id,login,password, name,email FROM user WHERE login = "+login);
-				rs = stm.executeQuery();
-				
-				if(rs.next()) {
-					user = new User();
-					user.setId(rs.getInt("id"));
-					user.setLogin(rs.getString("login"));
-					user.setPassword(rs.getString("password"));
-					user.setName(rs.getString("name"));
-					user.setEmail(rs.getString("email"));
-									
-				}
-			} else {
-				user = new User();
-				user.setId(1);
-				user.setLogin(login);
-				user.setPassword(login);
-				user.setName("Usuario AD");
-				user.setEmail("Usuario AD");
-				//pega usuarioAD
-			}
-			if(user != null) {
-				user.setAccess(getAccess(login));
-			}
-			
-		} catch (SQLException e) {
-			throw new DaoException("Erro AccessDao:isInternalUser", e);
-		}finally {
-			try {conn.close();} catch (SQLException e1) {}
-			try {stm.close();} catch (SQLException e) {}
-		}
-		return user;
-	}
-		
-	private List<UserSystemArtifactPermission> getAccess(String login) throws DaoException{
-		
-		Connection conn = null;
-		PreparedStatement stm = null;
-		ResultSet rs = null;
-		
-		List<UserSystemArtifactPermission> access = new ArrayList<UserSystemArtifactPermission>();
-		
-		try {
-				
-			conn = new ConnectionDB("access").getConnection();
-			stm = conn.prepareStatement(" select s.name as system, a.name artifact,ua.accesspermissionid permission "+  
-										" from user_access ua,system_artifact sa, system s, artifact a "+ 
-										" WHERE ua.systemartifactid = sa.id " +
-										" and sa.systemid = s.id " +
-										" and sa.artifactid = a.id "+
-										" and ua.login = '"+login+"' ");
-			rs = stm.executeQuery();
-			
-			while(rs.next()) {
-				UserSystemArtifactPermission obj = new UserSystemArtifactPermission();
-				obj.setSystem(rs.getString("system"));
-				obj.setArtifact(rs.getString("artifact"));
-				obj.setPermission(rs.getString("permission"));
-				access.add(obj);
-									
-			}
-			
-			
-		} catch (SQLException e) {
-			throw new DaoException("Erro AccessDao:getAccess", e);
-		}finally {
-			try {conn.close();} catch (SQLException e1) {}
-			try {stm.close();} catch (SQLException e) {}
-		}
-		return access;
-	}
+	
 
 	public JSONObject getArtifactBySystem(String userLogin, String system) {
 		ConnectionDB conn = null;
@@ -208,6 +100,102 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		
 		return objectOut;
 
+	}
+
+	public List<User> findAll() {
+		
+		ConnectionDB conn = null;
+		ResultSet rs = null;
+		
+		List<User> access = new ArrayList<User>();
+		
+		try {
+				
+			conn = new ConnectionDB();
+			String query = "select * from ACCESS.user a";
+			
+			rs = conn.ExecuteQuery(query);
+			
+			while(rs.next()) {
+				User obj = new User();
+				obj.setId(rs.getInt(1));
+				obj.setLogin(rs.getString(2));
+				obj.setPassword(rs.getString(3));
+				obj.setName(rs.getString(4));
+				obj.setEmail(rs.getString(5));
+				access.add(obj);
+			}
+			
+		} catch (SQLException e) {
+			try {
+				throw new DaoException("Erro AccessDao:getAccess", e);
+			} catch (DaoException e1) {
+				e1.printStackTrace();
+			}
+		}finally {
+			conn.finalize();
+		}
+		return access;
+	}
+
+	public User getUser(String userLogin) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static void save(User user) {
+		
+		String sql = "";
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		
+		if(user.getId() == -1){
+			//new user
+			sql  = "insert into access.user (name, email, login, password, id) values ('"+user.getName()+"', '"+user.getEmail()+"', '"+user.getLogin()+"' , '"+user.getPassword()+"', nextval('serial'))";
+			
+		}else{
+			sql = "update access.user set name= '"+user.getName()+"', email= '"+user.getEmail()+"', login = '"+user.getLogin()+"', password = '"+user.getPassword()+"' where id="+user.getId(); 
+		}
+		
+		conn = new ConnectionDB();
+		
+		try {
+			rs = conn.ExecuteQuery(sql);
+		} catch (SQLException e) {
+			try {
+				throw new DaoException("Erro AccessDao:getAccess", e);
+			} catch (DaoException e1) {
+				
+			}
+		} finally {
+			conn.finalize();
+		}
+		
+	}
+
+	public static void remove(User user) {
+		
+		String sql = "";
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		
+			sql  = "";
+			
+		
+		conn = new ConnectionDB();
+		
+		try {
+			rs = conn.ExecuteQuery(sql);
+		} catch (SQLException e) {
+			try {
+				throw new DaoException("Erro AccessDao:getAccess", e);
+			} catch (DaoException e1) {
+				
+			}
+		} finally {
+			conn.finalize();
+		}
+		
 	}
 
 	

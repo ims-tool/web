@@ -366,5 +366,6 @@
 		<module>ims-tool-web-admin</module>
 		<module>ims-tool-operator-web</module>
 		<module>ims-tool-flow-view</module>
+		<module>ims-tool-dashboard</module>
 	</modules>
 </project>

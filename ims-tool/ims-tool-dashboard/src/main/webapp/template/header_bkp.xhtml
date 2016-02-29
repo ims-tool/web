@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"   
+	  xmlns:ui="http://java.sun.com/jsf/facelets" 
+	  xmlns:c="http://java.sun.com/jsp/jstl/core" > 	  
+	<body> 
+		<ui:composition> 
+			 <!-- **********************************************************************************************************************************************************
+		      TOP BAR CONTENT & NOTIFICATIONS
+		      *********************************************************************************************************************************************************** -->
+		      <!--header start-->
+		      <header class="header black-bg">
+		              <div class="sidebar-toggle-box">
+		                  <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Esconder Menu"></div>
+		              </div>
+		            <!--logo start-->
+		            <a href="index.xhtml" class="logo"><b>IMS DASHBOARD</b></a>
+		            <!--logo end-->
+		            
+		       </header>
+		      <!--header end-->
+		      
+		      
+		      <!-- **********************************************************************************************************************************************************
+		      MAIN SIDEBAR MENU
+		      *********************************************************************************************************************************************************** -->
+		      <!--sidebar start-->
+		      <aside>
+		          <div id="sidebar"  class="nav-collapse ">
+		              <!-- sidebar menu start-->
+		              <ul class="sidebar-menu" id="nav-accordion">
+		                  <li class="mt">
+		                      <c:choose>
+  								 <c:when test="#{bean.menu == null}">
+  								 	<a class="active" href="index.xhtml">
+		  								<i class="fa fa-dashboard"></i>
+				                       	<span>Dashboard</span>
+				                    </a>
+  								 </c:when>
+  								 <c:otherwise>
+									<a href="index.xhtml">
+										<i class="fa fa-dashboard"></i>
+				                        <span>Dashboard</span>
+				                     </a>	
+								  </c:otherwise>
+							   </c:choose>		                      		                      
+		                       
+		                  </li>
+		                  <li class="sub-menu">
+		                  	  <c:choose>	
+	                  	          <c:when test="#{bean.menu != null and bean.menu == 'report'}">
+								 	  <a class="active" href="javascript:;" ><i class="fa fa-th"></i><span>Reports</span></a>
+								  </c:when>
+								  <c:otherwise>
+							          <a href="javascript:;" ><i class="fa fa-th"></i><span>Reports</span></a>	
+						          </c:otherwise>
+						      </c:choose>		                      
+		                      <ul class="sub">
+		                      	  <c:choose>
+  								    <c:when test="#{bean.submenu != null and bean.submenu == 'logura'}">
+  								 	  <li class="active"><a  href="/ims-dashboard/Report?menu=report&amp;submenu=logura">Log de URA</a></li>
+  								    </c:when>
+  								    <c:otherwise>
+									  <li><a  href="/ims-dashboard/Report?menu=report&amp;submenu=logura">Log de URA</a></li>	
+								    </c:otherwise>
+							      </c:choose>
+							      <c:choose>
+  								    <c:when test="#{bean.submenu != null and bean.submenu == 'wsvolume'}">
+  								 	  <li class="active"><a  href="/ims-dashboard/Report?menu=report&amp;submenu=wsvolume">Web Services x Volume</a></li>
+  								    </c:when>
+  								    <c:otherwise>
+									  <li><a  href="/ims-dashboard/Report?menu=report&amp;submenu=wsvolume">Web Services x Volume</a></li>	
+								    </c:otherwise>
+							      </c:choose>	
+		                          
+		                      </ul>
+		                  </li>
+		
+		              </ul>
+		              <!-- sidebar menu end-->
+		          </div>
+		      </aside>
+		      <!--sidebar end--> 
+		</ui:composition> 
+	</body> 
+</html>
