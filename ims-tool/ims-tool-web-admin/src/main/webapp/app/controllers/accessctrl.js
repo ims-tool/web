@@ -45,20 +45,7 @@ app.controller(
 					
 					};
 
-					$scope.changeHour = function(hour) {
-						var data = hour;
-						var box = confirm("Deseja realmente alterar o usuário?");
-						if (box === true) {
-							$
-									.ajax({
-										type : "POST",
-										data : JSON.stringify(data),
-										url : "http://localhost:8080/ims-tool-server/rest/servicehour/update",
-										contentType : "application/json",
-										dataType : 'json'
-									});
-						}
-					};
+				
 					
 					$scope.showForm = function() {
 						$scope.showUser = false;
@@ -73,10 +60,12 @@ app.controller(
 					};
 					
 					 $scope.removeUser = function(index){
-						 	
+						 
+						 var data = $scope.users[index];
+						 
 							$.ajax({
 								type : "POST",
-								data : JSON.stringify(index),
+								data : JSON.stringify(data),
 								url : "http://localhost:8080/ims-tool-server/rest/access/remove",
 								contentType : "application/json",
 								dataType : 'json'

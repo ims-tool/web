@@ -60,18 +60,16 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
     @Consumes("application/json")
     public void remove(String entity) {
 
+    	System.out.println(entity);
     	JSONObject jsonObj = new JSONObject(entity);
     	
     	User user = new User();
-    	if(StringUtils.isNotBlank((String)jsonObj.get("id"))){
+    		
     		user.setId((Integer) jsonObj.get("id"));
-    	}else{
-    		user.setId(-1);
-    	}
+
     	user.setName((String) jsonObj.get("name"));
     	user.setEmail((String) jsonObj.get("email"));
     	user.setLogin((String) jsonObj.get("login"));
-    	user.setPassword((String) jsonObj.get("pw1"));
     	
     	
     	UserControlCtrl.remove(user);
