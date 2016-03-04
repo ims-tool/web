@@ -8,7 +8,8 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 	var typeList;
 	$rootScope.activetab = $location.path();
 	
-	$http.get('http://localhost:8080/ims-tool-server/rest/servicehour/findType')
+	
+	$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/servicehour/findType')
 	.success(function(data1) {
 		$scope.data = {
 			    repeatSelect: null,
@@ -17,7 +18,7 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 	});
 	
 	 $scope.submit = function() {
-	        	$http.get('http://localhost:8080/ims-tool-server/rest/servicehour/find/'+$scope.data.singleSelect)
+	        	$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/servicehour/find/'+$scope.data.singleSelect)
 				.success(function(data) {
 					$scope.hours = data;
 				});
@@ -32,7 +33,7 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 							.ajax({
 								type : "POST",
 								data : JSON.stringify(data),
-								url : "http://localhost:8080/ims-tool-server/rest/servicehour/update",
+								url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/servicehour/update",
 								contentType : "application/json",
 								dataType : 'json'
 							});
@@ -50,7 +51,7 @@ app.controller(
 
 					$scope.parameters = []; // declare an empty array
 
-					$http.get('http://localhost:8080/ims-tool-server/rest/parameters/findAll')
+					$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/parameters/findAll')
 							.success(function(data) {
 								$scope.parameters = data;
 							});
@@ -76,7 +77,7 @@ app.controller(
 							$.ajax({
 										type : "POST",
 										data : JSON.stringify(data),
-										url : "http://localhost:8080/ims-tool-server/rest/parameters/update",
+										url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/parameters/update",
 										contentType : "application/json",
 										dataType : 'json'
 									});
@@ -109,7 +110,7 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		        'Content-Type': 'application/json' 
 		    },
 		    'type': 'POST',
-		    'url': "http://localhost:8080/ims-tool-server/rest/access/login",
+		    'url': 'http://'+window.location.hostname+":8080/ims-tool-server/rest/access/login",
 		    'data': JSON.stringify(user),
 		    'dataType': 'json',
 		    'success': function(data){

@@ -10,7 +10,7 @@ app.controller(
 					$scope.showUser = true;
 					$scope.showButtonUser = false;
 
-					$http.get('http://localhost:8080/ims-tool-server/rest/access/findAllUser').success(function(data1) {
+					$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/access/findAllUser').success(function(data1) {
 								$scope.users = data1;
 							});
 
@@ -32,7 +32,7 @@ app.controller(
 											.ajax({
 												type : "POST",
 												data : JSON.stringify(data),
-												url : "http://localhost:8080/ims-tool-server/rest/access/update",
+												url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/access/update",
 												contentType : "application/json",
 												dataType : 'json'
 											})
@@ -63,15 +63,19 @@ app.controller(
 						 
 						 var data = $scope.users[index];
 						 
+						 var box = confirm("Deseja realmente apagar todos os dados do usuário?");
+						 if (box === true){
+							 
 							$.ajax({
 								type : "POST",
 								data : JSON.stringify(data),
-								url : "http://localhost:8080/ims-tool-server/rest/access/remove",
+								url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/access/remove",
 								contentType : "application/json",
 								dataType : 'json'
 							})
 						 
 						    $scope.users.splice(index, 1);
+						 }
 					 }; 
 
 				});
