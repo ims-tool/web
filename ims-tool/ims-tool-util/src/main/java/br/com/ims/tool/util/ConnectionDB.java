@@ -114,5 +114,17 @@ public class ConnectionDB {
 		}
 		return rs;
 	}
+	
+	public ResultSet ExecuteQueryUpdate(String sql) throws SQLException {
+		rs = null;
+		stmt = null;
+		try {
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_READ_ONLY);
+			stmt.executeQuery(sql);
+		} catch (Exception e) {
+		}
+		return rs;
+	}
 
 }

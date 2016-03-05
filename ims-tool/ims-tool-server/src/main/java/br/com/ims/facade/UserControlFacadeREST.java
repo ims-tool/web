@@ -1,5 +1,6 @@
 package br.com.ims.facade;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 
 import br.com.ims.control.ServiceHourCtrl;
 import br.com.ims.control.UserControlCtrl;
+import br.com.ims.tool.entity.AccessByUser;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 import br.com.ims.tool.entity.User;
@@ -83,9 +85,10 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
     	
     	
     	JSONObject jsonObj = new JSONObject(entity);
-    	
+    	String id = "";
     	User user = new User();
-    	if(StringUtils.isNotBlank((String)jsonObj.get("id"))){
+    	
+    	if((Integer) jsonObj.get("id") > 0){
     		user.setId((Integer) jsonObj.get("id"));
     	}else{
     		user.setId(-1);
@@ -243,6 +246,30 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
 		  return Response.status(201).entity(objectOut.toString()).build();
 		
 	  }
+	  
+	  @GET
+	    @Path("findAccessByUser/{id}")
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public String findAccessByUser(@PathParam("id") Integer id) {
+	    	List<AccessByUser> listAccessByUser = new ArrayList<AccessByUser>();
+	    	System.out.println(id);
+	    	listAccessByUser = UserControlCtrl.findAccessByUser(id);
+	    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	    	String json = "";
+			try {
+				json = ow.writeValueAsString(listAccessByUser);
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	return json;
+	    }
 	  
     
 }

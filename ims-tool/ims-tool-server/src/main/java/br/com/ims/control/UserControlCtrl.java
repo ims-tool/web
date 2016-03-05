@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import br.com.ims.persistence.ServiceHourDao;
 import br.com.ims.persistence.UserControlDao;
+import br.com.ims.tool.entity.AccessByUser;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 import br.com.ims.tool.entity.User;
@@ -48,6 +49,11 @@ public class UserControlCtrl {
 
 	public static void remove(User user) {
 		UserControlDao.remove(user);
+	}
+
+	public static List<AccessByUser> findAccessByUser(Integer id) {
+		UserControlDao dao = new UserControlDao();
+		return dao.getAccessByUser(id);
 	}
 
 }

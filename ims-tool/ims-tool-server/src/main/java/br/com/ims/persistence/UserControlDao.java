@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.web.servlet.tags.ParamAware;
 
+import br.com.ims.tool.entity.AccessByUser;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 import br.com.ims.tool.entity.User;
@@ -39,7 +40,7 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 			conn = new ConnectionDB();
 			
 			String query = "SELECT * FROM ACCESS.USER u, "
-					+ "ACCESS.artifact_access_type_user UA, ARTIFACT A, SYSTEM S "
+					+ "ACCESS.artifact_access_type_user UA, ACCESS.artifact A, ACCESS.SYSTEM S "
 					+ "WHERE upper(u.LOGIN) = '"+login.toUpperCase()+"' and upper(u.password) = '"+password.toUpperCase()+"' "
 							+ "and u.id = ua.userid and a.id = ua.artifactid and s.id = a.systemid and "
 							+ "s.id = "+system;
@@ -70,7 +71,7 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 			conn = new ConnectionDB();
 			
 			String query = "select a.id id, a.description, ua.userid, ua.acesstypeid, up.profileid "
-					+ "from access.artifact a, access.user_artifact ua, access.user_profile up "
+					+ "from access.artifact a, access.artifact_access_type_user ua, access.user_profile up "
 					+ "where up.userid = ua.userid and ua.artifactid = a.id and ua.userid = (select id from users where upper(login) = '"+userLogin.toUpperCase()+"') and a.systemid = "+ system;
 			
 			rs = conn.ExecuteQuery(query);
@@ -160,7 +161,7 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		conn = new ConnectionDB();
 		
 		try {
-			rs = conn.ExecuteQuery(sql);
+			conn.ExecuteQueryUpdate(sql);
 		} catch (SQLException e) {
 			try {
 				throw new DaoException("Erro AccessDao:getAccess", e);
@@ -178,24 +179,78 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		String sql = "";
 		ResultSet rs = null;
 		ConnectionDB conn = null;
+		Integer id = user.getId();
 		
-			sql  = "";
-			
-		
+		sql  = "delete from access.user_area ua where userid ="+id;
 		conn = new ConnectionDB();
 		
 		try {
-			rs = conn.ExecuteQuery(sql);
-		} catch (SQLException e) {
-			try {
-				throw new DaoException("Erro AccessDao:getAccess", e);
-			} catch (DaoException e1) {
-				
-			}
+			conn.ExecuteQueryUpdate(sql);
+		} catch (Exception e) {
 		} finally {
 			conn.finalize();
 		}
 		
+		sql  = "delete from access.artifact_access_type_user ua where userid ="+id;
+		conn = new ConnectionDB();
+		
+		try {
+			conn.ExecuteQueryUpdate(sql);
+		} catch (Exception e) {
+		} finally {
+			conn.finalize();
+		}
+		
+		sql  = "delete from access.user ua where id ="+id;
+		conn = new ConnectionDB();
+		
+		try {
+			conn.ExecuteQueryUpdate(sql);
+		} catch (Exception e) {
+		} finally {
+			conn.finalize();
+		}
+		
+	}
+
+	public List<AccessByUser> getAccessByUser(Integer id) {
+		
+		
+		String sql = "select  s.description as system, a.description as artifact, at.description as access_type, ar.description as area from "+ 
+		"access.artifact_access_type_user au, "+
+		"access.artifact a, "+
+		"access.system s, "+
+		"access.access_type at, "+
+		"access.area ar "+ 
+		"where "+  
+			"a.id = au.artifactid and "+
+			"s.id = a.systemid and "+
+			"at.id = au.acesstypeid and "+
+			"ar.id = au.areaid and "+
+		"userid ="+id ;
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		List<AccessByUser> list = new ArrayList<AccessByUser>();
+		conn = new ConnectionDB();
+		
+		try {
+			rs = conn.ExecuteQuery(sql);
+			while(rs.next()){
+				System.out.println("Achou");
+				AccessByUser abu = new AccessByUser();
+				
+				abu.setSystem(rs.getString(1));
+				abu.setArtifact(rs.getString(2));
+				abu.setAccessType(rs.getString(3));
+				abu.setArea(rs.getString(4));
+				
+			}
+		} catch (Exception e) {
+		} finally {
+			conn.finalize();
+		}
+		
+		return list;
 	}
 
 	
