@@ -10,34 +10,14 @@
 			<div ng-controller="AccessCtrl" ng-submit="submit()">
 				<form name="accessUserForm">
 					<div class="col-lg-12">
-						<button class="btn btn-info" type="button">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true">
-								Perfil</span>
-						</button>
-						<button class="btn btn-info" type="button">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true">
-								Area</span>
-						</button>
-						<button class="btn btn-info" type="button">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true">
-								Artefato</span>
-						</button>
-						<button class="btn btn-warning" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true">
+						
+						<button class="btn btn-warning" type="button"><span aria-hidden="true">
 								Sistema</span></button>
 						
-						<button class="btn btn-info" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true">
-								 Usuario</span></button></button>
+						<button class="btn btn-info" type="button"><span  aria-hidden="true" ui-sref="access">
+								 Usuario</span></button>
 					</div>
 					<br></br> <br></br>
-					<div class="col-lg-12">
-						<div class="input-group">
-							<input type="text" class="form-control"
-								placeholder="Procurar usuário..."> <span
-								class="input-group-btn">
-								<button class="btn btn-default" type="button">Pesquisar</button>
-							</span>
-						</div>
-					</div>
 
 				</form>
 
@@ -46,32 +26,13 @@
 					<thead>
 						<tr>
 							<th>Id</th>
-							<th>Nome</th>
-							<th>E-mail</th>
-							<th>Login</th>
-							<th>Password</th>
+							<th>Descrição</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr
-							ng-repeat="hour in hours | filter: { type: option.type} | orderBy:'weekday'">
-							<td>
-								<div ng-if="1 == hour.weekday">Domingo</div>
-								<div ng-if="2 == hour.weekday">Segunda-feira</div>
-								<div ng-if="3 == hour.weekday">Terça-feira</div>
-								<div ng-if="4 == hour.weekday">Quarta-feira</div>
-								<div ng-if="5 == hour.weekday">Quinta-feira</div>
-								<div ng-if="6 == hour.weekday">Sexta-feira</div>
-								<div ng-if="7 == hour.weekday">Sábado</div>
-							</td>
-							<td>{{hour.type}}</td>
-							<td><a href="#" editable-text="hour.starthour"
-								onaftersave="changeHour(hour)">{{ hour.starthour ||
-									"empty"}}</a></td>
-							<td><a href="#" editable-text="hour.stophour"
-								onaftersave="changeHour(hour)">{{ hour.stophour || "empty"}}</a>
-							</td>
-							<td>{{hour.lastchange}}</td>
+						<tr ng-repeat="system in systems | orderBy:'id'">
+							<td>{{system.id}}</td>
+							<td>{{system.description}}</td>
 						</tr>
 					</tbody>
 				</table>

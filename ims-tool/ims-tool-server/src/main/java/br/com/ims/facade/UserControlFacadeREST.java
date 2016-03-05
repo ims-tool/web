@@ -18,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -53,6 +54,28 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
         super.create(entity);
     }
     
+    
+    @POST
+    @Path("/remove")
+    @Consumes("application/json")
+    public void remove(String entity) {
+
+    	System.out.println(entity);
+    	JSONObject jsonObj = new JSONObject(entity);
+    	
+    	User user = new User();
+    		
+    		user.setId((Integer) jsonObj.get("id"));
+
+    	user.setName((String) jsonObj.get("name"));
+    	user.setEmail((String) jsonObj.get("email"));
+    	user.setLogin((String) jsonObj.get("login"));
+    	
+    	
+    	UserControlCtrl.remove(user);
+    	
+    }
+    
     @POST
     @Path("/update")
     @Consumes("application/json")
@@ -61,12 +84,19 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
     	
     	JSONObject jsonObj = new JSONObject(entity);
     	
-    	ServiceHour serviceHour = new ServiceHour();
-    	serviceHour.setId((Integer) jsonObj.get("id"));
-    	serviceHour.setStarthour((String) jsonObj.get("starthour"));
-    	serviceHour.setStophour((String) jsonObj.get("stophour"));
-    	serviceHour.setLastlogin((String) jsonObj.get("lastlogin"));
-    	ServiceHourCtrl.save(serviceHour);
+    	User user = new User();
+    	if(StringUtils.isNotBlank((String)jsonObj.get("id"))){
+    		user.setId((Integer) jsonObj.get("id"));
+    	}else{
+    		user.setId(-1);
+    	}
+    	user.setName((String) jsonObj.get("name"));
+    	user.setEmail((String) jsonObj.get("email"));
+    	user.setLogin((String) jsonObj.get("login"));
+    	user.setPassword((String) jsonObj.get("pw1"));
+    	
+    	
+    	UserControlCtrl.save(user);
     }
 
     @PUT
@@ -76,11 +106,6 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
         super.edit(entity);
     }
 
-    @DELETE
-    @Path("{id}")
-    public void remove(@PathParam("id") Integer id) {
-        super.remove(super.find(id));
-    }
 
     @GET
     @Path("{id}")
@@ -129,6 +154,31 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
     	return json;
         
     }
+    
+    @GET
+    @Path("findAllUser")
+    @Produces("application/json")
+    public String findAllUser() {
+    	
+    	List<User> lista = UserControlCtrl.findAll();
+    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    	String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return json;
+        
+    }
+    
 
 
     @GET
@@ -152,27 +202,7 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
     
     
     
-    public User login(String userLogin,String password) {
-		  UserControlCtrl userctrl = new UserControlCtrl();  
-		  User user = null;
-		  try {
-				user = userctrl.getUser(userLogin);
-				if(user != null) {
-					  if(userctrl.isInternalUser()) {
-						  if(user.getPassword().equals(password)) {
-							  return user;
-						  } else {
-							  return null;
-						  }
-					  }
-				}
-		  } catch (DaoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		  }
-		  
-		  return user;		  
-	  }
+ 
 	
 	  @Path("/login")	  
 	  @POST

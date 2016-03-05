@@ -13,16 +13,17 @@ import br.com.ims.tool.exception.DaoException;
 
 public class UserControlCtrl {
 	
-	public static List<ServiceHour> findAll(String type){
-		return ServiceHourDao.findAll(type);
+	public static List<User> findAll(){
+		UserControlDao dao = new UserControlDao();
+		return dao.findAll();
 	}
 
 	public static ServiceHour find(Integer id) {
 		return ServiceHourDao.find(id);
 	}
 
-	public static void save(ServiceHour entity) {
-		ServiceHourDao.save(entity);
+	public static void save(User user) {
+		UserControlDao.save(user);
 	}
 	
 	public static List<ServiceHourType> findType() {
@@ -34,10 +35,6 @@ public class UserControlCtrl {
 		return dao.getUser(userLogin);
 	}
 
-	public boolean isInternalUser() throws DaoException {
-		UserControlDao dao = new UserControlDao();
-		return dao.isInternalUser();
-	}
 	
 	public static String getSystemAccess(String login, String password, String system) throws DaoException {
 		UserControlDao dao = new UserControlDao();
@@ -47,6 +44,10 @@ public class UserControlCtrl {
 	public static JSONObject getArtifactBySystem(String userLogin, String system) {
 		UserControlDao dao = new UserControlDao();
 		return dao.getArtifactBySystem(userLogin, system);
+	}
+
+	public static void remove(User user) {
+		UserControlDao.remove(user);
 	}
 
 }
