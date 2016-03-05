@@ -101,50 +101,68 @@
     				
 					</p:layoutUnit>
 			    
-				    <p:layoutUnit position="center" resizable="true">
-				 			<p:diagram widgetVar="graph" 
-						               value="#{ivrEditorView.model}" 
-						               style="height:100%" styleClass="ui-widget-content" 
-						               var="el" id="flowEditor"  >
-						        
- 
-							        <f:facet  name="element"  >
-							             <h:outputText value="#{el.name}" style="display:block;margin-top:1em;margin-left: auto;margin-right: auto;text-align: center;" />
-								         <p:graphicImage library="images" value="#{el.imagePath}"  width="#{el.formType.imageSizeWidthStr}" height="#{el.formType.imageSizeHeightStr}" alt="#{el.formError ?  el.errorDescription : el.name}, double click to edit" ondblclick="selectElement('#{el.id}')" style="display:block;margin-bottom: 1em; margin-left: auto;margin-right: auto;text-align: center;" />								         								                   						             						    			
-								    </f:facet>
-								 
-							    
-							    
-								<p:ajax event="connect" listener="#{ivrEditorView.onConnect}" update="formFlow,settingUtilDlgId,flowEditor" oncomplete="PF('settingUtilDlg').show()"  />
-						        <p:ajax event="disconnect"  listener="#{ivrEditorView.onDisconnect}" update="formFlow,settingUtilDlgId,flowEditor"  />
-						        <p:ajax event="connectionChange" listener="#{ivrEditorView.onConnectionChange}" update="formFlow,settingUtilDlgId,flowEditor" oncomplete="PF('settingUtilDlg').show()" />
-								  
-						    </p:diagram>
+				    <p:layoutUnit position="center" resizable="true" size="600">
+				    	<p:commandButton id="buttonAddTab" 
+										 update="formFlow,tabView" 
+									     actionListener="#{ivrEditorView.addTab}" 
+									     ajax="true" 
+									     immediate="true" 
+									     />
+				 		<p:tabView id="tabView"	activeIndex="#{ivrEditorView.activeIndex}"	style="heigth:100%;">
+							<p:ajax event="tabClose" listener="#{ivrEditorView.onTabClose}" />  
+							<p:ajax event="tabChange" listener="#{ivrEditorView.onTabChange}" />
+							<c:forEach items="#{ivrEditorView.tabList}" var="tabItem">   
+								<p:tab title="#{tabItem.name}" id="tab_#{tabItem.tabIndex}">
+								</p:tab>   
+							</c:forEach>
+						</p:tabView>
+						
+						<p:diagram widgetVar="graph" 
+					               value="#{ivrEditorView.model}" 
+					               style="height:100%" styleClass="ui-widget-content" 
+					               var="el" id="flowEditor"  >
+					        
+				
+						        <f:facet  name="element"  >
+						             <h:outputText value="#{el.name}" style="display:block;margin-top:1em;margin-left: auto;margin-right: auto;text-align: center;" />
+							         <p:graphicImage library="images" value="#{el.imagePath}"  width="#{el.formType.imageSizeWidthStr}" height="#{el.formType.imageSizeHeightStr}" alt="#{el.formError ?  el.errorDescription : el.name}, double click to edit" ondblclick="selectElement('#{el.id}')" style="display:block;margin-bottom: 1em; margin-left: auto;margin-right: auto;text-align: center;" />								         								                   						             						    			
+							    </f:facet>
+							 
 						    
 						    
-							
-						    <p:droppable id="dragPalletoToEditor" 
-						                 for="flowEditor" tolerance="touch" 
-						                 activeStyleClass="ui-state-highlight" datasource="palleteData" onDrop="handleDrop"
-						                 widgetVar="dropWV">
-						        <p:ajax listener="#{ivrEditorView.onDropFormType}" update="formFlow" />						        
-						    </p:droppable>
-						    <div style="display: none" >
-						    	<h:inputHidden id="elementId" value="#{ivrEditorView.formId}" />
-								<p:commandButton id="buttonElementSelected" 
-								                 update="formFlow,settingFormDlgId" 
-								                 actionListener="#{ivrEditorView.elementSelected}" 
-								                 ajax="true" 
-								                 immediate="true" 
-								                 oncomplete="PF('settingFormDlg').show()"/>	    	
-						    </div>						    						    
+							<p:ajax event="connect" listener="#{ivrEditorView.onConnect}" update="formFlow,settingUtilDlgId,flowEditor" oncomplete="PF('settingUtilDlg').show()"  />
+					        <p:ajax event="disconnect"  listener="#{ivrEditorView.onDisconnect}" update="formFlow,settingUtilDlgId,flowEditor"  />
+					        <p:ajax event="connectionChange" listener="#{ivrEditorView.onConnectionChange}" update="formFlow,settingUtilDlgId,flowEditor" oncomplete="PF('settingUtilDlg').show()" />
+							  
+					    </p:diagram>
+					    
+					    
+						
+					    <p:droppable id="dragPalletoToEditor" 
+					                 for="flowEditor" tolerance="touch" 
+					                 activeStyleClass="ui-state-highlight" datasource="palleteData" onDrop="handleDrop"
+					                 widgetVar="dropWV">
+					        <p:ajax listener="#{ivrEditorView.onDropFormType}" update="formFlow" />						        
+					    </p:droppable>
+					    <div style="display: none" >
+					    	<h:inputHidden id="elementId" value="#{ivrEditorView.formId}" />
+							<p:commandButton id="buttonElementSelected" 
+							                 update="formFlow,settingFormDlgId" 
+							                 actionListener="#{ivrEditorView.elementSelected}" 
+							                 ajax="true" 
+							                 
+							                 immediate="true" 
+							                 oncomplete="PF('settingFormDlg').show()"/>	    	
+					    </div>
+
+										    						    
 					</p:layoutUnit>
 					<p:layoutUnit effectSpeed="50" minSize="25" maxSize="265" effect="slide" collapsed="true" collapseSize="25" id="left_config" position="east" size="265" header="Settings" resizable="true" closable="false" collapsible="true" style="text-align:center" >
 						<p:messages id="messages" />
 						
 						<p:panel id="panelForms" header="Nodes" style="margin-bottom:10px;">
 					        <h:panelGrid columns="1">
-					            <p:selectOneMenu id="nodesForm" value="#{ivrEditorView.form}" converter="formEntityConverter" panelStyle="width:180px"
+					            <p:selectOneMenu id="nodesForm" value="#{ivrEditorView.form}" panelStyle="width:180px"
 						                         effect="fade" var="f" style="width:160px" filter="true" filterMatchMode="startsWith">
 						            <f:selectItems value="#{ivrEditorView.listForm}" var="form" itemLabel="#{form.description}" itemValue="#{form}" />
 						 

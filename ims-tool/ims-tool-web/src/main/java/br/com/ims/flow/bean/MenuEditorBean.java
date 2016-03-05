@@ -15,7 +15,6 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.diagram.Element;
 
 import br.com.ims.flow.common.Constants;
-import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ChoiceEntity;
@@ -104,19 +103,12 @@ public class MenuEditorBean extends AbstractBean {
 		this.menu = menu;
 	}
 
-	public LogicalFlow getFlow() {
-		return flow;
-	}
-
-	public void setFlow(LogicalFlow flow) {
-		this.flow = flow;
-	}
 	private void removeChoices() {
 		
 		
 		
 		if(this.menu.getChoices() != null) {
-			Node source = flow.getNode(this.form);
+			Node source = logicalFlow.getNode(this.form);
 			
 			for(ChoiceEntity menuChoice : this.menu.getChoices()) {
 				
@@ -133,7 +125,7 @@ public class MenuEditorBean extends AbstractBean {
 						}
 						if(remove) {
 							this.menu.getChoices().remove(menuChoice);
-							ServicesFactory.getInstance().getFlowEditorService().deleteForm(target.getElement());
+							ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
 						} 
 						 
 					}
@@ -150,12 +142,12 @@ public class MenuEditorBean extends AbstractBean {
 	private void removeNoInput() {
 		
 		if(this.menu.getNoInput() != null && !this.menu.getNoInput().getId().equals(this.noInputId)) {
-			Node source = flow.getNode(this.form);
+			Node source = logicalFlow.getNode(this.form);
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) &&
 				   formTarget.getName().equals(this.menu.getNoInput().getName())) {
-					ServicesFactory.getInstance().getFlowEditorService().deleteForm(target.getElement());
+					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
 				}
 				
 			}
@@ -163,12 +155,12 @@ public class MenuEditorBean extends AbstractBean {
 	}
 	private void removeNoMatch() {
 		if(this.menu.getNoMatch() != null && !this.menu.getNoMatch().getId().equals(this.noMatchId)) {
-			Node source = flow.getNode(this.form);
+			Node source = logicalFlow.getNode(this.form);
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) &&
 				   formTarget.getName().equals(this.menu.getNoMatch().getName())) {
-					ServicesFactory.getInstance().getFlowEditorService().deleteForm(target.getElement());
+					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
 				}
 				
 			}
@@ -206,17 +198,17 @@ public class MenuEditorBean extends AbstractBean {
 		
 		Element element = new Element(formNoInput);
 		
-		ServicesFactory.getInstance().getFlowEditorService().setEndPoint(formType, element);
+		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 		
-		ServicesFactory.getInstance().getFlowEditorService().getBean().getModel().addElement(element);
-		ServicesFactory.getInstance().getFlowEditorService().getBean().getListForm().add(formNoInput);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().getModel().addElement(element);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().getListForm().add(formNoInput);
 		
-		flow.addNode(element);
+		logicalFlow.addNode(element);
 		
-		Node source = flow.getNode(this.form);
+		Node source = logicalFlow.getNode(this.form);
 		
 		
-		ServicesFactory.getInstance().getFlowEditorService().connectForm(source.getElement(), element);
+		ServicesFactory.getInstance().getIvrEditorService().connectForm(source.getElement(), element);
 	
 	}
 	private void addNoMatch() {
@@ -245,23 +237,23 @@ public class MenuEditorBean extends AbstractBean {
 		
 		Element element = new Element(formNoMatch);
 		
-		ServicesFactory.getInstance().getFlowEditorService().setEndPoint(formType, element);
+		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 		
-		ServicesFactory.getInstance().getFlowEditorService().getBean().getModel().addElement(element);
-		ServicesFactory.getInstance().getFlowEditorService().getBean().getListForm().add(formNoMatch);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().getModel().addElement(element);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().getListForm().add(formNoMatch);
 		
-		flow.addNode(element);
+		logicalFlow.addNode(element);
 		
-		Node source = flow.getNode(this.form);
+		Node source = logicalFlow.getNode(this.form);
 		
 		
-		ServicesFactory.getInstance().getFlowEditorService().connectForm(source.getElement(), element);
+		ServicesFactory.getInstance().getIvrEditorService().connectForm(source.getElement(), element);
 	}
 	
 	
 	private void addChoices() {
 		
-		Node source = flow.getNode(this.form);
+		Node source = logicalFlow.getNode(this.form);
 		
 		Collections.sort(this.choices);
 		
@@ -295,15 +287,15 @@ public class MenuEditorBean extends AbstractBean {
 				
 				Element element = new Element(formChoice);
 				
-				ServicesFactory.getInstance().getFlowEditorService().setEndPoint(formType, element);
+				ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 				
-				ServicesFactory.getInstance().getFlowEditorService().getBean().getModel().addElement(element);
-				ServicesFactory.getInstance().getFlowEditorService().getBean().getListForm().add(formChoice);
+				ServicesFactory.getInstance().getIvrEditorService().getBean().getModel().addElement(element);
+				ServicesFactory.getInstance().getIvrEditorService().getBean().getListForm().add(formChoice);
 				
-				flow.addNode(element);
+				logicalFlow.addNode(element);
 				
 				
-				ServicesFactory.getInstance().getFlowEditorService().connectForm(source.getElement(), element);
+				ServicesFactory.getInstance().getIvrEditorService().connectForm(source.getElement(), element);
 			} 
 		}		
 		this.menu.setChoices(this.choices);
@@ -331,7 +323,7 @@ public class MenuEditorBean extends AbstractBean {
 				}
 			}						
 		}
-		ServicesFactory.getInstance().getFlowEditorService().alingMenuChoices(source.getElement());
+		ServicesFactory.getInstance().getIvrEditorService().alingMenuChoices(source.getElement());
 		
 	}
 	
@@ -349,23 +341,23 @@ public class MenuEditorBean extends AbstractBean {
 		addNoMatch();
 		
 		
-		flow.validateNodes();
-		flow.align();
+		logicalFlow.validateNodes();
+		logicalFlow.align();
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Menu",this.menu.getName()+" - Updated!");
 		
 		 
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setEditing(true);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setEditing(true);
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 		context.addCallbackParam("saved", saved);		
-		flow.validateNodes();
+		logicalFlow.validateNodes();
 
     }
 	
 	public void addPrompt(ActionEvent event) {
 		
 		this.collect();		
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
 		
 		ServicesFactory.getInstance().getPromptEditorService().getBean().setMenuBean(this);
 		
@@ -373,7 +365,7 @@ public class MenuEditorBean extends AbstractBean {
 	public void addCondition(ActionEvent event) {
 		collect();
 		
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
 		
 		ServicesFactory.getInstance().getConditionEditorService().getBean().setMenuBean(this);
 		
@@ -383,7 +375,7 @@ public class MenuEditorBean extends AbstractBean {
 		
 		this.collect();
 
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setOtherPageEditor("/pages/other/NoMatchInput.xhtml");
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/other/NoMatchInput.xhtml");
 		
 		ServicesFactory.getInstance().getNoMatchInputEditorService().getBean().setMenuBean(this);
 		

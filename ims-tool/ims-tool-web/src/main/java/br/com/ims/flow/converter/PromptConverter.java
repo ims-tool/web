@@ -7,7 +7,7 @@ import javax.faces.convert.FacesConverter;
 
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.PromptEntity;
-import br.com.ims.flow.service.FlowEditorService;
+import br.com.ims.flow.service.IvrEditorService;
 
 
 @FacesConverter(value = "promptConverter")
@@ -29,7 +29,7 @@ public class PromptConverter implements Converter {
         if ((submittedValue != null) && (!submittedValue.equals(""))) {
         	try {
 				//return ServicesFactory.getInstance().getPromptService().get(submittedValue);
-        		return new FlowEditorService().getPrompt(Integer.valueOf(submittedValue));
+        		return new IvrEditorService().getPrompt(Integer.valueOf(submittedValue));
 			} catch (Exception e) {
 
 			} 		

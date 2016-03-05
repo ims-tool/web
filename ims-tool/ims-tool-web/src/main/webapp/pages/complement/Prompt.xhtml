@@ -127,7 +127,7 @@
 			            <h:outputText value="#{p.name}" />
 			        </p:column>
 			        <p:column headerText="IN USE" >
-			            <h:outputText rendered="#{!promptEditorView.isUsed(p.id)}" value="NO" />
+			            <h:outputText rendered="#{promptEditorView.isUsed(p.id) eq false}" value="NO" />
 			            <p:commandButton rendered="#{promptEditorView.isUsed(p.id)}" icon="ui-icon-search" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">

@@ -145,7 +145,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	public void addPrompt(ActionEvent event) {
 		this.collect();
 		
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
 		
 		ServicesFactory.getInstance().getPromptEditorService().getBean().setNoMatchInputBean(this);
 		

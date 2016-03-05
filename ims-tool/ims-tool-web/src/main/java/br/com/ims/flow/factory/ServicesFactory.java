@@ -7,13 +7,16 @@ import br.com.ims.flow.service.ConditionGroupEditorService;
 import br.com.ims.flow.service.ConditionMapEditorService;
 import br.com.ims.flow.service.ConditionMapService;
 import br.com.ims.flow.service.ConditionService;
-import br.com.ims.flow.service.FlowEditorService;
 import br.com.ims.flow.service.FormService;
 import br.com.ims.flow.service.FormTypeService;
 import br.com.ims.flow.service.GrammarEditorService;
 import br.com.ims.flow.service.GrammarService;
+import br.com.ims.flow.service.IvrEditorService;
 import br.com.ims.flow.service.NoMatchInputEditorService;
 import br.com.ims.flow.service.NoMatchInputService;
+import br.com.ims.flow.service.OperationGroupEditorService;
+import br.com.ims.flow.service.OperationMapEditorService;
+import br.com.ims.flow.service.OperationMapService;
 import br.com.ims.flow.service.PromptEditorService;
 import br.com.ims.flow.service.PromptService;
 import br.com.ims.flow.service.TagEditorService;
@@ -35,8 +38,8 @@ public class ServicesFactory {
 	private ServicesFactory() {
 	}
 
-	public FlowEditorService getFlowEditorService() {
-		return new FlowEditorService();
+	public IvrEditorService getIvrEditorService() {
+		return new IvrEditorService();
 	}
 	
 	public FormService getFormService() {
@@ -109,6 +112,15 @@ public class ServicesFactory {
 	public ConditionMapEditorService getConditionMapEditorService() {
 		return new ConditionMapEditorService();
 	}
-	
+	public OperationMapService getOperationMapService() {
+		return new OperationMapService();
+	}
+
+	public OperationMapEditorService getOperationMapEditorService() {
+		return new OperationMapEditorService();
+	}
+	public OperationGroupEditorService getOperationGroupEditorService() {
+		return new OperationGroupEditorService();
+	}
 
 }

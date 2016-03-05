@@ -31,7 +31,7 @@ public class TagService extends AbstractEntityService<TagEntity>{
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 
-		List<FormEntity> forms = ServicesFactory.getInstance().getFlowEditorService().getBean().getListForm();
+		List<FormEntity> forms = ServicesFactory.getInstance().getIvrEditorService().getBean().getListForm();
 		for(FormEntity form :  forms) {
 			if(form.getTag()!= null && form.getTag().getId().equals(id)) {
 				return true;

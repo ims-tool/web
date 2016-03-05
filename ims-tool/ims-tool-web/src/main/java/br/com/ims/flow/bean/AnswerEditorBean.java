@@ -50,10 +50,10 @@ public class AnswerEditorBean extends AbstractBean {
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Answer",this.answer.getName()+" - Updated!");
 		 
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setEditing(true);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setEditing(true);
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				
-		flow.validateNodes();
+		logicalFlow.validateNodes();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean saved = true;

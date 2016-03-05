@@ -9,7 +9,12 @@ import org.primefaces.model.diagram.Element;
 import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.AnnounceEntity;
 import br.com.ims.flow.model.ChoiceEntity;
+import br.com.ims.flow.model.DecisionEntity;
 import br.com.ims.flow.model.FormEntity;
+import br.com.ims.flow.model.MenuEntity;
+import br.com.ims.flow.model.OperationEntity;
+import br.com.ims.flow.model.PromptCollectEntity;
+import br.com.ims.flow.model.TransferEntity;
 
 public class LogicalFlow {
 	private int minSizeWidth = 70;
@@ -128,6 +133,8 @@ public class LogicalFlow {
 			form.setFormError(false);
 			form.setErrorDescription("");
 			
+			int startFlow = 0;
+			boolean stopFlow = false;
 			for(Node nodeAux : listNode) {
 				FormEntity formAux = (FormEntity)nodeAux.getElement().getData();
 				if(!formAux.getId().equalsIgnoreCase(form.getId()) 
@@ -138,6 +145,12 @@ public class LogicalFlow {
 					form.setFormError(true);
 					form.setErrorDescription("Name "+form.getName()+" already assigned to another Element.");
 					continue;
+				}
+				if(formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_ANSWER)) {
+					startFlow++;
+				}
+				if(formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_DISCONNECT)) {
+					stopFlow = true;
 				}
 			}
 			
@@ -155,6 +168,21 @@ public class LogicalFlow {
 				form.setErrorDescription("Output is mandatory");
 				continue;
 			}
+			if(startFlow == 0) {
+				form.setFormError(true);
+				form.setErrorDescription("You have to start the flow with the node type 'Answer'");
+				continue;
+			} else if(startFlow > 1) {
+				form.setFormError(true);
+				form.setErrorDescription("Node type 'Answer' is allowed only ONE per flow");
+				continue;
+			}
+			
+			if(!stopFlow) {
+				form.setFormError(true);
+				form.setErrorDescription("You have to finish the flow with the node type 'Disconnect' or 'Transfer'");
+				continue;
+			}
 				
 			
 			
@@ -166,7 +194,121 @@ public class LogicalFlow {
 		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_ANNOUNCE)) {
 			return validadeFormAnnounce(form);	
 		}
+		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+			return validadeFormPromptCollect(form);	
+		}
+		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_MENU)) {
+			return validadeFormMenu(form);
+		}
+		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_DECISION)) {
+			return validadeFormDecision(form);
+		}
+		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_OPERATION)) {
+			return validadeFormOperation(form);
+		}
+		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_TRANSFER)) {
+			return validadeFormTransfer(form);
+		}
 		return false;
+	}
+	private boolean validadeFormTransfer(FormEntity form) {
+		TransferEntity transfer = (TransferEntity)form.getFormId();
+		if(transfer.getTransferRules() == null || transfer.getTransferRules().size() == 0) {
+			form.setFormError(true);
+			form.setErrorDescription("Transfer Rules is missing");
+		}
+		return form.isFormError();
+	}
+		
+	private boolean validadeFormOperation(FormEntity form) {
+		OperationEntity operation = (OperationEntity)form.getFormId();
+		if(operation.getListOperationGroup() == null || operation.getListOperationGroup().size() == 0) {
+			form.setFormError(true);
+			form.setErrorDescription("Operation Group is missing");
+		}
+		return form.isFormError();
+	}
+	private boolean validadeFormDecision(FormEntity form) {
+		DecisionEntity decision = (DecisionEntity)form.getFormId();
+		if(decision.getListDecisionChance() == null || decision.getListDecisionChance().size() == 0) {
+			form.setFormError(true);
+			form.setErrorDescription("Chances is missing");
+		}
+		return form.isFormError();
+	}
+	private boolean validadeFormMenu(FormEntity form) {
+		MenuEntity menu = (MenuEntity)form.getFormId();
+		boolean error = false;
+		String msgErro = "";
+		if(menu.getPrompt() == null) {
+			error = true;
+			msgErro = "Prompt is missing";
+			
+		}
+		if(menu.getNoInput() == null) {
+			if(error) {
+				msgErro += " / ";
+			}
+			error = true;
+			msgErro += "NoInput is missing";
+			
+		}
+		if(menu.getNoMatch() == null) {
+			if(error) {
+				msgErro += " / ";
+			}
+			error = true;
+			msgErro += "NoMatch is missing";
+			
+		}
+		if(menu.getChoices() == null || menu.getChoices().size() == 0) {
+			if(error) {
+				msgErro += " / ";
+			}
+			error = true;
+			msgErro += "Choices is missing";
+		}
+		form.setFormError(error);
+		form.setErrorDescription(msgErro);
+
+		return form.isFormError();
+	}
+	private boolean validadeFormPromptCollect(FormEntity form) {
+		PromptCollectEntity promptCollect = (PromptCollectEntity)form.getFormId();
+		boolean error = false;
+		String msgErro = "";
+		if(promptCollect.getGrammar() == null) {
+			error = true;
+			msgErro = "Grammar is missing"; 
+					}
+		if(promptCollect.getPrompt() == null) {
+			if(error) {
+				msgErro += " / ";
+			}
+			error = true;
+			msgErro += "Prompt is missing";
+			
+		}
+		if(promptCollect.getNoInput() == null) {
+			if(error) {
+				msgErro += " / ";
+			}
+			error = true;
+			msgErro += "NoInput is missing";
+			
+		}
+		if(promptCollect.getNoMatch() == null) {
+			if(error) {
+				msgErro += " / ";
+			}
+			error = true;
+			msgErro += "NoMatch is missing";
+			
+		}
+		form.setFormError(error);
+		form.setErrorDescription(msgErro);
+
+		return form.isFormError();
 	}
 	private boolean validadeFormAnnounce(FormEntity form) {
 		AnnounceEntity announce = (AnnounceEntity)form.getFormId();

@@ -12,7 +12,6 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	private Integer interDigitTimeout;
 	private Integer terminatingTimeout;
 	private String terminatingCharacter;
-	private FormEntity nextform;
 	private TagEntity tag;
 	
 	
@@ -69,12 +68,6 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	}
 	public void setTerminatingCharacter(String terminatingCharacter) {
 		this.terminatingCharacter = terminatingCharacter;
-	}
-	public FormEntity getNextform() {
-		return nextform;
-	}
-	public void setNextform(FormEntity nextform) {
-		this.nextform = nextform;
 	}
 	public TagEntity getTag() {
 		return tag;

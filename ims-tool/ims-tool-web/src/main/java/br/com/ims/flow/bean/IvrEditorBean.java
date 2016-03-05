@@ -1,5 +1,6 @@
 package br.com.ims.flow.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.TabChangeEvent;
+import org.primefaces.event.TabCloseEvent;
 import org.primefaces.event.diagram.ConnectEvent;
 import org.primefaces.event.diagram.ConnectionChangeEvent;
 import org.primefaces.event.diagram.DisconnectEvent;
@@ -28,10 +31,11 @@ import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.service.FormTypeService;
  
 @SuppressWarnings("serial")
-@ManagedBean(name = "flowEditorView")
+@ManagedBean(name = "ivrEditorView")
 @ViewScoped
-public class FlowEditorBean extends AbstractBean {
+public class IvrEditorBean extends AbstractBean {
      
+	
 	
 	private FormTypeService formTypeService = new FormTypeService(); 
 	private DefaultDiagramModel model;
@@ -54,7 +58,13 @@ public class FlowEditorBean extends AbstractBean {
 	
 	private boolean editing;
 	
+    int countTab =0;
+	
     
+    private int tabId;
+	private List<TabItem> tabList;
+	private int activeIndex = 0;
+	
     public PromptEntity getPrompt() {
 		return prompt;
 	}
@@ -64,12 +74,15 @@ public class FlowEditorBean extends AbstractBean {
 	}
 	private boolean suspendEvent;
  
-    public FlowEditorBean() {
+    public IvrEditorBean() {
     	init();
     }
     
     public void init() {
-        model = new DefaultDiagramModel();
+    	
+    	
+        
+    	model = new DefaultDiagramModel();
         model.setMaxConnections(20);
         
         model.getDefaultConnectionOverlays().add(new ArrowOverlay(20, 20, 1, 1));
@@ -87,9 +100,36 @@ public class FlowEditorBean extends AbstractBean {
         listForm = new ArrayList<FormEntity>();
         this.editing = false;
         
+        
+        tabList = new ArrayList<TabItem>();
+		tabList.add(new TabItem("New Flow", "/pages/template/flowEditorTemplate.xhtml", tabId));
+		
     }
      
-    
+    public void onTabChange(TabChangeEvent event) {
+        FacesMessage msg = new FacesMessage("Tab Changed", "Active Tab: " + event.getTab().getId());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+         
+    public void onTabClose(TabCloseEvent event) {
+        FacesMessage msg = new FacesMessage("Tab Closed", "Closed tab: " + event.getTab().getId());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+	
+    public void addTab() {
+
+    	tabId++;
+    	tabList.add(new TabItem("Tab "+tabId, "/pages/template/flowEditorTemplate.xhtml", tabId));
+    	
+    	/*TabView tabView =  (TabView)FacesContext.getCurrentInstance().getAttributes().get("formFlow:tabFlow");
+    			
+    	Tab tab = (Tab)FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("tab_"+countTab);
+    	Tab tabNew = new Tab();
+    	tabNew.setTitle(tab.getTitle()+" novoId: "+(++this.countTab));
+    	tabNew.setId("tab_"+this.countTab);
+    	tabView.getChildren().add(tabNew);*/
+    }
     
     public LogicalFlow getFlow() {
 		return flow;
@@ -129,10 +169,10 @@ public class FlowEditorBean extends AbstractBean {
         	Node node = flow.getNode(event.getSourceElement());
         	if(node.getListTarget().size() > 0) {
         		//continuar
-        		ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
+        		ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
         	}
         	
-        	ServicesFactory.getInstance().getFlowEditorService().connectForm(model, flow, event.getSourceElement(),event.getTargetElement());
+        	ServicesFactory.getInstance().getIvrEditorService().connectForm(model, flow, event.getSourceElement(),event.getTargetElement());
         	flow.validateNodes();
             flow.align();            
             this.node = flow.getNode(event.getSourceElement());            
@@ -151,7 +191,7 @@ public class FlowEditorBean extends AbstractBean {
     public void onDisconnect(DisconnectEvent event) {
     	this.editing = true;
     	this.auxiliarPageEditor = "";
-    	ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
+    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
     	flow.validateNodes();
         flow.align();
     }
@@ -159,9 +199,9 @@ public class FlowEditorBean extends AbstractBean {
     public void onConnectionChange(ConnectionChangeEvent event) {
     	this.editing = true;
     	
-    	ServicesFactory.getInstance().getFlowEditorService().disconnectForm(this.model,this.flow, event.getOriginalSourceElement());
+    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.flow, event.getOriginalSourceElement());
 
-    	ServicesFactory.getInstance().getFlowEditorService().connectForm(model, flow, event.getNewSourceElement(),event.getNewTargetElement());
+    	ServicesFactory.getInstance().getIvrEditorService().connectForm(model, flow, event.getNewSourceElement(),event.getNewTargetElement());
     	
     	flow.validateNodes();
         flow.align();            
@@ -188,7 +228,7 @@ public class FlowEditorBean extends AbstractBean {
 		FormEntity formEntityElement = new FormEntity();
 		
 		formEntityElement.setDescription(formType.getDescription());
-		formEntityElement.setName(formType.getName());
+		formEntityElement.setName(formType.getName()+"_"+formEntityElement.getId());
 		formEntityElement.setFormType(formType);
 		
 		listForm.add(formEntityElement);
@@ -196,7 +236,7 @@ public class FlowEditorBean extends AbstractBean {
 		Element element = new Element(formEntityElement);
 		
 
-		ServicesFactory.getInstance().getFlowEditorService().setEndPoint(formType, element);
+		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 		
 		
 		model.addElement(element);
@@ -209,7 +249,7 @@ public class FlowEditorBean extends AbstractBean {
 		
 		this.formId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formFlow:elementId").toString();
 		
-		this.form = ServicesFactory.getInstance().getFlowEditorService().getForm(this, Integer.valueOf(this.formId)); 
+		this.form = ServicesFactory.getInstance().getIvrEditorService().getForm(this, Integer.valueOf(this.formId)); 
 	
 
 		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE) || 
@@ -224,7 +264,7 @@ public class FlowEditorBean extends AbstractBean {
 		
 		this.formPageEditor = "/pages/forms/"+form.getFormType().getName()+".xhtml";
 		
-		Object bean = ServicesFactory.getInstance().getFlowEditorService().getBean(form.getFormType().getName());
+		Object bean = ServicesFactory.getInstance().getIvrEditorService().getBean(form.getFormType().getName());
 		((AbstractBean)bean).init();
 		
 		
@@ -331,6 +371,62 @@ public class FlowEditorBean extends AbstractBean {
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+
+	public class TabItem implements Serializable{
+		private String name;
+		private String url;
+		private int tabIndex;
+		public TabItem(String name, String url, int tabIndex)
+		{
+			this.setName(name);
+			this.setUrl(url);
+			this.setTabIndex(tabIndex);
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getUrl() {
+			return url;
+		}
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		public int getTabIndex() {
+			return tabIndex;
+		}
+		public void setTabIndex(int tabIndex) {
+			this.tabIndex = tabIndex;
+		}
+	}
+
+
+	public int getTabId() {
+		return tabId;
+	}
+
+	public void setTabId(int tabId) {
+		this.tabId = tabId;
+	}
+
+	public List<TabItem> getTabList() {
+		return tabList;
+	}
+
+	public void setTabList(List<TabItem> tabList) {
+		this.tabList = tabList;
+	}
+
+	public int getActiveIndex() {
+		return activeIndex;
+	}
+
+	public void setActiveIndex(int activeIndex) {
+		this.activeIndex = activeIndex;
 	}
 	
 	

@@ -7,6 +7,7 @@ import br.com.ims.flow.dao.FormDAO;
 import br.com.ims.flow.dao.FormTypeDAO;
 import br.com.ims.flow.dao.GrammarDAO;
 import br.com.ims.flow.dao.NoMatchInputDAO;
+import br.com.ims.flow.dao.OperationMapDAO;
 import br.com.ims.flow.dao.PromptDAO;
 import br.com.ims.flow.dao.TagDAO;
 import br.com.ims.flow.dao.TagTypeDAO;
@@ -27,7 +28,7 @@ public class DAOFactory {
 	}
 
 	public FormDAO getFormDAO() {
-		return new FormDAO();
+		return FormDAO.getInstance();
 	}
 	public FormTypeDAO getFormTypeDAO() {
 		return new FormTypeDAO();
@@ -65,6 +66,9 @@ public class DAOFactory {
 	
 	public ConditionMapDAO getConditionMapDAO() {
 		return ConditionMapDAO.getInstance(); 
+	}
+	public OperationMapDAO getOperationMapDAO() {
+		return OperationMapDAO.getInstance(); 
 	}
 
 }

@@ -5,10 +5,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import org.primefaces.model.diagram.Element;
-
-import br.com.ims.flow.service.FlowEditorService;
 import br.com.ims.flow.model.FormEntity;
+import br.com.ims.flow.service.IvrEditorService;
 
 @FacesConverter(value = "formEntityConverter")
 public class FormEntityConverter implements Converter {
@@ -25,7 +23,7 @@ public class FormEntityConverter implements Converter {
         
         if ((submittedValue != null) && (!submittedValue.equals(""))) {
         	try {
-				return new FlowEditorService().getForm(Integer.valueOf(submittedValue));
+				return new IvrEditorService().getForm(Integer.valueOf(submittedValue));
 			} catch (Exception e) {
 
 			} 		

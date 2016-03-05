@@ -224,7 +224,7 @@ public class PromptEditorBean extends AbstractBean {
 		
 		collect();
 		
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Audio.xhtml");
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Audio.xhtml");
 		
 		ServicesFactory.getInstance().getAudioEditorService().getBean().setPromptBean(this);
 	}
@@ -233,7 +233,7 @@ public class PromptEditorBean extends AbstractBean {
 		
 		this.collect();
 		
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
 		
 		ServicesFactory.getInstance().getConditionEditorService().getBean().setPromptBean(this);
 	}

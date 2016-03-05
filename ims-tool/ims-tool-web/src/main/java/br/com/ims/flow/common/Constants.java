@@ -4,6 +4,7 @@ public class Constants {
 	public final static String ICON_FLOW_PATH = "/imagens/icones/flow/";
 	public final static String CLASS_ENTITY_PATH = "br.com.ims.flow.model.";
 	
+	public final static String FORM_TYPE_ANSWER = "Answer";;
 	public final static String FORM_TYPE_ANNOUNCE = "Announce";
 	public final static String FORM_TYPE_PROMPT_COLLECT = "PromptCollect";
 	public final static String FORM_TYPE_MENU = "Menu";

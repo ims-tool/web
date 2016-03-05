@@ -14,7 +14,7 @@ public abstract class AbstractBean implements Serializable {
      
 	protected boolean insert;
 	protected FormEntity form;
-	protected LogicalFlow flow;
+	protected LogicalFlow logicalFlow;
 	
 	
 	public boolean isInsert() {
@@ -38,20 +38,21 @@ public abstract class AbstractBean implements Serializable {
 		this.form = form;
 	}
 
+	
 
-	public LogicalFlow getFlow() {
-		return flow;
+	public LogicalFlow getLogicalFlow() {
+		return logicalFlow;
 	}
 
 
-	public void setFlow(LogicalFlow flow) {
-		this.flow = flow;
+	public void setLogicalFlow(LogicalFlow logicalFlow) {
+		this.logicalFlow = logicalFlow;
 	}
 
 
 	public void init() {
-		this.form = ServicesFactory.getInstance().getFlowEditorService().getForm();
-    	this.flow = ServicesFactory.getInstance().getFlowEditorService().getFlow();
+		this.form = ServicesFactory.getInstance().getIvrEditorService().getForm();
+    	this.logicalFlow = ServicesFactory.getInstance().getIvrEditorService().getFlow();
 	}
 	protected void collect() {
 		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_name") != null)

@@ -15,18 +15,18 @@ import org.primefaces.model.diagram.endpoint.EndPoint;
 import org.primefaces.model.diagram.endpoint.EndPointAnchor;
 import org.primefaces.model.diagram.endpoint.RectangleEndPoint;
 
-import br.com.ims.flow.bean.FlowEditorBean;
+import br.com.ims.flow.bean.IvrEditorBean;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
 import br.com.ims.flow.model.PromptEntity;
 
-public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
+public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 	
-	public FlowEditorService() {
+	public IvrEditorService() {
 		ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-		this.bean = (FlowEditorBean) elContext.getELResolver().getValue(elContext, null, "flowEditorView");
+		this.bean = (IvrEditorBean) elContext.getELResolver().getValue(elContext, null, "ivrEditorView");
 	}
 	public Object getBean(String form) {
 		ELContext elContext = FacesContext.getCurrentInstance().getELContext();
@@ -48,7 +48,7 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 		return getPrompt(this.bean, code);
 	}
 	
-	public FormEntity getForm(FlowEditorBean flowEditor, int code) {		
+	public FormEntity getForm(IvrEditorBean flowEditor, int code) {		
 		for (FormEntity form : flowEditor.getListForm()) {
 			if(String.valueOf(code).equals(form.getId())) {
 		
@@ -58,7 +58,7 @@ public class FlowEditorService extends AbstractBeanService<FlowEditorBean>{
 		return null;
 	}
 	
-	public PromptEntity getPrompt(FlowEditorBean flowEditor, int code) {
+	public PromptEntity getPrompt(IvrEditorBean flowEditor, int code) {
 		for (PromptEntity prompt : flowEditor.getPrompts()) {
 			if(String.valueOf(code).equals(prompt.getId())) {
 		

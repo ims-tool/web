@@ -84,7 +84,7 @@
 			            <h:outputText value="#{a.path}" />
 			        </p:column>
 			        <p:column headerText="IN USE" >
-			            <h:outputText rendered="#{!audioEditorView.isUsed(a.id)}" value="NO" />
+			            <h:outputText rendered="#{audioEditorView.isUsed(a.id) eq false}" value="NO" />
 			            <p:commandButton rendered="#{audioEditorView.isUsed(a.id)}" icon="ui-icon-search" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">

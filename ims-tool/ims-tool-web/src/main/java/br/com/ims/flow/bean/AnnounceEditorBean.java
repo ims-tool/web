@@ -82,10 +82,10 @@ public class AnnounceEditorBean extends AbstractBean {
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Announce",this.announce.getName()+" - Updated!");
 		 
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setEditing(true);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setEditing(true);
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				
-		flow.validateNodes();
+		logicalFlow.validateNodes();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean saved = true;
@@ -97,7 +97,7 @@ public class AnnounceEditorBean extends AbstractBean {
 		
 		this.collect();
 				
-		ServicesFactory.getInstance().getFlowEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
 		
 		ServicesFactory.getInstance().getPromptEditorService().getBean().setAnnounceBean(this);
 		

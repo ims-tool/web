@@ -59,6 +59,18 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		result.add(formType);
 		
 		formType = new FormTypeEntity();
+		formType.setId("4");
+		formType.setName("Flow");
+		formType.setDescription("Flow");
+		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "flow.png");
+		formType.setImagePathError(Constants.ICON_FLOW_PATH + "flow_error.png");
+		formType.setAllowInput(1);
+		formType.setAllowOutput(0);
+		formType.setMandatoryInput(0);
+		formType.setMandatoryOutput(1);
+		result.add(formType);
+		
+		formType = new FormTypeEntity();
 		formType.setId("5");
 		formType.setName("Decision");
 		formType.setDescription("Decision");
@@ -66,6 +78,18 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setImagePathError(Constants.ICON_FLOW_PATH + "decision_error.png");
 		formType.setAllowInput(1);
 		formType.setAllowOutput(0);
+		formType.setMandatoryInput(0);
+		formType.setMandatoryOutput(1);
+		result.add(formType);
+		
+		formType = new FormTypeEntity();
+		formType.setId("6");
+		formType.setName("Operation");
+		formType.setDescription("Operation");
+		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "operation.png");
+		formType.setImagePathError(Constants.ICON_FLOW_PATH + "operation_error.png");
+		formType.setAllowInput(1);
+		formType.setAllowOutput(1);
 		formType.setMandatoryInput(0);
 		formType.setMandatoryOutput(1);
 		result.add(formType);
@@ -93,6 +117,7 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setMandatoryInput(1);
 		formType.setMandatoryOutput(0);
 		result.add(formType);
+		
 		
 		formType = new FormTypeEntity();
 		formType.setId("9");
@@ -138,6 +163,19 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setMandatoryInput(1);
 		formType.setMandatoryOutput(1);
 		formType.setVisible(false);
+		result.add(formType);
+		
+
+		formType = new FormTypeEntity();
+		formType.setId("12");
+		formType.setName("Return");
+		formType.setDescription("Return");
+		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "return.png");
+		formType.setImagePathError(Constants.ICON_FLOW_PATH + "return_error.png");
+		formType.setAllowInput(1);
+		formType.setAllowOutput(0);
+		formType.setMandatoryInput(1);
+		formType.setMandatoryOutput(0);
 		result.add(formType);
 		
 		return result;
