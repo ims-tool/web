@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<ui:composition
+		template="/pages/template/formTemplate.xhtml">
+
+		<ui:param name="bean" value="#{decisionEditorView}" />
+		
+		<ui:define name="newContent">	
+	 			<h:outputLabel id="label_dialog_form_chances" for="panel_dialog_form_chances" value="Chances:" />
+	 			<h:panelGrid id="panel_dialog_form_chances" cellpadding="5">	 				 				
+            		<p:separator />
+            		<h:panelGrid id="panel_dialog_form_chance_add" columns="7" cellpadding="5">
+		 				<h:outputLabel id="label_form_chance_order" for="form_chance_order" value="Number Order:" />
+			            <p:inputText id="form_chance_order" value="#{bean.orderNum}" type="number"  requiredMessage="Please,inform the Number Order" label="label_form_chance_order"  />
+			            
+			            <h:outputLabel id="label_form_chance_condition" for="form_chance_condition" value="Condition:" />
+			            <p:selectOneMenu value="#{bean.conditionId}" 
+			 			                 id="form_chance_condition"
+			 			                 filter="true" filterMatchMode="startsWith" 
+			 			                 label="label_form_chance_condition">
+			 				<f:selectItem itemLabel="Empty" itemValue="" />
+			 				<f:selectItems value="#{bean.conditions}" var="condition"
+								itemValue="#{condition.id}" itemLabel="#{condition.name}"  />
+			 			</p:selectOneMenu>
+
+			            <p:commandButton value="Add Condition" actionListener="#{bean.addCondition}" 
+ 										 icon="buttonAddCondition"
+ 										 update="settingAuxiliarDlgId"  
+ 										 ajax="true" 
+						                 immediate="true" 
+						                 oncomplete="PF('settingAuxiliarDlg').show()"  />			            				
+		 			</h:panelGrid>
+		 			<p:commandButton value="Add" update="panel_dialog_form_chance_add,panel_dialog_form_chance_list" ajax="true" immediate="true" actionListener="#{bean.addChanceToDecision}"/>	 		
+					<p:separator />
+					<p:panel id="panel_dialog_form_chance_list" header="Chances" style="margin-bottom:20px">
+		 				<p:dataTable  
+		 						scrollable="true" 
+		 						scrollHeight="100"
+		 						value="#{bean.listDecisionChance}"
+		 						var="chance"
+		 						emptyMessage="No Chances assigned to Decision" 
+		 						sortBy="#{chance.orderNum}"
+		 				    >
+					        <p:column headerText="Number Order" >
+					            <h:outputText value="#{chance.orderNum}" />
+					        </p:column>
+					        <p:column headerText="Condition" >
+					        	<h:outputText value="#{chance.condition != null ? chance.condition.name : 'N/A'}" />					            
+					        </p:column>
+					        <p:column style="width:32px;text-align: center">
+					             <p:commandButton icon="ui-icon-close" title="Delete" update="formForm:panel_dialog_form_chance_list" ajax="true" immediate="true" actionListener="#{bean.deleteChance(chance.id)}" />
+					             						                
+					        </p:column>
+					    </p:dataTable>
+		 						 				
+		 			</p:panel>	
+				</h:panelGrid>
+	 					 	 				 		
+
+	    </ui:define>
+	    
+		
+	</ui:composition>			
+</ui:composition>

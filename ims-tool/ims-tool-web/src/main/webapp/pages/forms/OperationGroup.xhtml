@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			<ui:param name="bean" value="#{operationgroupEditorView}" />
+			
+			<p:growl id="msg" showDetail="true" />	
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+				h3 { 
+				    display: block;
+				    font-size: 1.0em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/operation.png"  width="60px" height="60px"   />
+				
+				<h2>OPERATION GROUP</h2>
+				<h3>#{bean.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_operationgroup_id" for="operationgroup_id" value="ID:" />
+	            <p:inputText id="operationgroup_id" value="#{bean.operationGroup.id}" readonly="true" label="label_operationgroup_id" />
+	 
+	            <h:outputLabel id="label_operationgroup_order" for="operationgroup_order" value="Number Order:" />
+	            <p:inputText id="operationgroup_order" value="#{bean.operationGroup.orderNum}"  label="label_operationgroup_order" rendered="true" requiredMessage="Please, inform the Number Order!" type="number" />
+	            
+	            
+	            <h:outputLabel id="label_operationgroup_description" for="operationgroup_description" value="Description:" />
+	            <p:inputTextarea id="operationgroup_description" value="#{bean.operationGroup.description}" required="true" requiredMessage="Please,inform a Description" label="label_operationgroup_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            
+	            
+	            
+	            <p:column colspan="2">
+	            	
+	            	<h:panelGrid columns="3" cellpadding="5">
+		 				<h:outputLabel id="label_operationgroup_map" for="operationgroup_map" value="MAP:" />
+	                    <p:selectOneMenu required="true" 
+			 			                 requiredMessage="Please,select a Map" 
+			 			                 value="#{bean.mapId}" 
+			 			                 id="operationgroup_map"
+			 			                 filter="true" filterMatchMode="startsWith" 
+			 			                 label="label_operationgroup_map">
+			 				<f:selectItem itemLabel="Select One" itemValue="" />
+			 				<f:selectItems value="#{bean.maps}" var="map"
+								itemValue="#{map.id}" itemLabel="#{map.name} - #{map.methodReference}"  />
+			 			</p:selectOneMenu>
+			 			
+			            <p:commandButton value="Add New Map" icon="buttonAddMap" oncomplete="PF('settingUtilDlg').show()" update="settingUtilDlgId" ajax="true" immediate="true" actionListener="#{bean.addNewMap}"/>			            				
+		 			</h:panelGrid>	 		
+				</p:column>
+	            <p:column colspan="2">
+	            	<p:separator />
+            		<p:panel id="panelOperationGroupAddParameter" header="Parameters" >
+            		
+	            		<h:outputLabel id="label_operationgroup_paramname" for="operationgroup_paramname" value="Name:" />
+		            	<p:inputText id="operationgroup_paramname" value="#{bean.operationParameter.paramName}" label="label_operationgroup_paramname" />
+		            	
+		            	<h:outputLabel id="label_operationgroup_paramvalue" for="operationgroup_paramvalue" value="Value:" style="margin-left:5px" />
+		            	<p:inputText id="operationgroup_paramvalue" value="#{bean.operationParameter.paramValue}" label="label_operationgroup_paramvalue" style="margin-right:5px" />
+		 
+	            		<p:commandButton value="Add" update="panelOperationGroupAddParameter,panelOperationGroupParameterList,msg" ajax="true" immediate="true" actionListener="#{bean.addParameter}"/>
+			        </p:panel>
+			        <p:panel id="panelOperationGroupParameterList" style="margin-bottom:10px">
+		 				<p:dataTable  
+		 						scrollable="true" 
+		 						scrollHeight="70"
+		 						value="#{bean.listOperationParameter}"
+		 						var="parameter"
+		 						emptyMessage="No Parameters" >
+					        <p:column headerText="Name" >
+					            <h:outputText value="#{parameter.paramName}" />
+					        </p:column>
+					        <p:column headerText="Value" >
+					            <h:outputText value="#{parameter.paramValue}" />
+					        </p:column>
+					        <p:column style="width:32px;text-align: center">
+					        	 <p:commandButton update="formComplement:panelOperationGroupParameterList,formComplement:msg" ajax="true" immediate="true" actionListener="#{bean.removeParameter(parameter.id)}" icon="ui-icon-close" title="Delete" />					                
+					        </p:column>
+					    </p:dataTable>
+		 						 				
+		 			</p:panel>
+			        <p:separator />
+	            </p:column>
+	            
+	            	
+	 			<f:facet name="footer">
+	                <p:commandButton value="Save" oncomplete="handleComplementSaveRequest(xhr, status, args)" update="formForm,msg" actionListener="#{bean.save}"/>
+	            </f:facet>  
+	        </h:panelGrid>
+	        	
+				
+</ui:composition>

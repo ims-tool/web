@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			
+			<p:growl id="msgComplementGrammar" showDetail="true" />	
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+				h3 { 
+				    display: block;
+				    font-size: 1.0em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/grammar.png"  width="60px" height="60px"   />
+				
+				<h2>GRAMMAR</h2>
+				<h3>#{grammarEditorView.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_complement_grammar_id" for="complement_grammar_id" value="ID:" />
+	            <p:inputText id="complement_grammar_id" value="#{grammarEditorView.grammar.id}" readonly="true" label="label_complement_grammar_id" />
+	 
+	            <h:outputLabel id="label_complement_grammar_name" for="complement_grammar_name" value="Name:" />
+	            <p:inputText id="complement_grammar_name" value="#{grammarEditorView.grammar.name}" required="true" requiredMessage="Please,inform a Name" label="label_complement_grammar_name" />
+	            
+	            <h:outputLabel id="label_complement_grammar_description" for="complement_grammar_description" value="Description:" />
+	            <p:inputTextarea id="complement_grammar_description" value="#{grammarEditorView.grammar.description}" required="true" requiredMessage="Please,inform a Description" label="label_complement_grammar_description"  rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+ 				
+ 				<h:outputLabel id="label_complement_prompt_type" for="complement_prompt_type" value="Type:" />
+	            <p:selectOneMenu required="true" 
+	 			                 requiredMessage="Please,select a Type" 
+	 			                 value="#{grammarEditorView.grammar.type}" 
+	 			                 id="complement_prompt_type"
+	 			                 filter="true" filterMatchMode="startsWith" 
+	 			                 label="label_complement_prompt_type">
+	 				<f:selectItem itemLabel="DIGITS" itemValue="DIGITS" />
+	 			</p:selectOneMenu>
+				
+				<h:outputLabel id="label_complement_grammar_sizemin" for="complement_grammar_sizemin" value="Size Min:" />
+	            <p:inputText id="complement_grammar_sizemin" value="#{grammarEditorView.grammar.sizeMin}" label="label_complement_grammar_sizemin" type="number" />
+	            
+		 		<h:outputLabel id="label_complement_grammar_sizemax" for="complement_grammar_sizemax" value="Size Max:" />
+	            <p:inputText id="complement_grammar_sizemax" value="#{grammarEditorView.grammar.sizeMin}" label="label_complement_grammar_sizemax" type="number" />
+	            
+		 		
+	 			<f:facet name="footer">
+	                <p:commandButton value="Save" oncomplete="handleComplementSaveRequest(xhr, status, args)" update="formComplement,formForm" actionListener="#{grammarEditorView.save}"/>
+	            </f:facet>  
+	        </h:panelGrid>
+	        
+	        <p:separator />
+	        
+	        <p:panel id="panelGrammarRegistered" header="Grammars Registered" style="margin-bottom:20px">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="g" value="#{grammarEditorView.grammars}">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{g.id}" />
+			        </p:column>
+			        
+			        <p:column headerText="NAME" filterBy="#{g.name}" filterMatchMode="contains">
+			            <h:outputText value="#{g.name}" />
+			        </p:column>
+			        <p:column headerText="DESCRIPTION" filterBy="#{g.description}" filterMatchMode="contains">
+			            <h:outputText value="#{g.description}" />
+			        </p:column>
+			        <p:column headerText="TYPE" filterBy="#{g.type}" filterMatchMode="contains">
+			            <h:outputText value="#{g.type}" />
+			        </p:column>
+			        <p:column headerText="SIZE MIN" filterBy="#{g.sizeMin}" filterMatchMode="contains">
+			            <h:outputText value="#{g.sizeMin}" />
+			        </p:column>
+			        <p:column headerText="SIZE MAX" filterBy="#{g.sizeMax}" filterMatchMode="contains">
+			            <h:outputText value="#{g.sizeMax}" />
+			        </p:column>
+			        <p:column headerText="IN USE" >
+			            <h:outputText rendered="#{grammarEditorView.isUsed(g.id) eq false}" value="NO" />
+			            <p:commandButton rendered="#{grammarEditorView.isUsed(g.id)}" icon="ui-icon-search" title="Yes" />
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
+			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			        </p:column>
+				</p:dataTable>
+			</p:panel>	        	        			
+</ui:composition>

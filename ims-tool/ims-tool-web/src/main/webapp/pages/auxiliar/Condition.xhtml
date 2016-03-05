@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			<ui:param name="bean" value="#{conditionEditorView}" />
+			
+			<p:growl id="msgAuxiliarCondition" showDetail="true" />	
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+				h3 { 
+				    display: block;
+				    font-size: 1.0em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/condition.png"  width="60px" height="60px"   />
+				
+				<h2>CONDITION</h2>
+				<h3>#{bean.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_auxiliar_condition_id" for="auxiliar_condition_id" value="ID:" />
+	            <p:inputText id="auxiliar_condition_id" value="#{bean.condition.id}" readonly="true" label="label_auxiliar_condition_id" />
+	 
+	            <h:outputLabel id="label_auxiliar_condition_name" for="auxiliar_condition_name" value="Name:" />
+	            <p:inputText id="auxiliar_condition_name" value="#{bean.condition.name}" required="true" requiredMessage="Please,inform a Name" label="label_auxiliar_condition_name" />
+	            
+	            <h:outputLabel id="label_auxiliar_condition_description" for="auxiliar_condition_description" value="Description:" />
+	            <p:inputTextarea id="auxiliar_condition_description" value="#{bean.condition.description}" required="true" requiredMessage="Please,inform a Description" label="label_auxiliar_condition_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            
+	            <p:column colspan="2">
+					<p:commandButton value="Add New Condition Group" update="settingOtherDlgId" oncomplete="PF('settingOtherDlg').show()" ajax="true" immediate="true" actionListener="#{bean.addNewGroup}"/>
+ 					<p:panel id="panelConditionGroup" header="Condition Group" style="margin-bottom:20px">
+		 				<p:dataTable  
+		 						scrollable="true" 
+		 						scrollHeight="100"
+		 						value="#{bean.conditionGroups}"
+		 						var="group"
+		 						emptyMessage="No condition group" 
+		 						sortBy="#{group.orderNum}" >
+					        <p:column headerText="Order" width="50px" >
+					            <h:outputText value="#{group.orderNum} " />
+					        </p:column>
+					        <p:column headerText="Description" >
+					            <h:outputText value="#{group.description}" />
+					        </p:column>
+					        <p:column headerText="Map" >
+					            <h:outputText value="#{group.conditionMap.name}" />
+					        </p:column>
+					        <p:column headerText="Parameters"  >
+					        	<p:dataTable  var="l" value="#{bean.paremeterView(group.id)}" >
+							        <p:column>							        
+							            <h:outputText value="#{l}" />
+							        </p:column>							        
+							    </p:dataTable>					        						            
+					        </p:column>
+					        <p:column headerText="Values" >
+					        	<p:dataTable  var="l" value="#{bean.valueView(group.id)}" >
+							        <p:column>							        
+							            <h:outputText value="#{l}" />
+							        </p:column>							        
+							    </p:dataTable>						            
+					        </p:column>
+					        <p:column style="width:32px;text-align: center">
+					        	 <p:commandButton update="settingOtherDlgId" oncomplete="PF('settingOtherDlg').show()" ajax="true" immediate="true" actionListener="#{bean.edit(group.id)}" icon="ui-icon-pencil" title="Edit" />
+					             <p:commandButton update="formAuxiliar:panelConditionGroup" icon="ui-icon-close" title="Delete" ajax="true" immediate="true" actionListener="#{bean.delete(group.id)}" />			
+		                		                
+					        </p:column>
+					    </p:dataTable>
+		 						 				
+		 			</p:panel>
+		 		</p:column>	
+	            	
+	 			<f:facet name="footer">
+	                <p:commandButton value="Save" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)" update="formAuxiliar,formComplement,formForm" actionListener="#{bean.save}"/>
+	            </f:facet>  
+	        </h:panelGrid>
+	        
+	        <p:separator />
+	        
+	        <p:panel id="panelConditionRegistered" header="Conditions Registered" style="margin-bottom:20px">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="c" value="#{conditionEditorView.conditions}">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{c.id}" />
+			        </p:column>
+			        
+			        <p:column headerText="NAME" filterBy="#{c.name}" filterMatchMode="contains">
+			            <h:outputText value="#{c.name}" />
+			        </p:column>
+			        <p:column headerText="IN USE" >
+			            <h:outputText rendered="#{conditionEditorView.isUsed(c.id) eq false}" value="NO" />
+			            <p:commandButton rendered="#{conditionEditorView.isUsed(c.id)}" icon="ui-icon-search" title="Yes" />
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
+			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			        </p:column>
+				</p:dataTable>
+			</p:panel>	        	        
+	
+				
+</ui:composition>
+

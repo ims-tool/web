@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			<ui:param name="bean" value="#{operationmapEditorView}" />
+			<p:growl id="msg" showDetail="true" />	
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+				h3 { 
+				    display: block;
+				    font-size: 1.0em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/operation.png"  width="60px" height="60px"   />
+				
+				<h2>OPERATION MAP</h2>
+				<h3>#{bean.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_operationmap_id" for="operationmap_id" value="ID:" />
+	            <p:inputText id="operationmap_id" value="#{bean.operationMap.id}" readonly="true" label="label_operationmap_id" />
+	 
+	            <h:outputLabel id="label_operationmap_name" for="operationmap_name" value="Name:" />
+	            <p:inputText id="operationmap_name" value="#{bean.operationMap.name}" required="true" requiredMessage="Please,inform a Name" label="label_operationmap_name" />
+	            
+	            <h:outputLabel id="label_operationmap_description" for="operationmap_description" value="Description:" />
+	            <p:inputTextarea id="operationmap_description" value="#{bean.operationMap.description}" required="true" requiredMessage="Please,inform a Description" label="label_operationmap_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            
+	            
+	            <h:outputLabel id="label_operationmap_method" for="operationmap_method" value="Method Reference:" />
+	            <p:inputText id="operationmap_method" value="#{bean.operationMap.methodReference}" required="true" requiredMessage="Please,inform a Method Reference" label="label_operationmap_method" />
+	            
+	            <f:facet name="footer">
+	                <p:commandButton value="Save" oncomplete="handleUtilSaveRequest(xhr, status, args)" update="formComplement,msg" actionListener="#{bean.save}"/>
+	            </f:facet>  
+	        </h:panelGrid>
+	        
+	        <p:separator />
+	        
+	        <p:panel id="panelOperationMapRegistered" header="Operation Maps Registered" style="margin-bottom:20px">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="c" value="#{bean.operationMaps}">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{c.id}" />
+			        </p:column>
+			        
+			        <p:column headerText="NAME" filterBy="#{c.name}" filterMatchMode="contains">
+			            <h:outputText value="#{c.name}" />
+			        </p:column>
+			        <p:column headerText="DESCRIPTION" filterBy="#{c.description}" filterMatchMode="contains">
+			            <h:outputText value="#{c.description}" />
+			        </p:column>
+			        <p:column headerText="METHOD REFERENCE" filterBy="#{c.methodReference}" filterMatchMode="contains">
+			            <h:outputText value="#{c.methodReference}" />
+			        </p:column>
+			        <p:column headerText="IN USE" >
+			            <h:outputText rendered="#{bean.isUsed(c.id) eq false}" value="NO" />
+			            <p:commandButton rendered="#{bean.isUsed(c.id)}" icon="ui-icon-search" title="YES" />
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" ajax="true" immediate="true" update="formUtil:panelOperationMapRegistered">
+			             	  <f:setPropertyActionListener value="#{c}" target="#{bean.operationMap}" />
+			             </p:commandButton>
+			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			        </p:column>
+				</p:dataTable>
+			</p:panel>	        	        
+	
+				
+</ui:composition>
+
