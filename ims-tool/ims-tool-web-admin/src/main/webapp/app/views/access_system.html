@@ -26,10 +26,10 @@
 							</thead>
 							<tbody>
 								<tr ng-repeat="access in accesses">
-									<td>{{access.id}}</td>
-									<td>{{access.name}}</td>
-									<td>{{access.email}}</td>
-									<td>{{access.login}}</td>
+									<td>{{access.system}}</td>
+									<td>{{access.artifact}}</td>
+									<td>{{access.accessType}}</td>
+									<td>{{access.area}}</td>
 									<td>
 										<button type="button" ng-click="editUser($index)"
 											class="btn btn-info" data-toggle="tooltip"

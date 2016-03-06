@@ -139,6 +139,7 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 	$scope.user = obj;
 	$scope.accesses = [];
 	$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/access/findAccessByUser/'+$scope.user.id).success(function(data2) {
+		console.log(data2);
 		$scope.accesses = data2;
 	});
 	

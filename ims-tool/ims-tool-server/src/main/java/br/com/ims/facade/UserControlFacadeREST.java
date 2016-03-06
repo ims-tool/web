@@ -252,7 +252,6 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
 	    @Produces(MediaType.APPLICATION_JSON)
 	    public String findAccessByUser(@PathParam("id") Integer id) {
 	    	List<AccessByUser> listAccessByUser = new ArrayList<AccessByUser>();
-	    	System.out.println(id);
 	    	listAccessByUser = UserControlCtrl.findAccessByUser(id);
 	    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 	    	String json = "";

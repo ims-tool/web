@@ -236,13 +236,13 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		try {
 			rs = conn.ExecuteQuery(sql);
 			while(rs.next()){
-				System.out.println("Achou");
 				AccessByUser abu = new AccessByUser();
 				
 				abu.setSystem(rs.getString(1));
 				abu.setArtifact(rs.getString(2));
 				abu.setAccessType(rs.getString(3));
 				abu.setArea(rs.getString(4));
+				list.add(abu);
 				
 			}
 		} catch (Exception e) {
