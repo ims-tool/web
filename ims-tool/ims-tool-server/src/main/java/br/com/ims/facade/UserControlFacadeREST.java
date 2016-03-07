@@ -24,11 +24,13 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.com.ims.control.ServiceHourCtrl;
 import br.com.ims.control.UserControlCtrl;
+import br.com.ims.tool.entity.Access;
 import br.com.ims.tool.entity.AccessByUser;
 import br.com.ims.tool.entity.AccessType;
 import br.com.ims.tool.entity.ServiceHour;
@@ -341,7 +343,6 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println(json);
 	    	return json;
 	    }
 	  
@@ -367,8 +368,35 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println(json);
 	    	return json;
+	    }
+	  
+	  @POST
+	    @Path("addAccess")
+	    @Consumes("application/json")
+	    public String addAccess(String entity) {
+	    	
+	    	
+	    	JSONObject jsonObj = new JSONObject(entity);
+	    	String statusCode = "";
+	    	
+	    	Access access = new Access();
+	    	access.setUserid((Integer) jsonObj.get("userid"));
+	    	access.setSystem((String) jsonObj.get("system"));
+	    	access.setArtifact((String) jsonObj.get("artifact"));
+	    	access.setAccessType((String) jsonObj.get("accessType"));
+	    	JSONArray ja =(JSONArray) jsonObj.get("areaList");
+	    	for (int i = 0; i < ja.length()+1; i++) {
+	    		try {
+					access.getAreaList().add((String) ja.get(i));
+			    	
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+	    	statusCode = UserControlCtrl.saveAccess(access);
+	    	return statusCode;
 	    }
 	  
 }

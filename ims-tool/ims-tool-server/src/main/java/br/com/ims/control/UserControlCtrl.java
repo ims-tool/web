@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import br.com.ims.persistence.ServiceHourDao;
 import br.com.ims.persistence.UserControlDao;
+import br.com.ims.tool.entity.Access;
 import br.com.ims.tool.entity.AccessByUser;
 import br.com.ims.tool.entity.AccessType;
 import br.com.ims.tool.entity.ServiceHour;
@@ -75,6 +76,11 @@ public class UserControlCtrl {
 	public static List<String> findArea() {
 		UserControlDao dao = new UserControlDao();
 		return dao.findArea();
+	}
+
+	public static String saveAccess(Access access) {
+		UserControlDao dao = new UserControlDao();
+		return dao.saveAccess(access);
 	}
 
 }

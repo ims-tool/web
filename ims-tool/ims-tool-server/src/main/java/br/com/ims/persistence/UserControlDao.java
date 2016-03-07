@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import br.com.ims.tool.entity.Access;
 import br.com.ims.tool.entity.AccessByUser;
 import br.com.ims.tool.entity.User;
 import br.com.ims.tool.exception.DaoException;
@@ -331,6 +332,36 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 				}
 				
 		return accessTypes;
+	}
+
+
+
+	public String saveAccess(Access access) {
+		
+		String status = "OK";
+		for (String area : access.getAreaList()) {
+			
+			String sql = "insert into access.artifact_access_type_user (userid, artifactid, acesstypeid, areaid) values ( "+access.getUserid()+", "
+					+ "(select id from access.artifact where description = '"+access.getArtifact()+"'), "
+							+ "(select id from access.access_type where description = '"+access.getAccessType()+"'), "
+									+ "(select id from access.area where description = '"+area+"'))";
+			ResultSet rs = null;
+			ConnectionDB conn = null;
+			conn = new ConnectionDB();
+			
+			try {
+				conn.ExecuteQueryUpdate(sql);
+				
+			} catch (Exception e) {
+				status = "ERROR";
+			} finally {
+				conn.finalize();
+			}
+			
+		}
+				
+		return status;
+		
 	}
 
 	

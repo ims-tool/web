@@ -137,6 +137,7 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 	
 	var obj = JSON.parse(sessionStorage.getItem('user'));
 	$scope.user = obj;
+	$scope.userid = obj.id;
 	$scope.accesses = [];
 	$scope.showUser = true;
 	$scope.showButtonUser = false;
@@ -149,6 +150,12 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 		$scope.showUser = false;
 		$scope.showButtonUser = true;
 		$scope.systems = [];
+		$scope.access = {};
+		$scope.access.system = '';
+		$scope.access.artifact = '';
+		$scope.access.areaList = [];
+		$scope.access.accessType = '';
+		$scope.access.userid = 0;
 		$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/access/findSystem')
 		.success(function(data1) {
 			$scope.systems = data1.system;
@@ -187,7 +194,24 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 	};
 	
 	$scope.saveAccess = function(ev) {
+		
 		if($scope.areaList != null){
+			$scope.access.system = $scope.system;
+			$scope.access.artifact = $scope.artifact;
+			$scope.access.accessType = $scope.accessType;
+			$scope.access.areaList = $scope.areaList;
+			$scope.access.userid = $scope.userid;
+			
+			
+			$.ajax({
+				type : "POST",
+				data : JSON.stringify($scope.access),
+				url : 'http://'+ window.location.hostname+ ":8080/ims-tool-server/rest/access/addAccess",
+				contentType : "application/json",
+				dataType : 'json'
+			})
+
+			
 			console.log($scope.areaList);
 		}else{
 			 $mdDialog.show(
