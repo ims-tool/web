@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import br.com.ims.control.ServiceHourCtrl;
 import br.com.ims.control.UserControlCtrl;
 import br.com.ims.tool.entity.AccessByUser;
+import br.com.ims.tool.entity.AccessType;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 import br.com.ims.tool.entity.User;
@@ -248,6 +249,29 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
 	  }
 	  
 	  @GET
+	    @Path("findSystem")
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public String findSystem() {
+		  
+	    	AccessType at = new AccessType();
+	    	at.setSystem(UserControlCtrl.findSystem());
+	    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	    	String json = "";
+			try {
+				json = ow.writeValueAsString(at);
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	return json;
+	    }
+	  @GET
 	    @Path("findAccessByUser/{id}")
 	    @Produces(MediaType.APPLICATION_JSON)
 	    public String findAccessByUser(@PathParam("id") Integer id) {
@@ -270,5 +294,81 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
 	    	return json;
 	    }
 	  
-    
+	  @GET
+	    @Path("findArtifact/{system}")
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public String findArtifactBySystem(@PathParam("system") String system) {
+		  
+	    	AccessType at = new AccessType();
+	    	at.setArtifact(UserControlCtrl.findArtifactBySystem(system));
+	    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	    	String json = "";
+	    	System.out.println(json);
+			try {
+				json = ow.writeValueAsString(at);
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	return json;
+	    }
+	  
+	  @GET
+	    @Path("findAccessType")
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public String findAccessType() {
+		  
+	    	AccessType at = new AccessType();
+	    	at.setAccessType(UserControlCtrl.findAccessType());
+	    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	    	String json = "";
+	    	
+			try {
+				json = ow.writeValueAsString(at);
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(json);
+	    	return json;
+	    }
+	  
+	  @GET
+	    @Path("findArea")
+	    @Produces(MediaType.APPLICATION_JSON)
+	    public String findArea() {
+		  
+	    	AccessType at = new AccessType();
+	    	at.setArea(UserControlCtrl.findArea());
+	    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+	    	String json = "";
+	    	
+			try {
+				json = ow.writeValueAsString(at);
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(json);
+	    	return json;
+	    }
+	  
 }

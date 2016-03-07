@@ -138,10 +138,73 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 	var obj = JSON.parse(sessionStorage.getItem('user'));
 	$scope.user = obj;
 	$scope.accesses = [];
+	$scope.showUser = true;
+	$scope.showButtonUser = false;
 	$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/access/findAccessByUser/'+$scope.user.id).success(function(data2) {
 		console.log(data2);
 		$scope.accesses = data2;
 	});
+	
+	$scope.showForm = function() {
+		$scope.showUser = false;
+		$scope.showButtonUser = true;
+		$scope.systems = [];
+		$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/access/findSystem')
+		.success(function(data1) {
+			$scope.systems = data1.system;
+		});
+	};
+	
+	$scope.selectedSystem = function(){
+		$scope.artifacts = [];
+		$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/access/findArtifact/'+$scope.system)
+		.success(function(artifacts) {
+			$scope.artifacts = artifacts.artifact;
+		});
+	}
+	
+	$scope.selectedArtifact = function(){
+		$scope.accessTypes = [];
+		$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/access/findAccessType')
+		.success(function(accessTypes) {
+			$scope.accessTypes = accessTypes.accessType;
+		});
+	}
+	
+	$scope.selectedAccessType = function(){
+		$scope.areas = [];
+		$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/access/findArea')
+		.success(function(areas) {
+			$scope.areas = areas.area;
+		});
+	}
+
+	$scope.cancelForm = function() {
+		$scope.showUser = true;
+		$scope.showButtonUser = false;
+		$scope.user = '';
+
+	};
+	
+	$scope.saveAccess = function(ev) {
+		if($scope.areaList != null){
+			console.log($scope.areaList);
+		}else{
+			 $mdDialog.show(
+				      $mdDialog.alert()
+				        .parent(angular.element(document.querySelector('#popupContainer')))
+				        .clickOutsideToClose(true)
+				        .title('Impossível realizar cadastro')
+				        .textContent('Não foi possível completar o cadastro, pois não foi selecionado a área correta')
+				        .ariaLabel('Alerta acesso')
+				        .ok('OK')
+				        .targetEvent(ev)
+				    );
+		}
+
+	};
+	
+
 	
 	})				
 				

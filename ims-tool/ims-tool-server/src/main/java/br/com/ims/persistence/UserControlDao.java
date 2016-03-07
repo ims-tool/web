@@ -1,6 +1,5 @@
 package br.com.ims.persistence;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,17 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ListModel;
-
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
-import org.springframework.web.servlet.tags.ParamAware;
 
 import br.com.ims.tool.entity.AccessByUser;
-import br.com.ims.tool.entity.ServiceHour;
-import br.com.ims.tool.entity.ServiceHourType;
 import br.com.ims.tool.entity.User;
-import br.com.ims.tool.entity.UserSystemArtifactPermission;
 import br.com.ims.tool.exception.DaoException;
 import br.com.ims.tool.util.ConnectionDB;
 import br.com.ims.util.Artifact;
@@ -251,6 +244,93 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		}
 		
 		return list;
+	}
+
+	public List<String> findSystem() {
+		
+		List<String> system = new ArrayList<String>();
+		String sql = "select description from access.system";
+				ResultSet rs = null;
+				ConnectionDB conn = null;
+				conn = new ConnectionDB();
+				
+				try {
+					rs = conn.ExecuteQuery(sql);
+					while(rs.next()){
+						system.add(rs.getString(1));
+					}
+				} catch (Exception e) {
+				} finally {
+					conn.finalize();
+				}
+				
+		return system;
+	}
+
+
+
+	public List<String> findArtifactBySystem(String system) {
+		List<String> artifacts = new ArrayList<String>();
+		String sql = "select a.description from access.artifact a, access.system s where s.id = a.systemid and s.description like '"+system+"'";
+				ResultSet rs = null;
+				ConnectionDB conn = null;
+				conn = new ConnectionDB();
+				
+				try {
+					rs = conn.ExecuteQuery(sql);
+					while(rs.next()){
+						artifacts.add(rs.getString(1));
+					}
+				} catch (Exception e) {
+				} finally {
+					conn.finalize();
+				}
+				
+		return artifacts;
+	}
+	
+	public List<String> findAccessType() {
+		
+		List<String> accessTypes = new ArrayList<String>();
+		String sql = "select description from access.access_type";
+				ResultSet rs = null;
+				ConnectionDB conn = null;
+				conn = new ConnectionDB();
+				
+				try {
+					rs = conn.ExecuteQuery(sql);
+					while(rs.next()){
+						accessTypes.add(rs.getString(1));
+					}
+				} catch (Exception e) {
+				} finally {
+					conn.finalize();
+				}
+				
+		return accessTypes;
+	}
+
+
+
+	public List<String> findArea() {
+
+		List<String> accessTypes = new ArrayList<String>();
+		String sql = "select description from access.area";
+				ResultSet rs = null;
+				ConnectionDB conn = null;
+				conn = new ConnectionDB();
+				
+				try {
+					rs = conn.ExecuteQuery(sql);
+					while(rs.next()){
+						accessTypes.add(rs.getString(1));
+					}
+				} catch (Exception e) {
+				} finally {
+					conn.finalize();
+				}
+				
+		return accessTypes;
 	}
 
 	

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import br.com.ims.persistence.ServiceHourDao;
 import br.com.ims.persistence.UserControlDao;
 import br.com.ims.tool.entity.AccessByUser;
+import br.com.ims.tool.entity.AccessType;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 import br.com.ims.tool.entity.User;
@@ -54,6 +55,26 @@ public class UserControlCtrl {
 	public static List<AccessByUser> findAccessByUser(Integer id) {
 		UserControlDao dao = new UserControlDao();
 		return dao.getAccessByUser(id);
+	}
+
+	public static List<String> findSystem() {
+		UserControlDao dao = new UserControlDao();
+		return dao.findSystem();
+	}
+
+	public static List<String> findArtifactBySystem(String system) {
+		UserControlDao dao = new UserControlDao();
+		return dao.findArtifactBySystem(system);
+	}
+
+	public static List<String> findAccessType() {
+		UserControlDao dao = new UserControlDao();
+		return dao.findAccessType();
+	}
+
+	public static List<String> findArea() {
+		UserControlDao dao = new UserControlDao();
+		return dao.findArea();
 	}
 
 }
