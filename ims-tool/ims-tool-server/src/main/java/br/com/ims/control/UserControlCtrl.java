@@ -78,9 +78,13 @@ public class UserControlCtrl {
 		return dao.findArea();
 	}
 
-	public static String saveAccess(Access access) {
+	public static String saveAccess(Access access, String area) {
 		UserControlDao dao = new UserControlDao();
-		return dao.saveAccess(access);
+		return dao.saveAccess(access, area);
+	}
+
+	public static void removeAccess(Access access) {
+		UserControlDao.removeAccess(access);
 	}
 
 }

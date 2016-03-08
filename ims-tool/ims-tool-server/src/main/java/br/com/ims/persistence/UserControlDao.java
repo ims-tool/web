@@ -336,11 +336,9 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 
 
 
-	public String saveAccess(Access access) {
+	public String saveAccess(Access access, String area) {
 		
 		String status = "OK";
-		for (String area : access.getAreaList()) {
-			
 			String sql = "insert into access.artifact_access_type_user (userid, artifactid, acesstypeid, areaid) values ( "+access.getUserid()+", "
 					+ "(select id from access.artifact where description = '"+access.getArtifact()+"'), "
 							+ "(select id from access.access_type where description = '"+access.getAccessType()+"'), "
@@ -357,11 +355,32 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 			} finally {
 				conn.finalize();
 			}
-			
-		}
 				
 		return status;
 		
+	}
+
+
+
+	public static void removeAccess(Access access) {
+		
+		String sql = "delete from access.artifact_access_type_user where userid = "+access.getUserid()+" "
+				+ "and artifactid = (select id from access.artifact where description = '"+access.getArtifact()+"') "
+						+ "and acesstypeid = (select id from access.access_type where description = '"+access.getAccessType()+"') "
+								+ "and areaid = (select id from access.area where description = '"+access.getAreaList().get(0)+"')";
+								
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		conn = new ConnectionDB();
+		
+		try {
+			conn.ExecuteQueryUpdate(sql);
+			
+		} catch (Exception e) {
+			
+		} finally {
+			conn.finalize();
+		}
 	}
 
 	

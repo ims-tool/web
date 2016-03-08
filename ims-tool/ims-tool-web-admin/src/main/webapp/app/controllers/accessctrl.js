@@ -189,9 +189,38 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 	$scope.cancelForm = function() {
 		$scope.showUser = true;
 		$scope.showButtonUser = false;
-		$scope.user = '';
+		
 
 	};
+	
+
+	$scope.removeAccess = function(index) {
+
+		
+		
+		var data = $scope.accesses[index];
+		data.userid = $scope.userid;
+		
+
+		var box = confirm("Deseja realmente remover o acesso?");
+		if (box === true) {
+
+			$
+					.ajax({
+						type : "POST",
+						data : JSON.stringify(data),
+						url : 'http://'
+								+ window.location.hostname
+								+ ":8080/ims-tool-server/rest/access/removeAccess",
+						contentType : "application/json",
+						dataType : 'json'
+					})
+
+			$scope.accesses.splice(index, 1);
+		}
+	};
+
+	
 	
 	$scope.saveAccess = function(ev) {
 		
@@ -201,8 +230,6 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 			$scope.access.accessType = $scope.accessType;
 			$scope.access.areaList = $scope.areaList;
 			$scope.access.userid = $scope.userid;
-			
-			
 			$.ajax({
 				type : "POST",
 				data : JSON.stringify($scope.access),
@@ -210,9 +237,19 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 				contentType : "application/json",
 				dataType : 'json'
 			})
-
+			$scope.system = '';
+			$scope.artifact = '';
+			$scope.accessType= '';
+			$scope.areaList= '';
+			$scope.userid= '';
+			$scope.showUser = true;
+			$scope.showButtonUser = false;
+			$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/access/findAccessByUser/'+$scope.user.id).success(function(data2) {
+				console.log(data2);
+				$scope.accesses = data2;
+			});
+			$scope.refresh();
 			
-			console.log($scope.areaList);
 		}else{
 			 $mdDialog.show(
 				      $mdDialog.alert()

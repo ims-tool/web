@@ -386,17 +386,32 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
 	    	access.setArtifact((String) jsonObj.get("artifact"));
 	    	access.setAccessType((String) jsonObj.get("accessType"));
 	    	JSONArray ja =(JSONArray) jsonObj.get("areaList");
-	    	for (int i = 0; i < ja.length()+1; i++) {
+	    	for (int i = 0; i < ja.length(); i++) {
 	    		try {
 					access.getAreaList().add((String) ja.get(i));
-			    	
-
+					statusCode = UserControlCtrl.saveAccess(access, (String) ja.get(i));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-	    	statusCode = UserControlCtrl.saveAccess(access);
 	    	return statusCode;
+	    }
+	  
+	  @POST
+	    @Path("/removeAccess")
+	    @Consumes("application/json")
+	    public void removeAccess(String entity) {
+
+	    	JSONObject jsonObj = new JSONObject(entity);
+	    	Access access = new Access();
+	    	access.setUserid((Integer) jsonObj.get("userid"));
+	    	access.setSystem((String) jsonObj.get("system"));
+	    	access.setArtifact((String) jsonObj.get("artifact"));
+	    	access.setAccessType((String) jsonObj.get("accessType"));
+	    	access.getAreaList().add((String) jsonObj.get("area"));
+	    	
+	    	UserControlCtrl.removeAccess(access);
+	    	
 	    }
 	  
 }
