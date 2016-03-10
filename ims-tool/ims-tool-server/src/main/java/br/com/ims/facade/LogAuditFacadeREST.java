@@ -52,7 +52,8 @@ public class LogAuditFacadeREST  {
     	logAudit.setDescription((String) jsonObj.get("description"));
     	logAudit.setOriginalValue((String) jsonObj.get("description"));
     	logAudit.setTypeid((Integer) jsonObj.get("typeid"));
-    	logAudit.setUserid((Integer) jsonObj.get("userid"));
+    	logAudit.setUserLogin((String) jsonObj.get("userLogin"));
+//    	logAudit.setUserid((Integer) jsonObj.get("userid"));
     	LogAuditCtrl.saveLog(logAudit);
     }
 

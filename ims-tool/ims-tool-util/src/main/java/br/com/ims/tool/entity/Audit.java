@@ -13,6 +13,7 @@ public class Audit {
 	private Integer userid;
 	private Integer typeid;
 	private Date rowdate;
+	private String userLogin;
 	private String description;
 	private String artifact;
 	private String originalValue;
@@ -58,5 +59,13 @@ public class Audit {
 	public void setOriginalValue(String originalValue) {
 		this.originalValue = originalValue;
 	}
+	public String getUserLogin() {
+		return userLogin;
+	}
+	public void setUserLogin(String userLogin) {
+		this.userLogin = userLogin;
+	}
+	
+	
 }
 

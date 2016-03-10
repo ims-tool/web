@@ -1,4 +1,5 @@
-
+var logAudit = '';
+		    		
 app.controller('HomeCtrl', function($rootScope, $location) {
 	$rootScope.activetab = $location.path();
 });
@@ -119,6 +120,20 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    	}else{
 		    		localStorage.setItem("login", user.login);
 		    		localStorage.setItem("artifact", JSON.stringify(data.artifact));
+		    		
+		    		logaudit.userLogin = user.login;
+		    		logaudit.typeid = 4;
+		    		logaudit.description = 'login web admin';
+		    		logaudit.artifact = 'ims-tool-web-admin';
+		    		
+		    		
+		    		$.ajax({
+						type : "POST",
+						data : JSON.stringify(data),
+						url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/logaudit/set",
+						contentType : "application/json",
+						dataType : 'json'
+					});
 		    		window.location.href = '../ims-tool-web-admin/';
 		    		
 		    	}
