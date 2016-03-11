@@ -1,4 +1,4 @@
-var logAudit = '';
+
 		    		
 app.controller('HomeCtrl', function($rootScope, $location) {
 	$rootScope.activetab = $location.path();
@@ -120,7 +120,7 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    	}else{
 		    		localStorage.setItem("login", user.login);
 		    		localStorage.setItem("artifact", JSON.stringify(data.artifact));
-		    		
+		    		var logaudit = '';
 		    		logaudit.userLogin = user.login;
 		    		logaudit.typeid = 4;
 		    		logaudit.description = 'login web admin';
@@ -132,9 +132,11 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 						data : JSON.stringify(data),
 						url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/logaudit/set",
 						contentType : "application/json",
-						dataType : 'json'
+						dataType : 'json',
+						'success': function(data){
+							window.location.href = '../ims-tool-web-admin/';
+						}
 					});
-		    		window.location.href = '../ims-tool-web-admin/';
 		    		
 		    	}
 		    }

@@ -33,9 +33,13 @@ import br.com.ims.tool.entity.ServiceHourType;
  */
 @Stateless
 @Path("logaudit")
-public class LogAuditFacadeREST  {
+public class LogAuditFacadeREST extends AbstractFacade<Audit> {
     @PersistenceContext(unitName = "ivrPersistence")
     private EntityManager em;
+
+    public LogAuditFacadeREST() {
+        super(Audit.class);
+    }
 
 
     @POST
@@ -47,7 +51,7 @@ public class LogAuditFacadeREST  {
     	JSONObject jsonObj = new JSONObject(entity);
     	
     	Audit logAudit = new Audit(); 
-    	
+    	System.out.println("teste");
     	logAudit.setArtifact((String) jsonObj.get("artifact"));
     	logAudit.setDescription((String) jsonObj.get("description"));
     	logAudit.setOriginalValue((String) jsonObj.get("description"));
@@ -56,6 +60,13 @@ public class LogAuditFacadeREST  {
 //    	logAudit.setUserid((Integer) jsonObj.get("userid"));
     	LogAuditCtrl.saveLog(logAudit);
     }
+
+
+	@Override
+	protected EntityManager getEntityManager() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
         
 }
