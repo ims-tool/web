@@ -17,6 +17,23 @@ public class Audit {
 	private String description;
 	private String artifact;
 	private String originalValue;
+	private Integer artifactid;
+	private Integer valueid;
+	
+	
+	
+	public Integer getArtifactid() {
+		return artifactid;
+	}
+	public void setArtifactid(Integer artifactid) {
+		this.artifactid = artifactid;
+	}
+	public Integer getValueid() {
+		return valueid;
+	}
+	public void setValueid(Integer valueid) {
+		this.valueid = valueid;
+	}
 	public Integer getId() {
 		return id;
 	}

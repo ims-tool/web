@@ -123,6 +123,7 @@ public class ConnectionDB {
 					ResultSet.CONCUR_READ_ONLY);
 			stmt.executeQuery(sql);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return rs;
 	}

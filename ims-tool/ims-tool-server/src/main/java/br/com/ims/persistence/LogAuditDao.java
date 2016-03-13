@@ -18,9 +18,9 @@ private static Logger logger = Logger.getLogger(LogAuditDao.class);
 		ConnectionDB conn = null;
 		try {
 			conn = new ConnectionDB();
-			String query = "insert into log.audict (id, rowdate, typeid, userid, description, artifact, originalValue) values"
-					+ "(nextval('serial'), current_timestamp, "+logAudit.getTypeid()+", (select id from access.user where login = '"+logAudit.getUserLogin()+"'), "
-							+ " '"+logAudit.getDescription()+"', '"+logAudit.getArtifact()+"', '"+ logAudit.getOriginalValue()+"')";
+			String query = "insert into log.audit (id, rowdate, typeid, userid, description, artifact, original_value, valueid, artifactid) values"
+					+ "(nextval('serial'),  CURRENT_TIMESTAMP(2), "+logAudit.getTypeid()+", (select id from access.user where login = '"+logAudit.getUserLogin()+"'), "
+							+ " '"+logAudit.getDescription()+"', '"+logAudit.getArtifact()+"', '"+ logAudit.getOriginalValue()+"', "+logAudit.getValueid()+", "+logAudit.getArtifactid()+")";
 			
 			conn.ExecuteQueryUpdate(query);
 			

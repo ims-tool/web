@@ -47,6 +47,7 @@ app.controller(
 							$scope.showUser = true;
 							$scope.showButtonUser = false;
 							$scope.user = '';
+							setLog(3, 'add login web admin', 'ims-tool-web-admin', user.login, 0, 0);
 							$http
 									.get(
 											'http://'
@@ -91,7 +92,7 @@ app.controller(
 										contentType : "application/json",
 										dataType : 'json'
 									})
-
+							setLog(2, 'add login web admin', 'ims-tool-web-admin', data.login, 0, data.id);		
 							$scope.users.splice(index, 1);
 						}
 					};
@@ -125,6 +126,7 @@ app.controller(
 						$scope.user.pw2 = data.password;
 						$scope.showUser = false;
 						$scope.showButtonUser = true;
+						setLog(1, 'add login web admin', 'ims-tool-web-admin', data.login, 0, data.id);
 
 					};
 					$scope.showConfirm = function(ev) {
@@ -217,6 +219,7 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 					})
 
 			$scope.accesses.splice(index, 1);
+			setLog(2, 'remove login access', 'ims-tool-web-admin', data.login, 0, data.id);
 		}
 	};
 
@@ -249,7 +252,7 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 				$scope.accesses = data2;
 			});
 			$scope.refresh();
-			
+			setLog(3, 'add access', 'ims-tool-web-admin', data.login, 0, data.id);
 		}else{
 			 $mdDialog.show(
 				      $mdDialog.alert()
@@ -279,4 +282,15 @@ function DialogController($scope, $mdDialog) {
 	$scope.answer = function(answer) {
 		$mdDialog.hide(answer);
 	};
+}
+
+function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, pvalueid){
+	var logaudit = {userLogin: localStorage.getItem('login'), typeid: ptypeid, description : pdescription, artifact: partifact, originalvalue: poriginalvalue, valueid : pvalueid, artifactid : partifactid};
+	$.ajax({
+		type : "POST",
+		data : JSON.stringify(logaudit),
+		url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/logaudit/set",
+		contentType : "application/json",
+		dataType : 'json'
+	});
 }

@@ -38,16 +38,19 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 								contentType : "application/json",
 								dataType : 'json'
 							});
+					setLog(1, 'hour admin', 'ims-tool-web-admin', localStorage.getItem('oldhour'), 2 ,hour.id);
 				}
-			};   
+			};
+			
+			$scope.setOldHour = function(hour) {
+				localStorage.setItem("oldhour", hour.starthour +' | '+ hour.stophour);
+			};
 
 	
 	
 });
 
-app.controller(
-				'FlagCtrl',
-				function($rootScope, $location, $scope, $http) {
+app.controller('FlagCtrl',function($rootScope, $location, $scope, $http) {
 					$rootScope.activetab = $location.path();
 
 					$scope.parameters = []; // declare an empty array
@@ -60,9 +63,8 @@ app.controller(
 					// callback for ng-click 'editUser':
 					$scope.editParameters = function(parameterid) {
 
-						window.location
-								.replace("/ims-tool-web-admin/admin/parameter/edit.html?id="
-										+ parameterid);
+						window.location.replace("/ims-tool-web-admin/admin/parameter/edit.html?id="+ parameterid);
+						
 					};
 					// callback for ng-click 'deleteUser':
 					$scope.deleteUser = function(userId) {
@@ -82,6 +84,7 @@ app.controller(
 										contentType : "application/json",
 										dataType : 'json'
 									});
+							setLog(1, 'flag admin', 'ims-tool-web-admin', parameter.value, 1 ,parameter.id);
 						}
 					};
 				});
@@ -120,29 +123,22 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    	}else{
 		    		localStorage.setItem("login", user.login);
 		    		localStorage.setItem("artifact", JSON.stringify(data.artifact));
-		    		var logaudit = '';
-		    		logaudit.userLogin = user.login;
-		    		logaudit.typeid = 4;
-		    		logaudit.description = 'login web admin';
-		    		logaudit.artifact = 'ims-tool-web-admin';
 		    		
-		    		
-		    		$.ajax({
-						type : "POST",
-						data : JSON.stringify(data),
-						url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/logaudit/set",
-						contentType : "application/json",
-						dataType : 'json',
-						'success': function(data){
-							window.location.href = '../ims-tool-web-admin/';
-						}
-					});
-		    		
+		    		setLog(4, 'login web admin', 'ims-tool-web-admin', 'nc', 0, 0)
+		    		window.location.href = '../ims-tool-web-admin/';
 		    	}
 		    }
 		    });
-		
-		
-		
 	};
 });
+
+function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, pvalueid){
+	var logaudit = {userLogin: localStorage.getItem('login'), typeid: ptypeid, description : pdescription, artifact: partifact, originalvalue: poriginalvalue, valueid : pvalueid, artifactid : partifactid};
+	$.ajax({
+		type : "POST",
+		data : JSON.stringify(logaudit),
+		url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/logaudit/set",
+		contentType : "application/json",
+		dataType : 'json'
+	});
+}

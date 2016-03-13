@@ -38,7 +38,7 @@
 							</td>
 							<td>{{hour.type}}</td>
 							<td>
-								<a href="#" editable-text="hour.starthour"onaftersave="changeHour(hour)">{{ hour.starthour || "empty"}}</a>
+								<a href="#" editable-text="hour.starthour"onaftersave="changeHour(hour)" onbeforesave="setOldHour(hour)">{{ hour.starthour || "empty"}}</a>
 							</td>
 							<td>
 								<a href="#" editable-text="hour.stophour" onaftersave="changeHour(hour)">{{ hour.stophour || "empty"}}</a> 

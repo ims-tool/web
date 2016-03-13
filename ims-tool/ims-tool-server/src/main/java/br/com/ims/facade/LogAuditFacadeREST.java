@@ -51,13 +51,14 @@ public class LogAuditFacadeREST extends AbstractFacade<Audit> {
     	JSONObject jsonObj = new JSONObject(entity);
     	
     	Audit logAudit = new Audit(); 
-    	System.out.println("teste");
     	logAudit.setArtifact((String) jsonObj.get("artifact"));
     	logAudit.setDescription((String) jsonObj.get("description"));
     	logAudit.setOriginalValue((String) jsonObj.get("description"));
     	logAudit.setTypeid((Integer) jsonObj.get("typeid"));
     	logAudit.setUserLogin((String) jsonObj.get("userLogin"));
-//    	logAudit.setUserid((Integer) jsonObj.get("userid"));
+    	logAudit.setOriginalValue((String) jsonObj.get("originalvalue"));
+    	logAudit.setArtifactid((Integer) jsonObj.get("artifactid"));
+    	logAudit.setValueid((Integer) jsonObj.get("valueid"));
     	LogAuditCtrl.saveLog(logAudit);
     }
 
