@@ -219,7 +219,7 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 					})
 
 			$scope.accesses.splice(index, 1);
-			setLog(2, 'remove login access', 'ims-tool-web-admin', data.login, 0, data.id);
+			setLog(2, 'remove login access', 'ims-tool-web-admin', 'nc', 0, data.id);
 		}
 	};
 
@@ -252,7 +252,7 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 				$scope.accesses = data2;
 			});
 			$scope.refresh();
-			setLog(3, 'add access', 'ims-tool-web-admin', data.login, 0, data.id);
+			setLog(3, 'add access', 'ims-tool-web-admin', 'nc', 0, 0);
 		}else{
 			 $mdDialog.show(
 				      $mdDialog.alert()
