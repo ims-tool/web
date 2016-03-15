@@ -89,6 +89,31 @@ function deleteElement(node_id) {
 			
 }
 
+function onAudioTypeChange() {
+	
+	
+	if(document.getElementById("formAuxiliar:complement_audio_type_input").value=="WAV" ||
+			document.getElementById("formAuxiliar:complement_audio_type_input").value=="TTS") {
+		document.getElementById("formAuxiliar:div_type_wav").style.visibility = "visible";
+		document.getElementById("formAuxiliar:div_type_v_wav").style.visibility = "hidden";
+		document.getElementById("formAuxiliar:div_type_var").style.visibility = "hidden";
+	} else if (document.getElementById("formAuxiliar:complement_audio_type_input").value=="V_WAV") {
+		document.getElementById("formAuxiliar:div_type_wav").style.visibility = "hidden";
+		document.getElementById("formAuxiliar:div_type_v_wav").style.visibility = "visible";
+		document.getElementById("formAuxiliar:div_type_var").style.visibility = "hidden";
+	} else {
+		//$("formAuxiliar:div_type_wav").hide();
+		//$("formAuxiliar:div_type_v_wav").hide();
+		//$("formAuxiliar:div_type_var").show();
+		alert(document.getElementById("formAuxiliar:complement_audio_type_input").value+"->ELSE");
+		document.getElementById("formAuxiliar:div_type_wav").style.display = "none";
+		document.getElementById("formAuxiliar:div_type_v_wav").style.display = "none";
+		document.getElementById("formAuxiliar:div_type_var").style.display = "inline";
+	}
+	
+			
+}
+
 $(document).ready(function(){
 	
 	context.init({preventDoubleContext: false});

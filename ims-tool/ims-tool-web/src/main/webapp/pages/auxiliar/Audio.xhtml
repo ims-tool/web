@@ -36,7 +36,7 @@
 				<h3>#{audioEditorView.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
 			</h:panelGrid>
 				
-			<h:panelGrid cellpadding="5">
+			<h:panelGrid cellpadding="5" id="panelGrid_audio">
 				
 				<h:outputLabel id="label_complement_audio_id" for="complement_audio_id" value="ID:" />
 	            <p:inputText id="complement_audio_id" value="#{audioEditorView.audio.id}" readonly="true" label="label_complement_audio_id" />
@@ -44,12 +44,17 @@
 	            <h:outputLabel id="label_complement_audio_type" for="complement_audio_type" value="TYPE:" />
 	            <p:selectOneMenu value="#{audioEditorView.audio.type}" 
 	 			                 id="complement_audio_type" 
-	 			                 label="label_complement_audio_type">
+	 			                 label="label_complement_audio_type" >
 	 				<f:selectItem itemLabel="WAV" itemValue="WAV" />
 	 				<f:selectItem itemLabel="V_WAV" itemValue="V_WAV" />
-	 				<f:selectItem itemLabel="TTS" itemValue="TTS" />
-	 				<f:selectItem itemLabel="VAR" itemValue="VAR" />	 				
+	 				<f:selectItem itemLabel="TTS" itemValue="TTS" />""
+	 				<f:selectItem itemLabel="VAR" itemValue="VAR" />	
+	 				
+	 				<p:ajax update="formAuxiliar:panelGrid_audio" listener="#{audioEditorView.typeChange}" />
 	 			</p:selectOneMenu>
+	 		</h:panelGrid>
+	 		
+	 		<h:panelGrid cellpadding="5" id="TYPE_WAV"   >
 	 
 	            <h:outputLabel id="label_complement_audio_name" for="complement_audio_name" value="Name:" />
 	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" required="true" requiredMessage="Please,inform a Name" label="label_complement_audio_name" />
@@ -64,9 +69,15 @@
 	            <f:facet name="footer">
 	                <p:commandButton value="Save" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="formAuxiliar,formComplement" actionListener="#{audioEditorView.save}"/>
 	            </f:facet>  	           
-	        </h:panelGrid>	
+	        </h:panelGrid>
+	       
 	        <p:separator />
-	        <p:panel id="panelPromptAudios" header="Audios Registered" style="margin-bottom:20px">
+	        
+	         <f:facet name="footer">
+	                <p:commandButton value="Save" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="formAuxiliar,formComplement" actionListener="#{audioEditorView.save}"/>
+	         </f:facet>	
+	        
+	        <p:panel id="panelPromptAudios" header="Audios Registered" style="margin-bottom:20px" >
  				<p:dataTable  scrollable="true" scrollHeight="300" var="a" value="#{audioEditorView.audios}">
 			        <p:column headerText="ID" >
 			            <h:outputText value="#{a.id}" />

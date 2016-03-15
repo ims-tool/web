@@ -99,6 +99,29 @@ public class AudioEditorBean extends AbstractBean {
 		}
 		
     }
+	public void typeChange() {
+		System.out.println(audio.getType());
+		/**
+		 * fazer o esquema de reconhecer variavel
+		 * 
+		 * Tipos: paramname | paramvalue
+		 * currencytype | reaiscentavos
+		 * datefmt | wdmy
+		 * datefmt | dmy
+		 * datefmt | dm
+	     * formatname | currency
+	     * formatname | tts
+		 * formatname | number
+	     * formatname | time
+		 * formatname | digits-500ms
+	     * formatname | date
+		 * gender | masculine
+	     * inflection | falling
+		 * timetype | 24
+ | 
+
+		 */
+	}
 
 	@Override
 	public void update(ActionEvent event) {
