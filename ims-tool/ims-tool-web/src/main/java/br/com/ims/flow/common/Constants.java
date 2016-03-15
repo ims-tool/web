@@ -13,6 +13,7 @@ public class Constants {
 	public final static String FORM_TYPE_OPERATION = "Operation";
 	public final static String FORM_TYPE_TRANSFER = "Transfer";
 	public final static String FORM_TYPE_DISCONNECT = "Disconnect";
+	public final static String FORM_TYPE_RETURN = "Return";
 	public final static String FORM_TYPE_FLOW_INTERNAL = "FlowInternal";
 	public final static String FORM_TYPE_THREAD = "Thread";
 	public final static String FORM_TYPE_CONDITION = "Condition";

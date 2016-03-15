@@ -8,7 +8,6 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
-import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AnswerEntity;
 import br.com.ims.flow.model.FormEntity;
@@ -51,6 +50,8 @@ public class AnswerEditorBean extends AbstractBean {
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Answer",this.answer.getName()+" - Updated!");
 		 
 		ServicesFactory.getInstance().getIvrEditorService().getBean().setEditing(true);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().updateTabFlowName(this.answer.getName());
+		
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 				
 		logicalFlow.validateNodes();

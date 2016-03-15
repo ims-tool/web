@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			<ui:param name="bean" value="#{versionEditorView}" />
+			
+			<p:growl id="msg" showDetail="true" />	
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+				h3 { 
+				    display: block;
+				    font-size: 1.0em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/version.png"  width="60px" height="60px"   />
+				
+				<h2>Version</h2>
+				<h3> - You have to associate the Version to save changes</h3>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				
+				
+				<h:outputLabel id="label_version_id" for="version_id" value="ID:" />
+	            <p:inputText id="version_id" value="#{bean.version.id}" readonly="true" label="label_version_id" />
+	            
+	            <h:outputLabel id="label_version_user" for="version_user" value="USER:" />
+	            <p:inputText id="version_user" value="#{bean.version.system_user}" readonly="true" label="label_version_user" />
+	 
+	            <h:outputLabel id="label_version_description" for="version_description" value="DESCRIPTION:" />
+	            <p:inputTextarea id="version_description" value="#{bean.version.description}" required="true" requiredMessage="Please,inform a Description" label="label_version_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	
+	 			<f:facet name="footer">
+	                <p:commandButton value="New" 
+	                                 oncomplete="handleAdminSaveRequest(xhr, status, args)" 
+	                                 update="formAdmin,formFlow" 
+	                                 immediate="true"
+	                                 actionListener="#{bean.init}" />
+
+	                <p:commandButton value="Save" oncomplete="handleAdminSaveRequest(xhr, status, args)" update="formAdmin,formFlow" actionListener="#{bean.save}">
+	                	<p:confirm header="Confirmation" message="Are you sure? After you save, you won't be able to update or delete." icon="ui-icon-alert" />
+	                </p:commandButton>	
+	            </f:facet>  
+	        </h:panelGrid>
+	        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		    </p:confirmDialog>
+	        <p:separator />
+	        
+	        <p:panel id="panelVersionRegistered" header="Versions Registered" style="margin-bottom:20px">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="v" value="#{bean.versions}">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{v.id}" />
+			        </p:column>
+			        
+			        <p:column headerText="USER" filterBy="#{v.system_user}" filterMatchMode="contains">
+			            <h:outputText value="#{v.system_user}" />
+			        </p:column>
+			        <p:column headerText="DATE" filterBy="#{v.getDateCreateString()}" filterMatchMode="contains">
+			            <h:outputText value="#{v.getDateCreateString()}" />
+			        </p:column>
+			        <p:column headerText="DESCRIPTION" filterBy="#{v.description}" filterMatchMode="contains">
+			            <h:outputText value="#{v.description}" />
+			        </p:column>
+			        <p:column headerText="ALTERED ITEMS" >
+			            <h:outputText rendered="#{bean.isUsed(v.id) eq false}" value="Empty" />
+			            <p:commandButton rendered="#{bean.isUsed(v.id)}" icon="ui-icon-search" title="View" />
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             <p:commandButton icon="ui-icon-check" 
+			             					title="Select" 
+			             					immediate="true"
+			             					oncomplete="handleAdminSaveRequest(xhr, status, args)" 
+			             					update="formAdmin,formFlow" actionListener="#{bean.select(v.id)}"/>			                
+			        </p:column>
+				</p:dataTable>
+			</p:panel>	        	        
+	
+				
+</ui:composition>
+

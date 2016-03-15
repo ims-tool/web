@@ -20,8 +20,8 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 		return DAOFactory.getInstance().getConditionMapDAO().get(id);
 	}
 	
-	public void save(ConditionMapEntity entity) {
-		DAOFactory.getInstance().getConditionMapDAO().save(entity);
+	public boolean save(ConditionMapEntity entity) {
+		return DAOFactory.getInstance().getConditionMapDAO().save(entity);
 	}
 
 	@Override
@@ -43,14 +43,15 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 	}
 
 	@Override
-	public void update(ConditionMapEntity object) {
+	public boolean update(ConditionMapEntity entity) {
 		// TODO Auto-generated method stub
-		
+		return DAOFactory.getInstance().getConditionMapDAO().update(entity);
 	}
 
 	@Override
-	public void delete(ConditionMapEntity object) {
+	public boolean delete(ConditionMapEntity entity) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getConditionMapDAO().update(entity);
 		
 	}
 

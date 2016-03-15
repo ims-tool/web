@@ -10,6 +10,7 @@ import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.AnnounceEntity;
 import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.DecisionEntity;
+import br.com.ims.flow.model.FlowEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.MenuEntity;
 import br.com.ims.flow.model.OperationEntity;
@@ -21,9 +22,9 @@ public class LogicalFlow {
 	private int minSizeHeight = 70;
 	private int sizeWidth = 70;
 	private int sizeHeight = 70;
-	private int distanceX = 10;
-	private int distanceY = 10;
-	private int sizePercentage = 100;
+	private int distanceX = 20;
+	private int distanceY = 20;
+	//private int sizePercentage = 100;
 	
 	private List<Node> listNode = new ArrayList<Node>();
 	private List<Node> listFirstNode = new ArrayList<Node>();
@@ -60,6 +61,14 @@ public class LogicalFlow {
 	public void delNode(Element element) {
 		Node node = getNode(element);
 		
+		disconnectAll(element);
+		
+		listNode.remove(node);
+		listFirstNode.remove(node);
+	}
+	public void delNode(FormEntity form) {
+		Node node = getNode(form);
+		Element element = node.getElement();
 		disconnectAll(element);
 		
 		listNode.remove(node);
@@ -123,7 +132,15 @@ public class LogicalFlow {
 	    ((AbstractFormEntity)formId).setNextForm(null);
 		
 	}
-	
+	public boolean existsStart() {
+		for(Node nodeAux : listNode) {
+			FormEntity formAux = (FormEntity)nodeAux.getElement().getData();
+			if(formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_ANSWER)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public void validateNodes() {
 		for(Node node : listNode) {
@@ -149,7 +166,9 @@ public class LogicalFlow {
 				if(formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_ANSWER)) {
 					startFlow++;
 				}
-				if(formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_DISCONNECT)) {
+				if(formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_DISCONNECT) ||
+						formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_TRANSFER) ||
+						formAux.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_RETURN)) {
 					stopFlow = true;
 				}
 			}
@@ -180,7 +199,7 @@ public class LogicalFlow {
 			
 			if(!stopFlow) {
 				form.setFormError(true);
-				form.setErrorDescription("You have to finish the flow with the node type 'Disconnect' or 'Transfer'");
+				form.setErrorDescription("You have to finish the flow with the node type 'Disconnect', 'Transfer' or 'Return'");
 				continue;
 			}
 				
@@ -209,7 +228,18 @@ public class LogicalFlow {
 		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_TRANSFER)) {
 			return validadeFormTransfer(form);
 		}
+		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_FLOW)) {
+			return validadeFormFlow(form);
+		}
 		return false;
+	}
+	private boolean validadeFormFlow(FormEntity form) {
+		FlowEntity flow = (FlowEntity)form.getFormId();
+		if(flow.getFlowName() == null || flow.getFlowName().length() == 0) {
+			form.setFormError(true);
+			form.setErrorDescription("Flow Name is missing");
+		}
+		return form.isFormError();
 	}
 	private boolean validadeFormTransfer(FormEntity form) {
 		TransferEntity transfer = (TransferEntity)form.getFormId();
@@ -318,8 +348,41 @@ public class LogicalFlow {
 		}
 		return form.isFormError();
 	}
-	public void align() {
+	public void resize() {
 		
+		/**
+		 * Aumentando dinamicamente o tamanho do painel de trabalho
+		 */
+		int maiorX = 0;
+		int maiorY = 0;
+		for(Node node : listFirstNode) {
+			if(node.getPositionX() > maiorX) {
+				maiorX = node.getPositionX();
+			}
+			if(node.getPositionY() > maiorY) {
+				maiorY = node.getPositionY();
+			}			
+		}
+		
+		if((maiorY + distanceY) > sizeHeight ) {
+			sizeHeight = maiorY + distanceY;
+		} else if((maiorY + distanceY) < minSizeHeight) {
+			sizeHeight = minSizeHeight;
+		}
+		
+		if((maiorX + distanceX) > sizeWidth ) {
+			sizeWidth = maiorX + distanceX;
+		} else if((maiorX + distanceX) < minSizeWidth) {
+			sizeWidth = minSizeWidth;
+		}
+	}
+	/**
+	public void align() {
+				
+		
+		 *  ignorando o código pois só estou pegando a posição
+		 *  do nó na tela, não vou ordenar automaticamente neste momento
+		 * - Quando for ordenar automaticamente, o codigo deverá ser corrigido
 		
 		
 		alingElementAlone();
@@ -392,8 +455,8 @@ public class LogicalFlow {
 		
 		
 		
-	}
-	private void alingLayerY(Node node, int indexLayerY) {
+	}*/
+	/*private void alingLayerY(Node node, int indexLayerY) {
 		if(node.getIndexLayerY() <= indexLayerY) {
 			node.setIndexLayerY(indexLayerY);
 			node.setPositionY(indexLayerY * distanceY);
@@ -405,17 +468,17 @@ public class LogicalFlow {
 		
 		
 		
-	}
-	private int countLayerY(Node node, int countY) {
+	}*/
+	/*private int countLayerY(Node node, int countY) {
 		
 		for(Node subNode : node.getListTarget()) {
 				alingLayerY(subNode, countY+1);
 		}
 		
 		return countY;
-	}
+	}*/
 	
-	private int countLayerX(Node node,int countX ) {
+	/*private int countLayerX(Node node,int countX ) {
 		if(node.getListTarget().size() > 0) {
 			int countLayerActual = node.getListTarget().size();
 			int countNextLayer = 0;
@@ -433,8 +496,9 @@ public class LogicalFlow {
 		}                                           
 		return countX;
 		
-	}
-	private void alingLayerX(Node before, Node node, int posX) {
+	}*/
+	/*private void alingLayerX(Node before, Node node, int posX) {
+
 		if(before == null) {
 			node.setIndexLayerX(posX);
 			node.setPositionX(sizeWidth/2);
@@ -494,7 +558,7 @@ public class LogicalFlow {
 							}
 						}
 					}
-					node.setPosX(sumPosX/countSumPosX);*/
+					node.setPosX(sumPosX/countSumPosX);*
 			
 					
 					
@@ -506,11 +570,16 @@ public class LogicalFlow {
 		}
 	
 		
-	}
+	}*/
 	
 	public void alingElementAlone() {
 		
-		int countElementAlone=0;
+	
+		/**
+		 *  ignorando o código pois só estou pegando a posição
+		 *  do nó na tela, não vou ordenar automaticamente neste momento
+		 * - Quando for ordenar automaticamente, o codigo deverá ser corrigido
+		
 		for(Node node: listFirstNode) {
 			if(node.getListSource().size() == 0) {				
 				if((countElementAlone * distanceY) > sizeWidth) {
@@ -525,7 +594,7 @@ public class LogicalFlow {
 			} 
 			
 		}
-		
+		*/
 		
 	}
 	public void alingMenuChoices(Element element) {

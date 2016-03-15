@@ -19,12 +19,12 @@ public class TagService extends AbstractEntityService<TagEntity>{
 		return DAOFactory.getInstance().getTagDAO().get(id);
 	}
 	
-	public void save(TagEntity tag) {
-		DAOFactory.getInstance().getTagDAO().save(tag);
+	public boolean save(TagEntity tag) {
+		return DAOFactory.getInstance().getTagDAO().save(tag);
 	}
 	
-	public void update(TagEntity tag) {
-		DAOFactory.getInstance().getTagDAO().update(tag);
+	public boolean update(TagEntity tag) {
+		return DAOFactory.getInstance().getTagDAO().update(tag);
 	}
 
 	@Override
@@ -41,8 +41,9 @@ public class TagService extends AbstractEntityService<TagEntity>{
 	}
 
 	@Override
-	public void delete(TagEntity object) {
+	public boolean delete(TagEntity object) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getTagDAO().delete(object);
 		
 	}
 

@@ -38,20 +38,22 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 		}
 		return null;
 	}
-	public void save(GrammarEntity entity) {
+	public boolean save(GrammarEntity entity) {
 		this.listGrammar.add(entity);
+		return true;
 	}
 
 	@Override
-	public void update(GrammarEntity entity) {
+	public boolean update(GrammarEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 
 	@Override
-	public void delete(GrammarEntity entity) {
+	public boolean delete(GrammarEntity entity) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	

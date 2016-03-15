@@ -52,7 +52,7 @@ public abstract class AbstractBean implements Serializable {
 
 	public void init() {
 		this.form = ServicesFactory.getInstance().getIvrEditorService().getForm();
-    	this.logicalFlow = ServicesFactory.getInstance().getIvrEditorService().getFlow();
+    	this.logicalFlow = ServicesFactory.getInstance().getIvrEditorService().getBean().getLogicalFlow();
 	}
 	protected void collect() {
 		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_name") != null)

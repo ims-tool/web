@@ -65,7 +65,7 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "flow.png");
 		formType.setImagePathError(Constants.ICON_FLOW_PATH + "flow_error.png");
 		formType.setAllowInput(1);
-		formType.setAllowOutput(0);
+		formType.setAllowOutput(1);
 		formType.setMandatoryInput(0);
 		formType.setMandatoryOutput(1);
 		result.add(formType);
@@ -188,20 +188,23 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 	}
 
 	@Override
-	public void save(FormTypeEntity entity) {
+	public boolean save(FormTypeEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 
 	@Override
-	public void update(FormTypeEntity entity) {
+	public boolean update(FormTypeEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 
 	@Override
-	public void delete(FormTypeEntity entity) {
+	public boolean delete(FormTypeEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 

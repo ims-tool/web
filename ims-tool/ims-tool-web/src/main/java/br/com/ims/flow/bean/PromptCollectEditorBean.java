@@ -12,7 +12,6 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.diagram.Element;
 
 import br.com.ims.flow.common.Constants;
-import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
@@ -202,6 +201,8 @@ public class PromptCollectEditorBean extends AbstractBean {
 		formNoInput.setDescription(noInput.getDescription());
 		formNoInput.setName(noInput.getName());
 		formNoInput.setFormType(formType);
+		formNoInput.setPositionX(this.form.getPositionX());
+		formNoInput.setPositionY(this.form.getPositionY());
 		
 		String imgPath = formType.getImagePathSuccess();
 		formType.setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
@@ -211,6 +212,8 @@ public class PromptCollectEditorBean extends AbstractBean {
 		
 		
 		Element element = new Element(formNoInput);
+		element.setX(formNoInput.getPositionX());
+		element.setY(formNoInput.getPositionY());
 		
 		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 		
@@ -285,7 +288,7 @@ public class PromptCollectEditorBean extends AbstractBean {
 		
 		
 		logicalFlow.validateNodes();
-		logicalFlow.align();
+		//logicalFlow.align();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean saved = true;

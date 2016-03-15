@@ -12,79 +12,8 @@
 	
 	<ui:composition template="/pages/template/mainTemplate.xhtml">
 		<ui:define name="conteudo">
-	
-				
-			<script type="text/javascript">
-			    function handleDrop(event, ui) {
-			        var droppedFormType = ui.draggable;			 
-			        droppedFormType.fadeOut('fast');
-			    }
-			    function selectElement(elementId) {
-					document.getElementById('formFlow:elementId').value = elementId;
-					document.getElementById('formFlow:buttonElementSelected').click();
-					
-				} 			   
-				function handleFormUpdateRequest(xhr, status, args) {		        						       
-			        if(!args.validationFailed) {				        	
-			        	if(args.saved == true) {
-			            	PF('settingFormDlg').hide();
-			            }
-			            	
-			        }			        
-				} 
-				function handleComplementSaveRequest(xhr, status, args) {		        						       
-			        if(!args.validationFailed) {				        	
-			        	if(args.saved == true) {
-			            	PF('settingComplementDlg').hide();
-			            }
-			            	
-			        }			        
-				}
-				
-				function handleAuxiliarSaveRequest(xhr, status, args) {		        						       
-			        if(!args.validationFailed) {				        	
-			        	if(args.saved == true) {
-			            	PF('settingAuxiliarDlg').hide();
-			            }
-			            	
-			        }			        
-				}
-				function handleUtilSaveRequest(xhr, status, args) {		        						       
-			        if(!args.validationFailed) {				        	
-			        	if(args.saved == true) {
-			            	PF('settingUtilDlg').hide();
-			            }
-			            	
-			        }			        
-				}
-				function handleOtherSaveRequest(xhr, status, args) {		        						       
-			        if(!args.validationFailed) {				        	
-			        	if(args.saved == true) {
-			            	PF('settingOtherDlg').hide();
-			            }
-			            	
-			        }			        
-				}
-				window.onbeforeunload = function (e) {
-				    e = e || window.event;
-
-				    if(document.getElementById('formFlow:editing').value) {
-					
-					    // For IE and Firefox prior to version 4
-					    if (e) {
-					        e.returnValue = "You have work does not save.\r\nIf you continue, your changes will be discarded.";
-					    }
-					
-					    // For Safari
-					    return "You have work does not save.\r\nIf you continue, your changes will be discarded.";
-					}
-				};
-				
-			</script>
-			
-			
-			<p:growl id="msgs" showDetail="true" />
-			
+			<p:growl id="growl_msg" showDetail="true" />
+			<p:messages id="messages_msg" showDetail="true" autoUpdate="true" closable="true" />
 			<h:form id="formFlow">
 			
 				<h:inputHidden id="editing" value="#{ivrEditorView.editing}" />
@@ -102,15 +31,66 @@
 					</p:layoutUnit>
 			    
 				    <p:layoutUnit position="center" resizable="true">
+				 			<h:panelGrid columns="1" cellpadding="5">
+				 				<h:outputText value="Version: #{ivrEditorView.version eq null ? 'unversioned' : ivrEditorView.version.toString()}" style="font-weight:bold"  />
+				 			</h:panelGrid>
+				 			<p:separator />
+				 			<h:panelGrid columns="3" cellpadding="5">
+					 			<h:outputLabel id="label_select_flow" for="select_flow" value="Flow:" />
+			 					<p:selectOneMenu id="select_flow"
+			 									 value="#{ivrEditorView.flowId}"  
+					 			                 filter="true" filterMatchMode="startsWith" 
+					 			                 label="label_select_flow"
+					 			                 required="true"
+					 			                 requiredMessage="Please, select one Flow" >						
+					 				<f:selectItem itemLabel="Select One" itemValue="" />
+					 				<f:selectItems value="#{ivrEditorView.flows}" var="flow"
+										itemValue="#{flow.id}" itemLabel="#{flow.name}"  />
+					 			</p:selectOneMenu>
+					 			
+					 			<p:commandButton value="Select" 
+					 							actionListener="#{ivrEditorView.select}" 
+					 							update="formFlow" 
+					 							icon="ui-icon-check"  />					 			
+							</h:panelGrid>
+							<p:separator />
+							<h:panelGrid columns="3" cellpadding="5">
+								<p:commandButton value="New Flow" actionListener="#{ivrEditorView.addNewFlow}" 
+						 										 update="formFlow" 
+						 										 icon="ui-icon-plusthick" 
+						 										 ajax="true" 
+												                 immediate="true" />
+								<p:commandButton value="Save" actionListener="#{ivrEditorView.save}" 
+						 										 update="formFlow" 
+						 										 icon="ui-icon-disk" 
+						 										 ajax="true" 
+												                 immediate="true" />
+							</h:panelGrid>
+			 				        
+				 			<p:tabView id="tabFlowView" cache="true"  binding="#{ivrEditorView.tabFlowView}"  activeIndex="#{ivrEditorView.activeTabFlowIndex}" >  
+						        <p:ajax event="tabClose" listener="#{ivrEditorView.onTabClose}" update="formFlow,growl_msg" />  
+								<p:ajax event="tabChange" listener="#{ivrEditorView.onTabChange}"  update="formFlow,growl_msg" />
+						    </p:tabView>  
+				 			
+				 			
+				 			<p:remoteCommand name="diagram_onNodeMove" actionListener="#{ivrEditorView.onNodeMove}" immediate="true"  />
+				 			<p:remoteCommand name="diagram_onNodeSelect" actionListener="#{ivrEditorView.elementSelected}" immediate="true"  />
+				 			<p:remoteCommand name="diagram_onNodeDelete" actionListener="#{ivrEditorView.deleteNode}" immediate="true"  />
+				 			
 				 			<p:diagram widgetVar="graph" 
-						               value="#{ivrEditorView.model}" 
+						               value="#{ivrEditorView.model}"						                
 						               style="height:100%" styleClass="ui-widget-content" 
-						               var="el" id="flowEditor"  >
+						               var="el" id="flowEditor" >
 						        
  
 							        <f:facet  name="element"  >
 							             <h:outputText value="#{el.name}" style="display:block;margin-top:1em;margin-left: auto;margin-right: auto;text-align: center;" />
-								         <p:graphicImage library="images" value="#{el.imagePath}"  width="#{el.formType.imageSizeWidthStr}" height="#{el.formType.imageSizeHeightStr}" alt="#{el.formError ?  el.errorDescription : el.name}, double click to edit" ondblclick="selectElement('#{el.id}')" style="display:block;margin-bottom: 1em; margin-left: auto;margin-right: auto;text-align: center;" />								         								                   						             						    			
+							             <div id="node_#{el.id}" onmouseover="node_onMouseOut(this,#{el.id})" ondblclick="selectElementDbClick('#{el.id}')" >
+								           <p:graphicImage library="images" value="#{el.imagePath}"  width="#{el.formType.imageSizeWidthStr}" height="#{el.formType.imageSizeHeightStr}" alt="#{el.formError ?  el.errorDescription : el.name}, right click to edit" style="display:block;margin-bottom: 1em; margin-left: auto;margin-right: auto;text-align: center;" />
+									     </div>
+									     <script type="text/javascript">
+									     	node_addContextMenu('node_#{el.id}','#{el.id}','#{el.name}','#{el.formType.name}');
+									     </script>
 								    </f:facet>
 								 
 							    
@@ -127,16 +107,22 @@
 						                 for="flowEditor" tolerance="touch" 
 						                 activeStyleClass="ui-state-highlight" datasource="palleteData" onDrop="handleDrop"
 						                 widgetVar="dropWV">
-						        <p:ajax listener="#{ivrEditorView.onDropFormType}" update="formFlow" />						        
+						        <p:ajax listener="#{ivrEditorView.onDropFormType}" update="formFlow,growl_msg" />						        
 						    </p:droppable>
 						    <div style="display: none" >
-						    	<h:inputHidden id="elementId" value="#{ivrEditorView.formId}" />
+						    	
+						    	<h:inputHidden id="deleteControl" value="#{ivrEditorView.deleteControl}" />
+						    	<h:inputHidden id="nodeId" value="#{ivrEditorView.formId}" />
+						    	<p:commandButton id="buttonDeleteNode" 
+								                 update="formFlow" 
+								                 actionListener="#{ivrEditorView.deleteNode}" 
+								                 ajax="true" 
+								                 immediate="true" />
 								<p:commandButton id="buttonElementSelected" 
 								                 update="formFlow,settingFormDlgId" 
-								                 actionListener="#{ivrEditorView.elementSelected}" 
+								                 actionListener="#{ivrEditorView.elementSelectedDbClick}" 
 								                 ajax="true" 
-								                 immediate="true" 
-								                 oncomplete="PF('settingFormDlg').show()"/>	    	
+								                 immediate="true" />                 				  
 						    </div>						    						    
 					</p:layoutUnit>
 					<p:layoutUnit effectSpeed="50" minSize="25" maxSize="265" effect="slide" collapsed="true" collapseSize="25" id="left_config" position="east" size="265" header="Settings" resizable="true" closable="false" collapsible="true" style="text-align:center" >
@@ -144,9 +130,9 @@
 						
 						<p:panel id="panelForms" header="Nodes" style="margin-bottom:10px;">
 					        <h:panelGrid columns="1">
-					            <p:selectOneMenu id="nodesForm" value="#{ivrEditorView.form}" converter="formEntityConverter" panelStyle="width:180px"
+					            <p:selectOneMenu id="nodesForm" value="#{ivrEditorView.form}" panelStyle="width:180px"
 						                         effect="fade" var="f" style="width:160px" filter="true" filterMatchMode="startsWith">
-						            <f:selectItems value="#{ivrEditorView.listForm}" var="form" itemLabel="#{form.description}" itemValue="#{form}" />
+						            <f:selectItems value="#{ivrEditorView.listForm}" var="form" itemLabel="#{form.description}" itemValue="#{form.id}" />
 						 
 						            <p:column style="width:10%">
 						            	<p:graphicImage url="#{f.imagePath}" width="40px" height="40px"/>
@@ -165,7 +151,7 @@
 					            <p:inputText id="formEntity_id" value="#{ivrEditorView.form != null ? ivrEditorView.form.id : ''}" readonly="true" label="ID" />
 					            
 					            <p:outputLabel for="formEntity_name" value="Name:" />
-					            <p:inputText id="formEntity_name" value="#{ivrEditorView.form != null ? ivrEditorView.form.name : ''}" label="NAME" maxlength="30" size="30" />
+					            <p:inputText id="formEntity_name" value="#{ivrEditorView.form != null ? ivrEditorView.form.name : ''}" readonly="true" label="NAME" maxlength="30" size="30" />
 					                
 					            <p:message for="formEntity_name" />
 					 
@@ -221,9 +207,32 @@
 			 		<ui:include src="#{ivrEditorView.otherPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
+		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+			 	<h:form id="formAdmin" >
+			 		<ui:include src="/pages/admin/Version.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
 		    
-			
-
+			<p:confirmDialog widgetVar="tabFlowCloseConfirmDlg"  header="Confirmation" message="You did not save the work, are you sure?">                                
+				
+				<p:commandButton value="Confirm" 
+				                 oncomplete="PF('tabFlowCloseConfirmDlg').hide();" 
+				          		 update="formFlow" 
+				               	 actionListener="#{ivrEditorView.closeTabFlow}" />
+				<p:commandButton value="Cancel"  onclick="PF('tabFlowCloseConfirmDlg').hide();" />                             
+				
+			</p:confirmDialog>
+			<p:confirmDialog widgetVar="nodeDeleteConfirmDlg"  header="Confirmation" message="Are you sure? After confirm, this action cannot be undone.">                                
+				
+				<p:commandButton value="Confirm" 
+				                 oncomplete="PF('nodeDeleteConfirmDlg').hide();" 
+				          		 update="formFlow" 
+				               	 actionListener="#{ivrEditorView.deleteNode}" 
+				               	 immediate="true"/>
+				<p:commandButton value="Cancel"  onclick="PF('nodeDeleteConfirmDlg').hide();" />                             
+				
+			</p:confirmDialog>
+ 			
 		</ui:define>
 	</ui:composition>
 </html>

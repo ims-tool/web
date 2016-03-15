@@ -30,21 +30,22 @@ public class TagTypeService extends AbstractEntityService<TagTypeEntity>{
 	}
 
 	@Override
-	public void save(TagTypeEntity object) {
+	public boolean save(TagTypeEntity object) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 
 	@Override
-	public void update(TagTypeEntity object) {
+	public boolean update(TagTypeEntity object) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void delete(TagTypeEntity object) {
+	public boolean delete(TagTypeEntity object) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 }

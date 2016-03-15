@@ -31,19 +31,22 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 		}
 		return null;
 	}
-	public void save(NoMatchInputEntity entity) {
+	public boolean save(NoMatchInputEntity entity) {
 		this.listNoMatchInputs.add(entity);
+		return true;
 	}
 
 	@Override
-	public void update(NoMatchInputEntity entity) {
+	public boolean update(NoMatchInputEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 
 	@Override
-	public void delete(NoMatchInputEntity entity) {
+	public boolean delete(NoMatchInputEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 

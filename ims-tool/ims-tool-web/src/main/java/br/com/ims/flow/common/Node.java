@@ -9,6 +9,7 @@ import org.primefaces.model.diagram.Element;
 import br.com.ims.flow.model.FormEntity;
 
 public class Node {
+	private FormEntity form;
 	private Element element;
 	private Connection connection;
 	
@@ -22,14 +23,15 @@ public class Node {
 	
 	public Node(Element element) {
 		if(element.getX() == null) {
-			element.setX("0em");
+			element.setX("0px");
 		}
 		if(element.getY() == null) {
-			element.setY("0em");
+			element.setY("0px");
 		}
-		this.positionX = Integer.valueOf(element.getX().replace("em", ""));
-		this.positionY = Integer.valueOf(element.getY().replace("em", ""));
+		this.positionX = Integer.valueOf(element.getX().replaceAll("[a-z,A-Z]", ""));
+		this.positionY = Integer.valueOf(element.getY().replaceAll("[a-z,A-Z]", ""));
 		this.element = element;
+		this.form = (FormEntity)element.getData();
 		listTarget = new ArrayList<Node>();
 		listSource = new ArrayList<Node>();
 	
@@ -41,7 +43,8 @@ public class Node {
 
 	public void setPositionX(int positionX) {
 		this.positionX = positionX;
-		element.setX(String.valueOf(positionX)+"em");
+		this.element.setX(String.valueOf(positionX)+"px");
+		this.form.setPositionX(this.element.getX());
 	}
 
 	public int getPositionY() {
@@ -50,16 +53,17 @@ public class Node {
 
 	public void setPositionY(int positionY) {
 		this.positionY = positionY;
-		element.setY(String.valueOf(positionY)+"em");
-		
+		this.element.setY(String.valueOf(positionY)+"px");
+		this.form.setPositionY(element.getY());
 	}
 		
 	public String getStrPositionY() {
-		return String.valueOf(this.positionY)+"em";
+		return String.valueOf(this.positionY)+"px";
 	}
 	public String getStrPositionX() {
-		return String.valueOf(this.positionX)+"em";
+		return String.valueOf(this.positionX)+"px";
 	}
+	
 	
 	
 	
@@ -105,6 +109,16 @@ public class Node {
 
 	public void setElement(Element element) {
 		this.element = element;
+	}
+	
+	
+
+	public FormEntity getForm() {
+		return form;
+	}
+
+	public void setForm(FormEntity form) {
+		this.form = form;
 	}
 
 	public Connection getConnection() {

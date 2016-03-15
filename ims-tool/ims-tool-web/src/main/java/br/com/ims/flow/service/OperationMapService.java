@@ -21,8 +21,8 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 		return DAOFactory.getInstance().getOperationMapDAO().get(id);
 	}
 	
-	public void save(OperationMapEntity entity) {
-		DAOFactory.getInstance().getOperationMapDAO().save(entity);
+	public boolean save(OperationMapEntity entity) {
+		return DAOFactory.getInstance().getOperationMapDAO().save(entity);
 	}
 
 	@Override
@@ -45,14 +45,16 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 	}
 
 	@Override
-	public void update(OperationMapEntity object) {
+	public boolean update(OperationMapEntity object) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getOperationMapDAO().update(object);
 		
 	}
 
 	@Override
-	public void delete(OperationMapEntity object) {
+	public boolean delete(OperationMapEntity object) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getOperationMapDAO().delete(object);
 		
 	}
 

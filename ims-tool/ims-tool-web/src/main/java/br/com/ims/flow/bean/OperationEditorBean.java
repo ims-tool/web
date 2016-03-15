@@ -125,7 +125,7 @@ public class OperationEditorBean extends AbstractBean {
 		this.operation.setListOperationGroup(this.operationGroups);
 		
 		logicalFlow.validateNodes();
-		logicalFlow.align();
+		//logicalFlow.align();
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Operation",this.operation.getName()+" - Updated!");
 		

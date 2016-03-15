@@ -45,8 +45,8 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 		return DAOFactory.getInstance().getNoMatchInputDAO().get(id);
 	}
 	
-	public void save(NoMatchInputEntity entity) {
-		DAOFactory.getInstance().getNoMatchInputDAO().save(entity);		
+	public boolean save(NoMatchInputEntity entity) {
+		return DAOFactory.getInstance().getNoMatchInputDAO().save(entity);		
 	}
 
 
@@ -75,15 +75,16 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 	}
 
 	@Override
-	public void update(NoMatchInputEntity object) {
+	public boolean update(NoMatchInputEntity entity) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getNoMatchInputDAO().update(entity);
 		
 	}
 
 	@Override
-	public void delete(NoMatchInputEntity object) {
+	public boolean delete(NoMatchInputEntity entity) {
 		// TODO Auto-generated method stub
-		
+		return DAOFactory.getInstance().getNoMatchInputDAO().delete(entity);
 	}
 
 }

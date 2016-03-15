@@ -45,19 +45,21 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		}
 		return null;
 	}
-	public void save(PromptEntity prompt) {
+	public boolean save(PromptEntity prompt) {
 		this.listPrompts.add(prompt);
+		return true;
 	}
 
 	@Override
-	public void update(PromptEntity entity) {
+	public boolean update(PromptEntity entity) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void delete(PromptEntity entity) {
+	public boolean delete(PromptEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 

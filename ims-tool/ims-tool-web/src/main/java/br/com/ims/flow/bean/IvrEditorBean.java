@@ -1,8 +1,9 @@
 package br.com.ims.flow.bean;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -10,6 +11,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.component.tabview.Tab;
+import org.primefaces.component.tabview.TabView;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
@@ -23,11 +27,13 @@ import org.primefaces.model.diagram.overlay.ArrowOverlay;
 
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.LogicalFlow;
+import br.com.ims.flow.common.MyBoolean;
 import br.com.ims.flow.common.Node;
+import br.com.ims.flow.common.TabItemFlow;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
-import br.com.ims.flow.model.PromptEntity;
+import br.com.ims.flow.model.VersionEntity;
 import br.com.ims.flow.service.FormTypeService;
  
 @SuppressWarnings("serial")
@@ -41,10 +47,11 @@ public class IvrEditorBean extends AbstractBean {
 	private DefaultDiagramModel model;
 	private List<FormTypeEntity> formTypes;
 	private List<FormEntity> listForm;
+	
+	private LogicalFlow logicalFlow;
+	
 	private FormEntity form;
 	private Node node;
-	
-	private LogicalFlow flow;
 	private String formId;
 	private String formPageEditor;
 	private String complementPageEditor;
@@ -52,87 +59,212 @@ public class IvrEditorBean extends AbstractBean {
 	private String utilPageEditor;
 	private String otherPageEditor;
     
-	private List<PromptEntity> prompts;
+	private MyBoolean editing;
 	
-	private PromptEntity prompt;
+    private TabView tabFlowView;
+    private List<TabItemFlow> tabFlowList;
+	private int activeTabFlowIndex = 0;
 	
-	private boolean editing;
-	
-    int countTab =0;
-	
+    private boolean suspendEvent;
     
-    private int tabId;
-	private List<TabItem> tabList;
-	private int activeIndex = 0;
-	
-    public PromptEntity getPrompt() {
-		return prompt;
-	}
-
-	public void setPrompt(PromptEntity prompt) {
-		this.prompt = prompt;
-	}
-	private boolean suspendEvent;
+    private TabCloseEvent tempTabCloseEvent;
  
+    private VersionEntity version;
+    
+    private String flowId;
+    private List<FormEntity> flows;
+    
+    private String deleteControl;
+    
     public IvrEditorBean() {
     	init();
     }
     
     public void init() {
+    	                
+    	initTab0();
     	
-    	
+        formTypes = formTypeService.getAll();
         
-    	model = new DefaultDiagramModel();
-        model.setMaxConnections(20);
         
-        model.getDefaultConnectionOverlays().add(new ArrowOverlay(20, 20, 1, 1));
+        if(version == null) {
+        	
+        	requestVersion(false);
+        	RequestContext context = RequestContext.getCurrentInstance();
+        	context.execute("PF('settingAdminDlg').show();");
+            context.update("settingAdminDlgId");
+            
+        }
+    }
+    
+    private void initTab0() {
+    	this.model = new DefaultDiagramModel();
+    	this.model.setMaxConnections(20);
+        
+    	this.model.getDefaultConnectionOverlays().add(new ArrowOverlay(20, 20, 1, 1));
         FlowChartConnector connector = new FlowChartConnector();
         connector.setPaintStyle("{strokeStyle:'#98AFC7', lineWidth:1}");
         connector.setHoverPaintStyle("{strokeStyle:'#5C738B'}");
 
-        model.setDefaultConnector(connector);
-                
+        this.model.setDefaultConnector(connector);
         
-        formTypes = formTypeService.getAll();
-        
-        flow = new LogicalFlow();        
-        formTypeService = new FormTypeService();         
-        listForm = new ArrayList<FormEntity>();
-        this.editing = false;
+        this.logicalFlow = new LogicalFlow();        
+        this.formTypeService = new FormTypeService();         
+        this.listForm = new ArrayList<FormEntity>();
+        this.editing = new MyBoolean(false);
         
         
-        tabList = new ArrayList<TabItem>();
-		tabList.add(new TabItem("New Flow", "/pages/template/flowEditorTemplate.xhtml", tabId));
+        this.tabFlowList = new ArrayList<TabItemFlow>();
+        Tab tab = new Tab();
+        tab.setTitle("New Flow");
+        
+        this.tabFlowList.add(new TabItemFlow(tab, 0,model,logicalFlow,listForm,editing));
 		
+        this.tabFlowView = new TabView();
+        this.tabFlowView.setActiveIndex(0);
+        this.tabFlowView.getChildren().add(tab);
+        this.activeTabFlowIndex = 0;
+
     }
      
-    public void onTabChange(TabChangeEvent event) {
-        FacesMessage msg = new FacesMessage("Tab Changed", "Active Tab: " + event.getTab().getId());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+    
+    
+    public String getDeleteControl() {
+		return deleteControl;
+	}
+
+	public void setDeleteControl(String deleteControl) {
+		this.deleteControl = deleteControl;
+	}
+
+	public String getFlowId() {
+		return flowId;
+	}
+
+	public void setFlowId(String flowId) {
+		this.flowId = flowId;
+	}
+
+	public List<FormEntity> getFlows() {
+		this.flows = ServicesFactory.getInstance().getFormService().getByFormTypeName(Constants.FORM_TYPE_ANSWER);
+		return flows;
+	}
+
+	public void setFlows(List<FormEntity> flows) {
+		this.flows = flows;
+	}
+
+	public VersionEntity getVersion() {
+		return this.version;
+	}
+
+	public void setVersion(VersionEntity version) {
+		this.version = version;
+	}
+
+	public void setLogicalFlow(LogicalFlow logicalFlow) {
+		this.logicalFlow = logicalFlow;
+	}
+
+	public void addNewFlow() {
+		if(this.isFlowEditing(null)) {
+			this.tempTabCloseEvent = null;
+			RequestContext context = RequestContext.getCurrentInstance();
+            // execute javascript and show dialog                    
+			context.execute("PF('tabFlowCloseConfirmDlg').show();");			
+			return;
+		} else {
+			
+		}    	
+    }
+	
+	private boolean isFlowEditing(Tab tab) {
+		for(TabItemFlow itemFlow : tabFlowList) {
+    		if(tab != null) {
+    			if(tab.getId().equals(itemFlow.getTab().getId()) &&
+    				itemFlow.getEditing().booleanValue()) {
+    				return true;
+    			}
+    		}else {    			
+				if(itemFlow.getEditing().booleanValue()) {
+	    			return true;
+	    		}
+    		}
+    	}
+		return false;
+	}
+	
+    public void select() {
+    	
+    }
+	
+	public void onTabChange(TabChangeEvent event) {
+        for(TabItemFlow tab : tabFlowList) {
+        	if(event.getTab().getId().equals(tab.getTab().getId())) {
+        		this.model = tab.getModel();
+	        	this.logicalFlow = tab.getLogicalFlow();
+	        	this.listForm = tab.getListForm();
+	        	this.editing = tab.getEditing();
+        	}
+        }
     }
          
     public void onTabClose(TabCloseEvent event) {
-        FacesMessage msg = new FacesMessage("Tab Closed", "Closed tab: " + event.getTab().getId());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-	
-    public void addTab() {
-
-    	tabId++;
-    	tabList.add(new TabItem("Tab "+tabId, "/pages/template/flowEditorTemplate.xhtml", tabId));
+        
+    	this.tempTabCloseEvent = event;
     	
-    	/*TabView tabView =  (TabView)FacesContext.getCurrentInstance().getAttributes().get("formFlow:tabFlow");
-    			
-    	Tab tab = (Tab)FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("tab_"+countTab);
-    	Tab tabNew = new Tab();
-    	tabNew.setTitle(tab.getTitle()+" novoId: "+(++this.countTab));
-    	tabNew.setId("tab_"+this.countTab);
-    	tabView.getChildren().add(tabNew);*/
+    	FacesMessage msg = new FacesMessage("Tab Closed", "Closed tab: " + event.getTab().getId()+", Index: "+this.activeTabFlowIndex);;
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        
+        for(int index = 0; index  < tabFlowList.size(); index++) {
+        	TabItemFlow tab = tabFlowList.get(index);
+        	if(event.getTab().getId().equals(tab.getTab().getId())) {
+        		if(tab.getEditing().booleanValue()) {
+        			this.tabFlowView.setActiveIndex(index);
+        			RequestContext context = RequestContext.getCurrentInstance();
+                    // execute javascript and show dialog                    
+        			context.execute("PF('tabFlowCloseConfirmDlg').show();");                    
+                    return;
+        		} else {
+        			closeTabFlow();
+        			return;
+        		}
+        	}
+        }
+        
+                        	
+    }
+    public void closeTabFlow() {
+    	
+        if(this.tempTabCloseEvent == null) {
+        	this.tabFlowList.clear();
+        	this.tabFlowView.setActiveIndex(0);
+        	this.tabFlowView.getChildren().clear();
+        	initTab0();
+        } else {
+        	boolean find = false;
+	    	
+	    	for(int index = 0; index  < tabFlowList.size() && !find; index++) {
+	        	TabItemFlow tab = tabFlowList.get(index);
+	        	if(this.tempTabCloseEvent.getTab().getId().equals(tab.getTab().getId())) {
+	        		tabFlowList.remove(index);
+	        		tabFlowView.getChildren().remove(index);
+	        		//ajustando os index;
+	                for(int newIndex = 0; newIndex < tabFlowList.size(); newIndex++) {
+	                	TabItemFlow t = tabFlowList.get(newIndex);
+	                	t.setTabIndex(newIndex);
+	                }
+	        		
+	        		this.changeTabFlow(index-1);
+	        		find = true;
+	        		
+	        	}
+	        }
+        }
     }
     
-    public LogicalFlow getFlow() {
-		return flow;
+    public LogicalFlow getLogicalFlow() {
+		return logicalFlow;
 	}
 
 
@@ -163,19 +295,19 @@ public class IvrEditorBean extends AbstractBean {
 	}
 
 	public void onConnect(ConnectEvent event) {
-		this.editing = true;
+		this.editing.setBooleanValue(true);
 		if(!suspendEvent) {
         	
-        	Node node = flow.getNode(event.getSourceElement());
+        	Node node = logicalFlow.getNode(event.getSourceElement());
         	if(node.getListTarget().size() > 0) {
         		//continuar
-        		ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
+        		ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getSourceElement());
         	}
         	
-        	ServicesFactory.getInstance().getIvrEditorService().connectForm(model, flow, event.getSourceElement(),event.getTargetElement());
-        	flow.validateNodes();
-            flow.align();            
-            this.node = flow.getNode(event.getSourceElement());            
+        	ServicesFactory.getInstance().getIvrEditorService().connectForm(model, logicalFlow, event.getSourceElement(),event.getTargetElement());
+        	logicalFlow.validateNodes();
+            //logicalFlow.align();            
+            this.node = logicalFlow.getNode(event.getSourceElement());            
             ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
             ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
             this.utilPageEditor = "/pages/util/TAG.xhtml";
@@ -189,23 +321,23 @@ public class IvrEditorBean extends AbstractBean {
     }
      
     public void onDisconnect(DisconnectEvent event) {
-    	this.editing = true;
+    	this.editing.setBooleanValue(true);
     	this.auxiliarPageEditor = "";
-    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.flow, event.getSourceElement());
-    	flow.validateNodes();
-        flow.align();
+    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getSourceElement());
+    	logicalFlow.validateNodes();
+        //logicalFlow.align();
     }
      
     public void onConnectionChange(ConnectionChangeEvent event) {
-    	this.editing = true;
+    	this.editing.setBooleanValue(true);
     	
-    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.flow, event.getOriginalSourceElement());
+    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getOriginalSourceElement());
 
-    	ServicesFactory.getInstance().getIvrEditorService().connectForm(model, flow, event.getNewSourceElement(),event.getNewTargetElement());
+    	ServicesFactory.getInstance().getIvrEditorService().connectForm(model, logicalFlow, event.getNewSourceElement(),event.getNewTargetElement());
     	
-    	flow.validateNodes();
-        flow.align();            
-        this.node = flow.getNode(event.getNewSourceElement());            
+    	logicalFlow.validateNodes();
+        //logicalFlow.align();            
+        this.node = logicalFlow.getNode(event.getNewSourceElement());            
         ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
         ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
         this.utilPageEditor = "/pages/util/TAG.xhtml";
@@ -222,10 +354,23 @@ public class IvrEditorBean extends AbstractBean {
 	
 	public void onDropFormType(DragDropEvent ddEvent) {
 		
-		this.editing = true;
+		this.editing.setBooleanValue(true);
 		FormTypeEntity formType = ((FormTypeEntity) ddEvent.getData());
 		
 		FormEntity formEntityElement = new FormEntity();
+		if(formType.getName().equals(Constants.FORM_TYPE_ANSWER)) {
+			if(logicalFlow.existsStart()) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Flow Editor","Node type 'Answer' is allowed only ONE per flow'");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				return;			
+			} else {
+				this.updateTabFlowName(formType.getName()+"_"+formEntityElement.getId());
+			}
+		}
+			
+		
+		
 		
 		formEntityElement.setDescription(formType.getDescription());
 		formEntityElement.setName(formType.getName()+"_"+formEntityElement.getId());
@@ -240,21 +385,33 @@ public class IvrEditorBean extends AbstractBean {
 		
 		
 		model.addElement(element);
-		flow.addNode(element);
-		flow.validateNodes();
-		flow.alingElementAlone();
+		logicalFlow.addNode(element);
+		logicalFlow.validateNodes();
+		logicalFlow.alingElementAlone();
     }
 	
-	public void elementSelected() {
+	public void elementSelected(ActionEvent param) {
 		
-		this.formId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formFlow:elementId").toString();
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		this.formId = params.get("node_id");
 		
-		this.form = ServicesFactory.getInstance().getIvrEditorService().getForm(this, Integer.valueOf(this.formId)); 
+		elementSelected(this.formId);
+    }
+	public void elementSelectedDbClick(ActionEvent param) {
+		
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		this.formId = params.get("formFlow:nodeId");
+		
+		elementSelected(this.formId);
+    }
+	private void elementSelected(String formId) {
+		
+		this.form = ServicesFactory.getInstance().getIvrEditorService().getForm(this, formId); 
 	
-
 		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE) || 
-		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCHINPUT)) {
-			Node node = flow.getNode(this.form);
+		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCHINPUT) ||
+		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_DECISION_CHANCE)) {
+			Node node = logicalFlow.getNode(this.form);
 			Node parent = node.getListSource().get(0);
 			this.form = (FormEntity)parent.getElement().getData();
 			this.formId = this.form.getId();
@@ -267,20 +424,13 @@ public class IvrEditorBean extends AbstractBean {
 		Object bean = ServicesFactory.getInstance().getIvrEditorService().getBean(form.getFormType().getName());
 		((AbstractBean)bean).init();
 		
-		
+		RequestContext context = RequestContext.getCurrentInstance();
+    	context.execute("PF('settingFormDlg').show();");
+        String [] forms = {"formFlow","settingFormDlgId"};
+    	context.update(Arrays.asList(forms));
     }
 	
 	
-	
-	public List<PromptEntity> getPrompts() {
-		this.prompts = ServicesFactory.getInstance().getPromptService().getAll();
-		return prompts;
-	}
-
-	public void setPrompts(List<PromptEntity> prompts) {
-		this.prompts = prompts;
-	}
-
 	
 	public String getFormPageEditor() {
 		return formPageEditor;
@@ -324,9 +474,41 @@ public class IvrEditorBean extends AbstractBean {
 		this.utilPageEditor = utilPageEditor;
 	}
 
+	public void requestVersion(boolean save) {
+		if(save) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have to assign the Version to save changes.",
+	                "IVR Editor");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+    	context.execute("PF('settingAdminDlg').show();");
+        context.update("settingAdminDlgId");
+	}
+	
 	public void save(ActionEvent event) {
-    	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "FormUpdated!",
-                "FormUpdated!");
+		if(this.version == null) {
+			requestVersion(true);
+            return;
+		}
+		String nameFlow = "";
+		for(FormEntity form : this.listForm) {
+			if(form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
+				nameFlow = form.getName(); 
+			}
+			if(form.isFormError()) {
+				
+		    	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You cannot save. There are Elements with error.",
+		                "IVR Editor");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				return;
+			}
+		}
+		this.editing.setBooleanValue(false);
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flow ("+nameFlow+") saved successfully!",
+                "IVR Editor");
 		 
 		FacesContext.getCurrentInstance().addMessage(null, msg);
  
@@ -348,11 +530,11 @@ public class IvrEditorBean extends AbstractBean {
 	}
 
 	public boolean isEditing() {
-		return editing;
+		return editing.booleanValue();
 	}
 
 	public void setEditing(boolean editing) {
-		this.editing = editing;
+		this.editing.setBooleanValue(editing);
 	}
 
 	@Override
@@ -373,62 +555,152 @@ public class IvrEditorBean extends AbstractBean {
 		
 	}
 	
-
-	public class TabItem implements Serializable{
-		private String name;
-		private String url;
-		private int tabIndex;
-		public TabItem(String name, String url, int tabIndex)
-		{
-			this.setName(name);
-			this.setUrl(url);
-			this.setTabIndex(tabIndex);
+	public void deleteNode(ActionEvent param) {
+		
+		
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		if(params.get("formFlow:deleteControl") != null) {
+			if(params.get("formFlow:deleteControl").equals("first")) {
+				this.deleteControl = "false";
+				this.formId = params.get("formFlow:nodeId");
+				RequestContext context = RequestContext.getCurrentInstance();
+	        	context.execute("PF('nodeDeleteConfirmDlg').show();");
+				return;
+				
+			}
 		}
-		public String getName() {
-			return name;
+		if(this.deleteControl.equals("false")) {
+		
+			this.form = ServicesFactory.getInstance().getIvrEditorService().getForm(this.formId);
+			
+			Node node = logicalFlow.getNode(this.form);
+					
+			if(this.form.getFormType().getName().equals(Constants.FORM_TYPE_MENU) ||
+					this.form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION) ||
+					this.form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+				for(Node nodeTarget :  node.getListTarget()) {
+					if(nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_CHOICE) ||
+							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_DECISION_CHANCE) ||
+							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT)) {
+						ServicesFactory.getInstance().getIvrEditorService().deleteForm(nodeTarget.getElement());
+					}
+				}
+				
+				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement());
+			} else {
+				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement());
+			}
+			
 		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public String getUrl() {
-			return url;
-		}
-		public void setUrl(String url) {
-			this.url = url;
-		}
-		public int getTabIndex() {
-			return tabIndex;
-		}
-		public void setTabIndex(int tabIndex) {
-			this.tabIndex = tabIndex;
-		}
-	}
-
-
-	public int getTabId() {
-		return tabId;
-	}
-
-	public void setTabId(int tabId) {
-		this.tabId = tabId;
-	}
-
-	public List<TabItem> getTabList() {
-		return tabList;
-	}
-
-	public void setTabList(List<TabItem> tabList) {
-		this.tabList = tabList;
-	}
-
-	public int getActiveIndex() {
-		return activeIndex;
-	}
-
-	public void setActiveIndex(int activeIndex) {
-		this.activeIndex = activeIndex;
 	}
 	
+
+	
+
+	public List<TabItemFlow> getTabFlowList() {
+		return tabFlowList;
+	}
+
+	public void setTabFlowList(List<TabItemFlow> tabFlowList) {
+		this.tabFlowList = tabFlowList;
+	}
+
+	public int getActiveTabFlowIndex() {
+		return activeTabFlowIndex;
+	}
+
+	public void setActiveTabFlowIndex(int activeTabFlowIndex) {
+		this.activeTabFlowIndex = activeTabFlowIndex;
+	}
+	public void updateTabFlowName(String name) {
+		
+		TabItemFlow tab = this.tabFlowList.get(this.tabFlowView.getActiveIndex());
+		if(tab != null) {
+			tab.getTab().setTitle(name);
+		}		
+	}
+	public void changeTabFlow(int index) {
+		for(TabItemFlow tab : this.tabFlowList) {
+			if(tab.getTabIndex() == index) {
+				this.model = tab.getModel();
+				this.listForm = tab.getListForm();
+				this.editing = tab.getEditing();
+				this.logicalFlow = tab.getLogicalFlow();
+				this.tabFlowView.setActiveIndex(index);
+			}
+		}
+	}
+	
+	public void addNewTabFlow() {
+		DefaultDiagramModel model = new DefaultDiagramModel();
+        model.setMaxConnections(20);
+        
+        model.getDefaultConnectionOverlays().add(new ArrowOverlay(20, 20, 1, 1));
+        FlowChartConnector connector = new FlowChartConnector();
+        connector.setPaintStyle("{strokeStyle:'#98AFC7', lineWidth:1}");
+        connector.setHoverPaintStyle("{strokeStyle:'#5C738B'}");
+
+        model.setDefaultConnector(connector);
+        
+        LogicalFlow logicalFlow = new LogicalFlow();        
+        List<FormEntity> listForm = new ArrayList<FormEntity>();
+        MyBoolean editing = new MyBoolean(false);
+        
+        Tab tab = new Tab();
+        tab.setTitle("New Flow");
+        tab.setClosable(true);
+        
+        int index = this.tabFlowList.size();
+        this.tabFlowList.add(new TabItemFlow(tab, index,model,logicalFlow,listForm,editing));
+		
+        this.tabFlowView.setActiveIndex(index);
+        this.tabFlowView.getChildren().add(tab);
+        
+        this.changeTabFlow(index);
+
+	}
+
+	public TabView getTabFlowView() {
+		return this.tabFlowView;
+	}
+
+	public void setTabFlowView(TabView tabFlowView) {
+		this.tabFlowView = tabFlowView;
+	}
+	
+	public void onNodeMove(ActionEvent param) {
+	      Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+	      String id = params.get("node_id");
+	      String x = params.get("node_x");
+	      String y = params.get("node_y");
+	      int pos = id.indexOf("-"); // Remove Client ID part
+	      if (pos != -1) {
+	         id = id.substring(pos + 1);
+	      }
+	      int iX = 0;
+	      int iY = 0;
+	    	
+	      if(x.indexOf("em") > -1) {
+	    	  iX = Integer.valueOf(x.replace("em", "")) * 16; 
+	      } else {
+	    	  iX = Integer.valueOf(x.replace("px", ""));	     	      
+	      }
+	      if(y.indexOf("em") > -1) {
+	    	  iY = Integer.valueOf(y.replace("em", "")) * 16; 
+	      } else {
+	    	  iY = Integer.valueOf(y.replace("px", ""));	     
+	      }
+	      Element element = model.findElement(id);
+	      if (element != null) {
+	    	  logicalFlow.getNode(element).setPositionX(iX);
+	    	  logicalFlow.getNode(element).setPositionY(iY);	         
+	      } else {
+	    	  System.out.println("Didn't find element for ID " + id);	         
+	      }
+	      logicalFlow.resize();
+	   }
+
+
 	
     
 }

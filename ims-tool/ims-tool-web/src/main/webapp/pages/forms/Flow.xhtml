@@ -16,7 +16,7 @@
 	 			<h:panelGrid columns="3" cellpadding="5" id="panel_dialog_form_prompt">
 		 			<p:selectOneMenu required="true" 
 		 			                 requiredMessage="Please,select a Flow" 
-		 			                 value="#{bean.flowId}" 
+		 			                 value="#{bean.formId}" 
 		 			                 id="form_flow"
 		 			                 filter="true" filterMatchMode="startsWith" 
 		 			                 label="label_form_flow">
@@ -25,11 +25,11 @@
 							itemValue="#{form.id}" itemLabel="#{form.name}"  />
 		 			</p:selectOneMenu>
 		 			<p:commandButton value="Add New Flow" actionListener="#{bean.addNewFlow}" 
-		 										 update="settingComplementDlgId" 
-		 										 icon="buttonAddPrompt" 
-		 										 ajax="true" 
-								                 immediate="true" 
-								                 oncomplete="PF('settingComplementDlg').show()"  />
+		 										 update="formFlow" 
+		 										 icon="buttonAddFlow" 
+		 										 ajax="true"
+		 										 oncomplete="handleFormUpdateRequest(xhr, status, args)" 
+								                 immediate="true" />
 		 			<p:message for="form_flow" />	 			
 	 			</h:panelGrid>	 	 				 		
 	    </ui:define>

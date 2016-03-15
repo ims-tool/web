@@ -12,8 +12,6 @@ import org.primefaces.context.RequestContext;
 
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionMapEntity;
-import br.com.ims.flow.model.ConditionParameterEntity;
-import br.com.ims.flow.model.ConditionValueEntity;
  
 @SuppressWarnings("serial")
 @ManagedBean(name = "conditionmapEditorView")

@@ -188,6 +188,8 @@ public class MenuEditorBean extends AbstractBean {
 		formNoInput.setDescription(noInput.getDescription());
 		formNoInput.setName(noInput.getName());
 		formNoInput.setFormType(formType);
+		formNoInput.setPositionX(this.form.getPositionX());
+		formNoInput.setPositionY(this.form.getPositionY());
 		
 		String imgPath = formType.getImagePathSuccess();
 		formType.setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
@@ -197,6 +199,8 @@ public class MenuEditorBean extends AbstractBean {
 		
 		
 		Element element = new Element(formNoInput);
+		element.setX(formNoInput.getPositionX());
+		element.setY(formNoInput.getPositionY());
 		
 		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 		
@@ -227,6 +231,8 @@ public class MenuEditorBean extends AbstractBean {
 		formNoMatch.setDescription(noMatch.getDescription());
 		formNoMatch.setName(noMatch.getName());
 		formNoMatch.setFormType(formType);
+		formNoMatch.setPositionX(this.form.getPositionX());
+		formNoMatch.setPositionY(this.form.getPositionY());
 		
 		String imgPath = formType.getImagePathSuccess();
 		formType.setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));
@@ -236,6 +242,8 @@ public class MenuEditorBean extends AbstractBean {
 		
 		
 		Element element = new Element(formNoMatch);
+		element.setX(formNoMatch.getPositionX());
+		element.setY(formNoMatch.getPositionY());
 		
 		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 		
@@ -276,6 +284,8 @@ public class MenuEditorBean extends AbstractBean {
 				formChoice.setDescription(this.menu.getName()+"_"+choice.getName());
 				formChoice.setName(this.menu.getName()+"_"+choice.getName());
 				formChoice.setFormType(formType,choice);
+				formChoice.setPositionX(this.form.getPositionX());
+				formChoice.setPositionY(this.form.getPositionY());
 				
 				
 				String imgPath = formType.getImagePathSuccess();
@@ -286,6 +296,8 @@ public class MenuEditorBean extends AbstractBean {
 				
 				
 				Element element = new Element(formChoice);
+				element.setX(formChoice.getPositionX());
+				element.setY(formChoice.getPositionY());
 				
 				ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 				
@@ -342,7 +354,7 @@ public class MenuEditorBean extends AbstractBean {
 		
 		
 		logicalFlow.validateNodes();
-		logicalFlow.align();
+		//logicalFlow.align();
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Menu",this.menu.getName()+" - Updated!");
 		

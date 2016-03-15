@@ -18,7 +18,7 @@ import br.com.ims.flow.model.FormEntity;
 @SuppressWarnings("serial")
 @ManagedBean(name = "flowEditorView")
 @ViewScoped
-public class flowEditorBean extends AbstractBean {
+public class FlowEditorBean extends AbstractBean {
      
 	private List<FormEntity> forms;
 	
@@ -27,7 +27,7 @@ public class flowEditorBean extends AbstractBean {
 	private FlowEntity flow;
 	
 	
-    public flowEditorBean() {
+    public FlowEditorBean() {
     	//init();
     }
     
@@ -93,12 +93,11 @@ public class flowEditorBean extends AbstractBean {
 	public void addNewFlow(ActionEvent event) {
 		
 		this.collect();
-				
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
-		
-		//ServicesFactory.getInstance().getPromptEditorService().getBean().setAnnounceBean(this);
-		
+		ServicesFactory.getInstance().getIvrEditorService().getBean().addNewTabFlow();
 
+        RequestContext context = RequestContext.getCurrentInstance();
+		boolean saved = true;
+		context.addCallbackParam("saved", saved);
     }
 
 	@Override

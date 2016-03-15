@@ -5,6 +5,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
+import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.service.IvrEditorService;
 
@@ -23,7 +24,7 @@ public class FormEntityConverter implements Converter {
         
         if ((submittedValue != null) && (!submittedValue.equals(""))) {
         	try {
-				return new IvrEditorService().getForm(Integer.valueOf(submittedValue));
+				return ServicesFactory.getInstance().getIvrEditorService().getForm(submittedValue);						
 			} catch (Exception e) {
 
 			} 		

@@ -30,9 +30,9 @@ public class FormService extends AbstractEntityService<FormEntity> {
 	
 
 	@Override
-	public void save(FormEntity object) {
+	public boolean save(FormEntity object) {
 		// TODO Auto-generated method stub
-		DAOFactory.getInstance().getFormDAO().save(object);
+		return DAOFactory.getInstance().getFormDAO().save(object);
 		
 	}
 
@@ -101,15 +101,15 @@ public class FormService extends AbstractEntityService<FormEntity> {
 	}
 
 	@Override
-	public void update(FormEntity object) {
+	public boolean update(FormEntity object) {
 		
-		DAOFactory.getInstance().getFormDAO().update(object);
+		return DAOFactory.getInstance().getFormDAO().update(object);
 		
 	}
 
 	@Override
-	public void delete(FormEntity object) {
-		DAOFactory.getInstance().getFormDAO().delete(object);
+	public boolean delete(FormEntity object) {
+		return DAOFactory.getInstance().getFormDAO().delete(object);
 		
 		
 	}

@@ -23,8 +23,8 @@ public class GrammarService extends AbstractEntityService<GrammarEntity>{
 	public GrammarEntity getByName(String name) {
 		return DAOFactory.getInstance().getGrammarDAO().getByName(name);
 	}
-	public void save(GrammarEntity entity) {
-		DAOFactory.getInstance().getGrammarDAO().save(entity);		
+	public boolean save(GrammarEntity entity) {
+		return DAOFactory.getInstance().getGrammarDAO().save(entity);		
 	}
 
 
@@ -45,17 +45,17 @@ public class GrammarService extends AbstractEntityService<GrammarEntity>{
 	}
 
 	@Override
-	public void update(GrammarEntity entity) {
+	public boolean update(GrammarEntity entity) {
 		// TODO Auto-generated method stub
-		DAOFactory.getInstance().getGrammarDAO().update(entity);
+		return DAOFactory.getInstance().getGrammarDAO().update(entity);
 		
 	}
 
 
 	@Override
-	public void delete(GrammarEntity entity) {
+	public boolean delete(GrammarEntity entity) {
 		// TODO Auto-generated method stub
-		DAOFactory.getInstance().getGrammarDAO().delete(entity);
+		return DAOFactory.getInstance().getGrammarDAO().delete(entity);
 		
 	}
 

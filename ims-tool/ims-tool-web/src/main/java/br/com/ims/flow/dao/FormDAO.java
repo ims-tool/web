@@ -7,9 +7,13 @@ import br.com.ims.flow.model.FormEntity;
 
 public class FormDAO extends AbstractDAO<FormEntity>{
 	List<FormEntity> result = null;
+	
+	
 	private static FormDAO instance = null;
 	
+	
 	private FormDAO() {
+		super();
 		this.result = new ArrayList<FormEntity>();
 	}
 	
@@ -44,22 +48,24 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	}
 
 	@Override
-	public void save(FormEntity entity) {
+	public boolean save(FormEntity entity) {
 		// TODO Auto-generated method stub
 		result.add(entity);
+		return true;
 		
 	}
 
 	@Override
-	public void update(FormEntity entity) {
+	public boolean update(FormEntity entity) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void delete(FormEntity entity) {
+	public boolean delete(FormEntity entity) {
 		// TODO Auto-generated method stub
 		result.remove(entity);
+		return true;
 		
 	}
 

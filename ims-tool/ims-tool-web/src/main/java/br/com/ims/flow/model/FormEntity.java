@@ -11,6 +11,8 @@ public class FormEntity extends AbstractFormEntity{
 	private ConditionEntity condition;
 	private FormEntity nextFormDefault;
 	private VersionEntity versionId;
+	private String positionX;
+	private String positionY;
 	private boolean clone;
 	
 	
@@ -37,6 +39,9 @@ public class FormEntity extends AbstractFormEntity{
 		}
 	}
 	
+	public String getName() {
+		return this.name;
+	}
 	
 	public void setDescription(String description) {
 		this.description = description;
@@ -73,7 +78,6 @@ public class FormEntity extends AbstractFormEntity{
 		}
 	}
 	
-
 	public Object getFormId() {
 		return formId;
 	}
@@ -145,6 +149,22 @@ public class FormEntity extends AbstractFormEntity{
 
 	public void setClone(boolean clone) {
 		this.clone = clone;
+	}
+
+	public String getPositionX() {
+		return positionX;
+	}
+
+	public void setPositionX(String positionX) {
+		this.positionX = positionX;
+	}
+
+	public String getPositionY() {
+		return positionY;
+	}
+
+	public void setPositionY(String positionY) {
+		this.positionY = positionY;
 	}
 	
 	

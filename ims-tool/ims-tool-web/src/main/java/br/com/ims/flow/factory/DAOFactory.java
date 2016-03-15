@@ -11,6 +11,7 @@ import br.com.ims.flow.dao.OperationMapDAO;
 import br.com.ims.flow.dao.PromptDAO;
 import br.com.ims.flow.dao.TagDAO;
 import br.com.ims.flow.dao.TagTypeDAO;
+import br.com.ims.flow.dao.VersionDAO;
 
 public class DAOFactory {
 
@@ -69,6 +70,10 @@ public class DAOFactory {
 	}
 	public OperationMapDAO getOperationMapDAO() {
 		return OperationMapDAO.getInstance(); 
+	}
+	
+	public VersionDAO getVersionDAO() {
+		return VersionDAO.getInstance(); 
 	}
 
 }

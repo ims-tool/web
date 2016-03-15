@@ -155,8 +155,12 @@ public class DecisionEditorBean extends AbstractBean {
 					formChance.setName(this.decision.getName()+"_"+chance.getCondition().getName());
 				}
 				formChance.setFormType(formType,chance);
+				formChance.setPositionX(this.form.getPositionX());
+				formChance.setPositionY(this.form.getPositionY());
 				
 				Element element = new Element(formChance);
+				element.setX(formChance.getPositionX());
+				element.setY(formChance.getPositionY());
 				
 				ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
 				
@@ -245,7 +249,7 @@ public class DecisionEditorBean extends AbstractBean {
 		
 		
 		logicalFlow.validateNodes();
-		logicalFlow.align();
+		//logicalFlow.align();
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Decision",this.decision.getName()+" - Updated!");
 		

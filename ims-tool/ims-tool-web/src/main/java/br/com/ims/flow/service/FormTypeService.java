@@ -1,12 +1,14 @@
 package br.com.ims.flow.service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.FormTypeEntity;
 
-public class FormTypeService extends AbstractEntityService<FormTypeEntity> {
+@SuppressWarnings("serial")
+public class FormTypeService extends AbstractEntityService<FormTypeEntity> implements Serializable{
 	
 	public List<FormTypeEntity> getAll() {
 		List<FormTypeEntity> formTypes = new ArrayList<FormTypeEntity>();
@@ -42,26 +44,28 @@ public class FormTypeService extends AbstractEntityService<FormTypeEntity> {
 	}
 
 	@Override
-	public void save(FormTypeEntity object) {
+	public boolean save(FormTypeEntity object) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getFormTypeDAO().save(object);
 		
 	}
 
 	@Override
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public void update(FormTypeEntity object) {
-		// TODO Auto-generated method stub
+	public boolean update(FormTypeEntity object) {
+		return DAOFactory.getInstance().getFormTypeDAO().update(object);
 		
 	}
 
 	@Override
-	public void delete(FormTypeEntity object) {
+	public boolean delete(FormTypeEntity object) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getFormTypeDAO().delete(object);
 		
 	}
 }

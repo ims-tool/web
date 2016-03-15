@@ -33,8 +33,8 @@ public class ConditionService extends AbstractEntityService<ConditionEntity>{
 		return DAOFactory.getInstance().getConditionDAO().get(id);
 	}
 	
-	public void save(ConditionEntity entity) {
-		DAOFactory.getInstance().getConditionDAO().save(entity);
+	public boolean save(ConditionEntity entity) {
+		return DAOFactory.getInstance().getConditionDAO().save(entity);
 	}
 
 	@Override
@@ -94,14 +94,16 @@ public class ConditionService extends AbstractEntityService<ConditionEntity>{
 	}
 
 	@Override
-	public void update(ConditionEntity object) {
+	public boolean update(ConditionEntity entity) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getConditionDAO().update(entity);
 		
 	}
 
 	@Override
-	public void delete(ConditionEntity object) {
+	public boolean delete(ConditionEntity entity) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getConditionDAO().delete(entity);
 		
 	}
 

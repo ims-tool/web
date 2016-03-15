@@ -19,8 +19,8 @@ public class AudioService extends AbstractEntityService <AudioEntity>{
 		return DAOFactory.getInstance().getAudioDAO().get(id);
 	}
 	
-	public void save(AudioEntity audio) {
-		DAOFactory.getInstance().getAudioDAO().save(audio);
+	public boolean save(AudioEntity audio) {
+		return DAOFactory.getInstance().getAudioDAO().save(audio);
 	}
 	
 	public boolean isUsed(String id) {
@@ -38,14 +38,16 @@ public class AudioService extends AbstractEntityService <AudioEntity>{
 	}
 
 	@Override
-	public void update(AudioEntity object) {
+	public boolean update(AudioEntity audio) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getAudioDAO().update(audio);
 		
 	}
 
 	@Override
-	public void delete(AudioEntity object) {
+	public boolean delete(AudioEntity audio) {
 		// TODO Auto-generated method stub
+		return DAOFactory.getInstance().getAudioDAO().delete(audio);
 		
 	}
 

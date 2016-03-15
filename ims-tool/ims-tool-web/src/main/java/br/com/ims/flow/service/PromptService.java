@@ -21,8 +21,8 @@ public class PromptService extends AbstractEntityService<PromptEntity>{
 		return DAOFactory.getInstance().getPromptDAO().get(id);
 	}
 	
-	public void save(PromptEntity prompt) {
-		DAOFactory.getInstance().getPromptDAO().save(prompt);
+	public boolean save(PromptEntity prompt) {
+		return DAOFactory.getInstance().getPromptDAO().save(prompt);
 	}
 
 	@Override
@@ -42,15 +42,15 @@ public class PromptService extends AbstractEntityService<PromptEntity>{
 	}
 
 	@Override
-	public void update(PromptEntity object) {
+	public boolean update(PromptEntity object) {
 		// TODO Auto-generated method stub
-		
+		return DAOFactory.getInstance().getPromptDAO().update(object);
 	}
 
 	@Override
-	public void delete(PromptEntity object) {
+	public boolean delete(PromptEntity object) {
 		// TODO Auto-generated method stub
-		
+		return DAOFactory.getInstance().getPromptDAO().delete(object);
 	}
 
 }

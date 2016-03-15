@@ -58,18 +58,21 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		return null;
 	}
 	
-	public void save(ConditionEntity entity) {
+	public boolean save(ConditionEntity entity) {
 		this.listConditions.add(entity);
+		return true;
 	}
 
 	@Override
-	public void update(ConditionEntity entity) {
+	public boolean update(ConditionEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 
 	@Override
-	public void delete(ConditionEntity entity) {
+	public boolean delete(ConditionEntity entity) {
+		return true;
 		// TODO Auto-generated method stub
 		
 	}

@@ -108,11 +108,11 @@
 									     ajax="true" 
 									     immediate="true" 
 									     />
-				 		<p:tabView id="tabView"	activeIndex="#{ivrEditorView.activeIndex}"	style="heigth:100%;">
-							<p:ajax event="tabClose" listener="#{ivrEditorView.onTabClose}" />  
-							<p:ajax event="tabChange" listener="#{ivrEditorView.onTabChange}" />
+				 		<p:tabView id="tabView"	activeIndex="#{ivrEditorView.activeIndex}"	style="heigth:100%;" >
+							<p:ajax event="tabClose" listener="#{ivrEditorView.onTabClose}" update="msgs" />  
+							<p:ajax event="tabChange" listener="#{ivrEditorView.onTabChange}"  update="msgs" />
 							<c:forEach items="#{ivrEditorView.tabList}" var="tabItem">   
-								<p:tab title="#{tabItem.name}" id="tab_#{tabItem.tabIndex}">
+								<p:tab title="#{tabItem.name}" id="tab_#{tabItem.tabIndex}" closable="#{tabItem.tabIndex ne 0}">
 								</p:tab>   
 							</c:forEach>
 						</p:tabView>

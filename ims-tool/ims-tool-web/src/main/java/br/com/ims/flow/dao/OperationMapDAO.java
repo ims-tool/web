@@ -46,19 +46,21 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 		return null;
 	}
 	
-	public void save(OperationMapEntity entity) {
+	public boolean save(OperationMapEntity entity) {
 		this.listOperationMaps.add(entity);
+		return true;
 	}
 
 	@Override
-	public void update(OperationMapEntity entity) {
+	public boolean update(OperationMapEntity entity) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void delete(OperationMapEntity entity) {
+	public boolean delete(OperationMapEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 

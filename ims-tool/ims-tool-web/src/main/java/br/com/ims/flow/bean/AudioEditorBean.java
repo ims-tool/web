@@ -72,20 +72,31 @@ public class AudioEditorBean extends AbstractBean {
 	}
 
 	public void save(ActionEvent event) {
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return;
+		} else {
+			this.audio.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		}
 		
-		ServicesFactory.getInstance().getAudioService().save(this.audio);
+		if(ServicesFactory.getInstance().getAudioService().save(this.audio)) {
 		
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.audio.getName()+" - Saved!");
-		 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		updateExternalsBean();
-		
-		init();
-		
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean saved = true;
-		context.addCallbackParam("saved", saved);
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.audio.getName()+" - Saved!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			updateExternalsBean();
+			
+			init();
+			
+			RequestContext context = RequestContext.getCurrentInstance();
+			boolean saved = true;
+			context.addCallbackParam("saved", saved);
+		} else {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Error on Save "+this.audio.getName()+", please contact your support.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 		
     }
 

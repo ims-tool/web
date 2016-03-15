@@ -32,19 +32,21 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 		}
 		return null;
 	}
-	public void save(TagEntity tag) {
+	public boolean save(TagEntity tag) {
 		this.listTags.add(tag);
+		return true;
 	}
 
 	@Override
-	public void update(TagEntity entity) {
+	public boolean update(TagEntity entity) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void delete(TagEntity entity) {
+	public boolean delete(TagEntity entity) {
 		// TODO Auto-generated method stub
+		return true;
 		
 	}
 

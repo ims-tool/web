@@ -22,6 +22,7 @@ import br.com.ims.flow.service.PromptService;
 import br.com.ims.flow.service.TagEditorService;
 import br.com.ims.flow.service.TagService;
 import br.com.ims.flow.service.TagTypeService;
+import br.com.ims.flow.service.VersionService;
 
 
 public class ServicesFactory {
@@ -121,6 +122,9 @@ public class ServicesFactory {
 	}
 	public OperationGroupEditorService getOperationGroupEditorService() {
 		return new OperationGroupEditorService();
+	}
+	public VersionService getVersionService() {
+		return new VersionService();
 	}
 
 }

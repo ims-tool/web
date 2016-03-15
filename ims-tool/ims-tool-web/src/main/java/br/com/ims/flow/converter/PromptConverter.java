@@ -28,8 +28,7 @@ public class PromptConverter implements Converter {
         
         if ((submittedValue != null) && (!submittedValue.equals(""))) {
         	try {
-				//return ServicesFactory.getInstance().getPromptService().get(submittedValue);
-        		return new IvrEditorService().getPrompt(Integer.valueOf(submittedValue));
+				return ServicesFactory.getInstance().getPromptService().get(submittedValue);        		
 			} catch (Exception e) {
 
 			} 		

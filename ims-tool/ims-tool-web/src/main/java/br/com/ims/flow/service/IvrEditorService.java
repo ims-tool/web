@@ -20,7 +20,6 @@ import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
-import br.com.ims.flow.model.PromptEntity;
 
 public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 	
@@ -39,18 +38,13 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 		return this.bean.getForm();
 	}
 	
-	public FormEntity getForm(int code) {
+	public FormEntity getForm(String code) {
 		return getForm(this.bean, code);
 	}
 	
-	public PromptEntity getPrompt(int code) {
-		
-		return getPrompt(this.bean, code);
-	}
-	
-	public FormEntity getForm(IvrEditorBean flowEditor, int code) {		
+	public FormEntity getForm(IvrEditorBean flowEditor, String code) {		
 		for (FormEntity form : flowEditor.getListForm()) {
-			if(String.valueOf(code).equals(form.getId())) {
+			if(code.equals(form.getId())) {
 		
 				return form;
 			}
@@ -58,21 +52,8 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 		return null;
 	}
 	
-	public PromptEntity getPrompt(IvrEditorBean flowEditor, int code) {
-		for (PromptEntity prompt : flowEditor.getPrompts()) {
-			if(String.valueOf(code).equals(prompt.getId())) {
-		
-				return prompt;
-			}
-		}
-		return null;
-	}
-	
-	public LogicalFlow getFlow() {
-		return this.bean.getFlow();
-	}
 	public void connectForm(Element sourceElement, Element targetElement) {
-		this.connectForm(bean.getModel(), bean.getFlow(), sourceElement, targetElement);
+		this.connectForm(bean.getModel(), bean.getLogicalFlow(), sourceElement, targetElement);
 	}
 	
 	public void connectForm(DefaultDiagramModel model, LogicalFlow flow, Element sourceElement, Element targetElement) {
@@ -105,7 +86,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 		
 	}
 	public void disconnectForm(Element sourceElement) {
-		disconnectForm(bean.getModel(),bean.getFlow(), sourceElement);
+		disconnectForm(bean.getModel(),bean.getLogicalFlow(), sourceElement);
 	}
 	public void disconnectForm(DefaultDiagramModel model,LogicalFlow flow, Element sourceElement) {
 		
@@ -151,7 +132,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 	}
 	public void deleteForm(Element element) {		
 		
-		deleteForm(bean.getModel(),bean.getFlow(), element);
+		deleteForm(bean.getModel(),bean.getLogicalFlow(), element);
 	}
 	public void deleteForm(DefaultDiagramModel model,LogicalFlow flow, Element element) {
 		Node node = flow.getNode(element);
@@ -218,7 +199,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     }
     
     public void alingMenuChoices(Element element) {
-    	this.bean.getFlow().alingMenuChoices(element);
+    	this.bean.getLogicalFlow().alingMenuChoices(element);
     	
     }
      
