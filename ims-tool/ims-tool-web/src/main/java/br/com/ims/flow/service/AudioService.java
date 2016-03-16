@@ -18,6 +18,10 @@ public class AudioService extends AbstractEntityService <AudioEntity>{
 		
 		return DAOFactory.getInstance().getAudioDAO().get(id);
 	}
+	public AudioEntity getByName(String name) {
+		
+		return DAOFactory.getInstance().getAudioDAO().getByName(name);
+	}
 	
 	public boolean save(AudioEntity audio) {
 		return DAOFactory.getInstance().getAudioDAO().save(audio);

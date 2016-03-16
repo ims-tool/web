@@ -25,7 +25,6 @@ public class AudioEditorBean extends AbstractBean {
 	
 	private PromptEditorBean promptBean;
 	
-		
     public AudioEditorBean() {
     	init();
     }
@@ -78,10 +77,20 @@ public class AudioEditorBean extends AbstractBean {
 		} else {
 			this.audio.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
 		}
+		AudioEntity tmp = ServicesFactory.getInstance().getAudioService().getByName(this.audio.getName()) ;
+		
+		if(tmp != null && 
+				tmp.getName().equalsIgnoreCase(this.audio.getName()) &&
+				!tmp.getId().equals(audio.getId())) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Audio","Audio with name '"+this.audio.getName()+"' already exists!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
 		
 		if(ServicesFactory.getInstance().getAudioService().save(this.audio)) {
 		
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.audio.getName()+" - Saved!");
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Audio",this.audio.getName()+" - Saved!");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
@@ -141,10 +150,14 @@ public class AudioEditorBean extends AbstractBean {
 
 	@Override
 	public void edit(String id) {
+		this.audio = ServicesFactory.getInstance().getAudioService().get(id);
+		
+		this.insert= false;
+		System.out.println("Edit:"+id);
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void delete(String id) {
 		// TODO Auto-generated method stub

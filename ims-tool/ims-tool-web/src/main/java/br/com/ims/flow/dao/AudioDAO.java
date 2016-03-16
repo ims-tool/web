@@ -78,6 +78,32 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		return audio;
 		
 	}
+	public AudioEntity getByName(String name) {
+		db = new DbConnection("");
+		String sql = "SELECT id,type,name,description,path,property,versionid "+
+		             "FROM flow.audio WHERE lower(name) = '"+name.toLowerCase()+"' ";
+		AudioEntity audio = null;
+		try {
+			ResultSet rs = db.ExecuteQuery(sql);
+			if(rs.next()) {
+				
+				audio = new AudioEntity();
+				audio.setId(rs.getString("id"));
+				audio.setType(rs.getString("type"));
+				audio.setName(rs.getString("name"));
+				audio.setPath(rs.getString("path"));
+				audio.setProperty(rs.getString("property"));
+				VersionEntity version = ServicesFactory.getInstance().getVersionService().get(rs.getString("versionid"));
+				audio.setVersionId(version);				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			db.finalize();
+		}
+		return audio;
+	}
 	public boolean save(AudioEntity audio) {
 		boolean result = true;
 		db = new DbConnection("");

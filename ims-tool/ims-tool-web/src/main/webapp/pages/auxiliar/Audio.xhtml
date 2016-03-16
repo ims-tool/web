@@ -47,7 +47,7 @@
 	 			                 label="label_complement_audio_type" >
 	 				<f:selectItem itemLabel="WAV" itemValue="WAV" />
 	 				<f:selectItem itemLabel="V_WAV" itemValue="V_WAV" />
-	 				<f:selectItem itemLabel="TTS" itemValue="TTS" />""
+	 				<f:selectItem itemLabel="TTS" itemValue="TTS" />
 	 				<f:selectItem itemLabel="VAR" itemValue="VAR" />	
 	 				
 	 				<p:ajax update="formAuxiliar:panelGrid_audio" listener="#{audioEditorView.typeChange}" />
@@ -57,10 +57,10 @@
 	 		<h:panelGrid cellpadding="5" id="TYPE_WAV"   >
 	 
 	            <h:outputLabel id="label_complement_audio_name" for="complement_audio_name" value="Name:" />
-	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" required="true" requiredMessage="Please,inform a Name" label="label_complement_audio_name" />
+	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" required="true" requiredMessage="Please,inform the Name" label="label_complement_audio_name" />
 	            
 	            <h:outputLabel id="label_complement_audio_description" for="complement_audio_description" value="Description:" />
-	            <p:inputTextarea id="complement_audio_description" value="#{audioEditorView.audio.description}" required="true" requiredMessage="Please,inform a Description" label="label_complement_audio_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            <p:inputTextarea id="complement_audio_description" value="#{audioEditorView.audio.description}" required="true" requiredMessage="Please,inform the Description" label="label_complement_audio_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
 	            
 	            
 	            <h:outputLabel id="label_complement_audio_path" for="complement_audio_path" value="Path:" />
@@ -78,7 +78,7 @@
 	         </f:facet>	
 	        
 	        <p:panel id="panelPromptAudios" header="Audios Registered" style="margin-bottom:20px" >
- 				<p:dataTable  scrollable="true" scrollHeight="300" var="a" value="#{audioEditorView.audios}">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="a" value="#{audioEditorView.audios}" resizableColumns="true">
 			        <p:column headerText="ID" >
 			            <h:outputText value="#{a.id}" />
 			        </p:column>
@@ -99,7 +99,7 @@
 			            <p:commandButton rendered="#{audioEditorView.isUsed(a.id)}" icon="ui-icon-search" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
-			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{audioEditorView.edit(a.id)}" update="@form"/>
 			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
 			        </p:column>
 			        
