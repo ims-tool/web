@@ -56,26 +56,28 @@
 	 		
 	 		<h:panelGrid cellpadding="5" id="TYPE_WAV"   >
 	 
-	            <h:outputLabel id="label_complement_audio_name" for="complement_audio_name" value="Name:" />
-	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" required="true" requiredMessage="Please,inform the Name" label="label_complement_audio_name" />
+	            <h:outputLabel id="label_complement_audio_name" for="complement_audio_name" value="Name: *" />
+	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" requiredMessage="Please,inform the Name" label="label_complement_audio_name" style="width:350px" maxlength="255" />
 	            
-	            <h:outputLabel id="label_complement_audio_description" for="complement_audio_description" value="Description:" />
-	            <p:inputTextarea id="complement_audio_description" value="#{audioEditorView.audio.description}" required="true" requiredMessage="Please,inform the Description" label="label_complement_audio_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            <h:outputLabel id="label_complement_audio_description" for="complement_audio_description" value="Description: *" />
+	            <p:inputTextarea id="complement_audio_description" value="#{audioEditorView.audio.description}"  requiredMessage="Please,inform the Description" label="label_complement_audio_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
 	            
-	            
-	            <h:outputLabel id="label_complement_audio_path" for="complement_audio_path" value="Path:" />
-	            <p:inputText id="complement_audio_path" value="#{audioEditorView.audio.path}" label="label_complement_audio_path" />
+	            <h:outputLabel id="label_complement_audio_path" for="complement_audio_path" value="Path: " />
+	            <p:inputText id="complement_audio_path" value="#{audioEditorView.audio.path}" label="label_complement_audio_path" style="width:350px" />
 	            
 	            <f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="formAuxiliar,formComplement" actionListener="#{audioEditorView.save}"/>
+	                
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{audioEditorView.insert eq true}" update="@form" actionListener="#{audioEditorView.newAudio}"/>
+	                <c:if test="#{audioEditorView.insert eq true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formComplement" actionListener="#{audioEditorView.save}"/>
+					</c:if>
+					<c:otherwise>
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formComplement" actionListener="#{audioEditorView.update}"/>
+					</c:otherwise>
 	            </f:facet>  	           
 	        </h:panelGrid>
 	       
 	        <p:separator />
-	        
-	         <f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="formAuxiliar,formComplement" actionListener="#{audioEditorView.save}"/>
-	         </f:facet>	
 	        
 	        <p:panel id="panelPromptAudios" header="Audios Registered" style="margin-bottom:20px" >
  				<p:dataTable  scrollable="true" scrollHeight="300" var="a" value="#{audioEditorView.audios}" resizableColumns="true">
@@ -89,7 +91,7 @@
 			            <h:outputText value="#{a.name}" />
 			        </p:column>
 			        <p:column headerText="DESCRIPTION" filterBy="#{a.description}" filterMatchMode="contains">
-			        	<p:inputTextarea readonly="true" rows="2" autoResize="false" style="width:150px; cursor:text;" value="a.description" />			            
+			        	<p:inputTextarea readonly="true" rows="2" autoResize="false" style="width:150px; cursor:text;" value="#{a.description}" />			            
 			        </p:column>
 			        <p:column headerText="PATH" >
 			            <h:outputText value="#{a.path}" />

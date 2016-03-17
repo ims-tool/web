@@ -52,7 +52,7 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 	}
 	public VersionEntity get(String id) {
 		db = new DbConnection("");
-		String sql = "SELECT id,description,system_user,to_char(date_create,'DD/MM/YYYY HH24:MI:DD') date_create FROM flow.version ";
+		String sql = "SELECT id,description,system_user,to_char(date_create,'DD/MM/YYYY HH24:MI:DD') date_create FROM flow.version WHERE id ='"+id+"' ";
 		VersionEntity version = null;
 		try {
 			ResultSet rs = db.ExecuteQuery(sql);

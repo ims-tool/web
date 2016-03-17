@@ -25,7 +25,7 @@ public class DbConnection {
 		
 		try {
 			ctx = new InitialContext();
-			ds = (DataSource)ctx.lookup("java:/comp/env/jdbc/postgres");
+			ds = (DataSource)ctx.lookup("java:/comp/env/jdbc/flow");
 			conn = ds.getConnection();
 			
 		} catch (Exception e) {

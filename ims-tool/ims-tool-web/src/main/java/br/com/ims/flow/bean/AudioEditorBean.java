@@ -69,13 +69,24 @@ public class AudioEditorBean extends AbstractBean {
 	public void setAudios(List<AudioEntity> audios) {
 		this.audios = audios;
 	}
-
-	public void save(ActionEvent event) {
-		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-			return;
-		} else {
-			this.audio.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+	private boolean validateFields() {
+		if(this.audio.getName() == null || this.audio.getName().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Audio","Please,inform the Name!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(this.audio.getDescription() == null || this.audio.getDescription().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Audio","Please,inform the Description!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(this.audio.getPath() == null || this.audio.getPath().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Audio","Please,inform the Path!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
 		}
 		AudioEntity tmp = ServicesFactory.getInstance().getAudioService().getByName(this.audio.getName()) ;
 		
@@ -85,26 +96,43 @@ public class AudioEditorBean extends AbstractBean {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Audio","Audio with name '"+this.audio.getName()+"' already exists!");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
-			return;
+			return false;
 		}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
+		}
+		this.audio.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		return true;
+	}
+	public void newAudio(ActionEvent event) {
+		this.audio = new AudioEntity();
+    	this.insert = true;
+	}
+
+	public void save(ActionEvent event) {
 		
-		if(ServicesFactory.getInstance().getAudioService().save(this.audio)) {
 		
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Audio",this.audio.getName()+" - Saved!");
-			 
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+		if(validateFields()) {	
 			
-			updateExternalsBean();
+			if(ServicesFactory.getInstance().getAudioService().save(this.audio)) {
 			
-			init();
-			
-			RequestContext context = RequestContext.getCurrentInstance();
-			boolean saved = true;
-			context.addCallbackParam("saved", saved);
-		} else {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Error on Save "+this.audio.getName()+", please contact your support.");
-			 
-			FacesContext.getCurrentInstance().addMessage(null, msg);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Audio",this.audio.getName()+" - Saved!");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				updateExternalsBean();
+				
+				init();
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Error on Save "+this.audio.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
 		}
 		
     }
@@ -135,7 +163,27 @@ public class AudioEditorBean extends AbstractBean {
 	@Override
 	public void update(ActionEvent event) {
 		// TODO Auto-generated method stub
-		
+		if(validateFields()) {	
+			
+			if(ServicesFactory.getInstance().getAudioService().update(this.audio)) {
+			
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Audio",this.audio.getName()+" - Updated!");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				updateExternalsBean();
+				
+				init();
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Error on Update "+this.audio.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		}
 	}
 
 	
@@ -153,8 +201,7 @@ public class AudioEditorBean extends AbstractBean {
 		this.audio = ServicesFactory.getInstance().getAudioService().get(id);
 		
 		this.insert= false;
-		System.out.println("Edit:"+id);
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

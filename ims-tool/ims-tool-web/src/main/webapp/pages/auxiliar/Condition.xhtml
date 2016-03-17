@@ -42,16 +42,16 @@
 			<h:panelGrid cellpadding="5">
 				
 				<h:outputLabel id="label_auxiliar_condition_id" for="auxiliar_condition_id" value="ID:" />
-	            <p:inputText id="auxiliar_condition_id" value="#{bean.condition.id}" readonly="true" label="label_auxiliar_condition_id" />
+	            <p:inputText id="auxiliar_condition_id" value="#{bean.condition.id}" label="label_auxiliar_condition_id" />
 	 
-	            <h:outputLabel id="label_auxiliar_condition_name" for="auxiliar_condition_name" value="Name:" />
-	            <p:inputText id="auxiliar_condition_name" value="#{bean.condition.name}" required="true" requiredMessage="Please,inform a Name" label="label_auxiliar_condition_name" />
+	            <h:outputLabel id="label_auxiliar_condition_name" for="auxiliar_condition_name" value="Name: *" />
+	            <p:inputText id="auxiliar_condition_name" value="#{bean.condition.name}" requiredMessage="Please,inform the Name" label="label_auxiliar_condition_name" maxlength="30" style="width:350px" />
 	            
-	            <h:outputLabel id="label_auxiliar_condition_description" for="auxiliar_condition_description" value="Description:" />
-	            <p:inputTextarea id="auxiliar_condition_description" value="#{bean.condition.description}" required="true" requiredMessage="Please,inform a Description" label="label_auxiliar_condition_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            <h:outputLabel id="label_auxiliar_condition_description" for="auxiliar_condition_description" value="Description: *" />
+	            <p:inputTextarea id="auxiliar_condition_description" value="#{bean.condition.description}" required="true" requiredMessage="Please,inform a Description" label="label_auxiliar_condition_description" rows="2" maxlength="256" autoResize="false" style="width:350px; cursor:text;"/>
 	            
 	            <p:column colspan="2">
-					<p:commandButton value="Add New Condition Group" update="settingOtherDlgId" oncomplete="PF('settingOtherDlg').show()" ajax="true" immediate="true" actionListener="#{bean.addNewGroup}"/>
+					<p:commandButton value="Add Condition Group" icon="ui-icon-plusthick" update="settingOtherDlgId" oncomplete="PF('settingOtherDlg').show()" ajax="true" immediate="true" actionListener="#{bean.addNewGroup}"/>
  					<p:panel id="panelConditionGroup" header="Condition Group" style="margin-bottom:20px">
 		 				<p:dataTable  
 		 						scrollable="true" 
@@ -94,7 +94,15 @@
 		 		</p:column>	
 	            	
 	 			<f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)" update="formAuxiliar,formComplement,formForm" actionListener="#{bean.save}"/>
+	                
+	                
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{bean.insert eq true}" update="@form" actionListener="#{audioEditorView.newAudio}"/>
+	                <c:if test="#{conditionEditorView.insert eq true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)" update="@form,formComplement,formForm" actionListener="#{bean.save}"/>
+					</c:if>
+					<c:otherwise>
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formComplement,formForm" actionListener="#{bean.update}"/>
+					</c:otherwise>
 	            </f:facet>  
 	        </h:panelGrid>
 	        

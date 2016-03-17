@@ -35,6 +35,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 				audio.setId(rs.getString("id"));
 				audio.setType(rs.getString("type"));
 				audio.setName(rs.getString("name"));
+				audio.setDescription(rs.getString("description"));
 				audio.setPath(rs.getString("path"));
 				audio.setProperty(rs.getString("property"));
 				VersionEntity version = ServicesFactory.getInstance().getVersionService().get(rs.getString("versionid"));
@@ -64,6 +65,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 				audio.setId(rs.getString("id"));
 				audio.setType(rs.getString("type"));
 				audio.setName(rs.getString("name"));
+				audio.setDescription(rs.getString("description"));
 				audio.setPath(rs.getString("path"));
 				audio.setProperty(rs.getString("property"));
 				VersionEntity version = ServicesFactory.getInstance().getVersionService().get(rs.getString("versionid"));
@@ -91,6 +93,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 				audio.setId(rs.getString("id"));
 				audio.setType(rs.getString("type"));
 				audio.setName(rs.getString("name"));
+				audio.setDescription(rs.getString("description"));
 				audio.setPath(rs.getString("path"));
 				audio.setProperty(rs.getString("property"));
 				VersionEntity version = ServicesFactory.getInstance().getVersionService().get(rs.getString("versionid"));

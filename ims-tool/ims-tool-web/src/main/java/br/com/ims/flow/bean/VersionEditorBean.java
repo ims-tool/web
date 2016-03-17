@@ -88,7 +88,7 @@ public class VersionEditorBean extends AbstractBean {
 	public void select(String id) {
 		// TODO Auto-generated method stub
 		this.version = ServicesFactory.getInstance().getVersionService().get(id);
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setVersion(version);
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setVersion(this.version);
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean saved = true;

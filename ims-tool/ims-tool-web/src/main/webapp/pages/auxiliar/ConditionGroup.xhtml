@@ -81,7 +81,7 @@
 		            	<h:outputLabel id="label_auxiliar_conditiongroup_paramvalue" for="auxiliar_conditiongroup_paramvalue" value="Value:" style="margin-left:5px" />
 		            	<p:inputText id="auxiliar_conditiongroup_paramvalue" value="#{bean.conditionParameter.paramValue}" label="label_auxiliar_conditiongroup_paramvalue" style="margin-right:5px" />
 		 
-	            		<p:commandButton value="Add" update="panelConditionGroupAddParameter,panelConditionGroupParameterList,msgAuxiliarCondition" ajax="true" immediate="true" actionListener="#{bean.addParameter}"/>
+	            		<p:commandButton value="Add" icon="ui-icon-plusthick" update="panelConditionGroupAddParameter,panelConditionGroupParameterList,msgAuxiliarCondition" ajax="true" immediate="true" actionListener="#{bean.addParameter}"/>
 			        </p:panel>
 			        <p:panel id="panelConditionGroupParameterList" style="margin-bottom:10px">
 		 				<p:dataTable  
@@ -179,7 +179,7 @@
 									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
 				 			</p:selectOneMenu>
 			            </p:panelGrid>
-			        	<p:commandButton value="Add" update="panelConditionGroupAddValues,panelConditionGroupValuesList,msgAuxiliarCondition"   ajax="true" immediate="true" actionListener="#{bean.addValue}"/>
+			        	<p:commandButton value="Add" icon="ui-icon-plusthick" update="panelConditionGroupAddValues,panelConditionGroupValuesList,msgAuxiliarCondition"   ajax="true" immediate="true" actionListener="#{bean.addValue}"/>
 			        </p:panel>
 			        <p:panel id="panelConditionGroupValuesList" style="margin-bottom:10px">
 		 				<p:dataTable  
@@ -242,7 +242,7 @@
 	            
 	            	
 	 			<f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleOtherSaveRequest(xhr, status, args)" update="formOther,formAuxiliar,msgAuxiliarCondition" actionListener="#{bean.save}"/>
+	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleOtherSaveRequest(xhr, status, args)" update="formOther,formAuxiliar,msgAuxiliarCondition" actionListener="#{bean.save}"/>
 	            </f:facet>  
 	        </h:panelGrid>
 	        	
