@@ -2,6 +2,8 @@ app.controller(
 				'AccessCtrl',
 				function($rootScope, $location, $scope, $http, $mdDialog,
 						$mdMedia) {
+					
+					checkAccess('webaccess');
 
 					var typeList;
 					$scope.status = '  ';
@@ -202,7 +204,6 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 		
 		var data = $scope.accesses[index];
 		data.userid = $scope.userid;
-		
 
 		var box = confirm("Deseja realmente remover o acesso?");
 		if (box === true) {
@@ -219,7 +220,8 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 					})
 
 			$scope.accesses.splice(index, 1);
-			setLog(2, 'remove login access', 'ims-tool-web-admin', 'nc', 0, data.id);
+			
+			setLog(2, 'remove login access', 'ims-tool-web-admin', data.system +'|'+ data.artifact +'|'+ data.accessType +'|'+ data.area , 0, 0 );
 		}
 	};
 
@@ -248,11 +250,9 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 			$scope.showUser = true;
 			$scope.showButtonUser = false;
 			$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/access/findAccessByUser/'+$scope.user.id).success(function(data2) {
-				console.log(data2);
 				$scope.accesses = data2;
 			});
-			$scope.refresh();
-			setLog(3, 'add access', 'ims-tool-web-admin', 'nc', 0, 0);
+			setLog(3, 'add access', 'ims-tool-web-admin', $scope.access.system +'|'+ $scope.access.artifact +'|'+ $scope.access.accessType +'|'+ $scope.access.areaList.toString(), 0, 0);
 		}else{
 			 $mdDialog.show(
 				      $mdDialog.alert()
@@ -265,11 +265,7 @@ app.controller('EditAccessCtrl', function($rootScope, $location, $scope, $http, 
 				        .targetEvent(ev)
 				    );
 		}
-
 	};
-	
-
-	
 	})				
 				
 function DialogController($scope, $mdDialog) {

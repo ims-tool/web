@@ -4,8 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -60,38 +63,36 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		ResultSet rs = null;
 		String response = "";
 		JSONObject objectOut = new JSONObject();
-		Map<String, Artifact> mapArtifact = new HashMap<String, Artifact>(); 
-		try {
-			conn = new ConnectionDB();
+		List<Artifact> listArtifact = new ArrayList<Artifact>();
 			
-			String query = "select a.id id, a.description, ua.userid, ua.acesstypeid, up.profileid "
-					+ "from access.artifact a, access.artifact_access_type_user ua, access.user_profile up "
-					+ "where up.userid = ua.userid and ua.artifactid = a.id and ua.userid = (select id from users where upper(login) = '"+userLogin.toUpperCase()+"') and a.systemid = "+ system;
+		try{	
+			
+			conn = new ConnectionDB();
+			String query = "select a.id id, a.description, ua.userid, ua.acesstypeid, ua.areaid, at.priority "
+					+ "from access.artifact a, access.artifact_access_type_user ua, access.access_type at "
+					+ "where ua.acesstypeid = at.id and a.id = ua.artifactid and  ua.userid = (select id from access.user where upper(login) = '"+userLogin.toUpperCase()+"') and a.systemid = "+ system;
 			
 			rs = conn.ExecuteQuery(query);
 			
 			while(rs.next()) {
-				String id = rs.getString("description");
 				
-				if (mapArtifact.containsKey(id)){
-					mapArtifact.get(id).add(rs.getInt("profileid"));
-				}else{
 					Artifact a = new Artifact();
 					a.setArtifactid(rs.getInt("id"));
+					a.setDescription(rs.getString("description"));
 					a.setUserid(rs.getInt("userid"));
 					a.setAccesstypeid(rs.getInt("acesstypeid"));
-					a.add(rs.getInt("profileid"));
-					mapArtifact.put(id, a);
+					a.setAreaid(rs.getInt("areaid"));
+					a.setPriority(rs.getInt("priority"));
+					listArtifact.add(a);
 				}
-				
-			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			response = "ERROR";
 		}finally{
 			conn.finalize();
 		}
 		
-		objectOut.put("artifact", mapArtifact);
+		objectOut.put("artifact", listArtifact);
 		
 		return objectOut;
 

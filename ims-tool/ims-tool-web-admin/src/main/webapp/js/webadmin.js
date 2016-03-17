@@ -11,23 +11,30 @@ window.onload = function(){
 	if(login === "null" || login === "" || login === null){
 		window.location.href = '/ims-tool-web-admin/login.html';
 	}else{
+		//verificar quais artefatos ficarão disponíveis.
+		document.getElementById('webflag').className = 'hidden';
+		document.getElementById('webparameter').className = 'hidden';
+		document.getElementById('webhour').className = 'hidden';
+		document.getElementById('webaccess').className = 'hidden';
+		
+		
 		artifact = localStorage.getItem('artifact');
 		var obj = JSON.parse(artifact);
-		console.log(obj.webflag);
-		console.log(obj.webhour);
-		console.log(obj.webparameter);
-		//verificar quais artefatos ficarão disponíveis.
-		if(obj.webflag === null){
-			document.getElementById('webflag').className = 'hidden';
+		for (var key in obj) {
+		    var access = obj[key];
+		   if(access.description === 'webflag'){
+			   document.getElementById('webflag').className = '';
+		    }
+		   if(access.description === 'webparameter'){
+			   document.getElementById('webparameter').className = '';
+		    }
+		   if(access.description === 'webhour'){
+			   document.getElementById('webhour').className = '';
+		    }
+		   if(access.description === 'webaccess'){
+			   document.getElementById('webaccess').className = '';
+		    }
 		}
-		if(obj.webparameter === null){
-			document.getElementById('webparameter').className = 'hidden';
-		}
-		if(obj.webhour === null){
-			document.getElementById('webhour').className = 'hidden';
-		}
-		
-		//console.log("---> profiles" + artifact.web-admin-hour.userprofiles);
 		
 	}	
 }
