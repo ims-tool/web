@@ -8,6 +8,7 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 	
 	var typeList;
 	$rootScope.activetab = $location.path();
+	checkAccess('webhour');
 	
 	
 	$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/servicehour/findType')
@@ -52,6 +53,7 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 
 app.controller('FlagCtrl',function($rootScope, $location, $scope, $http) {
 					$rootScope.activetab = $location.path();
+					checkAccess('webflag');
 
 					$scope.parameters = []; // declare an empty array
 
@@ -91,6 +93,7 @@ app.controller('FlagCtrl',function($rootScope, $location, $scope, $http) {
 
 app.controller('ParameterCtrl', function($rootScope, $location, $scope, $http) {
 	$rootScope.activetab = $location.path();
+	checkAccess('webparameter');
 });
 
 app.controller('LoginController', function($rootScope, $location) {

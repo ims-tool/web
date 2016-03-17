@@ -10,6 +10,9 @@ public class Artifact {
 	private Integer accesstypeid;
 	private List<Integer> userprofiles;
 	private Boolean access;
+	private Integer areaid;
+	private String description;
+	private Integer priority;
 	
 	
 	public Artifact() {
@@ -41,5 +44,29 @@ public class Artifact {
 	}
 	public void add(Integer profileid) {
 		this.userprofiles.add(profileid);
+	}
+	public Boolean getAccess() {
+		return access;
+	}
+	public void setAccess(Boolean access) {
+		this.access = access;
+	}
+	public Integer getAreaid() {
+		return areaid;
+	}
+	public void setAreaid(Integer areaid) {
+		this.areaid = areaid;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public Integer getPriority() {
+		return priority;
+	}
+	public void setPriority(Integer priority) {
+		this.priority = priority;
 	}
 }
