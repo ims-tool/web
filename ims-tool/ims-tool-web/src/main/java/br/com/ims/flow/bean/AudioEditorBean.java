@@ -208,7 +208,25 @@ public class AudioEditorBean extends AbstractBean {
 	@Override
 	public void delete(String id) {
 		// TODO Auto-generated method stub
-		
+		this.audio = ServicesFactory.getInstance().getAudioService().get(id);
+		if(ServicesFactory.getInstance().getAudioService().delete(this.audio)) {
+			
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Audio",this.audio.getName()+" - Deleted!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			updateExternalsBean();
+			
+			init();
+			
+			RequestContext context = RequestContext.getCurrentInstance();
+			boolean saved = true;
+			context.addCallbackParam("saved", saved);
+		} else {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Audio","Error on Delete "+this.audio.getName()+", please contact your support.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}   
 	
 	

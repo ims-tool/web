@@ -212,6 +212,11 @@
 			 		<ui:include src="/pages/admin/Version.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
+		    <p:dialog id="dependenceDlgId" header="Dependences" widgetVar="dependenceDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" >
+			 	<h:form id="formDependence" >
+			 		<ui:include src="/pages/dependence/Dependences.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
 		    
 			<p:confirmDialog widgetVar="tabFlowCloseConfirmDlg"  header="Confirmation" message="You did not save the work, are you sure?">                                
 				

@@ -26,7 +26,7 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 		
 		List<VersionEntity> result = new ArrayList<VersionEntity>();
 		
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "SELECT id,description,system_user,to_char(date_create,'DD/MM/YYYY HH24:MI:DD') date_create FROM flow.version ";
 		
 		try {
@@ -51,7 +51,7 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 
 	}
 	public VersionEntity get(String id) {
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "SELECT id,description,system_user,to_char(date_create,'DD/MM/YYYY HH24:MI:DD') date_create FROM flow.version WHERE id ='"+id+"' ";
 		VersionEntity version = null;
 		try {
@@ -75,7 +75,7 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 	
 	public boolean save(VersionEntity entity) {
 		boolean result = true;
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "INSERT INTO flow.version (id,description,system_user) VALUES "+
 	                 "('"+entity.getId()+"','"+entity.getDescription()+"','"+entity.getSystem_user()+"') ";
 		result = db.ExecuteSql(sql);

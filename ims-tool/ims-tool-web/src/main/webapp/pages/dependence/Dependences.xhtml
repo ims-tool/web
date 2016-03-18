@@ -7,6 +7,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"	>
 		
 	<p:tooltip />
+		    <ui:param name="bean" value="#{dependenceEditorView}" />
 	
 			<style>
 				h2 { 
@@ -32,78 +33,19 @@
 				<p:graphicImage library="images" value="/imagens/icones/flow/dependences.png"  width="60px" height="60px"   />
 
 				<h2>DEPENDENCES</h2>
-				<h3>#{dependenceEditorView.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
+				<h3>#{bean.objectType} - #{bean.objectName}</h3>
 			</h:panelGrid>
-				
-			<h:panelGrid cellpadding="5" id="panelGrid_audio">
-				
-				<h:outputLabel id="label_complement_audio_id" for="complement_audio_id" value="ID:" />
-	            <p:inputText id="complement_audio_id" value="#{audioEditorView.audio.id}" readonly="true" label="label_complement_audio_id" />
-	            
-	            <h:outputLabel id="label_complement_audio_type" for="complement_audio_type" value="TYPE:" />
-	            <p:selectOneMenu value="#{audioEditorView.audio.type}" 
-	 			                 id="complement_audio_type" 
-	 			                 label="label_complement_audio_type" >
-	 				<f:selectItem itemLabel="WAV" itemValue="WAV" />
-	 				<f:selectItem itemLabel="V_WAV" itemValue="V_WAV" />
-	 				<f:selectItem itemLabel="TTS" itemValue="TTS" />
-	 				<f:selectItem itemLabel="VAR" itemValue="VAR" />	
-	 				
-	 				<p:ajax update="formAuxiliar:panelGrid_audio" listener="#{audioEditorView.typeChange}" />
-	 			</p:selectOneMenu>
-	 		</h:panelGrid>
-	 		
-	 		<h:panelGrid cellpadding="5" id="TYPE_WAV"   >
-	 
-	            <h:outputLabel id="label_complement_audio_name" for="complement_audio_name" value="Name: *" />
-	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" requiredMessage="Please,inform the Name" label="label_complement_audio_name" style="width:350px" maxlength="255" />
-	            
-	            <h:outputLabel id="label_complement_audio_description" for="complement_audio_description" value="Description: *" />
-	            <p:inputTextarea id="complement_audio_description" value="#{audioEditorView.audio.description}"  requiredMessage="Please,inform the Description" label="label_complement_audio_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
-	            
-	            <h:outputLabel id="label_complement_audio_path" for="complement_audio_path" value="Path: " />
-	            <p:inputText id="complement_audio_path" value="#{audioEditorView.audio.path}" label="label_complement_audio_path" style="width:350px" />
-	            
-	            <f:facet name="footer">
-	                
-	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{audioEditorView.insert eq true}" update="@form" actionListener="#{audioEditorView.newAudio}"/>
-	                <c:if test="#{audioEditorView.insert == true}">
-					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formComplement" actionListener="#{audioEditorView.save}"/>
-					</c:if>
-					<c:if test="#{audioEditorView.insert == false}">
-					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formComplement" actionListener="#{audioEditorView.update}"/>
-					</c:if>
-	            </f:facet>  	           
-	        </h:panelGrid>
-	       
-	        <p:separator />
+	
 	        
-	        <p:panel id="panelPromptAudios" header="Audios Registered" style="margin-bottom:20px" >
- 				<p:dataTable  scrollable="true" scrollHeight="300" var="a" value="#{audioEditorView.audios}" resizableColumns="true">
-			        <p:column headerText="ID" >
-			            <h:outputText value="#{a.id}" />
+	        <p:panel id="panelPromptAudios" header="Objects that use '#{bean.objectName}'" style="margin-bottom:20px" >
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="o" value="#{bean.objects}" resizableColumns="true">
+			        <p:column headerText="TYPE" filterBy="#{o[0]}" filterMatchMode="contains">
+			            <h:outputText value="#{o[0]}" />
 			        </p:column>
-			        <p:column headerText="TYPE" filterBy="#{a.type}" filterMatchMode="contains">
-			            <h:outputText value="#{a.type}" />
+			        <p:column headerText="NAME" filterBy="#{o[1]}" filterMatchMode="contains">
+			            <h:outputText value="#{o[1]}" />
 			        </p:column>
-			        <p:column headerText="NAME" filterBy="#{a.name}" filterMatchMode="contains">
-			            <h:outputText value="#{a.name}" />
-			        </p:column>
-			        <p:column headerText="DESCRIPTION" filterBy="#{a.description}" filterMatchMode="contains">
-			        	<p:inputTextarea readonly="true" rows="2" autoResize="false" style="width:150px; cursor:text;" value="#{a.description}" />			            
-			        </p:column>
-			        <p:column headerText="PATH" >
-			            <h:outputText value="#{a.path}" />
-			        </p:column>
-			        <p:column headerText="IN USE" >
-			            <h:outputText rendered="#{audioEditorView.isUsed(a.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{audioEditorView.isUsed(a.id)}" icon="ui-icon-search" title="Yes" />
-			        </p:column>
-			        <p:column style="width:32px;text-align: center">
-			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{audioEditorView.edit(a.id)}" update="@form"/>
-			             <p:commandButton icon="ui-icon-close" title="Delete" actionListener="#{audioEditorView.delete(a.id)}" update="@form"/>			                
-			        </p:column>
-			        
+			            
 			    </p:dataTable>
  				
  				

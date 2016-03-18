@@ -24,6 +24,9 @@ public class Constants {
 	public final static String FORM_TYPE_DECISION_CHANCE = "DecisionChance";
 	
 	
+	public final static String DEPENDENCE_OBJECT_TYPE_AUDIO = "Audio";
+	public final static String DEPENDENCE_OBJECT_TYPE_TAG = "Tag";
+	
 	public final static String NO_MATCH = "NOMATCH";
 	public final static String NO_INPUT = "NOINPUT";
 	

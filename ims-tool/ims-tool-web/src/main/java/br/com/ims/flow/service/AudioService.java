@@ -1,5 +1,6 @@
 package br.com.ims.flow.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.factory.DAOFactory;
@@ -39,6 +40,24 @@ public class AudioService extends AbstractEntityService <AudioEntity>{
 			}
 		}
 		return false;
+	}
+	public List<String[]> getUsed(String id) {
+		List<String[]> result = new ArrayList<String[]>();
+		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll();
+		for(PromptEntity prompt :  prompts) { 
+			if(prompt.getAudios() != null && prompt.getAudios().size() > 0) {
+				boolean found = false;
+				for(int index = 0; index < prompt.getAudios().size() && !found; index++) {
+					PromptAudioEntity promptAudio = prompt.getAudios().get(index);
+					if(promptAudio.getAudio().getId().equals(id)) {
+						found = true;
+						String [] dependence = {"Prompt",prompt.getName()};
+						result.add(dependence);
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override

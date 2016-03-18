@@ -25,7 +25,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	
 	public List<AudioEntity> getAll() {
 		
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "SELECT id,type,name,description,path,property,versionid FROM flow.audio ORDER BY name";
 		List<AudioEntity> result = new ArrayList<AudioEntity>(); 
 		try {
@@ -53,7 +53,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		
 	}
 	public AudioEntity get(String id) {
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "SELECT id,type,name,description,path,property,versionid "+
 		             "FROM flow.audio WHERE id = '"+id+"' ";
 		AudioEntity audio = null;
@@ -81,7 +81,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		
 	}
 	public AudioEntity getByName(String name) {
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "SELECT id,type,name,description,path,property,versionid "+
 		             "FROM flow.audio WHERE lower(name) = '"+name.toLowerCase()+"' ";
 		AudioEntity audio = null;
@@ -109,7 +109,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	}
 	public boolean save(AudioEntity audio) {
 		boolean result = true;
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "INSERT INTO flow.audio (id,type,name,description,path,versionid) "+
 					 "VALUES ('"+audio.getId()+"','"+audio.getType()+"','"+audio.getName()+"','"+audio.getDescription()+"','"+audio.getPath()+"',"+audio.getVersionId().getId()+") ";
 		             
@@ -122,7 +122,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	@Override
 	public boolean update(AudioEntity audio) {
 		boolean result = true;
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "UPDATE flow.audio SET type='"+audio.getType()+"',name='"+audio.getName()+"',description='"+audio.getDescription()+"',path='"+audio.getPath()+"',versionid='"+audio.getVersionId().getId()+"' "+
 					 "WHERE id = '"+audio.getId()+"' ";
 		             
@@ -136,7 +136,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	@Override
 	public boolean delete(AudioEntity audio) {
 		boolean result = true;
-		db = new DbConnection("");
+		DbConnection db = new DbConnection("");
 		String sql = "DELETE FROM flow.audio WHERE id = '"+audio.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);

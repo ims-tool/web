@@ -7,8 +7,6 @@ import br.com.ims.flow.model.AbstractEntity;
 
 public abstract class AbstractDAO <T extends AbstractEntity> {
 	
-	protected DbConnection db = null;
-	
 	public abstract List<T> getAll();
 	
 	public abstract T get(String id);
