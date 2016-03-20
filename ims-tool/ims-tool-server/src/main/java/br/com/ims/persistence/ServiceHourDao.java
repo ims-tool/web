@@ -95,7 +95,7 @@ private static Logger logger = Logger.getLogger(ServiceHourDao.class);
 	}
 
 
-	public static List<ServiceHourType> findType() {
+	public static List<ServiceHourType> findType(String user) {
 		
 		List<ServiceHourType> listType = new ArrayList<ServiceHourType>();
 		ServiceHourType type = null;
@@ -104,8 +104,9 @@ private static Logger logger = Logger.getLogger(ServiceHourDao.class);
 		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = "select distinct type  from flow.Service_Hour";
-			
+			String query = "select distinct type from flow.service_hour where type in "
+					+ "(select a.description from access.artifact_access_type_user au, access.user u, access.area a "
+					+ "where a.id = au.areaid and au.userid = u.id and u.login = '"+user+"' and au.artifactid = 2)";
 			rs = conn.ExecuteQuery(query);
 			int id = 0;
 			while (rs.next()) {

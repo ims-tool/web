@@ -85,8 +85,7 @@ public class ConnectionDB {
 		rs = null;
 		stmt = null;
 		try {
-			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-					ResultSet.CONCUR_READ_ONLY);
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			rs = stmt.executeQuery(sql);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -121,7 +120,7 @@ public class ConnectionDB {
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					ResultSet.CONCUR_READ_ONLY);
-			stmt.executeQuery(sql);
+			stmt.executeUpdate(sql);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

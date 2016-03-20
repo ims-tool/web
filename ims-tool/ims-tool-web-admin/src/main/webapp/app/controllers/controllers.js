@@ -11,8 +11,9 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 	checkAccess('webhour');
 	
 	
-	$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/servicehour/findType')
+	$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/servicehour/findType/'+localStorage.getItem('login'))
 	.success(function(data1) {
+		
 		$scope.data = {
 			    repeatSelect: null,
 			    availableOptions: data1,

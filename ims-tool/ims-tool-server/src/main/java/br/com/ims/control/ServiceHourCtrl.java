@@ -20,8 +20,8 @@ public class ServiceHourCtrl {
 		ServiceHourDao.save(entity);
 	}
 	
-	public static List<ServiceHourType> findType() {
-		return ServiceHourDao.findType();
+	public static List<ServiceHourType> findType(String user) {
+		return ServiceHourDao.findType(user);
 	}
 
 }
