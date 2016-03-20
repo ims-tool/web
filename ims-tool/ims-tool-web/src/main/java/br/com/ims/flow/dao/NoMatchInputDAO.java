@@ -18,7 +18,10 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 		}
 		return instance;
 	}
-	
+	public List<NoMatchInputEntity> getByFilter(String where) {
+
+		return this.listNoMatchInputs;		
+	}
 	public List<NoMatchInputEntity> getAll() {
 		
 		return this.listNoMatchInputs;		

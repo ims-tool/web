@@ -18,7 +18,10 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 		}
 		return instance;
 	}
-	
+
+	public List<TagEntity> getByFilter(String where) {
+		return this.listTags;
+	}
 	public List<TagEntity> getAll() {
 		
 		return this.listTags;

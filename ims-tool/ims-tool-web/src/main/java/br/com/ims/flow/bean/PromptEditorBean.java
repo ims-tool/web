@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AudioEntity;
 import br.com.ims.flow.model.ConditionEntity;
@@ -58,7 +59,11 @@ public class PromptEditorBean extends AbstractBean {
     	
     }
     
-    
+    public void newPrompt(ActionEvent event) {
+    	this.prompt = new PromptEntity();
+    	this.prompt.setAudios(new ArrayList<PromptAudioEntity>());    	
+    	this.insert = true;
+    }
    
     public PromptEntity getPrompt() {
 		return prompt;
@@ -307,5 +312,8 @@ public class PromptEditorBean extends AbstractBean {
 		this.conditionId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_condition_input").toString();
 	}
 	
+	public void viewDependence(String id, String name) {
+		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_PROMPT,id, name);
+	}
     
 }

@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.model.ConditionEntity;
-import br.com.ims.flow.model.ConditionGroupEntity;
-import br.com.ims.flow.model.ConditionParameterEntity;
-import br.com.ims.flow.model.ConditionValueEntity;
 
 public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	private List<ConditionEntity> listConditions =  null;
@@ -39,6 +36,9 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		
 
 		return result;*/
+	}
+	public List<ConditionEntity> getByFilter(String where) {
+		return this.listConditions;
 	}
 	public ConditionEntity get(String id) {
 		for(ConditionEntity condition : this.listConditions) {

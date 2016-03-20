@@ -1,14 +1,20 @@
 package br.com.ims.flow.factory;
 
+import br.com.ims.flow.dao.AnnounceDAO;
+import br.com.ims.flow.dao.AnswerDAO;
 import br.com.ims.flow.dao.AudioDAO;
 import br.com.ims.flow.dao.ConditionDAO;
 import br.com.ims.flow.dao.ConditionMapDAO;
+import br.com.ims.flow.dao.DisconnectDAO;
 import br.com.ims.flow.dao.FormDAO;
 import br.com.ims.flow.dao.FormTypeDAO;
 import br.com.ims.flow.dao.GrammarDAO;
+import br.com.ims.flow.dao.MenuDAO;
 import br.com.ims.flow.dao.NoMatchInputDAO;
 import br.com.ims.flow.dao.OperationMapDAO;
+import br.com.ims.flow.dao.PromptCollectDAO;
 import br.com.ims.flow.dao.PromptDAO;
+import br.com.ims.flow.dao.ReturnDAO;
 import br.com.ims.flow.dao.TagDAO;
 import br.com.ims.flow.dao.TagTypeDAO;
 import br.com.ims.flow.dao.VersionDAO;
@@ -74,6 +80,25 @@ public class DAOFactory {
 	
 	public VersionDAO getVersionDAO() {
 		return VersionDAO.getInstance(); 
+	}
+	
+	public AnnounceDAO getAnnounceDAO() {
+		return AnnounceDAO.getInstance();
+	}
+	public AnswerDAO getAnswerDAO() {
+		return AnswerDAO.getInstance();
+	}
+	public ReturnDAO getReturnDAO() {
+		return ReturnDAO.getInstance();
+	}
+	public DisconnectDAO getDisconnectDAO() {
+		return DisconnectDAO.getInstance();
+	}
+	public PromptCollectDAO getPromptCollectDAO() {
+		return PromptCollectDAO.getInstance();
+	}
+	public MenuDAO getMenuDAO() {
+		return MenuDAO.getInstance();
 	}
 
 }

@@ -6,9 +6,8 @@ import java.util.regex.Pattern;
 public class ChoiceEntity extends AbstractFormEntity implements Comparable<ChoiceEntity>{
 	
 	private String name;
-	private Integer menuId;
+	private String menuId;
 	private String dtmf;
-	private FormEntity nextForm;
 	private ConditionEntity condition;
 	private TagEntity tag;
 	
@@ -19,10 +18,10 @@ public class ChoiceEntity extends AbstractFormEntity implements Comparable<Choic
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Integer getMenuId() {
+	public String getMenuId() {
 		return menuId;
 	}
-	public void setMenuId(Integer menuId) {
+	public void setMenuId(String menuId) {
 		this.menuId = menuId;
 	}
 	public String getDtmf() {
@@ -31,12 +30,7 @@ public class ChoiceEntity extends AbstractFormEntity implements Comparable<Choic
 	public void setDtmf(String dtmf) {
 		this.dtmf = dtmf;
 	}
-	public FormEntity getNextForm() {
-		return nextForm;
-	}
-	public void setNextForm(FormEntity nextForm) {
-		this.nextForm = nextForm;
-	}
+
 	public ConditionEntity getCondition() {
 		return condition;
 	}

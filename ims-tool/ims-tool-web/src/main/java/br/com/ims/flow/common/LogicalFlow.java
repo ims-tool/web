@@ -83,7 +83,7 @@ public class LogicalFlow {
 	    nodeSource.setConnection(connection);
 	    listFirstNode.remove(nodeTarget);
 	    Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();
-	    ((AbstractFormEntity)formId).setNextForm((FormEntity)target.getData());
+	    ((AbstractFormEntity)formId).setNextForm(((FormEntity)target.getData()).getId());
 	    
 	}
 	

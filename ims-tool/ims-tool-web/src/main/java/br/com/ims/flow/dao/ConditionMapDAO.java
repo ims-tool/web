@@ -18,6 +18,9 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		}
 		return instance;
 	}
+	public List<ConditionMapEntity> getByFilter(String where) {
+		return this.listConditionMaps;
+	}
 	
 	public List<ConditionMapEntity> getAll() {
 		

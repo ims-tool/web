@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.common.DbConnection;
-import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AudioEntity;
-import br.com.ims.flow.model.VersionEntity;
 
 public class AudioDAO extends AbstractDAO<AudioEntity>{
 	private static AudioDAO instance = null;
+	private DbConnection db =  null;
 	private AudioDAO() {
-		 			
+		db =  new DbConnection("");
 	}
 	
 	public static AudioDAO getInstance() {
@@ -23,13 +22,19 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		return instance;
 	}
 	
-	public List<AudioEntity> getAll() {
+	public List<AudioEntity> getByFilter(String where) {
 		
-		DbConnection db = new DbConnection("");
-		String sql = "SELECT id,type,name,description,path,property,versionid FROM flow.audio ORDER BY name";
-		List<AudioEntity> result = new ArrayList<AudioEntity>(); 
+		String sql = "SELECT id,type,name,description,path,property,versionid "+
+				     "FROM flow.audio <WHERE> ORDER BY name";
+		if(where != null && where.length() > 0) {
+			sql = sql.replace("<WHERE>", where);
+		}
+		sql = sql.replace("<WHERE>", "");
+		
+		List<AudioEntity> result = new ArrayList<AudioEntity>();
+		ResultSet rs = null;
 		try {
-			ResultSet rs = db.ExecuteQuery(sql);
+			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
 				AudioEntity audio = new AudioEntity();
 				audio.setId(rs.getString("id"));
@@ -38,97 +43,60 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 				audio.setDescription(rs.getString("description"));
 				audio.setPath(rs.getString("path"));
 				audio.setProperty(rs.getString("property"));
-				VersionEntity version = ServicesFactory.getInstance().getVersionService().get(rs.getString("versionid"));
-				audio.setVersionId(version);
+				audio.setVersionId(null);
 				result.add(audio);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			db.finalize();
+			
+			try {
+				if(rs != null && !rs.isClosed())
+					rs.close();
+			} 
+			catch(Exception e) {};
 		}
 		
 		return result;
 		
 	}
+	public List<AudioEntity> getAll() {
+		return this.getByFilter(null);
+	}
 	public AudioEntity get(String id) {
-		DbConnection db = new DbConnection("");
-		String sql = "SELECT id,type,name,description,path,property,versionid "+
-		             "FROM flow.audio WHERE id = '"+id+"' ";
-		AudioEntity audio = null;
-		try {
-			ResultSet rs = db.ExecuteQuery(sql);
-			if(rs.next()) {
-				
-				audio = new AudioEntity();
-				audio.setId(rs.getString("id"));
-				audio.setType(rs.getString("type"));
-				audio.setName(rs.getString("name"));
-				audio.setDescription(rs.getString("description"));
-				audio.setPath(rs.getString("path"));
-				audio.setProperty(rs.getString("property"));
-				VersionEntity version = ServicesFactory.getInstance().getVersionService().get(rs.getString("versionid"));
-				audio.setVersionId(version);				
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			db.finalize();
+		List<AudioEntity> result = this.getByFilter("WHERE id = "+id);
+		if(result.size() > 0) {
+			return result.get(0);
 		}
-		return audio;
-		
+		return null;	
 	}
 	public AudioEntity getByName(String name) {
-		DbConnection db = new DbConnection("");
-		String sql = "SELECT id,type,name,description,path,property,versionid "+
-		             "FROM flow.audio WHERE lower(name) = '"+name.toLowerCase()+"' ";
-		AudioEntity audio = null;
-		try {
-			ResultSet rs = db.ExecuteQuery(sql);
-			if(rs.next()) {
-				
-				audio = new AudioEntity();
-				audio.setId(rs.getString("id"));
-				audio.setType(rs.getString("type"));
-				audio.setName(rs.getString("name"));
-				audio.setDescription(rs.getString("description"));
-				audio.setPath(rs.getString("path"));
-				audio.setProperty(rs.getString("property"));
-				VersionEntity version = ServicesFactory.getInstance().getVersionService().get(rs.getString("versionid"));
-				audio.setVersionId(version);				
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			db.finalize();
+		List<AudioEntity> result = this.getByFilter("WHERE lower(name) = '"+name.toLowerCase()+"'");
+		if(result.size() > 0) {
+			return result.get(0);
 		}
-		return audio;
+		return null;
+		
 	}
 	public boolean save(AudioEntity audio) {
 		boolean result = true;
-		DbConnection db = new DbConnection("");
 		String sql = "INSERT INTO flow.audio (id,type,name,description,path,versionid) "+
 					 "VALUES ('"+audio.getId()+"','"+audio.getType()+"','"+audio.getName()+"','"+audio.getDescription()+"','"+audio.getPath()+"',"+audio.getVersionId().getId()+") ";
 		             
 		
 		result = db.ExecuteSql(sql);
-		db.finalize();
 		return result;
 	}
 
 	@Override
 	public boolean update(AudioEntity audio) {
 		boolean result = true;
-		DbConnection db = new DbConnection("");
 		String sql = "UPDATE flow.audio SET type='"+audio.getType()+"',name='"+audio.getName()+"',description='"+audio.getDescription()+"',path='"+audio.getPath()+"',versionid='"+audio.getVersionId().getId()+"' "+
 					 "WHERE id = '"+audio.getId()+"' ";
 		             
 		
 		result = db.ExecuteSql(sql);
-		db.finalize();
 		return result;
 		
 	}
@@ -136,11 +104,9 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	@Override
 	public boolean delete(AudioEntity audio) {
 		boolean result = true;
-		DbConnection db = new DbConnection("");
 		String sql = "DELETE FROM flow.audio WHERE id = '"+audio.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);
-		db.finalize();
 		return result;
 		
 	}

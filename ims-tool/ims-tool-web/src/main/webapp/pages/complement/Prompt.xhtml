@@ -9,7 +9,8 @@
 	<p:tooltip />
 	
 			
-			<p:growl id="msgComplementPrompt" showDetail="true" />	
+			<p:growl id="msgComplementPrompt" showDetail="true" autoUpdate="true" />
+			<p:messages id="messages_msg" showDetail="true" autoUpdate="true" closable="true" />	
 			<style>
 				h2 { 
 				    display: block;
@@ -79,7 +80,7 @@
 								itemValue="#{condition.id}" itemLabel="#{condition.name}"  />
 			 			</p:selectOneMenu>
 			            
-			            <p:commandButton value="Add" update="formComplement" ajax="true" immediate="true" actionListener="#{promptEditorView.addAudioToPrompt}"/>			            				
+			            <p:commandButton value="Add" icon="ui-icon-plusthick" update="formComplement" ajax="true" immediate="true" actionListener="#{promptEditorView.addAudioToPrompt}"/>			            				
 		 			</h:panelGrid>	 		
 				</p:column>
 				<p:column colspan="2">
@@ -111,14 +112,21 @@
 		 		</p:column>
 	 			
 	 			<f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleComplementSaveRequest(xhr, status, args)" update="formOther,formComplement,formForm" actionListener="#{promptEditorView.save}"/>
+	                
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{promptEditorView.insert eq true}" update="@form" actionListener="#{promptEditorView.newPrompt}"/>
+	                <c:if test="#{promptEditorView.insert == true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleComplementSaveRequest(xhr, status, args)"  update="@form,formOther,formForm" actionListener="#{promptEditorView.save}"/>
+					</c:if>
+					<c:if test="#{promptEditorView.insert == false}">
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleComplementSaveRequest(xhr, status, args)"  update="@form,formOther,formForm" actionListener="#{promptEditorView.update}"/>
+					</c:if>
 	            </f:facet>  
 	        </h:panelGrid>
 	        
 	        <p:separator />
 	        
 	        <p:panel id="panelPromptRegistered" header="Prompts Registered" style="margin-bottom:20px">
- 				<p:dataTable  scrollable="true" scrollHeight="300" var="p" value="#{promptEditorView.prompts}">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="p" value="#{promptEditorView.prompts}" resizableColumns="true">
 			        <p:column headerText="ID" >
 			            <h:outputText value="#{p.id}" />
 			        </p:column>
@@ -128,11 +136,13 @@
 			        </p:column>
 			        <p:column headerText="IN USE" >
 			            <h:outputText rendered="#{promptEditorView.isUsed(p.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{promptEditorView.isUsed(p.id)}" icon="ui-icon-search" title="Yes" />
+			            <p:commandButton rendered="#{promptEditorView.isUsed(p.id) eq true}" icon="ui-icon-search" actionListener="#{promptEditorView.viewDependence(p.id,p.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
-			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
-			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{promptEditorView.edit(p.id)}" update="@form"/>
+			             <p:commandButton icon="ui-icon-close" disabled="#{promptEditorView.isUsed(a.id)}"  title="Delete" actionListener="#{promptEditorView.delete(p.id)}" update="@form">
+			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
+			             </p:commandButton>			                
 			        </p:column>
 				</p:dataTable>
 			</p:panel>	        	        

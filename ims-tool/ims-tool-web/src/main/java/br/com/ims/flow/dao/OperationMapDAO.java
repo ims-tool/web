@@ -18,6 +18,11 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 		}
 		return instance;
 	}
+
+	public List<OperationMapEntity> getByFilter(String where) {
+
+		return this.listOperationMaps;
+	}
 	
 	public List<OperationMapEntity> getAll() {
 		

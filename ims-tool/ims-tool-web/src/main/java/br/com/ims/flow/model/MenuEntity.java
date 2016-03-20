@@ -9,8 +9,8 @@ public class MenuEntity extends AbstractFormEntity{
 	private PromptEntity prompt;
 	private NoMatchInputEntity noInput;
 	private NoMatchInputEntity noMatch;
-	private Integer fetchTimeOut;
-	private Integer terminatingTimeOut;
+	private String fetchTimeOut;
+	private String terminatingTimeOut;
 	private String terminatingCharacter;	
 	
 	private List<ChoiceEntity> choices;
@@ -34,16 +34,16 @@ public class MenuEntity extends AbstractFormEntity{
 	public void setNoMatch(NoMatchInputEntity noMatch) {
 		this.noMatch = noMatch;
 	}
-	public Integer getFetchTimeOut() {
+	public String getFetchTimeOut() {
 		return fetchTimeOut;
 	}
-	public void setFetchTimeOut(Integer fetchTimeOut) {
+	public void setFetchTimeOut(String fetchTimeOut) {
 		this.fetchTimeOut = fetchTimeOut;
 	}
-	public Integer getTerminatingTimeOut() {
+	public String getTerminatingTimeOut() {
 		return terminatingTimeOut;
 	}
-	public void setTerminatingTimeOut(Integer terminatingTimeOut) {
+	public void setTerminatingTimeOut(String terminatingTimeOut) {
 		this.terminatingTimeOut = terminatingTimeOut;
 	}
 	public String getTerminatingCharacter() {

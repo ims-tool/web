@@ -17,6 +17,10 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 		}
 		return instance;
 	}
+	public List<GrammarEntity> getByFilter(String where) {
+		
+		return this.listGrammar;		
+	}
 	
 	public List<GrammarEntity> getAll() {
 		

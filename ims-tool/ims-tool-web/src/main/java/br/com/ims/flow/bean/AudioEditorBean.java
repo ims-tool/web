@@ -10,6 +10,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AudioEntity;
  
@@ -227,7 +228,11 @@ public class AudioEditorBean extends AbstractBean {
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
-	}   
+	}
+	
+	public void viewDependence(String id, String name) {
+		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_AUDIO,id, name);
+	}
 	
 	
     

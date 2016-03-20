@@ -31,7 +31,9 @@ public class DependenceEditorBean extends AbstractBean {
     }
     
     public void setObject(String objectType,String objectId, String objectName ) {
-    	
+    	this.objectType = objectType;
+    	this.objectId = objectId;
+    	this.objectName = objectName;
     }
     
     public List<String[]> getObjects() {

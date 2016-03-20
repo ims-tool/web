@@ -25,6 +25,7 @@ public class Constants {
 	
 	
 	public final static String DEPENDENCE_OBJECT_TYPE_AUDIO = "Audio";
+	public final static String DEPENDENCE_OBJECT_TYPE_PROMPT = "Prompt";
 	public final static String DEPENDENCE_OBJECT_TYPE_TAG = "Tag";
 	
 	public final static String NO_MATCH = "NOMATCH";

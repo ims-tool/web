@@ -17,5 +17,7 @@ public abstract class AbstractEntityService <T extends AbstractEntity> {
 	public abstract boolean delete(T object);
 	
 	public abstract boolean isUsed(String id);
+	
+	public abstract List<String[]> getUsed(String id);
 
 }

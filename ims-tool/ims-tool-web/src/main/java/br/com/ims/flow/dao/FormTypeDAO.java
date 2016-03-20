@@ -7,6 +7,10 @@ import br.com.ims.flow.model.FormTypeEntity;
 import br.com.ims.flow.common.*;
 
 public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
+	
+	public List<FormTypeEntity> getByFilter(String where) {
+		return this.getAll();
+	}
 	public List<FormTypeEntity> getAll() {
 		List<FormTypeEntity> result = new ArrayList<FormTypeEntity>();
 		

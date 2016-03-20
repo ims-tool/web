@@ -6,7 +6,7 @@ public abstract class AbstractFormEntity extends AbstractEntity{
 	
 	protected String name;
 	protected String description;
-	protected FormEntity nextForm;
+	protected String nextForm;
 
 	public String getName() {
 		return name;
@@ -24,11 +24,11 @@ public abstract class AbstractFormEntity extends AbstractEntity{
 		this.description = description;
 	}
 
-	public FormEntity getNextForm() {
+	public String getNextForm() {
 		return nextForm;
 	}
 
-	public void setNextForm(FormEntity nextForm) {
+	public void setNextForm(String nextForm) {
 		this.nextForm = nextForm;
 	}
 	

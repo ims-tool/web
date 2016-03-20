@@ -4,16 +4,9 @@ package br.com.ims.flow.model;
 public class AnswerEntity extends AbstractFormEntity{
 	
 	
-	private FormEntity nextform;
 	private TagEntity tag;
 	
 	
-	public FormEntity getNextform() {
-		return nextform;
-	}
-	public void setNextform(FormEntity nextform) {
-		this.nextform = nextform;
-	}
 	public TagEntity getTag() {
 		return tag;
 	}

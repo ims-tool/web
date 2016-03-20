@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-public class DbConnection {
+public class DbConnection{
 	public static Logger log = Logger.getLogger(DbConnection.class);
 	
 	InitialContext ctx = null;
@@ -24,6 +24,7 @@ public class DbConnection {
 	public DbConnection(String database) {
 		
 		try {
+			System.out.println("Constructing");
 			ctx = new InitialContext();
 			ds = (DataSource)ctx.lookup("java:/comp/env/jdbc/flow");
 			conn = ds.getConnection();
@@ -31,14 +32,17 @@ public class DbConnection {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 		
 	}
+
 	public void finalize() {
+		System.out.println("finalizing");
 		try {rs.close();} catch(Exception e) {}
 		try {stmt.close();} catch(Exception e) {}
-		try {conn.close();} catch(Exception e) {}
 		try {ctx.close();} catch(Exception e) {}
+		try {conn.close();} catch(Exception e) {}
+		
 	}
 	public boolean ExecuteSql(String sql) {
 		try {

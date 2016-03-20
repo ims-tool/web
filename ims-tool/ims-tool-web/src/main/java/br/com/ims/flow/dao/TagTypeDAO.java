@@ -12,6 +12,7 @@ public class TagTypeDAO extends AbstractDAO<TagTypeEntity> {
 		listTagTypes = new ArrayList<TagTypeEntity>(); 			
 	}
 	
+	
 	public static TagTypeDAO getInstance() {
 		if(instance == null) {
 			instance = new TagTypeDAO();
@@ -80,6 +81,13 @@ public class TagTypeDAO extends AbstractDAO<TagTypeEntity> {
 			
 		}
 		return instance;
+	}
+	
+
+	public List<TagTypeEntity> getByFilter(String where) {
+		
+		return this.listTagTypes;
+		
 	}
 	
 	public List<TagTypeEntity> getAll() {

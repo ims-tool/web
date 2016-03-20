@@ -1,5 +1,7 @@
 package br.com.ims.flow.factory;
 
+import br.com.ims.flow.service.AnnounceService;
+import br.com.ims.flow.service.AnswerService;
 import br.com.ims.flow.service.AudioEditorService;
 import br.com.ims.flow.service.AudioService;
 import br.com.ims.flow.service.ConditionEditorService;
@@ -7,18 +9,23 @@ import br.com.ims.flow.service.ConditionGroupEditorService;
 import br.com.ims.flow.service.ConditionMapEditorService;
 import br.com.ims.flow.service.ConditionMapService;
 import br.com.ims.flow.service.ConditionService;
+import br.com.ims.flow.service.DependenceEditorService;
+import br.com.ims.flow.service.DisconnectService;
 import br.com.ims.flow.service.FormService;
 import br.com.ims.flow.service.FormTypeService;
 import br.com.ims.flow.service.GrammarEditorService;
 import br.com.ims.flow.service.GrammarService;
 import br.com.ims.flow.service.IvrEditorService;
+import br.com.ims.flow.service.MenuService;
 import br.com.ims.flow.service.NoMatchInputEditorService;
 import br.com.ims.flow.service.NoMatchInputService;
 import br.com.ims.flow.service.OperationGroupEditorService;
 import br.com.ims.flow.service.OperationMapEditorService;
 import br.com.ims.flow.service.OperationMapService;
+import br.com.ims.flow.service.PromptCollectService;
 import br.com.ims.flow.service.PromptEditorService;
 import br.com.ims.flow.service.PromptService;
+import br.com.ims.flow.service.ReturnService;
 import br.com.ims.flow.service.TagEditorService;
 import br.com.ims.flow.service.TagService;
 import br.com.ims.flow.service.TagTypeService;
@@ -125,6 +132,28 @@ public class ServicesFactory {
 	}
 	public VersionService getVersionService() {
 		return new VersionService();
+	}
+	
+	public DependenceEditorService getDependenceEditorService() {
+		return new DependenceEditorService();
+	}
+	public AnnounceService getAnnounceService() {
+		return new AnnounceService();
+	}
+	public AnswerService getAnswerService() {
+		return new AnswerService();
+	}
+	public ReturnService getReturnService() {
+		return new ReturnService();
+	}
+	public DisconnectService getDisconnectService() {
+		return new DisconnectService();
+	}
+	public PromptCollectService getPromptCollectService() {
+		return new PromptCollectService();
+	}
+	public MenuService getMenuService() {
+		return new MenuService();
 	}
 
 }
