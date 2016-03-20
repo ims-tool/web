@@ -50,11 +50,20 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(formType.getName().equals(Constants.FORM_TYPE_MENU)) {
 			obj = (Object)ServicesFactory.getInstance().getMenuService().get(objectId);
 		}
+		if(formType.getName().equals(Constants.FORM_TYPE_DECISION)) {
+			obj = (Object)ServicesFactory.getInstance().getDecisionService().get(objectId);
+		}
+		if(formType.getName().equals(Constants.FORM_TYPE_FLOW)) {
+			obj = (Object)ServicesFactory.getInstance().getFlowService().get(objectId);
+		}
+		if(formType.getName().equals(Constants.FORM_TYPE_TRANSFER)) {
+			obj = (Object)ServicesFactory.getInstance().getTransferService().get(objectId);
+		}
 		return obj;
 	}
 	public List<FormEntity> getByFilter(String where) {
 
-		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.formype f_formtype, f.formid f_formid, f.condition f_condition, "+ 
+		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.formype f_formtype, f.formid f_formid, f.condition f_condition, f.positionx f_positionx, f.positiony f_positiony,"+ 
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.form f "+ 
@@ -90,21 +99,17 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 				}
 				FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().get(rs.getString("f_formtype"));
 				
+				Object obj = this.getObject(formType, rs.getString("f_id"));
+				
 				FormEntity form = new FormEntity();
 				form.setId(rs.getString("f_id"));
 				form.setDescription(rs.getString("f_description"));
 				form.setCondition(condition);
 				form.setTag(tag);
-				
+				form.setPositionX(rs.getString("f_positionx"));
+				form.setPositionY(rs.getString("f_positiony"));
 
-				
-				audio.setId(rs.getString("id"));
-				audio.setType(rs.getString("type"));
-				audio.setName(rs.getString("name"));
-				audio.setDescription(rs.getString("description"));
-				audio.setPath(rs.getString("path"));
-				audio.setProperty(rs.getString("property"));
-				audio.setVersionId(null);
+				//continuar aqui
 				result.add(audio);
 				
 				/*

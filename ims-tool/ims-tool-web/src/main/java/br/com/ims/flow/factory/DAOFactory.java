@@ -5,7 +5,9 @@ import br.com.ims.flow.dao.AnswerDAO;
 import br.com.ims.flow.dao.AudioDAO;
 import br.com.ims.flow.dao.ConditionDAO;
 import br.com.ims.flow.dao.ConditionMapDAO;
+import br.com.ims.flow.dao.DecisionDAO;
 import br.com.ims.flow.dao.DisconnectDAO;
+import br.com.ims.flow.dao.FlowDAO;
 import br.com.ims.flow.dao.FormDAO;
 import br.com.ims.flow.dao.FormTypeDAO;
 import br.com.ims.flow.dao.GrammarDAO;
@@ -17,6 +19,7 @@ import br.com.ims.flow.dao.PromptDAO;
 import br.com.ims.flow.dao.ReturnDAO;
 import br.com.ims.flow.dao.TagDAO;
 import br.com.ims.flow.dao.TagTypeDAO;
+import br.com.ims.flow.dao.TransferDAO;
 import br.com.ims.flow.dao.VersionDAO;
 
 public class DAOFactory {
@@ -99,6 +102,15 @@ public class DAOFactory {
 	}
 	public MenuDAO getMenuDAO() {
 		return MenuDAO.getInstance();
+	}
+	public DecisionDAO getDecisionDAO() {
+		return DecisionDAO.getInstance();
+	}
+	public FlowDAO getFlowDAO() {
+		return FlowDAO.getInstance();
+	}
+	public TransferDAO getTransferDAO() {
+		return TransferDAO.getInstance();
 	}
 
 }

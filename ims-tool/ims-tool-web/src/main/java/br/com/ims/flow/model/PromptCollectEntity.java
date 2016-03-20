@@ -8,9 +8,9 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	private PromptEntity prompt;
 	private NoMatchInputEntity noInput;
 	private NoMatchInputEntity noMatch;
-	private Integer fetchTimeout;
-	private Integer interDigitTimeout;
-	private Integer terminatingTimeout;
+	private String fetchTimeout;
+	private String interDigitTimeout;
+	private String terminatingTimeout;
 	private String terminatingCharacter;
 	private TagEntity tag;
 	
@@ -45,22 +45,22 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	public void setNoMatch(NoMatchInputEntity noMatch) {
 		this.noMatch = noMatch;
 	}
-	public Integer getFetchTimeout() {
+	public String getFetchTimeout() {
 		return fetchTimeout;
 	}
-	public void setFetchTimeout(Integer fetchTimeout) {
+	public void setFetchTimeout(String fetchTimeout) {
 		this.fetchTimeout = fetchTimeout;
 	}
-	public Integer getInterDigitTimeout() {
+	public String getInterDigitTimeout() {
 		return interDigitTimeout;
 	}
-	public void setInterDigitTimeout(Integer interDigitTimeout) {
+	public void setInterDigitTimeout(String interDigitTimeout) {
 		this.interDigitTimeout = interDigitTimeout;
 	}
-	public Integer getTerminatingTimeout() {
+	public String getTerminatingTimeout() {
 		return terminatingTimeout;
 	}
-	public void setTerminatingTimeout(Integer terminatingTimeout) {
+	public void setTerminatingTimeout(String terminatingTimeout) {
 		this.terminatingTimeout = terminatingTimeout;
 	}
 	public String getTerminatingCharacter() {

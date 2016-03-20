@@ -104,7 +104,8 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		boolean result = true;
 		
 		String sql = "INSERT INTO flow.announce (id,name,description,flushprompt,prompt,nextform,tag,versionid) "+
-					 "VALUES ('"+announce.getId()+"','"+announce.getName()+"','"+announce.getDescription()+"','"+announce.getFlushprompt()+"','"+announce.getPrompt().getId()+"',"+announce.getNextForm()+",'"+announce.getTag().getId()+"','"+announce.getVersionId().getId()+"') ";
+					 "VALUES ('"+announce.getId()+"','"+announce.getName()+"','"+announce.getDescription()+"','"+announce.getFlushprompt()+"','"+announce.getPrompt().getId()+"',"+announce.getNextForm()+","
+					+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",'"+announce.getVersionId().getId()+"') ";
 		             
 		result = db.ExecuteSql(sql);
 		return result;
@@ -113,7 +114,10 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	@Override
 	public boolean update(AnnounceEntity announce) {
 		boolean result = true;
-		String sql = "UPDATE flow.announce SET name='"+announce.getName()+"',description='"+announce.getDescription()+"',flushprompt='"+announce.getFlushprompt()+"',prompt='"+announce.getPrompt()+"',nextform='"+announce.getNextForm()+"',tag='"+announce.getTag().getId()+"',versionid='"+announce.getVersionId().getId()+"' "+
+		String sql = "UPDATE flow.announce SET name='"+announce.getName()+"',description='"+announce.getDescription()+"',"
+				   + "flushprompt='"+announce.getFlushprompt()+"',prompt='"+announce.getPrompt()+"',"
+				   + "nextform='"+announce.getNextForm()+"',"
+				   + "tag="+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",versionid='"+announce.getVersionId().getId()+"' "+
 					 "WHERE id = '"+announce.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);

@@ -127,8 +127,8 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			promptCollect.setPrompt(prompt);
 			promptCollect.setNoInput(noInput);
 			promptCollect.setNoMatch(noMatch);
-			promptCollect.setFetchTimeout(rs.getInt("pc_fetchtimeou"));
-			promptCollect.setInterDigitTimeout(rs.getInt("pc_interdigittimeout"));
+			promptCollect.setFetchTimeout(rs.getString("pc_fetchtimeou"));
+			promptCollect.setInterDigitTimeout(rs.getString("pc_interdigittimeout"));
 			promptCollect.setTerminatingCharacter(rs.getString("pc_terminatingcharacter"));
 			promptCollect.setNextForm(rs.getString("pc_nextform"));
 				
@@ -171,10 +171,13 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 					 "VALUES ('"+promptCollect.getId()+"','"+promptCollect.getName()+"',"
 					+ "'"+promptCollect.getDescription()+"','"+promptCollect.getFlushprompt()+"',"
 					+ "'"+promptCollect.getPrompt().getId()+"','"+promptCollect.getNoInput().getId()+"',"
-					+ "'"+promptCollect.getNoMatch().getId()+"',"+promptCollect.getFetchTimeout()+","
-					+ promptCollect.getInterDigitTimeout()+","+promptCollect.getTerminatingTimeout()+","
-					+ promptCollect.getTerminatingCharacter()+","+promptCollect.getNextForm()+",'"
-					+ promptCollect.getTag().getId()+"','"+promptCollect.getVersionId().getId()+"') ";
+					+ "'"+promptCollect.getNoMatch().getId()+"',"
+					+ (promptCollect.getFetchTimeout() == null || promptCollect.getFetchTimeout().length() == 0? "NULL" : promptCollect.getFetchTimeout() )+","
+					+ (promptCollect.getInterDigitTimeout() == null ||  promptCollect.getInterDigitTimeout().length() == 0 ? "NULL" : promptCollect.getInterDigitTimeout())+","
+					+ (promptCollect.getTerminatingTimeout() ==  null || promptCollect.getTerminatingTimeout().length() == 0 ? "NULL" : promptCollect.getTerminatingTimeout())+","
+					+ (promptCollect.getTerminatingCharacter() == null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","
+					+ promptCollect.getNextForm()+","
+					+ (promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+"','"+promptCollect.getVersionId().getId()+"') ";
 		             
 		result = db.ExecuteSql(sql);
 		return result;
@@ -186,10 +189,13 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		String sql = "UPDATE flow.promptcollect SET name = '"+promptCollect.getName()+"', "+
 		             "description = '"+promptCollect.getDescription()+"',flushprompt = "+promptCollect.getFlushprompt()+", "+
 				     "prompt= '"+promptCollect.getPrompt().getId()+"',noinput='"+promptCollect.getNoInput().getId()+"', "+
-		             "nomatch='"+promptCollect.getNoMatch().getId()+"',fechtimeout="+promptCollect.getFetchTimeout()+", "+
-				     "interdigittimeout="+promptCollect.getInterDigitTimeout()+",terminatingtimeout="+promptCollect.getTerminatingTimeout()+", "+
-		             "terminatincharacter="+promptCollect.getTerminatingCharacter()+",nextform='"+promptCollect.getNextForm()+"', "+
-				     "tag='"+promptCollect.getTag().getId()+"',versionid='"+promptCollect.getVersionId().getId()+"' "+
+		             "nomatch='"+promptCollect.getNoMatch().getId()+"',"+
+		             "fechtimeout="+(promptCollect.getFetchTimeout() == null || promptCollect.getFetchTimeout().length() == 0 ? "NULL" : promptCollect.getFetchTimeout())+", "+
+				     "interdigittimeout="+(promptCollect.getInterDigitTimeout() == null || promptCollect.getInterDigitTimeout().length() == 0 ? "NULL" : promptCollect.getInterDigitTimeout())+","+
+				     "terminatingtimeout="+(promptCollect.getTerminatingTimeout() == null || promptCollect.getTerminatingTimeout().length() == 0 ? "NULL" : promptCollect.getTerminatingTimeout())+", "+
+		             "terminatincharacter="+(promptCollect.getTerminatingCharacter()== null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","+
+		             "nextform='"+promptCollect.getNextForm()+"', "+
+				     "tag="+(promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",versionid='"+promptCollect.getVersionId().getId()+"' "+
 					 "WHERE id = '"+promptCollect.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);

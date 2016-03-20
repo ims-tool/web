@@ -6,39 +6,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.common.DbConnection;
-import br.com.ims.flow.model.AnswerEntity;
+import br.com.ims.flow.model.FlowEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
-public class AnswerDAO extends AbstractDAO<AnswerEntity>{
-	private static AnswerDAO instance = null;
+public class FlowDAO extends AbstractDAO<FlowEntity>{
+	private static FlowDAO instance = null;
 	private DbConnection db =  null;
-	private AnswerDAO() {
+	private FlowDAO() {
 		db =  new DbConnection("");
 	}
 	
-	public static AnswerDAO getInstance() {
+	public static FlowDAO getInstance() {
 		if(instance == null) {
-			instance = new AnswerDAO();
+			instance = new FlowDAO();
 		}
 		return instance;
 	}
 	
-	public List<AnswerEntity> getByFilter(String where) {
+	public List<FlowEntity> getByFilter(String where) {
 		
-		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.nextform a_nextform, "+
+		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.flowname f_flowname,a.nextform a_nextform, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
-					 "FROM flow.answer a "+
+					 "FROM flow.flow f "+
 					 "LEFT JOIN flow.tag t ON a.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
 					 "<WHERE> "+
-				     "ORDER BY a.name";
+				     "ORDER BY f.name";
 		if(where != null && where.length() > 0) {
 			sql = sql.replace("<WHERE>", where);
 		}
 		sql = sql.replace("<WHERE>", "");
-		List<AnswerEntity> result = new ArrayList<AnswerEntity>();
+		List<FlowEntity> result = new ArrayList<FlowEntity>();
 		ResultSet rs = null;
 		try {
 			rs = db.ExecuteQuery(sql);
@@ -57,14 +57,15 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 				}
 				
 				
-				AnswerEntity answer = new AnswerEntity();
-				answer.setId(rs.getString("a_id"));
-				answer.setName(rs.getString("a_name"));
-				answer.setDescription(rs.getString("a_description"));
-				answer.setNextForm(rs.getString("a_nextform"));
-				answer.setTag(tag);
+				FlowEntity flow = new FlowEntity();
+				flow.setId(rs.getString("f_id"));
+				flow.setName(rs.getString("f_name"));
+				flow.setDescription(rs.getString("f_description"));
+				flow.setFlowName(rs.getString("f_flowname"));
+				flow.setNextForm(rs.getString("a_nextform"));
+				flow.setTag(tag);
 				
-				result.add(answer);
+				result.add(flow);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -81,34 +82,36 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		return result;
 		
 	}
-	public List<AnswerEntity> getAll() {
+	public List<FlowEntity> getAll() {
 		return this.getByFilter(null);
 	}
-	public AnswerEntity get(String id) {
-		List<AnswerEntity> result = this.getByFilter("WHERE a.id = "+id);
+	public FlowEntity get(String id) {
+		List<FlowEntity> result = this.getByFilter("WHERE f.id = "+id);
 		if(result.size() > 0) {
 			return result.get(0);
 		}
 		return null;		
 	}
 	
-	public boolean save(AnswerEntity answer) {
+	public boolean save(FlowEntity entity) {
 		boolean result = true;
 		
-		String sql = "INSERT INTO flow.answer (id,name,description,nextform,tag,versionid) "+
-					 "VALUES ('"+answer.getId()+"','"+answer.getName()+"','"+answer.getDescription()+"','"+answer.getNextForm()+"',"
-					 		+ (answer.getTag() == null ? "NULL" : answer.getTag().getId())+",'"+answer.getVersionId().getId()+"') ";
+		String sql = "INSERT INTO flow.flow (id,name,description,flowname,nextform,tag,versionid) "+
+					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFlowName()+"',"+
+					 entity.getNextForm()+","+
+					 (entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId().getId()+"') ";
 		             
 		result = db.ExecuteSql(sql);
 		return result;
 	}
 
 	@Override
-	public boolean update(AnswerEntity answer) {
+	public boolean update(FlowEntity entity) {
 		boolean result = true;
-		String sql = "UPDATE flow.answer SET name='"+answer.getName()+"',description='"+answer.getDescription()+"',nextform='"+answer.getNextForm()+"',"
-				   + "tag="+(answer.getTag() == null ? "NULL" : answer.getTag().getId())+",versionid='"+answer.getVersionId().getId()+"' "+
-					 "WHERE id = '"+answer.getId()+"' ";
+		String sql = "UPDATE flow.flow SET name='"+entity.getName()+"',description='"+entity.getDescription()+"',flowname='"+entity.getFlowName()+"',"
+				   + "nextform='"+entity.getNextForm()+"',"
+				   + "tag="+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",versionid='"+entity.getVersionId().getId()+"' "+
+					 "WHERE id = '"+entity.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);
 		return result;
@@ -116,9 +119,9 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	}
 
 	@Override
-	public boolean delete(AnswerEntity answer) {
+	public boolean delete(FlowEntity entity) {
 		boolean result = true;
-		String sql = "DELETE FROM flow.answer WHERE id = '"+answer.getId()+"' ";
+		String sql = "DELETE FROM flow.flow WHERE id = '"+entity.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);
 		return result;

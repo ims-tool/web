@@ -130,7 +130,8 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		if(result) {
 			for(PromptAudioEntity promptAudio : prompt.getAudios()) {
 				sql = "INSERT INTO flow.promptaudio (prompt,audio,ordernum,condition) "+
-					   "VALUES ('"+prompt.getId()+"','"+promptAudio.getAudio().getId()+"',"+(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+") ";
+					   "VALUES ('"+prompt.getId()+"','"+promptAudio.getAudio().getId()+"',"+
+						(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+") ";
 				result = result & db.ExecuteSql(sql);
 				if(!result) {
 					//rollback

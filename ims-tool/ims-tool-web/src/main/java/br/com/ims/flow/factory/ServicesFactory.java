@@ -9,8 +9,10 @@ import br.com.ims.flow.service.ConditionGroupEditorService;
 import br.com.ims.flow.service.ConditionMapEditorService;
 import br.com.ims.flow.service.ConditionMapService;
 import br.com.ims.flow.service.ConditionService;
+import br.com.ims.flow.service.DecisionService;
 import br.com.ims.flow.service.DependenceEditorService;
 import br.com.ims.flow.service.DisconnectService;
+import br.com.ims.flow.service.FlowService;
 import br.com.ims.flow.service.FormService;
 import br.com.ims.flow.service.FormTypeService;
 import br.com.ims.flow.service.GrammarEditorService;
@@ -29,6 +31,7 @@ import br.com.ims.flow.service.ReturnService;
 import br.com.ims.flow.service.TagEditorService;
 import br.com.ims.flow.service.TagService;
 import br.com.ims.flow.service.TagTypeService;
+import br.com.ims.flow.service.TransferService;
 import br.com.ims.flow.service.VersionService;
 
 
@@ -154,6 +157,15 @@ public class ServicesFactory {
 	}
 	public MenuService getMenuService() {
 		return new MenuService();
+	}
+	public DecisionService getDecisionService() {
+		return new DecisionService();
+	}
+	public FlowService getFlowService() {
+		return new FlowService();
+	}
+	public TransferService getTransferService() {
+		return new TransferService();
 	}
 
 }

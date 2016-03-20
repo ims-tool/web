@@ -97,7 +97,8 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 		boolean result = true;
 		
 		String sql = "INSERT INTO flow.return (id,name,description,nextform,tag,versionid) "+
-					 "VALUES ('"+_return.getId()+"','"+_return.getName()+"','"+_return.getDescription()+"','"+_return.getTag().getId()+"','"+_return.getVersionId().getId()+"') ";
+					 "VALUES ('"+_return.getId()+"','"+_return.getName()+"','"+_return.getDescription()+"',"
+					+(_return.getTag() == null ? "NULL" : _return.getTag().getId())+",'"+_return.getVersionId().getId()+"') ";
 		             
 		result = db.ExecuteSql(sql);
 		return result;
@@ -106,7 +107,8 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 	@Override
 	public boolean update(ReturnEntity _return) {
 		boolean result = true;
-		String sql = "UPDATE flow.return SET name='"+_return.getName()+"',description='"+_return.getDescription()+"',tag='"+_return.getTag().getId()+"',versionid='"+_return.getVersionId().getId()+"' "+
+		String sql = "UPDATE flow.return SET name='"+_return.getName()+"',description='"+_return.getDescription()+"',"
+				   + "tag="+(_return.getTag() ==  null ? "NULL" :_return.getTag().getId())+"',versionid='"+_return.getVersionId().getId()+"' "+
 					 "WHERE id = '"+_return.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);

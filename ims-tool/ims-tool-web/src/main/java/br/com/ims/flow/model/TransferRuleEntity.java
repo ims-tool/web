@@ -4,6 +4,7 @@ package br.com.ims.flow.model;
 public class TransferRuleEntity extends AbstractEntity implements Comparable <TransferRuleEntity> {
 	
 	private Integer orderNum;
+	private String transferId;
 	private ConditionEntity condition;
 	private TagEntity tag;
 	private PromptEntity prompt;
@@ -101,4 +102,17 @@ public class TransferRuleEntity extends AbstractEntity implements Comparable <Tr
 		return "N/A";
 		
 	}
+
+
+
+	public String getTransferId() {
+		return transferId;
+	}
+
+
+
+	public void setTransferId(String transferId) {
+		this.transferId = transferId;
+	}
+	
 }

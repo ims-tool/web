@@ -96,7 +96,8 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		boolean result = true;
 		
 		String sql = "INSERT INTO flow.disconnect (id,name,description,nextform,tag,versionid) "+
-					 "VALUES ('"+disconnect.getId()+"','"+disconnect.getName()+"','"+disconnect.getDescription()+"','"+disconnect.getTag().getId()+"','"+disconnect.getVersionId().getId()+"') ";
+					 "VALUES ('"+disconnect.getId()+"','"+disconnect.getName()+"','"+disconnect.getDescription()+"',"
+					 		+ (disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",'"+disconnect.getVersionId().getId()+"') ";
 		             
 		result = db.ExecuteSql(sql);
 		return result;
@@ -105,7 +106,8 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 	@Override
 	public boolean update(DisconnectEntity disconnect) {
 		boolean result = true;
-		String sql = "UPDATE flow.disconnect SET name='"+disconnect.getName()+"',description='"+disconnect.getDescription()+"',tag='"+disconnect.getTag().getId()+"',versionid='"+disconnect.getVersionId().getId()+"' "+
+		String sql = "UPDATE flow.disconnect SET name='"+disconnect.getName()+"',description='"+disconnect.getDescription()+"',"
+				   + "tag="+(disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",versionid='"+disconnect.getVersionId().getId()+"' "+
 					 "WHERE id = '"+disconnect.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);

@@ -4,22 +4,24 @@ package br.com.ims.flow.model;
 @SuppressWarnings("serial")
 public class DecisionChanceEntity extends AbstractFormEntity implements Comparable <DecisionChanceEntity>{
 	
-	private Integer decisionGroupId;
+	private String decisionId;
 	private Integer orderNum;
 	private ConditionEntity condition;
-	private FormEntity nextForm;
 	private TagEntity tag;
 	
 	
-	public Integer getDecisionGroupId() {
-		return decisionGroupId;
+
+
+
+	public String getDecisionId() {
+		return decisionId;
 	}
 
 
 
 
-	public void setDecisionGroupId(Integer decisionGroupId) {
-		this.decisionGroupId = decisionGroupId;
+	public void setDecisionId(String decisionId) {
+		this.decisionId = decisionId;
 	}
 
 
@@ -35,20 +37,6 @@ public class DecisionChanceEntity extends AbstractFormEntity implements Comparab
 	public void setOrderNum(Integer orderNum) {
 		this.orderNum = orderNum;
 	}
-
-
-	public FormEntity getNextForm() {
-		return nextForm;
-	}
-
-
-
-
-	public void setNextForm(FormEntity nextForm) {
-		this.nextForm = nextForm;
-	}
-
-
 
 
 	public TagEntity getTag() {
