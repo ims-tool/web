@@ -1,5 +1,6 @@
 package br.com.ims.flow.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.factory.DAOFactory;
@@ -53,6 +54,34 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 		// TODO Auto-generated method stub
 		return DAOFactory.getInstance().getConditionMapDAO().update(entity);
 		
+	}
+
+	@Override
+	public List<String[]> getUsed(String id) {
+		
+		
+		List<String[]> result = new ArrayList<String[]>();
+		
+		List<ConditionEntity> conditions = ServicesFactory.getInstance().getConditionService().getAll();
+		
+		for(ConditionEntity condition :  conditions) {
+			List<ConditionGroupEntity> groups = condition.getListConditionGroup();
+			
+			boolean found = false;
+			for(int index = 0; index < groups.size() && !found; index++) {
+			
+				ConditionGroupEntity group = groups.get(index);
+				if(group.getConditionMap().getId().equals(id)) {
+					found = true;
+					String [] dependence = {"Condition",condition.getName()};
+					result.add(dependence);
+				}
+			}
+			
+		}
+		
+		
+		return result;
 	}
 
 }

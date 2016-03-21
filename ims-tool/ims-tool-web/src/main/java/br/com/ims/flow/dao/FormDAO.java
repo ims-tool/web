@@ -8,11 +8,21 @@ import java.util.List;
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.factory.ServicesFactory;
+import br.com.ims.flow.model.AbstractEntity;
+import br.com.ims.flow.model.AnnounceEntity;
+import br.com.ims.flow.model.AnswerEntity;
 import br.com.ims.flow.model.ConditionEntity;
+import br.com.ims.flow.model.DecisionEntity;
+import br.com.ims.flow.model.DisconnectEntity;
+import br.com.ims.flow.model.FlowEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
+import br.com.ims.flow.model.MenuEntity;
+import br.com.ims.flow.model.PromptCollectEntity;
+import br.com.ims.flow.model.ReturnEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
+import br.com.ims.flow.model.TransferEntity;
 
 public class FormDAO extends AbstractDAO<FormEntity>{
 	
@@ -63,10 +73,11 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	}
 	public List<FormEntity> getByFilter(String where) {
 
-		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.formype f_formtype, f.formid f_formid, f.condition f_condition, f.positionx f_positionx, f.positiony f_positiony,"+ 
+		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.formtype f_formtype, f.formid f_formid, f.condition f_condition, f.positionx f_positionx, f.positiony f_positiony,"+ 
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
-					 "FROM flow.form f "+ 
+					 "FROM flow.form f "+
+					 "FROM flow.formtype ft ON f.formtype = ft.id "+ 
 					 "LEFT JOIN flow.tag t ON f.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+ 
 					 "<WHERE> "+
@@ -103,23 +114,18 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 				
 				FormEntity form = new FormEntity();
 				form.setId(rs.getString("f_id"));
+				form.setName(rs.getString("f_name"));
 				form.setDescription(rs.getString("f_description"));
+				form.setFormType(formType);
+				form.setFormId(obj);
 				form.setCondition(condition);
 				form.setTag(tag);
 				form.setPositionX(rs.getString("f_positionx"));
 				form.setPositionY(rs.getString("f_positiony"));
 
-				//continuar aqui
-				result.add(audio);
+				result.add(form);
 				
-				/*
-				 * private FormTypeEntity formType;
-	private Object formId;
-	private TagEntity tag;
-	private ConditionEntity condition;
-	private FormEntity nextFormDefault;
-	private VersionEntity versionId;
-				 */
+			
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -135,7 +141,6 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		
 		return result;
 		
-		return result;
 	}
 	public List<FormEntity> getAll() {
 		return this.getByFilter(null);
@@ -152,30 +157,150 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		
 	}
 	public List<FormEntity> getByTypeName(String typeName) {
-		return this.getFilter("WHERE tt.name = '"+typeName+"'");
+		return this.getByFilter("WHERE ft.name = '"+typeName+"'");
 		
 	}
 
+	private boolean saveObj(FormEntity entity) {
+		boolean result = true;
+		Object obj = entity.getFormId();
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE)) {
+			result = ServicesFactory.getInstance().getAnnounceService().save((AnnounceEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
+			result = ServicesFactory.getInstance().getAnswerService().save((AnswerEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_RETURN)) {
+			result = ServicesFactory.getInstance().getReturnService().save((ReturnEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_DISCONNECT)) {
+			result = ServicesFactory.getInstance().getDisconnectService().save((DisconnectEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+			result = ServicesFactory.getInstance().getPromptCollectService().save((PromptCollectEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
+			result = ServicesFactory.getInstance().getMenuService().save((MenuEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
+			result = ServicesFactory.getInstance().getDecisionService().save((DecisionEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
+			result = ServicesFactory.getInstance().getFlowService().save((FlowEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
+			result = ServicesFactory.getInstance().getTransferService().save((TransferEntity)obj);
+		}
+		return result;
+	}
+	private boolean deleteObj(FormEntity entity) {
+		boolean result = true;
+		Object obj = entity.getFormId();
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE)) {
+			result = ServicesFactory.getInstance().getAnnounceService().delete((AnnounceEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
+			result = ServicesFactory.getInstance().getAnswerService().delete((AnswerEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_RETURN)) {
+			result = ServicesFactory.getInstance().getReturnService().delete((ReturnEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_DISCONNECT)) {
+			result = ServicesFactory.getInstance().getDisconnectService().delete((DisconnectEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+			result = ServicesFactory.getInstance().getPromptCollectService().delete((PromptCollectEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
+			result = ServicesFactory.getInstance().getMenuService().delete((MenuEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
+			result = ServicesFactory.getInstance().getDecisionService().delete((DecisionEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
+			result = ServicesFactory.getInstance().getFlowService().delete((FlowEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
+			result = ServicesFactory.getInstance().getTransferService().delete((TransferEntity)obj);
+		}
+		return result;
+	}
+	private boolean updateObj(FormEntity entity) {
+		boolean result = true;
+		Object obj = entity.getFormId();
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE)) {
+			result = ServicesFactory.getInstance().getAnnounceService().update((AnnounceEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
+			result = ServicesFactory.getInstance().getAnswerService().update((AnswerEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_RETURN)) {
+			result = ServicesFactory.getInstance().getReturnService().update((ReturnEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_DISCONNECT)) {
+			result = ServicesFactory.getInstance().getDisconnectService().update((DisconnectEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+			result = ServicesFactory.getInstance().getPromptCollectService().update((PromptCollectEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
+			result = ServicesFactory.getInstance().getMenuService().update((MenuEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
+			result = ServicesFactory.getInstance().getDecisionService().update((DecisionEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
+			result = ServicesFactory.getInstance().getFlowService().update((FlowEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
+			result = ServicesFactory.getInstance().getTransferService().update((TransferEntity)obj);
+		}
+		return result;
+	}
+	
 	@Override
 	public boolean save(FormEntity entity) {
 		// TODO Auto-generated method stub
-		result.add(entity);
-		return true;
+		
+		boolean result = true;
+		if((result = this.saveObj(entity))) {
+			String sql = "INSERT INTO flow.form (id,name,description,formtype,formid,tag,condition,versionid) "
+					   + "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFormType().getId()+"','"+((AbstractEntity)entity.getFormId()).getId()+"',"
+					   + (entity.getTag() == null ? "NULL" : entity.getTag().getId())+","+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId() )+",'"+entity.getVersionId().getId()+"')";
+			result = db.ExecuteSql(sql);
+			if(!result) {
+				deleteObj(entity);
+			}
+		}
+		return result;
 		
 	}
 
 	@Override
 	public boolean update(FormEntity entity) {
-		// TODO Auto-generated method stub
-		return true;
+		boolean result = true;
+		if((result = this.updateObj(entity))) {
+			String sql = "UPDATE flow.form SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',"
+					   + "formtype='"+entity.getFormType().getId()+"',formid='"+((AbstractEntity)entity.getFormId()).getId()+"',"
+					   + "tag="+(entity.getTag() == null ? "NULL" :  entity.getTag().getId())+","
+					   + "condition="+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId())+","
+					   + "versionid='"+entity.getVersionId().getId()+"' "
+					   + "WHERE id = '"+entity.getId()+"' ";
+			result = db.ExecuteSql(sql);
+		}
+		return result;
 	}
 
 	@Override
 	public boolean delete(FormEntity entity) {
 		// TODO Auto-generated method stub
-		result.remove(entity);
-		return true;
 		
+		boolean result = this.deleteObj(entity);
+		if(result) {
+			String sql = "DELETE flow.form WHERE id ='"+entity.getId()+"' ";
+			result = db.ExecuteSql(sql);
+		}
+		return result;
 	}
 
 }

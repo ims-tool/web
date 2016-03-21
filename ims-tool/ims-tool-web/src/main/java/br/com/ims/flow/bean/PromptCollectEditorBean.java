@@ -376,18 +376,18 @@ public class PromptCollectEditorBean extends AbstractBean {
 			this.promptCollect.setFlushprompt(null);
 		
 		if(fetchTimeOut.length() > 0) 
-			this.promptCollect.setFetchTimeout(Integer.valueOf(fetchTimeOut));
+			this.promptCollect.setFetchTimeout(fetchTimeOut);
 		else
 			this.promptCollect.setFetchTimeout(null);
 		
 		
 		if(interDigitTimeout.length() > 0)
-			this.promptCollect.setInterDigitTimeout(Integer.valueOf(interDigitTimeout));
+			this.promptCollect.setInterDigitTimeout(interDigitTimeout);
 		else
 			this.promptCollect.setInterDigitTimeout(null);
 			
 		if(terminatingTimeout.length() > 0)
-			this.promptCollect.setTerminatingTimeout(Integer.valueOf(terminatingTimeout));
+			this.promptCollect.setTerminatingTimeout(terminatingTimeout);
 		else
 			this.promptCollect.setTerminatingTimeout(null);
 		

@@ -37,12 +37,7 @@ public class NoMatchInputEntity extends AbstractFormEntity{
 	public void setPrompt(PromptEntity prompt) {
 		this.prompt = prompt;
 	}
-	public FormEntity getNextForm() {
-		return nextForm;
-	}
-	public void setNextForm(FormEntity nextForm) {
-		this.nextForm = nextForm;
-	}
+	
 	public TagEntity getTag() {
 		return tag;
 	}
