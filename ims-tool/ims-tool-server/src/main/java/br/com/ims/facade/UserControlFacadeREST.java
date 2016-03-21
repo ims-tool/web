@@ -138,11 +138,11 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
 
     
     @GET
-    @Path("findType")
+    @Path("findType/{user}")
     @Produces("application/json")
-    public String findType() {
+    public String findType(@PathParam("user") String user) {
     	
-    	List<ServiceHourType> lista = ServiceHourCtrl.findType();
+    	List<ServiceHourType> lista = ServiceHourCtrl.findType(user);
     	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     	String json = "";
 		try {

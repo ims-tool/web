@@ -29,8 +29,8 @@ public class UserControlCtrl {
 		UserControlDao.save(user);
 	}
 	
-	public static List<ServiceHourType> findType() {
-		return ServiceHourDao.findType();
+	public static List<ServiceHourType> findType(String user) {
+		return ServiceHourDao.findType(user);
 	}
 
 	public User getUser(String userLogin) throws DaoException {
