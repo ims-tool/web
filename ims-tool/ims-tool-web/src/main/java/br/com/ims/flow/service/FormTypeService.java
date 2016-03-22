@@ -68,4 +68,10 @@ public class FormTypeService extends AbstractEntityService<FormTypeEntity> imple
 		return DAOFactory.getInstance().getFormTypeDAO().delete(object);
 		
 	}
+
+	@Override
+	public List<String[]> getUsed(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -10,37 +10,71 @@ import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.DecisionChanceEntity;
 import br.com.ims.flow.model.DecisionEntity;
+import br.com.ims.flow.model.OperationEntity;
+import br.com.ims.flow.model.OperationGroupEntity;
+import br.com.ims.flow.model.OperationMapEntity;
+import br.com.ims.flow.model.OperationParameterEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
-public class DecisionDAO extends AbstractDAO<DecisionEntity>{
-	private static DecisionDAO instance = null;
+public class OperationDAO extends AbstractDAO<OperationEntity>{
+	private static OperationDAO instance = null;
 	private DbConnection db =  null;
-	private DecisionDAO() {
+	private OperationDAO() {
 		db =  new DbConnection("");
 	}
 	
-	public static DecisionDAO getInstance() {
+	public static OperationDAO getInstance() {
 		if(instance == null) {
-			instance = new DecisionDAO();
+			instance = new OperationDAO();
 		}
 		return instance;
 	}
-	private List<DecisionChanceEntity> getChances(String decisionId) {
-		String sql = "SELECT dc.id dc_id,dc.decisionid dc_decisionid,dc.ordernum dc_ordernum,dc.condition dc_condition,dc.nextformid dc_nextformid, "+
-					 "t.id t_id, t.description t_description, "+ 
-					 "tt.id tt_id, tt.name tt_name,tt.description tt_description, "+	                 
-	                 "FROM flow.decisionchance dc "+
-	                 "LEFT JOIN flow.tag t ON dc.tag = t.id "+ 
-					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
-	                 "WHERE dc.decisionid ='"+decisionId+"' "+
-	                 "ORDER BY c.dtmf ";
+	private List<OperationParameterEntity> getOperationParameters(String operationGroupId) {
+		String sql = "SELECT op.id op_id,op.operationgroupid op_operationgroupid,op.paramname op_paramname,op.paramvalue op_paramvalue "+
+				 "FROM flow.operationparameters op "+
+                "WHERE op.operationgroupid ='"+operationGroupId+"' ";
+		List<OperationParameterEntity> result = new ArrayList<OperationParameterEntity>();
+		ResultSet rs = null;
+		try {
+			rs = db.ExecuteQuery(sql);
+			while(rs.next()) {
+				OperationParameterEntity op = new 	OperationParameterEntity();
+				op.setId(rs.getString("op_id"));
+				op.setOperationGroupId(rs.getString("op_operationgroupid"));
+				op.setParamName(rs.getString("op_paramname"));
+				op.setParamValue(rs.getString("op_paramvalue"));
+				result.add(op);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null && !rs.isClosed())
+					rs.close();
+			} 
+			catch(Exception e) {};
+		}
+		
+		return result;
+	}
+	private List<OperationGroupEntity> getOperationGroups(String operationId) {
+		String sql = "SELECT og.id og_id,og.operationid og_operationid,og.ordernum og_ordernum,og.description og_description,og.versionid og_versionid, "+
+					 "om.id om_id, om.name om_name,om.description om_description, om.methodreference om_methodreference, om.versionid om_versioid,om.log_active om_log_active "+
+					 "FROM flow.operationgroup og "+
+	                 "INNER JOIN flow.operationmap om ON og.operationmapid = om.id "+ 
+	                 "WHERE og.operationid ='"+operationId+"' "+
+	                 "ORDER BY og.ordernum ";
 		List<DecisionChanceEntity> result = new ArrayList<DecisionChanceEntity>();
 		ResultSet rs = null;
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
-				TagEntity tag = null;
+				OperationMapEntity operationMap = new OperationMapEntity();
+				operationMap.setId(rs.getString("om_id"));
+				operationMap.setName(rs.getString("om_name"));
+				//continuar aqui
 				if(rs.getString("t_id") != null && rs.getString("t_id").length() > 0) {
 					TagTypeEntity tagType = new TagTypeEntity();
 					tagType.setId(rs.getString("tt_id"));
@@ -81,15 +115,15 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		return result;
 	}
 	
-	public List<DecisionEntity> getByFilter(String where) {
-		String sql = "SELECT d.id d_id,d.name d_name,d.description d_description, "+
+	public List<OperationEntity> getByFilter(String where) {
+		String sql = "SELECT o.id o_id,o.name o_name,o.description o_description,o.nextformid o_nextformid, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
-				 "FROM flow.decision d "+
-				 "LEFT JOIN flow.tag t ON d.tag = t.id "+ 
+				 "FROM flow.operation o "+
+				 "LEFT JOIN flow.tag t ON o.tag = t.id "+ 
 				 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
 				 "<WHERE> "+
-				 "ORDER BY d.name";
+				 "ORDER BY o.name";
 		if(where != null && where.length() > 0) {
 			sql = sql.replace("<WHERE>", where);
 		} else {

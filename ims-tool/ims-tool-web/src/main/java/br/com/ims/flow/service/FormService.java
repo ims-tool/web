@@ -45,26 +45,26 @@ public class FormService extends AbstractEntityService<FormEntity> {
 			AbstractFormEntity abs = (AbstractFormEntity)form.getFormId();
 			
 			if(abs.getNextForm() != null &&
-					abs.getNextForm().getId().equals(id)) {
+					abs.getNextForm().equals(id)) {
 				return true;
 			}
 			if(form.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
 				MenuEntity menu = (MenuEntity)form.getFormId();
 				if(menu.getChoices() != null) {
 					for(ChoiceEntity choice : menu.getChoices()) {
-						if(choice.getNextForm() != null && choice.getNextForm().getId().equals(id)) {
+						if(choice.getNextForm() != null && choice.getNextForm().equals(id)) {
 							return true;
 						}
 					}
 				}
 				if(menu.getNoInput() != null &&
 						menu.getNoInput().getNextForm() !=null && 
-						menu.getNoInput().getNextForm().getId().equals(id)) {
+						menu.getNoInput().getNextForm().equals(id)) {
 					return true;
 				}
 				if(menu.getNoMatch() != null && 
 						menu.getNoMatch().getNextForm() != null && 
-						menu.getNoMatch().getNextForm().getId().equals(id)){
+						menu.getNoMatch().getNextForm().equals(id)){
 					return true;
 				}
 			}
@@ -72,12 +72,12 @@ public class FormService extends AbstractEntityService<FormEntity> {
 				PromptCollectEntity pc = (PromptCollectEntity)form.getFormId();
 				if(pc.getNoInput() != null &&
 						pc.getNoInput().getNextForm() !=null &&
-						pc.getNoInput().getNextForm().getId().equals(id)) {
+						pc.getNoInput().getNextForm().equals(id)) {
 					return true;
 				}
 				if(pc.getNoMatch() !=null &&
 						pc.getNoMatch().getNextForm() != null &&
-						pc.getNoMatch().getNextForm().getId().equals(id)) {
+						pc.getNoMatch().getNextForm().equals(id)) {
 					return true;
 					
 				}
@@ -89,7 +89,7 @@ public class FormService extends AbstractEntityService<FormEntity> {
 					
 					for(DecisionChanceEntity chance : decision.getListDecisionChance()) {
 						if(chance.getNextForm() != null &&
-								chance.getNextForm().getId().equals(id)) {
+								chance.getNextForm().equals(id)) {
 							return true;							
 						}
 					}
@@ -112,6 +112,11 @@ public class FormService extends AbstractEntityService<FormEntity> {
 		return DAOFactory.getInstance().getFormDAO().delete(object);
 		
 		
+	}
+	@Override
+	public List<String[]> getUsed(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

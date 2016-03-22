@@ -69,6 +69,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(formType.getName().equals(Constants.FORM_TYPE_TRANSFER)) {
 			obj = (Object)ServicesFactory.getInstance().getTransferService().get(objectId);
 		}
+		if(formType.getName().equals(Constants.FORM_TYPE_OPERATION)) {
+			obj = (Object)ServicesFactory.getInstance().getOperationService().get(objectId);
+		}
 		return obj;
 	}
 	public List<FormEntity> getByFilter(String where) {

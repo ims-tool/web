@@ -3,11 +3,10 @@ package br.com.ims.flow.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.factory.DAOFactory;
-import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.MenuEntity;
 import br.com.ims.flow.model.NoMatchInputEntity;
+import br.com.ims.flow.model.PromptCollectEntity;
 
 public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntity>{
 	
@@ -54,23 +53,23 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 
-		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll();
-		for(FormEntity form :  forms) {
-			if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_MENU)) {
-				
-				if(((MenuEntity)form.getFormId()).getNoInput().getId().equals(id) ||
-					((MenuEntity)form.getFormId()).getNoMatch().getId().equals(id)) {
-					return true;
-				} 
+		List<MenuEntity> menus = DAOFactory.getInstance().getMenuDAO().getAll();
+		for(MenuEntity menu :  menus) {
+			if(menu.getNoInput() != null && menu.getNoInput().getId().equals(id) ||
+					menu.getNoMatch() != null && menu.getNoMatch().getId().equals(id)) {
+				return true;
 			}
-			if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_PROMPT_COLLECT)) {
-				
-				if(((MenuEntity)form.getFormId()).getNoInput().getId().equals(id) ||
-					((MenuEntity)form.getFormId()).getNoMatch().getId().equals(id)) {
-					return true;
-				} 
-			}
+			
 		}
+		List<PromptCollectEntity> promptCollects = DAOFactory.getInstance().getPromptCollectDAO().getAll();
+		for(PromptCollectEntity promptCollect :  promptCollects) {
+			if(promptCollect.getNoInput() !=null && promptCollect.getNoInput().getId().equals(id) ||
+					promptCollect.getNoMatch() !=null && promptCollect.getNoMatch().getId().equals(id)) {
+				return true;
+			}
+			
+		}
+
 		return false;
 	}
 
@@ -87,4 +86,33 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 		return DAOFactory.getInstance().getNoMatchInputDAO().delete(entity);
 	}
 
+
+	@Override
+	public List<String[]> getUsed(String id) {
+		List<String[]> result = new ArrayList<String[]>();
+		List<MenuEntity> menus = DAOFactory.getInstance().getMenuDAO().getAll();
+		for(MenuEntity menu :  menus) {
+			if(menu.getNoInput() != null && menu.getNoInput().getId().equals(id) ||
+					menu.getNoMatch() != null && menu.getNoMatch().getId().equals(id)) {
+				String[] obj = {"Menu",menu.getName()};
+				result.add(obj);
+				
+			}
+			
+		}
+		List<PromptCollectEntity> promptCollects = DAOFactory.getInstance().getPromptCollectDAO().getAll();
+		for(PromptCollectEntity promptCollect :  promptCollects) {
+			if(promptCollect.getNoInput() !=null && promptCollect.getNoInput().getId().equals(id) ||
+					promptCollect.getNoMatch() !=null && promptCollect.getNoMatch().getId().equals(id)) {
+				String[] obj = {"PromptCollect",promptCollect.getName()};
+				result.add(obj);
+			}
+			
+		}
+
+
+		return result;
+	}
+
 }
+	
