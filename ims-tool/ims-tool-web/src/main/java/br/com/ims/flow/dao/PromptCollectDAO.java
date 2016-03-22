@@ -97,7 +97,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 				tag_nm.setType(tagType_nm);
 			}
 			
-			PromptEntity prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("a_prompt"));
+			PromptEntity prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("pc_prompt"));
 			PromptEntity prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
 			PromptEntity prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
 			
@@ -127,7 +127,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			promptCollect.setPrompt(prompt);
 			promptCollect.setNoInput(noInput);
 			promptCollect.setNoMatch(noMatch);
-			promptCollect.setFetchTimeout(rs.getString("pc_fetchtimeou"));
+			promptCollect.setFetchTimeout(rs.getString("pc_fetchtimeout"));
 			promptCollect.setInterDigitTimeout(rs.getString("pc_interdigittimeout"));
 			promptCollect.setTerminatingCharacter(rs.getString("pc_terminatingcharacter"));
 			promptCollect.setNextForm(rs.getString("pc_nextform"));

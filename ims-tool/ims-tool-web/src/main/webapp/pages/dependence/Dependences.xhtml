@@ -40,10 +40,10 @@
 	        <p:panel id="panelPromptAudios" header="Objects that use '#{bean.objectName}'" style="margin-bottom:20px" >
  				<p:dataTable  scrollable="true" scrollHeight="300" var="o" value="#{bean.objects}" resizableColumns="true">
 			        <p:column headerText="TYPE" filterBy="#{o[0]}" filterMatchMode="contains">
-			            <h:outputText value="#{o[0]}" />
+			            <h:outputText value="#{o[0]}" style="font-weight:bold" />
 			        </p:column>
 			        <p:column headerText="NAME" filterBy="#{o[1]}" filterMatchMode="contains">
-			            <h:outputText value="#{o[1]}" />
+			            <h:outputText value="#{o[1]}" style="font-weight:bold"/>
 			        </p:column>
 			            
 			    </p:dataTable>

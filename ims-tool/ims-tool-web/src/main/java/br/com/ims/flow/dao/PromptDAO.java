@@ -121,6 +121,14 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		return null;
 		
 	}
+	public PromptEntity getByName(String name) {
+		List<PromptEntity> result = this.getByFilter("WHERE name = '"+name+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+		
+	}
 	public boolean save(PromptEntity prompt) {
 		boolean result = true;
 		String sql = "INSERT INTO flow.prompt (id,name,versionid) "+

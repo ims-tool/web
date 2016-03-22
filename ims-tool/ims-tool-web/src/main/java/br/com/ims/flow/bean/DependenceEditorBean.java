@@ -40,6 +40,9 @@ public class DependenceEditorBean extends AbstractBean {
     	if(Constants.DEPENDENCE_OBJECT_TYPE_AUDIO.equals(this.objectType)) {
 			this.objects = ServicesFactory.getInstance().getAudioService().getUsed(this.objectId);
 		}
+    	if(Constants.DEPENDENCE_OBJECT_TYPE_PROMPT.equals(this.objectType)) {
+    		this.objects = ServicesFactory.getInstance().getPromptService().getUsed(this.objectId);
+    	}
     	return objects;
 	}
 

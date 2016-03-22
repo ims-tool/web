@@ -13,6 +13,7 @@ import br.com.ims.flow.dao.FormTypeDAO;
 import br.com.ims.flow.dao.GrammarDAO;
 import br.com.ims.flow.dao.MenuDAO;
 import br.com.ims.flow.dao.NoMatchInputDAO;
+import br.com.ims.flow.dao.OperationDAO;
 import br.com.ims.flow.dao.OperationMapDAO;
 import br.com.ims.flow.dao.PromptCollectDAO;
 import br.com.ims.flow.dao.PromptDAO;
@@ -111,6 +112,9 @@ public class DAOFactory {
 	}
 	public TransferDAO getTransferDAO() {
 		return TransferDAO.getInstance();
+	}
+	public OperationDAO getOperationDAO() {
+		return OperationDAO.getInstance();
 	}
 
 }

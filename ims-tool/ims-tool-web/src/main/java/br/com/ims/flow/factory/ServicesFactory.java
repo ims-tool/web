@@ -24,6 +24,7 @@ import br.com.ims.flow.service.NoMatchInputService;
 import br.com.ims.flow.service.OperationGroupEditorService;
 import br.com.ims.flow.service.OperationMapEditorService;
 import br.com.ims.flow.service.OperationMapService;
+import br.com.ims.flow.service.OperationService;
 import br.com.ims.flow.service.PromptCollectService;
 import br.com.ims.flow.service.PromptEditorService;
 import br.com.ims.flow.service.PromptService;
@@ -166,6 +167,9 @@ public class ServicesFactory {
 	}
 	public TransferService getTransferService() {
 		return new TransferService();
+	}
+	public OperationService getOperationService() {
+		return new OperationService();
 	}
 
 }

@@ -1,10 +1,14 @@
 package br.com.ims.flow.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.factory.DAOFactory;
+import br.com.ims.flow.model.AudioEntity;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.FormEntity;
+import br.com.ims.flow.model.NoMatchInputEntity;
+import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.model.VersionEntity;
 
 public class VersionService extends AbstractEntityService<VersionEntity>{
@@ -41,6 +45,42 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 			}
 			
 		}
+		List<NoMatchInputEntity> noMatchInputs = DAOFactory.getInstance().getNoMatchInputDAO().getAll();
+		for(NoMatchInputEntity ni :  noMatchInputs) {
+			
+			if(ni.getVersionId() != null && ni.getVersionId().getId().equals(id)) {
+				return true;
+				
+			}
+			
+		}
+		List<ConditionEntity> conditions = DAOFactory.getInstance().getConditionDAO().getAll();
+		for(ConditionEntity condition :  conditions) {
+			
+			if(condition.getVersionId() != null && condition.getVersionId().getId().equals(id)) {
+				return true;
+				
+			}
+			
+		}
+		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll();
+		for(PromptEntity prompt :  prompts) {
+			
+			if(prompt.getVersionId() != null && prompt.getVersionId().getId().equals(id)) {
+				return true;
+				
+			}
+			
+		}
+		List<AudioEntity> audios = DAOFactory.getInstance().getAudioDAO().getAll();
+		for(AudioEntity audio :  audios) {
+			
+			if(audio.getVersionId() != null && audio.getVersionId().getId().equals(id)) {
+				return true;
+				
+			}
+			
+		}
 		
 		return false;
 	}
@@ -55,6 +95,64 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 	public boolean delete(VersionEntity object) {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public List<String[]> getUsed(String id) {
+		// TODO Auto-generated method stub
+		List<String []> result = new ArrayList<String[]>();
+		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll();
+		for(FormEntity form :  forms) {
+			
+			if(form.getVersionId() != null && form.getVersionId().getId().equals(id)) {
+				String [] obj = {form.getFormType().getName(),form.getName()};
+				result.add(obj);
+				
+			}
+			
+		}
+		List<NoMatchInputEntity> noMatchInputs = DAOFactory.getInstance().getNoMatchInputDAO().getAll();
+		for(NoMatchInputEntity ni :  noMatchInputs) {
+			
+			if(ni.getVersionId() != null && ni.getVersionId().getId().equals(id)) {
+				String [] obj = {"NoMatchInput - "+ni.getType(),ni.getName()};
+				result.add(obj);
+				
+			}
+			
+		}
+		List<ConditionEntity> conditions = DAOFactory.getInstance().getConditionDAO().getAll();
+		for(ConditionEntity condition :  conditions) {
+			
+			if(condition.getVersionId() != null && condition.getVersionId().getId().equals(id)) {
+				String [] obj = {"Condition",condition.getName()};
+				result.add(obj);
+				
+			}
+			
+		}
+		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll();
+		for(PromptEntity prompt :  prompts) {
+			
+			if(prompt.getVersionId() != null && prompt.getVersionId().getId().equals(id)) {
+				String [] obj = {"Prompt",prompt.getName()};
+				result.add(obj);
+				
+			}
+			
+		}
+		List<AudioEntity> audios = DAOFactory.getInstance().getAudioDAO().getAll();
+		for(AudioEntity audio :  audios) {
+			
+			if(audio.getVersionId() != null && audio.getVersionId().getId().equals(id)) {
+				String [] obj = {"Audio",audio.getName()};
+				result.add(obj);
+				
+			}
+			
+		}
+		
+		return result;
 	}
 
 }

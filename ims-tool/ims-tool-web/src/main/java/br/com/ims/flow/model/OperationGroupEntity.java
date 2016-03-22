@@ -7,6 +7,7 @@ import java.util.List;
 public class OperationGroupEntity extends AbstractEntity{
 	
 	private Integer orderNum;
+	private String operationId;
 	private OperationMapEntity operationMap;
 	private String description;	
 	private List<OperationParameterEntity> listOperationParameters;
@@ -14,6 +15,20 @@ public class OperationGroupEntity extends AbstractEntity{
 	public OperationGroupEntity() {
 		listOperationParameters = new ArrayList<OperationParameterEntity>();
 	}
+	
+	
+
+	public String getOperationId() {
+		return operationId;
+	}
+
+
+
+	public void setOperationId(String operationId) {
+		this.operationId = operationId;
+	}
+
+
 
 	public Integer getOrderNum() {
 		return orderNum;

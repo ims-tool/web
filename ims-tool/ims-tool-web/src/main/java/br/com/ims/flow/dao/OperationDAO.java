@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.common.DbConnection;
-import br.com.ims.flow.factory.ServicesFactory;
-import br.com.ims.flow.model.ConditionEntity;
-import br.com.ims.flow.model.DecisionChanceEntity;
-import br.com.ims.flow.model.DecisionEntity;
 import br.com.ims.flow.model.OperationEntity;
 import br.com.ims.flow.model.OperationGroupEntity;
 import br.com.ims.flow.model.OperationMapEntity;
@@ -60,13 +56,13 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		return result;
 	}
 	private List<OperationGroupEntity> getOperationGroups(String operationId) {
-		String sql = "SELECT og.id og_id,og.operationid og_operationid,og.ordernum og_ordernum,og.description og_description,og.versionid og_versionid, "+
-					 "om.id om_id, om.name om_name,om.description om_description, om.methodreference om_methodreference, om.versionid om_versioid,om.log_active om_log_active "+
+		String sql = "SELECT og.id og_id,og.operationid og_operationid,og.ordernum og_ordernum,og.description og_description, "+
+					 "om.id om_id, om.name om_name,om.description om_description, om.methodreference om_methodreference, om.log_active om_log_active "+
 					 "FROM flow.operationgroup og "+
 	                 "INNER JOIN flow.operationmap om ON og.operationmapid = om.id "+ 
 	                 "WHERE og.operationid ='"+operationId+"' "+
 	                 "ORDER BY og.ordernum ";
-		List<DecisionChanceEntity> result = new ArrayList<DecisionChanceEntity>();
+		List<OperationGroupEntity> result = new ArrayList<OperationGroupEntity>();
 		ResultSet rs = null;
 		try {
 			rs = db.ExecuteQuery(sql);
@@ -74,32 +70,21 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				OperationMapEntity operationMap = new OperationMapEntity();
 				operationMap.setId(rs.getString("om_id"));
 				operationMap.setName(rs.getString("om_name"));
-				//continuar aqui
-				if(rs.getString("t_id") != null && rs.getString("t_id").length() > 0) {
-					TagTypeEntity tagType = new TagTypeEntity();
-					tagType.setId(rs.getString("tt_id"));
-					tagType.setName(rs.getString("tt_name"));
-					tagType.setDescription(rs.getString("tt_description"));
-					
-					tag = new TagEntity();
-					tag.setId(rs.getString("t_id"));
-					tag.setDescription(rs.getString("t_description"));
-					tag.setType(tagType);
-				}
-				ConditionEntity condition = null;
-				if(rs.getString("dc_condition") != null && rs.getString("dc_condition").length() > 0) {
-					condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("c_condition"));
-				}
+				operationMap.setDescription(rs.getString("om_description"));
+				operationMap.setMethodReference(rs.getString("om_methodreference"));
+				operationMap.setLogActive(rs.getInt("om_log_active"));
 				
-				DecisionChanceEntity chance = new DecisionChanceEntity();
-				chance.setId(rs.getString("dc_id"));
-				chance.setDecisionId(rs.getString("dc_decisionid"));
-				chance.setOrderNum(rs.getInt("dc_ordernum"));
-				chance.setCondition(condition); 
-				chance.setNextForm(rs.getString("dc_nextformid"));
-				chance.setTag(tag);
+				List<OperationParameterEntity> op = this.getOperationParameters(rs.getString("og_id"));
+				
+				OperationGroupEntity og = new OperationGroupEntity();
+				og.setId(rs.getString("og_id"));
+				og.setOperationId(rs.getString("og_operationid"));
+				og.setOrderNum(rs.getInt("og_ordernum"));
+				og.setDescription(rs.getString("og_description"));
+				og.setOperationMap(operationMap);
+				og.setListOperationParameters(op);
 								
-				result.add(chance);
+				result.add(og);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -129,7 +114,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		} else {
 			sql = sql.replace("<WHERE>", "");
 		}
-		List<DecisionEntity> result = new ArrayList<DecisionEntity>();
+		List<OperationEntity> result = new ArrayList<OperationEntity>();
 		ResultSet rs = null;
 		try {
 			rs = db.ExecuteQuery(sql);
@@ -148,17 +133,19 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					tag.setType(tagType);
 				}
 				
-				List<DecisionChanceEntity> chances = this.getChances(rs.getString("d_id"));
+				List<OperationGroupEntity> groups = this.getOperationGroups(rs.getString("o_id"));
 				
 				
-				DecisionEntity decision = new DecisionEntity();
-				decision.setId(rs.getString("d_id"));
-				decision.setName(rs.getString("d_name"));
-				decision.setDescription(rs.getString("d_description"));
-				decision.setListDecisionChance(chances);
-				decision.setTag(tag);	
+				OperationEntity operation = new OperationEntity();
+				operation.setId(rs.getString("o_id"));
+				operation.setName(rs.getString("o_name"));
+				operation.setDescription(rs.getString("o_description"));
+				operation.setNextForm(rs.getString("o_nextformid"));
+				operation.setListOperationGroup(groups);
+				operation.setTag(tag);	
+				 
 				
-				result.add(decision);
+				result.add(operation);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -175,92 +162,138 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		return result;
 	}
 	
-	public List<DecisionEntity> getAll() {
+	public List<OperationEntity> getAll() {
 		return this.getByFilter(null);
 		
 		
 	}
-	public DecisionEntity get(String id) {
-		List<DecisionEntity> result = this.getByFilter("WHERE d.id = "+id);
+	public OperationEntity get(String id) {
+		List<OperationEntity> result = this.getByFilter("WHERE o.id = "+id);
 		if(result.size() > 0) {
 			return result.get(0);
 		}
 		return null;
 	}
 	
-	public boolean save(DecisionEntity entity) {
+	public boolean save(OperationEntity entity) {
 		boolean result = true;
-		String sql = "INSERT INTO flow.decision (id,name,description,tag,versionid) "+
+		String sql = "INSERT INTO flow.operation (id,name,description,tag,nexformid,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"',"
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
+					 		+ entity.getNextForm()+","
 					 		+entity.getVersionId().getId()+")";
 				    
-		             
 		result = db.ExecuteSql(sql);
 		if(result) {
-			for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
-				sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
-					   "VALUES ('"+chance.getId()+"','"+chance.getDecisionId()+"','"+chance.getOrderNum()+"',"+
-					   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+chance.getNextForm()+","+
-					   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+chance.getVersionId().getId()+") ";
+			for(OperationGroupEntity og : entity.getListOperationGroup()) {
+				
+				
+				sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
+					   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+og.getVersionId().getId()+"')";
+					   
+					   
 				result = result & db.ExecuteSql(sql);
 				if(!result) {
 					//rollback
-					sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
+					sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
 					db.ExecuteSql(sql);
-					sql = "DELETE FROM flow.decision WHERE id = '"+entity.getId()+"' ";
+					sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
 					db.ExecuteSql(sql);
-					break;
-				}
-			}
-						
-		}
-		return result;
-
-	}
-
-	@Override
-	public boolean update(DecisionEntity entity) {
-		boolean result = true;
-		String sql = "UPDATE flow.decision SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',"
-				+ "tag = "+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+", "
-				+ "versionid = "+entity.getVersionId().getVersionId()+" "
-				+ "WHERE id = "+entity.getId();
-		
-		result = db.ExecuteSql(sql);
-		if(result) {
-			sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
-			result = db.ExecuteSql(sql);
-			if(result) {
-				for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
-					sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
-							   "VALUES ('"+chance.getId()+"','"+chance.getDecisionId()+"','"+chance.getOrderNum()+"',"+
-							   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+chance.getNextForm()+","+
-							   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+chance.getVersionId().getId()+") ";
+					return result;
+				} else {
+					for(OperationParameterEntity op : og.getListOperationParameters()) {
+						sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
+								   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+op.getVersionId().getId()+"')";
 						result = result & db.ExecuteSql(sql);
-						if(!result) {					
-							break;
+						if(!result) {
+							//rollback
+							sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
+							db.ExecuteSql(sql);
+							sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
+							db.ExecuteSql(sql);
+							sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
+							db.ExecuteSql(sql);
+							return result;
 						}
+					}
+					
+					
+				}
+			}
+						
+		}
+		return result;
+
+	}
+
+	@Override
+	public boolean update(OperationEntity entity) {
+		boolean result = true;
+		String sql = "UPDATE flow.operation SET name = '"+entity.getName()+"',description = '"+entity.getDescription()+"',"
+				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+",nexformid='"+entity.getNextForm()+"',"
+				   + "versionid  =  '"+entity.getVersionId().getId()+"' "
+				   + "WHERE id = "+entity.getId();
+		
+		result = db.ExecuteSql(sql);
+		if(result) {
+			sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
+			
+			result = db.ExecuteSql(sql);
+			if(!result) {
+				return result;
+			}
+			sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";			
+			result = db.ExecuteSql(sql);
+			
+			if(!result) {
+				return result;
+			}
+			
+			for(OperationGroupEntity og : entity.getListOperationGroup()) {
+				
+				
+				sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
+					   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+og.getVersionId().getId()+"')";
+					   
+					   
+				result = result & db.ExecuteSql(sql);
+				if(!result) {					
+					return result;
+				} else {
+					for(OperationParameterEntity op : og.getListOperationParameters()) {
+						sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
+								   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+op.getVersionId().getId()+"')";
+						result = result & db.ExecuteSql(sql);
+						if(!result) {							
+							return result;
+						}
+					}
+					
+					
 				}
 			}
 						
 		}
 		return result;
 		
-		
 	}
 
 	@Override
-	public boolean delete(DecisionEntity entity) {
+	public boolean delete(OperationEntity entity) {
 		boolean result = true;
-		String sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
+		String sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
 		result = db.ExecuteSql(sql);
-		if(result) {
-			sql = "DELETE FROM flow.decision WHERE id = '"+entity.getId()+"' ";
-		             
-			result = db.ExecuteSql(sql);
-		}
+		if(!result)
+			return result;
+		sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
+		result = db.ExecuteSql(sql);
+		if(!result)
+			return result;
+		sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
+		result = db.ExecuteSql(sql);
 		return result;
+		
+		
 		
 	}
 

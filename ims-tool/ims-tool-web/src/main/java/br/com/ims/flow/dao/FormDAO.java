@@ -80,7 +80,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.form f "+
-					 "FROM flow.formtype ft ON f.formtype = ft.id "+ 
+					 "INNER JOIN flow.formtype ft ON f.formtype = ft.id "+ 
 					 "LEFT JOIN flow.tag t ON f.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+ 
 					 "<WHERE> "+
@@ -89,7 +89,6 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 			sql = sql.replace("<WHERE>", where);
 		}
 		sql = sql.replace("<WHERE>", "");
-		
 		List<FormEntity> result = new ArrayList<FormEntity>();
 		ResultSet rs = null;
 		try {

@@ -45,7 +45,7 @@
 	            <p:inputText id="complement_prompt_id" value="#{promptEditorView.prompt.id}" readonly="true" label="label_complement_prompt_id" />
 	 
 	            <h:outputLabel id="label_complement_prompt_name" for="complement_prompt_name" value="Name:" />
-	            <p:inputText id="complement_prompt_name" value="#{promptEditorView.prompt.name}" required="true" requiredMessage="Please,inform a Name" label="label_complement_prompt_name" />
+	            <p:inputText id="complement_prompt_name" value="#{promptEditorView.prompt.name}" requiredMessage="Please,inform the Name" label="label_complement_prompt_name" />
 	            
 	            <p:column colspan="2">
 	            	<p:separator />
@@ -58,8 +58,7 @@
 	            	
 	            	<h:panelGrid columns="7" cellpadding="5">
 		 				<h:outputLabel id="label_complement_prompt_audio" for="complement_prompt_audio" value="Audio:" />
-			            <p:selectOneMenu required="true" 
-			 			                 requiredMessage="Please,select a Audio" 
+			            <p:selectOneMenu requiredMessage="Please,select the Audio" 
 			 			                 value="#{promptEditorView.audioId}" 
 			 			                 id="complement_prompt_audio"
 			 			                 filter="true" filterMatchMode="startsWith" 
@@ -69,7 +68,7 @@
 								itemValue="#{audio.id}" itemLabel="#{audio.name}"  />
 			 			</p:selectOneMenu>
 			 			<h:outputLabel id="label_complement_prompt_audio_order" for="complement_prompt_audio_order" value="Order:" />		 		 
-			            <p:inputText id="complement_prompt_audio_order" type="number" value="#{promptEditorView.audioOrder}"  required="true" requiredMessage="Please,inform audio order" label="label_complement_prompt_audio_order"/>
+			            <p:inputText id="complement_prompt_audio_order" type="number" value="#{promptEditorView.audioOrder}"  requiredMessage="Please,inform the audio order" label="label_complement_prompt_audio_order"/>
 			            <h:outputLabel id="label_complement_prompt_condition" for="complement_prompt_condition" value="Condition:" />
 			            <p:selectOneMenu value="#{promptEditorView.conditionId}" 
 			 			                 id="complement_prompt_condition"
@@ -140,7 +139,7 @@
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
 			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{promptEditorView.edit(p.id)}" update="@form"/>
-			             <p:commandButton icon="ui-icon-close" disabled="#{promptEditorView.isUsed(a.id)}"  title="Delete" actionListener="#{promptEditorView.delete(p.id)}" update="@form">
+			             <p:commandButton icon="ui-icon-close" disabled="#{promptEditorView.isUsed(p.id)}"  title="Delete" actionListener="#{promptEditorView.delete(p.id)}" update="@form">
 			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
 			             </p:commandButton>			                
 			        </p:column>

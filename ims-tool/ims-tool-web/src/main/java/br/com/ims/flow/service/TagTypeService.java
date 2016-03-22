@@ -48,4 +48,10 @@ public class TagTypeService extends AbstractEntityService<TagTypeEntity>{
 		return true;
 	}
 
+	@Override
+	public List<String[]> getUsed(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

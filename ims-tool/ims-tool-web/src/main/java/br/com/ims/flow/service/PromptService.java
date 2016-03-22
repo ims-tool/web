@@ -3,12 +3,12 @@ package br.com.ims.flow.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.factory.DAOFactory;
-import br.com.ims.flow.model.AbstractEntity;
-import br.com.ims.flow.model.FormEntity;
-import br.com.ims.flow.model.PromptAudioEntity;
+import br.com.ims.flow.model.AnnounceEntity;
+import br.com.ims.flow.model.PromptCollectEntity;
 import br.com.ims.flow.model.PromptEntity;
+import br.com.ims.flow.model.TransferEntity;
+import br.com.ims.flow.model.TransferRuleEntity;
 
 public class PromptService extends AbstractEntityService<PromptEntity>{
 	
@@ -21,6 +21,10 @@ public class PromptService extends AbstractEntityService<PromptEntity>{
 		
 		return DAOFactory.getInstance().getPromptDAO().get(id);
 	}
+	public PromptEntity getByName(String name) {
+		
+		return DAOFactory.getInstance().getPromptDAO().getByName(name);
+	}
 	
 	public boolean save(PromptEntity prompt) {
 		return DAOFactory.getInstance().getPromptDAO().save(prompt);
@@ -30,28 +34,58 @@ public class PromptService extends AbstractEntityService<PromptEntity>{
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 
-		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll();
-		for(FormEntity form :  forms) {
-			if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_ANNOUNCE) ||
-			   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_PROMPT_COLLECT)) {
-				if(((AbstractEntity)form.getFormId()).getId().equals(id) ) {
-					return true;
-				}
+		List<AnnounceEntity> announces = DAOFactory.getInstance().getAnnounceDAO().getAll();
+		for(AnnounceEntity announce: announces) {
+			if(announce.getPrompt() != null && announce.getPrompt().getId().equals(id)) {
+				return true;
 			}
 		}
+		List<PromptCollectEntity> promptCollects = DAOFactory.getInstance().getPromptCollectDAO().getAll();
+		for(PromptCollectEntity promptCollect: promptCollects) {
+			if(promptCollect.getPrompt() != null && promptCollect.getPrompt().getId().equals(id)) {
+				return true;
+			}
+		}
+		List<TransferEntity> Transfers = DAOFactory.getInstance().getTransferDAO().getAll();
+		for(TransferEntity transfer: Transfers) {
+			for(TransferRuleEntity transferRule : transfer.getTransferRules()) {
+				if(transferRule.getPrompt() != null && transferRule.getPrompt().getId().equals(id)) {
+					return true;
+				}
+			}			
+		}
+		
+		
 		return false;
 	}
 	public List<String[]> getUsed(String id) {
 		List<String[]> result = new ArrayList<String[]>();
-		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll();
-		for(FormEntity form :  forms) {
-			if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_ANNOUNCE) ||
-			   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_PROMPT_COLLECT)) {
-				if(((AbstractEntity)form.getFormId()).getId().equals(id) ) {
-					String [] dependence = {form.getFormType().getName(),form.getName()};
-					result.add(dependence);
-				}
+		List<AnnounceEntity> announces = DAOFactory.getInstance().getAnnounceDAO().getAll();
+		for(AnnounceEntity announce: announces) {
+			if(announce.getPrompt() != null && announce.getPrompt().getId().equals(id)) {
+				String [] obj = {"Announce",announce.getName()};
+				result.add(obj);
 			}
+		}
+		List<PromptCollectEntity> promptCollects = DAOFactory.getInstance().getPromptCollectDAO().getAll();
+		for(PromptCollectEntity promptCollect: promptCollects) {
+			if(promptCollect.getPrompt() != null && promptCollect.getPrompt().getId().equals(id)) {
+				String [] obj = {"PromptCollect",promptCollect.getName()};
+				result.add(obj);
+			}
+		}
+		List<TransferEntity> Transfers = DAOFactory.getInstance().getTransferDAO().getAll();
+		for(TransferEntity transfer: Transfers) {
+			boolean found = false;
+			
+			for(int index  = 0; index < transfer.getTransferRules().size() && !found; index++) {
+				TransferRuleEntity transferRule = transfer.getTransferRules().get(index);
+				if(transferRule.getPrompt() != null && transferRule.getPrompt().getId().equals(id)) {
+					String [] obj = {"Transfer",transfer.getName()};
+					result.add(obj);
+					found = true;
+				}
+			}			
 		}
 		
 		return result;

@@ -30,10 +30,10 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.disconnect d "+
-					 "LEFT JOIN flow.tag t ON a.tag = t.id "+ 
+					 "LEFT JOIN flow.tag t ON d.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
 				     "<WHERE> "+ 
-					 "ORDER BY r.name";
+					 "ORDER BY d.name";
 		if(where != null && where.length() >0) {
 			sql = sql.replace("<WHERE>", where);
 		}
@@ -85,7 +85,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		return this.getByFilter(null);
 	}
 	public DisconnectEntity get(String id) {
-		List<DisconnectEntity> result = this.getByFilter("WHERE r.id = "+id);
+		List<DisconnectEntity> result = this.getByFilter("WHERE d.id = "+id);
 		if(result.size() > 0) {
 			return result.get(0);
 		}

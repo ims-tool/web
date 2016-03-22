@@ -30,7 +30,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 	private List<TransferRuleEntity> getTransferRules(String transferId) {
 		String sql = "SELECT tr.id tr_id,tr.ordernum tr_ordernum,tr.transferid tr_transferid,tr.condition tr_condition,tr.prompt tr_prompt,tr.number tr_number, "+
 					 "t.id t_id, t.description t_description, "+ 
-					 "tt.id tt_id, tt.name tt_name,tt.description tt_description, "+	                 
+					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.transferrule tr "+
 	                 "LEFT JOIN flow.tag t ON tr.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
@@ -90,7 +90,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 	public List<TransferEntity> getByFilter(String where) {
 		String sql = "SELECT tr.id tr_id,tr.name tr_name,tr.description tr_description, "+
 				 "t.id t_id, t.description t_description, "+ 
-				 "tt.id tt_id, tt.name tt_name,tt.description tt_description, "+
+				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 				 "FROM flow.transfer tr "+
 				 "LEFT JOIN flow.tag t ON tr.tag = t.id "+ 
 				 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+

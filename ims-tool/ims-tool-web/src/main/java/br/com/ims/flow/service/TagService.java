@@ -3,8 +3,6 @@ package br.com.ims.flow.service;
 import java.util.List;
 
 import br.com.ims.flow.factory.DAOFactory;
-import br.com.ims.flow.factory.ServicesFactory;
-import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.TagEntity;
 
 public class TagService extends AbstractEntityService<TagEntity>{
@@ -31,13 +29,8 @@ public class TagService extends AbstractEntityService<TagEntity>{
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 
-		List<FormEntity> forms = ServicesFactory.getInstance().getIvrEditorService().getBean().getListForm();
-		for(FormEntity form :  forms) {
-			if(form.getTag()!= null && form.getTag().getId().equals(id)) {
-				return true;
-			}					
-		}
-		return false;
+		
+		return true;
 	}
 
 	@Override
@@ -45,6 +38,12 @@ public class TagService extends AbstractEntityService<TagEntity>{
 		// TODO Auto-generated method stub
 		return DAOFactory.getInstance().getTagDAO().delete(object);
 		
+	}
+
+	@Override
+	public List<String[]> getUsed(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

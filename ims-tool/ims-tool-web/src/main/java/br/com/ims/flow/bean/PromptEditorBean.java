@@ -143,29 +143,63 @@ public class PromptEditorBean extends AbstractBean {
 		}
     }
 	
-	public void save(ActionEvent event) {
-		
+	private boolean validateFields() {
+		if(this.prompt.getName() == null || this.prompt.getName().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Prompt","Please,inform the Name!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
 		if(this.prompt.getAudios().size() == 0) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt",this.prompt.getName()+" Missing audio!");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
-			return;
+			return false;
 		}
 		
-		ServicesFactory.getInstance().getPromptService().save(this.prompt);
+		PromptEntity tmp = ServicesFactory.getInstance().getPromptService().getByName(this.prompt.getName()) ;
 		
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.prompt.getName()+" - Saved!");
-		 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if(tmp != null && 
+				tmp.getName().equalsIgnoreCase(this.prompt.getName()) &&
+				!tmp.getId().equals(prompt.getId())) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Prompt","Prompt with name '"+this.prompt.getName()+"' already exists!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
+		}
+		this.prompt.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		return true;
 		
+	}
+	
+	public void save(ActionEvent event) {
 		
-		updateExternalsBean();
-		
-		
-		init();
-		
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean saved = true;
-		context.addCallbackParam("saved", saved);
+		if(validateFields()) {
+			
+			if(ServicesFactory.getInstance().getPromptService().save(this.prompt)) {
+			
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.prompt.getName()+" - Saved!");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				
+				updateExternalsBean();
+				
+				
+				init();
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Error on Save "+this.prompt.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		}
 		
     }   
 	
@@ -288,6 +322,30 @@ public class PromptEditorBean extends AbstractBean {
 	@Override
 	public void update(ActionEvent event) {
 		// TODO Auto-generated method stub
+		if(validateFields()) {
+			
+			if(ServicesFactory.getInstance().getPromptService().update(this.prompt)) {
+			
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.prompt.getName()+" - Updated!");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				
+				updateExternalsBean();
+				
+				
+				init();
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Error on Updated "+this.prompt.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		}
+	
 		
 	}
 
@@ -296,6 +354,9 @@ public class PromptEditorBean extends AbstractBean {
 	@Override
 	public void edit(String id) {
 		// TODO Auto-generated method stub
+		this.prompt = ServicesFactory.getInstance().getPromptService().get(id);
+		
+		this.insert= false;
 		
 	}
 
