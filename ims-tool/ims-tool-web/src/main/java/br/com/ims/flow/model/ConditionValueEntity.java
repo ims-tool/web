@@ -4,7 +4,7 @@ package br.com.ims.flow.model;
 @SuppressWarnings("serial")
 public class ConditionValueEntity extends AbstractEntity implements Comparable <ConditionValueEntity>{
 	
-	private Integer conditionGroupId;
+	private String conditionGroupId;
 	private Integer orderNum;
 	private String operation;
 	private String value1;
@@ -25,12 +25,22 @@ public class ConditionValueEntity extends AbstractEntity implements Comparable <
 	}
 	
 	
-	public Integer getConditionGroupId() {
+	
+	
+	public String getConditionGroupId() {
 		return conditionGroupId;
 	}
-	public void setConditionGroupId(Integer conditionGroupId) {
+
+
+
+
+	public void setConditionGroupId(String conditionGroupId) {
 		this.conditionGroupId = conditionGroupId;
 	}
+
+
+
+
 	public Integer getOrderNum() {
 		return orderNum;
 	}

@@ -10,6 +10,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.GrammarEntity;
  
@@ -31,6 +32,7 @@ public class GrammarEditorBean extends AbstractBean {
     
     public void init() {
     	this.grammar = new GrammarEntity();    	
+    	this.grammar.setId(Util.getUID());
     	this.insert = true;
     	
     	this.promptCollectBean = null;

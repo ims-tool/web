@@ -13,7 +13,7 @@ public class VersionEntity extends AbstractEntity {
 	
 	public VersionEntity() {
 		super();
-		this.date_create = Calendar.getInstance().getTime();
+		this.date_create = Calendar.getInstance().getTime();		
 	}
 	
 	public String getDescription() {

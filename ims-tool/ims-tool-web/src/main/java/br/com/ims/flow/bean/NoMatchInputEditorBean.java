@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
 
 import br.com.ims.flow.common.Constants;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.PromptEntity;
@@ -38,7 +39,8 @@ public class NoMatchInputEditorBean extends AbstractBean {
     }
     
     public void init() {
-    	this.noMatchInput = new NoMatchInputEntity();    	
+    	this.noMatchInput = new NoMatchInputEntity();   
+    	this.noMatchInput.setId(Util.getUID());
     	this.insert = true;
     	this.menuBean = null;
     	this.promptCollectBean = null;

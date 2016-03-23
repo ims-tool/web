@@ -8,6 +8,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.VersionEntity;
  
@@ -28,6 +29,7 @@ public class VersionEditorBean extends AbstractBean {
     public void init() {
     	super.init();
     	this.version = new VersionEntity();
+    	this.version.setId(Util.getVERSIONID());
     	this.version.setSystem_user(System.getProperty("user.name"));
     }
     

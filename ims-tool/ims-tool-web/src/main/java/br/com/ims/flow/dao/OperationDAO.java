@@ -189,7 +189,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				
 				
 				sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
-					   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+og.getVersionId().getId()+"')";
+					   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId().getId()+"')";
 					   
 					   
 				result = result & db.ExecuteSql(sql);
@@ -203,7 +203,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				} else {
 					for(OperationParameterEntity op : og.getListOperationParameters()) {
 						sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
-								   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+op.getVersionId().getId()+"')";
+								   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId().getId()+"')";
 						result = result & db.ExecuteSql(sql);
 						if(!result) {
 							//rollback

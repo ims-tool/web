@@ -65,7 +65,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		return this.getByFilter(null);
 	}
 	public AudioEntity get(String id) {
-		List<AudioEntity> result = this.getByFilter("WHERE id = "+id);
+		List<AudioEntity> result = this.getByFilter("WHERE id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

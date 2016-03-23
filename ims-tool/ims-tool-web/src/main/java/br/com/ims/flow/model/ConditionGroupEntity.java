@@ -7,6 +7,7 @@ import java.util.List;
 public class ConditionGroupEntity extends AbstractEntity{
 	
 	private Integer orderNum;
+	private String conditionId;
 	private ConditionMapEntity conditionMap;
 	private String description;	
 	private List<ConditionParameterEntity> listConditionParameters;
@@ -23,6 +24,15 @@ public class ConditionGroupEntity extends AbstractEntity{
 	public void setOrderNum(Integer orderNum) {
 		this.orderNum = orderNum;
 	}
+	
+	public String getConditionId() {
+		return conditionId;
+	}
+
+	public void setConditionId(String conditionId) {
+		this.conditionId = conditionId;
+	}
+
 	public ConditionMapEntity getConditionMap() {
 		return conditionMap;
 	}

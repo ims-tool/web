@@ -10,6 +10,8 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Constants;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionMapEntity;
  
@@ -35,6 +37,7 @@ public class ConditionMapEditorBean extends AbstractBean {
     
     public void init() {
     	this.conditionMap = new ConditionMapEntity();
+    	this.conditionMap.setId(Util.getUID());
     	
     	this.insert = true;
     	
@@ -42,6 +45,12 @@ public class ConditionMapEditorBean extends AbstractBean {
     	
     }
     
+    public void newMap() {
+    	this.conditionMap = new ConditionMapEntity();
+    	this.conditionMap.setId(Util.getUID());
+    	
+    	this.insert = true;
+    }
     
 	
 
@@ -71,47 +80,82 @@ public class ConditionMapEditorBean extends AbstractBean {
 		this.conditionGroupBean = conditionGroupBean;
 	}
 
+	public void viewDependence(String id, String name) {
+		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_CONDITION_MAP,id, name);
+	}
 	
+	private boolean validateFields() {
+		if(this.conditionMap.getName() == null || this.conditionMap.getName().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Map","Please,inform the Name!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(this.conditionMap.getDescription() == null || this.conditionMap.getDescription().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Map","Please,inform the Description!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(this.conditionMap.getMethodReference() == null || this.conditionMap.getMethodReference().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Map","Please,inform the Method Reference!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		
+		ConditionMapEntity tmp = ServicesFactory.getInstance().getConditionMapService().getByName(this.conditionMap.getName()) ;
+		
+		if(tmp != null && 
+				tmp.getName().equalsIgnoreCase(this.conditionMap.getName()) &&
+				!tmp.getId().equals(conditionMap.getId())) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Map","Condition Map with name '"+this.conditionMap.getName()+"' already exists!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		tmp = ServicesFactory.getInstance().getConditionMapService().getByMethodReference(this.conditionMap.getMethodReference()) ;
+		
+		if(tmp != null && 
+				tmp.getMethodReference().equalsIgnoreCase(this.conditionMap.getMethodReference()) &&
+				!tmp.getId().equals(conditionMap.getId())) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Map","Condition Map with MethodReference '"+this.conditionMap.getMethodReference()+"' already exists!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
+		}
+		this.conditionMap.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		return true;
+	}
 
 	
 	public void save(ActionEvent event) {
 
-		this.conditionMaps = this.getConditionMaps();
-		for(ConditionMapEntity map : this.conditionMaps) {
-			if(!map.getId().equals(this.conditionMap.getId()) &&
-					map.getName().equalsIgnoreCase(this.conditionMap.getName())) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Group - Map","Condition Map with name '"+this.conditionMap.getName()+"' already exists!");
-				FacesContext.getCurrentInstance().addMessage(null, msg);
-				return;
-			}
-			if(!map.getId().equals(this.conditionMap.getId()) &&
-					map.getMethodReference().equalsIgnoreCase(this.conditionMap.getMethodReference())) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Group - Map","Condition Map with Method Reference '"+this.conditionMap.getMethodReference()+"' already exists!");
-				FacesContext.getCurrentInstance().addMessage(null, msg);
-				return;
-			}
-		}
-		
-		FacesMessage msg = null;
-		if(insert) {
-			ServicesFactory.getInstance().getConditionMapService().save(this.conditionMap);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Group - Map","Condition Map "+this.conditionMap.getName()+" - Saved!");
+		if(this.validateFields()) {
+			if(ServicesFactory.getInstance().getConditionMapService().save(this.conditionMap)) {
 			
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Map","Condition Map "+this.conditionMap.getName()+" - Saved!");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				updateExternalsBean();
+				
+				init(); 
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Map","Error on Save "+this.conditionMap.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
 		}
-		else {
-			ServicesFactory.getInstance().getConditionMapService().update(this.conditionMap);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Group - Map","Condition Map "+this.conditionMap.getName()+" - Updated!");
-		}
 		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		updateExternalsBean();
-		
-		init(); 
-		
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean saved = true;
-		context.addCallbackParam("saved", saved);
 		
 		
     }   
@@ -128,7 +172,26 @@ public class ConditionMapEditorBean extends AbstractBean {
 	@Override
 	public void update(ActionEvent event) {
 		// TODO Auto-generated method stub
-		
+		if(this.validateFields()) {
+			if(ServicesFactory.getInstance().getConditionMapService().update(this.conditionMap)) {
+			
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Group - Map","Condition Map "+this.conditionMap.getName()+" - Saved!");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				updateExternalsBean();
+				
+				init(); 
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Group - Map","Error on Update "+this.conditionMap.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		}
 	}
 
 	
@@ -142,12 +205,33 @@ public class ConditionMapEditorBean extends AbstractBean {
 	@Override
 	public void edit(String id) {
 		// TODO Auto-generated method stub
+		this.conditionMap = ServicesFactory.getInstance().getConditionMapService().get(id);
+		
+		this.insert= false;
 		
 	}
 
 	@Override
 	public void delete(String id) {
-		// TODO Auto-generated method stub
+		this.conditionMap = ServicesFactory.getInstance().getConditionMapService().get(id);
+		if(ServicesFactory.getInstance().getConditionMapService().delete(this.conditionMap)) {
+			
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Map",this.conditionMap.getName()+" - Deleted!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			updateExternalsBean();
+			
+			init();
+			
+			RequestContext context = RequestContext.getCurrentInstance();
+			boolean saved = true;
+			context.addCallbackParam("saved", saved);
+		} else {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Map","Error on Delete "+this.conditionMap.getName()+", please contact your support.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 		
 	}
 	

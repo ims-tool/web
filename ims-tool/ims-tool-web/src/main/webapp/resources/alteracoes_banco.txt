@@ -1,0 +1,19 @@
+--Criar sequences
+
+create sequence flow.seq_uid;
+
+create sequence flow.seq_tag;
+
+create sequence flow.seq_version start with 1000;
+
+--criar indices
+
+create index ix_conditionmap_method on flow.conditionmap(methodreference)
+
+-- alterar colunas
+
+alter table flow.conditionmap ALTER COLUMN "name" TYPE character varying(30)
+alter table flow.conditionmap ALTER COLUMN description TYPE character varying(2000)
+alter table flow.conditionmap ALTER COLUMN "type" TYPE character varying(10)
+alter table flow.conditionmap ALTER COLUMN methodreference TYPE character varying(100)
+

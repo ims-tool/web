@@ -42,7 +42,7 @@
 			<h:panelGrid cellpadding="5">
 				
 				<h:outputLabel id="label_auxiliar_condition_id" for="auxiliar_condition_id" value="ID:" />
-	            <p:inputText id="auxiliar_condition_id" value="#{bean.condition.id}" label="label_auxiliar_condition_id" />
+	            <p:inputText id="auxiliar_condition_id" value="#{bean.condition.id}" label="label_auxiliar_condition_id" readonly="true" />
 	 
 	            <h:outputLabel id="label_auxiliar_condition_name" for="auxiliar_condition_name" value="Name: *" />
 	            <p:inputText id="auxiliar_condition_name" value="#{bean.condition.name}" requiredMessage="Please,inform the Name" label="label_auxiliar_condition_name" maxlength="30" style="width:350px" />

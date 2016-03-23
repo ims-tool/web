@@ -18,6 +18,7 @@ import br.com.ims.flow.dao.OperationMapDAO;
 import br.com.ims.flow.dao.PromptCollectDAO;
 import br.com.ims.flow.dao.PromptDAO;
 import br.com.ims.flow.dao.ReturnDAO;
+import br.com.ims.flow.dao.SequenceDAO;
 import br.com.ims.flow.dao.TagDAO;
 import br.com.ims.flow.dao.TagTypeDAO;
 import br.com.ims.flow.dao.TransferDAO;
@@ -115,6 +116,9 @@ public class DAOFactory {
 	}
 	public OperationDAO getOperationDAO() {
 		return OperationDAO.getInstance();
+	}
+	public SequenceDAO getSequenceDAO() {
+		return SequenceDAO.getInstance();
 	}
 
 }

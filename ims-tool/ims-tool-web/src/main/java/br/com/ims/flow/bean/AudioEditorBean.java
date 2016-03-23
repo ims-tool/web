@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
 
 import br.com.ims.flow.common.Constants;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AudioEntity;
  
@@ -32,6 +33,7 @@ public class AudioEditorBean extends AbstractBean {
     
     public void init() {
     	this.audio = new AudioEntity();
+    	this.audio.setId(Util.getUID());
     	this.promptBean = null;
     	
     	this.insert = true;
@@ -108,6 +110,7 @@ public class AudioEditorBean extends AbstractBean {
 	}
 	public void newAudio(ActionEvent event) {
 		this.audio = new AudioEntity();
+		this.audio.setId(Util.getUID());
     	this.insert = true;
 	}
 

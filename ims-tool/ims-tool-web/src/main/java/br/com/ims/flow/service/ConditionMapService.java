@@ -20,6 +20,14 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 		
 		return DAOFactory.getInstance().getConditionMapDAO().get(id);
 	}
+	public ConditionMapEntity getByName(String name) {
+		
+		return DAOFactory.getInstance().getConditionMapDAO().getByName(name);
+	}
+	public ConditionMapEntity getByMethodReference(String method) {
+		
+		return DAOFactory.getInstance().getConditionMapDAO().getByMethodReference(method);
+	}
 	
 	public boolean save(ConditionMapEntity entity) {
 		return DAOFactory.getInstance().getConditionMapDAO().save(entity);
@@ -52,7 +60,7 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 	@Override
 	public boolean delete(ConditionMapEntity entity) {
 		// TODO Auto-generated method stub
-		return DAOFactory.getInstance().getConditionMapDAO().update(entity);
+		return DAOFactory.getInstance().getConditionMapDAO().delete(entity);
 		
 	}
 

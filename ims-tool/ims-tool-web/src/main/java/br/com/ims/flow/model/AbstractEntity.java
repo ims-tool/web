@@ -2,8 +2,6 @@ package br.com.ims.flow.model;
 
 import java.io.Serializable;
 
-import br.com.ims.flow.common.Util;
-
 @SuppressWarnings("serial")
 public abstract class AbstractEntity implements Serializable{
 	
@@ -12,7 +10,6 @@ public abstract class AbstractEntity implements Serializable{
 	
 	
 	public AbstractEntity() {
-		this.id = Util.getUID();
 	}
 	
 	

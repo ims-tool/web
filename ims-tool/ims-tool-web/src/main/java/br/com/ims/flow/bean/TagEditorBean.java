@@ -13,6 +13,7 @@ import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.overlay.LabelOverlay;
 
 import br.com.ims.flow.common.Node;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.NoMatchInputEntity;
@@ -51,7 +52,7 @@ public class TagEditorBean extends AbstractBean {
     public void init() {
     	
     	this.tag = new TagEntity();
-    	
+    	this.tag.setId(Util.getTAGID());
     	this.insert = true;
     	
     	this.node = null;
@@ -119,24 +120,36 @@ public class TagEditorBean extends AbstractBean {
 		this.tagTypeId = tagTypeId;
 	}
 
+	private boolean validateFields() {
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
+		}
+		this.tag.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		return true;
+	}
 	
 	@Override
 	public void save(ActionEvent event) {
 		
-		FacesMessage msg = null;
-		this.tag.setType(ServicesFactory.getInstance().getTagTypeService().get(this.tagTypeId));
-		if(this.insert) {					
-			ServicesFactory.getInstance().getTagService().save(this.tag);			
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "TAG",this.tag.getId()+" - Saved!");
-		} else {
-			ServicesFactory.getInstance().getTagService().update(this.tag);			
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "TAG",this.tag.getId()+" - Updated!");
-		}
+		if(validateFields()) {
 			
-		 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+			this.tag.setType(ServicesFactory.getInstance().getTagTypeService().get(this.tagTypeId));
+								
+			if(ServicesFactory.getInstance().getTagService().save(this.tag)) {			
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "TAG",this.tag.getId()+" - Saved!");
+					
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				updateExternalsBean();
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tag","Error on Save "+this.tag.getId()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		}
 		
-		updateExternalsBean();
 		
 		
 		

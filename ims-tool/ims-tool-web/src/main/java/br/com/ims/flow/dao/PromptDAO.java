@@ -132,14 +132,15 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	public boolean save(PromptEntity prompt) {
 		boolean result = true;
 		String sql = "INSERT INTO flow.prompt (id,name,versionid) "+
-					 "VALUES ('"+prompt.getId()+"','"+prompt.getName()+"','"+prompt.getVersionId().getVersionId()+"') ";
+					 "VALUES ('"+prompt.getId()+"','"+prompt.getName()+"','"+prompt.getVersionId().getId()+"') ";
 		             
 		result = db.ExecuteSql(sql);
 		if(result) {
 			for(PromptAudioEntity promptAudio : prompt.getAudios()) {
-				sql = "INSERT INTO flow.promptaudio (prompt,audio,ordernum,condition) "+
-					   "VALUES ('"+prompt.getId()+"','"+promptAudio.getAudio().getId()+"',"+
-						(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+") ";
+				sql = "INSERT INTO flow.promptaudio (prompt,audio,ordernum,condition,versionid) "+
+					   "VALUES ('"+prompt.getId()+"','"+promptAudio.getAudio().getId()+"',"+promptAudio.getOrderNum()+","+
+						(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+","+
+						prompt.getVersionId().getId()+") ";
 				result = result & db.ExecuteSql(sql);
 				if(!result) {
 					//rollback
@@ -167,8 +168,8 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 			result = db.ExecuteSql(sql);
 			if(result) {
 				for(PromptAudioEntity promptAudio : entity.getAudios()) {
-					sql = "INSERT INTO flow.promptaudio (prompt,audio,ordernum,condition) "+
-						   "VALUES ('"+entity.getId()+"','"+promptAudio.getAudio().getId()+"',"+(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+") ";
+					sql = "INSERT INTO flow.promptaudio (prompt,audio,ordernum,condition,versionid) "+
+						   "VALUES ('"+entity.getId()+"','"+promptAudio.getAudio().getId()+"',"+promptAudio.getOrderNum()+","+(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+","+entity.getVersionId().getId()+") ";
 					result = result & db.ExecuteSql(sql);
 					if(!result) {
 						break;

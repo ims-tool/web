@@ -12,6 +12,7 @@ import javax.faces.event.ActionEvent;
 import org.primefaces.context.RequestContext;
 
 import br.com.ims.flow.common.Constants;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AudioEntity;
 import br.com.ims.flow.model.ConditionEntity;
@@ -47,6 +48,7 @@ public class PromptEditorBean extends AbstractBean {
     
     public void init() {
     	this.prompt = new PromptEntity();
+    	this.prompt.setId(Util.getUID());
     	this.prompt.setAudios(new ArrayList<PromptAudioEntity>());    	
     	this.insert = true;
     	
@@ -61,6 +63,7 @@ public class PromptEditorBean extends AbstractBean {
     
     public void newPrompt(ActionEvent event) {
     	this.prompt = new PromptEntity();
+    	this.prompt.setId(Util.getUID());
     	this.prompt.setAudios(new ArrayList<PromptAudioEntity>());    	
     	this.insert = true;
     }
@@ -364,6 +367,25 @@ public class PromptEditorBean extends AbstractBean {
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		
+		this.prompt = ServicesFactory.getInstance().getPromptService().get(id);
+		if(ServicesFactory.getInstance().getPromptService().delete(this.prompt)) {
+			
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.prompt.getName()+" - Deleted!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			updateExternalsBean();
+			
+			init();
+			
+			RequestContext context = RequestContext.getCurrentInstance();
+			boolean saved = true;
+			context.addCallbackParam("saved", saved);
+		} else {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Error on Delete "+this.prompt.getName()+", please contact your support.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 	protected void collect() {
 		this.prompt.setName(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formComplement:complement_prompt_name").toString());

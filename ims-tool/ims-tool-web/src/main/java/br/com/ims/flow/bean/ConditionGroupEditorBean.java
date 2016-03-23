@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionGroupEntity;
 import br.com.ims.flow.model.ConditionMapEntity;
@@ -49,8 +50,11 @@ public class ConditionGroupEditorBean extends AbstractBean {
     
     public void init() {
     	this.conditionGroup = new ConditionGroupEntity();
+    	this.conditionGroup.setId(Util.getUID());
     	this.conditionParameter = new ConditionParameterEntity();
+    	this.conditionParameter.setId(Util.getUID());
     	this.conditionValue = new ConditionValueEntity();
+    	this.conditionValue.setId(Util.getUID());
     	
     	this.listConditionParameter = new ArrayList<ConditionParameterEntity>() ;
     	this.listConditionValue = new ArrayList<ConditionValueEntity>(); 

@@ -26,9 +26,14 @@ public class Constants {
 	
 	public final static String DEPENDENCE_OBJECT_TYPE_AUDIO = "Audio";
 	public final static String DEPENDENCE_OBJECT_TYPE_PROMPT = "Prompt";
-	public final static String DEPENDENCE_OBJECT_TYPE_TAG = "Tag";
+	public final static String DEPENDENCE_OBJECT_TYPE_TAG = "Tag";	
+	public final static String DEPENDENCE_OBJECT_CONDITION_MAP = "ConditionMap";
 	
 	public final static String NO_MATCH = "NOMATCH";
 	public final static String NO_INPUT = "NOINPUT";
+	
+	public final static String SEQUENCE_UID = "flow.seq_uid";
+	public final static String SEQUENCE_TAG = "flow.seq_tag";
+	public final static String SEQUENCE_VERSION = "flow.seq_version";
 	
 }

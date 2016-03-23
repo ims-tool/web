@@ -43,6 +43,9 @@ public class DependenceEditorBean extends AbstractBean {
     	if(Constants.DEPENDENCE_OBJECT_TYPE_PROMPT.equals(this.objectType)) {
     		this.objects = ServicesFactory.getInstance().getPromptService().getUsed(this.objectId);
     	}
+    	if(Constants.DEPENDENCE_OBJECT_CONDITION_MAP.equals(this.objectType)) {
+    		this.objects = ServicesFactory.getInstance().getConditionMapService().getUsed(this.objectId);
+    	}
     	return objects;
 	}
 

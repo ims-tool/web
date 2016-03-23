@@ -1,6 +1,7 @@
 package br.com.ims.flow.model;
 
 import br.com.ims.flow.common.Constants;
+import br.com.ims.flow.common.Util;
 
 @SuppressWarnings("serial")
 public class FormEntity extends AbstractFormEntity{
@@ -63,6 +64,7 @@ public class FormEntity extends AbstractFormEntity{
 			
 			try {
 				this.formId = Class.forName(entity).newInstance();
+				((AbstractFormEntity)this.formId).setId(Util.getUID());
 				((AbstractFormEntity)this.formId).setName(this.name);
 				((AbstractFormEntity)this.formId).setDescription(this.description);
 			} catch (InstantiationException e) {

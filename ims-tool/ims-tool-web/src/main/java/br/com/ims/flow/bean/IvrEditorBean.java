@@ -30,6 +30,7 @@ import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.MyBoolean;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.common.TabItemFlow;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
@@ -358,6 +359,7 @@ public class IvrEditorBean extends AbstractBean {
 		FormTypeEntity formType = ((FormTypeEntity) ddEvent.getData());
 		
 		FormEntity formEntityElement = new FormEntity();
+		formEntityElement.setId(Util.getUID());
 		if(formType.getName().equals(Constants.FORM_TYPE_ANSWER)) {
 			if(logicalFlow.existsStart()) {
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Flow Editor","Node type 'Answer' is allowed only ONE per flow'");

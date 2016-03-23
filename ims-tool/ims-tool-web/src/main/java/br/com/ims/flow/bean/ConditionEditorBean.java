@@ -12,6 +12,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.ConditionGroupEntity;
@@ -44,6 +45,7 @@ public class ConditionEditorBean extends AbstractBean {
     @SuppressWarnings("unchecked")
 	public void init() {
     	this.condition = new ConditionEntity();
+    	this.condition.setId(Util.getUID());
     	if(this.condition.getListConditionGroup() == null) {
     		this.condition.setListConditionGroup(new ArrayList<ConditionGroupEntity>());
     	}
@@ -140,39 +142,66 @@ public class ConditionEditorBean extends AbstractBean {
 			this.decisionBean.setConditionId(this.condition.getId());
 		}
     }
-	
-	public void save(ActionEvent event) {
-		
+	private boolean validateFields() {
 		
 		if(ServicesFactory.getInstance().getConditionService().getByName(this.condition.getName()) != null) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition","Condition with name '"+this.condition.getName()+"' already exists.");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
-			return;
+			return false;
 		}
 		if(this.conditionGroups.size() ==0 ){
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition","Please, configure at least one Condition Group.");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
-			return;
+			return false;
 		}
 		this.condition.setListConditionGroup(this.conditionGroups);
 		
-		ServicesFactory.getInstance().getConditionService().save(this.condition);
+		ConditionEntity tmp = ServicesFactory.getInstance().getConditionService().getByName(this.condition.getName()) ;
 		
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition",this.condition.getName()+" - Saved!");
-		 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if(tmp != null && 
+				tmp.getName().equalsIgnoreCase(this.condition.getName()) &&
+				!tmp.getId().equals(condition.getId())) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Condition","Condition with name '"+this.condition.getName()+"' already exists!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
+		}
+		this.condition.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		return true;
+	}
+	
+	public void save(ActionEvent event) {
 		
+		if(validateFields()) {
 		
-		updateExternalsBean();
-		
-		
-		init();
-		
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean saved = true;
-		context.addCallbackParam("saved", saved);
+			
+			if(ServicesFactory.getInstance().getConditionService().save(this.condition)) {
+			
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition",this.condition.getName()+" - Saved!");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				
+				updateExternalsBean();
+				
+				
+				init();
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "condition","Error on Save "+this.condition.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		}
 		
     }   
 	
@@ -271,7 +300,30 @@ public class ConditionEditorBean extends AbstractBean {
 	@Override
 	public void update(ActionEvent event) {
 		// TODO Auto-generated method stub
+		if(validateFields()) {
 		
+			
+			if(ServicesFactory.getInstance().getConditionService().update(this.condition)) {
+			
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition",this.condition.getName()+" - Saved!");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				
+				updateExternalsBean();
+				
+				
+				init();
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "condition","Error on Save "+this.condition.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}
+		}
 	}
 
 

@@ -9,7 +9,7 @@
 	<p:tooltip />
 	
 			<ui:param name="bean" value="#{conditionmapEditorView}" />
-			<p:growl id="msgConditionMap" showDetail="true" />	
+			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 			<style>
 				h2 { 
 				    display: block;
@@ -43,14 +43,14 @@
 				<h:outputLabel id="label_auxiliar_conditionmap_id" for="auxiliar_conditionmap_id" value="ID:" />
 	            <p:inputText id="auxiliar_conditionmap_id" value="#{bean.conditionMap.id}" readonly="true" label="label_auxiliar_conditionmap_id" />
 	 
-	            <h:outputLabel id="label_auxiliar_conditionmap_name" for="auxiliar_conditionmap_name" value="Name:" />
-	            <p:inputText id="auxiliar_conditionmap_name" value="#{bean.conditionMap.name}" required="true" requiredMessage="Please,inform a Name" label="label_auxiliar_conditionmap_name" style="width:350px" maxlength="30"  />
+	            <h:outputLabel id="label_auxiliar_conditionmap_name" for="auxiliar_conditionmap_name" value="Name: *" />
+	            <p:inputText id="auxiliar_conditionmap_name" value="#{bean.conditionMap.name}" requiredMessage="Please,inform the Name" label="label_auxiliar_conditionmap_name" style="width:350px" maxlength="30"  />
 	            
-	            <h:outputLabel id="label_auxiliar_conditionmap_description" for="auxiliar_conditionmap_description" value="Description:" />
-	            <p:inputTextarea id="auxiliar_conditionmap_description" value="#{bean.conditionMap.description}" required="true" requiredMessage="Please,inform a Description" label="label_auxiliar_condition_description" rows="2" autoResize="false" style="width:350px; cursor:text;"/>
+	            <h:outputLabel id="label_auxiliar_conditionmap_description" for="auxiliar_conditionmap_description" value="Description: *" />
+	            <p:inputTextarea id="auxiliar_conditionmap_description" value="#{bean.conditionMap.description}" requiredMessage="Please,inform the Description" label="label_auxiliar_condition_description" rows="2" autoResize="false" style="width:350px; cursor:text;"/>
 	            
-	            <h:outputLabel id="label_auxiliar_conditionmap_method" for="auxiliar_conditionmap_method" value="Method Reference:" />
-	            <p:inputText id="auxiliar_conditionmap_method" value="#{bean.conditionMap.methodReference}" required="true" requiredMessage="Please,inform a Method Reference" label="label_auxiliar_conditionmap_method" style="width:350px" maxlength="100" />
+	            <h:outputLabel id="label_auxiliar_conditionmap_method" for="auxiliar_conditionmap_method" value="Method Reference: *" />
+	            <p:inputText id="auxiliar_conditionmap_method" value="#{bean.conditionMap.methodReference}" requiredMessage="Please,inform the Method Reference" label="label_auxiliar_conditionmap_method" style="width:350px" maxlength="100" />
 	            
 	            <h:outputLabel id="label_auxiliar_conditionmap_type" for="auxiliar_conditionmap_type" value="TYPE:" />
 	            <p:selectOneMenu value="#{bean.conditionMap.type}" 
@@ -59,9 +59,24 @@
 	 				<f:selectItem itemLabel="TEXT" itemValue="TEXT" />
 	 				<f:selectItem itemLabel="NUMERIC" itemValue="NUMERIC" />
 	 			</p:selectOneMenu>
+	 			<h:outputLabel id="label_auxiliar_conditionmap_log" for="auxiliar_conditionmap_log" value="LOG ACTIVE:" />
+	            <p:selectOneMenu value="#{bean.conditionMap.logActive}" 
+	 			                 id="auxiliar_conditionmap_log"	 			                 
+	 			                 label="label_auxiliar_conditionmap_LOG">
+	 				<f:selectItem itemLabel="NO" itemValue="0" />
+	 				<f:selectItem itemLabel="YES" itemValue="1" />
+	 			</p:selectOneMenu>
 	            	
 	 			<f:facet name="footer">
-	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleUtilSaveRequest(xhr, status, args)" update="formOther,msgConditionMap" actionListener="#{bean.save}"/>
+	                
+	                
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{bean.insert eq true}" update="@form" actionListener="#{bean.newMap}"/>
+	                <c:if test="#{bean.insert == true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleUtilSaveRequest(xhr, status, args)" update="@form,formOther" actionListener="#{bean.save}"/>
+					</c:if>
+					<c:if test="#{bean.insert == false}">
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleUtilSaveRequest(xhr, status, args)"  update="@form,formOther" actionListener="#{bean.update}"/>
+					</c:if>
 	            </f:facet>  
 	        </h:panelGrid>
 	        
@@ -88,10 +103,14 @@
 			        <p:column headerText="IN USE" >
 			            <h:outputText rendered="#{bean.isUsed(c.id) eq false}" value="NO" />
 			            <p:commandButton rendered="#{bean.isUsed(c.id)}" icon="ui-icon-search" title="YES" />
+			            <p:commandButton rendered="#{bean.isUsed(c.id)}" icon="ui-icon-search" actionListener="#{bean.viewDependence(c.id,c.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
-			             <p:commandButton icon="ui-ic on-pencil" title="Edit" ajax="true" immediate="true" update="@form" actionListener="bean.edit(c.id)" />
-			             <p:commandButton icon="ui-icon-close" title="Delete"  ajax="true" immediate="true" update="@form" actionListener="bean.delete(c.id)"/>			                
+			             
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{bean.edit(c.id)}" update="@form"/>
+			             <p:commandButton icon="ui-icon-close" disabled="#{bean.isUsed(c.id)}"  title="Delete" actionListener="#{bean.delete(c.id)}" update="@form">
+			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
+			             </p:commandButton>				                
 			        </p:column>
 				</p:dataTable>
 			</p:panel>	        	        

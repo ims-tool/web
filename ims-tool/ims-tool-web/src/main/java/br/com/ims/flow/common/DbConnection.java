@@ -50,6 +50,7 @@ public class DbConnection{
 			stmt.execute(sql); 
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error(e.getMessage(), e);
 			log.debug(sql);
 			return false;

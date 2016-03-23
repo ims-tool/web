@@ -7,6 +7,9 @@ public class TagEntity extends AbstractEntity{
 	private String description;	
 	private TagTypeEntity type;
 	
+	public TagEntity() {
+		super();
+	}
 	
 	public String getDescription() {
 		return description;

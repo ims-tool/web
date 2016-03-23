@@ -6,23 +6,20 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Random;
 
+import br.com.ims.flow.factory.DAOFactory;
+
 @SuppressWarnings("serial")
 public class Util implements Serializable {
     
     public static Integer uid = 0;
 	public static String getUID() {
-    	String retorno = "";
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmssSSS");
-    	
-    	Random random = new Random();		
-		Integer value = random.nextInt(9);
-		
-		retorno =  sdf.format(Calendar.getInstance().getTime())+String.valueOf(value);
-		
-		return retorno;
-		//uid++;
-		
-		//return String.valueOf(uid);
+    	return DAOFactory.getInstance().getSequenceDAO().getNextVal(Constants.SEQUENCE_UID);		
+    }
+	public static String getTAGID() {
+    	return DAOFactory.getInstance().getSequenceDAO().getNextVal(Constants.SEQUENCE_TAG);		
+    }
+	public static String getVERSIONID() {
+    	return DAOFactory.getInstance().getSequenceDAO().getNextVal(Constants.SEQUENCE_VERSION);		
     }
 	public static java.util.Date dateFormat(String strDate) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
