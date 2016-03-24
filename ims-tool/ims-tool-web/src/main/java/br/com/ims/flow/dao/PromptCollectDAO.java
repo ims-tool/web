@@ -35,7 +35,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description, "+
 				 "t_ni.id t_ni_id, t_ni.description t_ni_description, "+ 
-				 "tt_ni.id tt_id, tt_ni.name tt_ni_name,tt_ni.description tt_ni_description, "+
+				 "tt_ni.id tt_ni_id, tt_ni.name tt_ni_name,tt_ni.description tt_ni_description, "+
 				 "t_nm.id t_nm_id, t_nm.description t_nm_description, "+ 
 				 "tt_nm.id tt_nm_id, tt_nm.name tt_nm_name,tt_nm.description tt_nm_description "+
 				 "FROM flow.promptcollect pc "+
