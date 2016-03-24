@@ -70,16 +70,16 @@
 					            <h:outputText value="#{group.conditionMap.name}" />
 					        </p:column>
 					        <p:column headerText="Parameters"  >
-					        	<p:dataTable  var="l" value="#{bean.paremeterView(group.id)}" >
+					        	<p:dataTable  var="p" value="#{bean.paremeterView(group.id)}" >
 							        <p:column>							        
-							            <h:outputText value="#{l}" />
+							            <h:outputText value="#{p}" />
 							        </p:column>							        
 							    </p:dataTable>					        						            
 					        </p:column>
 					        <p:column headerText="Values" >
-					        	<p:dataTable  var="l" value="#{bean.valueView(group.id)}" >
+					        	<p:dataTable  var="v" value="#{bean.valueView(group.id)}" >
 							        <p:column>							        
-							            <h:outputText value="#{l}" />
+							            <h:outputText value="#{v}" />
 							        </p:column>							        
 							    </p:dataTable>						            
 					        </p:column>

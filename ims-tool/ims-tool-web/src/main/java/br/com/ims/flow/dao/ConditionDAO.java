@@ -250,7 +250,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		
 	}
 	public ConditionEntity get(String id) {
-		List<ConditionEntity> result = this.getByFilter("WHERE c.id = "+id);
+		List<ConditionEntity> result = this.getByFilter("WHERE c.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -258,7 +258,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	}
 	
 	public ConditionEntity getByName(String name) {
-		List<ConditionEntity> result = this.getByFilter("WHERE c.name = "+name);
+		List<ConditionEntity> result = this.getByFilter("WHERE c.name = '"+name+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

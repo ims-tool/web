@@ -234,46 +234,45 @@ public class ConditionEditorBean extends AbstractBean {
 	
 	public List<String> valueView(String id) {
 		List<String> result = new ArrayList<String>();
-		if(condition.getListConditionGroup() != null) {
-			for(ConditionGroupEntity group : condition.getListConditionGroup()) {
-				if(group.getId().equals(id)) {
-					List<ConditionValueEntity> values = group.getListConditionValues();
-					if(values != null && values.size() > 0) {
-						Collections.sort(values);
-						
-						for(ConditionValueEntity value : values) {
-							String linha = group.getConditionMap().getMethodReference()+" ("+value.getOperation()+") "+value.getValue1();
-							if(value.getValue2() != null && value.getValue2().length() > 0) {
-								linha+=", "+value.getValue2();
-							}
-							if(value.getValue3() != null && value.getValue3().length() > 0) {
-								linha+=", "+value.getValue3();
-							}
-							if(value.getValue4() != null && value.getValue4().length() > 0) {
-								linha+=", "+value.getValue4();
-							}
-							if(value.getValue5() != null && value.getValue5().length() > 0) {
-								linha+=", "+value.getValue5();
-							}
-							if(value.getValue6() != null && value.getValue6().length() > 0) {
-								linha+=", "+value.getValue6();
-							}
-							if(value.getValue7() != null && value.getValue7().length() > 0) {
-								linha+=", "+value.getValue7();
-							}
-							if(value.getValue8() != null && value.getValue8().length() > 0) {
-								linha+=", "+value.getValue8();
-							}
-							if(value.getValue9() != null && value.getValue9().length() > 0) {
-								linha+=", "+value.getValue9();
-							}
-							if(value.getValue10() != null && value.getValue10().length() > 0) {
-								linha+=", "+value.getValue10();
-							}
-							result.add(linha);
+		
+		for(ConditionGroupEntity group : conditionGroups) {
+			if(group.getId().equals(id)) {
+				List<ConditionValueEntity> values = group.getListConditionValues();
+				if(values != null && values.size() > 0) {
+					Collections.sort(values);
+					
+					for(ConditionValueEntity value : values) {
+						String linha = group.getConditionMap().getMethodReference()+" ("+value.getOperation()+") "+value.getValue1();
+						if(value.getValue2() != null && value.getValue2().length() > 0) {
+							linha+=", "+value.getValue2();
 						}
-						
+						if(value.getValue3() != null && value.getValue3().length() > 0) {
+							linha+=", "+value.getValue3();
+						}
+						if(value.getValue4() != null && value.getValue4().length() > 0) {
+							linha+=", "+value.getValue4();
+						}
+						if(value.getValue5() != null && value.getValue5().length() > 0) {
+							linha+=", "+value.getValue5();
+						}
+						if(value.getValue6() != null && value.getValue6().length() > 0) {
+							linha+=", "+value.getValue6();
+						}
+						if(value.getValue7() != null && value.getValue7().length() > 0) {
+							linha+=", "+value.getValue7();
+						}
+						if(value.getValue8() != null && value.getValue8().length() > 0) {
+							linha+=", "+value.getValue8();
+						}
+						if(value.getValue9() != null && value.getValue9().length() > 0) {
+							linha+=", "+value.getValue9();
+						}
+						if(value.getValue10() != null && value.getValue10().length() > 0) {
+							linha+=", "+value.getValue10();
+						}
+						result.add(linha);
 					}
+					
 				}
 			}
 		}

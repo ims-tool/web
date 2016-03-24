@@ -339,7 +339,18 @@ public class ConditionGroupEditorBean extends AbstractBean {
 		this.conditionValue.setOrderNum(Integer.valueOf(order	));
 		this.conditionValue.setOperation(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_operation_input").toString());
 		this.conditionValue.setValue1(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value1").toString());
-		if(!this.conditionValue.getOperation().equals("=")) {			
+		
+		if(this.conditionValue.getOperation().equals("BETWEEN")) {
+			this.conditionValue.setValue2(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value2").toString());
+			this.conditionValue.setValue3("");
+			this.conditionValue.setValue4("");
+			this.conditionValue.setValue5("");
+			this.conditionValue.setValue6("");
+			this.conditionValue.setValue7("");
+			this.conditionValue.setValue8("");
+			this.conditionValue.setValue9("");
+			this.conditionValue.setValue10("");
+		} else if(this.conditionValue.getOperation().equals("OR")) {			
 			this.conditionValue.setValue2(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value2").toString());
 			this.conditionValue.setValue3(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value3").toString());
 			this.conditionValue.setValue4(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value4").toString());
