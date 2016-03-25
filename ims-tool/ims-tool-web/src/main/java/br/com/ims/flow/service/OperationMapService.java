@@ -19,6 +19,13 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 		
 		return DAOFactory.getInstance().getOperationMapDAO().get(id);
 	}
+	public OperationMapEntity getByName(String name) {
+		
+		return DAOFactory.getInstance().getOperationMapDAO().getByName(name);
+	}
+	public OperationMapEntity getByMethodReference(String methodReference) {
+		return DAOFactory.getInstance().getOperationMapDAO().getByMethodReference(methodReference);
+	}
 	
 	public boolean save(OperationMapEntity entity) {
 		return DAOFactory.getInstance().getOperationMapDAO().save(entity);

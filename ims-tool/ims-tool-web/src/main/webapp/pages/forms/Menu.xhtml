@@ -98,7 +98,7 @@
 						                 immediate="true" 
 						                 oncomplete="PF('settingAuxiliarDlg').show()"  />			            				
 		 			</h:panelGrid>
-		 			<p:commandButton value="Add Choice" update="panel_dialog_form_choice_add,panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.addChoiceToMenu}"/>	 		
+		 			<p:commandButton value="Add Choice" icon="ui-icon-plusthick" update="panel_dialog_form_choice_add,panel_dialog_form_choices_list" ajax="true" immediate="true" actionListener="#{bean.addChoiceToMenu}"/>	 		
 					<p:separator />
 					<p:panel id="panel_dialog_form_choices_list" header="Choices" style="margin-bottom:20px">
 		 				<p:dataTable  

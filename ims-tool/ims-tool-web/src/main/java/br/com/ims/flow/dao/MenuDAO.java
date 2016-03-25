@@ -31,7 +31,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	private List<ChoiceEntity> getChoices(String menuId) {
 		String sql = "SELECT c.id c_id,c.name c_name,c.menu c_menu,c.dtmf c_dtmf,c.nextform c_nextform,c.condition c_condition, "+
 					 "t.id t_id, t.description t_description, "+ 
-					 "tt.id tt_id, tt.name tt_name,tt.description tt_description, "+	                 
+					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.choice c "+
 	                 "LEFT JOIN flow.tag t ON c.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
@@ -89,7 +89,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				 "ni.id ni_id,ni.name ni_name, ni.type ni_type,ni.threshold ni_threshold, ni.prompt ni_prompt, ni.nextform ni_nextform, "+
 			     "nm.id nm_id,nm.name nm_name, nm.type nm_type,nm.threshold nm_threshold, nm.prompt nm_prompt, nm.nextform nm_nextform, "+
 				 "t_ni.id t_ni_id, t_ni.description t_ni_description, "+ 
-				 "tt_ni.id tt_id, tt_ni.name tt_ni_name,tt_ni.description tt_ni_description, "+
+				 "tt_ni.id tt_ni_id, tt_ni.name tt_ni_name,tt_ni.description tt_ni_description, "+
 				 "t_nm.id t_nm_id, t_nm.description t_nm_description, "+ 
 				 "tt_nm.id tt_nm_id, tt_nm.name tt_nm_name,tt_nm.description tt_nm_description "+
 				 "FROM flow.menu m "+
@@ -137,7 +137,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				tag_nm.setType(tagType_nm);
 			}
 			
-			PromptEntity prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("a_prompt"));
+			PromptEntity prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("m_prompt"));
 			PromptEntity prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
 			PromptEntity prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
 			

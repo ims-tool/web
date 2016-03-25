@@ -52,9 +52,7 @@ public class ConditionGroupEditorBean extends AbstractBean {
     	this.conditionGroup = new ConditionGroupEntity();
     	this.conditionGroup.setId(Util.getUID());
     	this.conditionParameter = new ConditionParameterEntity();
-    	this.conditionParameter.setId(Util.getUID());
     	this.conditionValue = new ConditionValueEntity();
-    	this.conditionValue.setId(Util.getUID());
     	
     	this.listConditionParameter = new ArrayList<ConditionParameterEntity>() ;
     	this.listConditionValue = new ArrayList<ConditionValueEntity>(); 
@@ -83,7 +81,7 @@ public class ConditionGroupEditorBean extends AbstractBean {
 	public void setConditionGroup(ConditionGroupEntity conditionGroup) {
 		this.insert = false;
 		this.conditionGroup = conditionGroup;
-		
+		this.mapId = conditionGroup.getConditionMap().getId();
 		
 		if(this.conditionGroup.getListConditionParameters() == null) {
     		this.conditionGroup.setListConditionParameters(new ArrayList<ConditionParameterEntity>());
@@ -242,6 +240,7 @@ public class ConditionGroupEditorBean extends AbstractBean {
 			return;
 		}
 		ConditionParameterEntity cp = new ConditionParameterEntity();
+		cp.setId(Util.getUID());
 		cp.setParamName(paramName);
 		cp.setParamValue(paramValue);
 		cp.setConditionGroupId(this.conditionGroup.getId());
@@ -296,6 +295,7 @@ public class ConditionGroupEditorBean extends AbstractBean {
 		
 		TagEntity tagTrue = ServicesFactory.getInstance().getTagService().get(this.tagTrueId);
 		TagEntity tagFalse = ServicesFactory.getInstance().getTagService().get(this.tagFalseId);
+		this.conditionValue.setId(Util.getUID());
 		this.conditionValue.setTagTrue(tagTrue);
 		this.conditionValue.setTagFalse(tagFalse);
 		

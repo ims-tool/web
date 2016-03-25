@@ -74,7 +74,12 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		}
 		return obj;
 	}
+	
 	public List<FormEntity> getByFilter(String where) {
+		return this.getByFilter(where,false);
+	}
+	
+	public List<FormEntity> getByFilter(String where, boolean lazy) {
 
 		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.formtype f_formtype, f.formid f_formid, f.condition f_condition, f.positionx f_positionx, f.positiony f_positiony,"+ 
 					 "t.id t_id, t.description t_description, "+ 
@@ -106,13 +111,17 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 					tag.setDescription(rs.getString("t_description"));
 					tag.setType(tagType);
 				}
-				ConditionEntity condition = null;
-				if(rs.getString("f_condition") != null && rs.getString("f_condition").length() > 0) {
-					condition =  ServicesFactory.getInstance().getConditionService().get(rs.getString("f_condition"));
-				}
+				
 				FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().get(rs.getString("f_formtype"));
 				
-				Object obj = this.getObject(formType, rs.getString("f_id"));
+				ConditionEntity condition = null;
+				Object obj = null;
+				if(!lazy) {		
+					if(rs.getString("f_condition") != null && rs.getString("f_condition").length() > 0) {
+						condition =  ServicesFactory.getInstance().getConditionService().get(rs.getString("f_condition"));
+					}
+					obj = this.getObject(formType, rs.getString("f_id"));
+				}
 				
 				FormEntity form = new FormEntity();
 				form.setId(rs.getString("f_id"));
@@ -151,7 +160,16 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	@Override
 	public FormEntity get(String id) {
 		// TODO Auto-generated method stub
-		List<FormEntity> result = this.getByFilter("WHERE f.id = "+id);
+		List<FormEntity> result = this.getByFilter("WHERE f.id = '"+id+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+		
+	}
+	public FormEntity get(String id,boolean lazy) {
+		// TODO Auto-generated method stub
+		List<FormEntity> result = this.getByFilter("WHERE f.id = '"+id+"'",lazy);
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -159,11 +177,11 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		
 	}
 	public List<FormEntity> getByTypeName(String typeName) {
-		return this.getByFilter("WHERE ft.name = '"+typeName+"'");
+		return this.getByFilter("WHERE lower(ft.name) = '"+typeName.toLowerCase()+"'");
 		
 	}
 
-	private boolean saveObj(FormEntity entity) {
+	public boolean saveObj(FormEntity entity) {
 		boolean result = true;
 		Object obj = entity.getFormId();
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE)) {
@@ -195,7 +213,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		}
 		return result;
 	}
-	private boolean deleteObj(FormEntity entity) {
+	public boolean deleteObj(FormEntity entity) {
 		boolean result = true;
 		Object obj = entity.getFormId();
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE)) {
@@ -227,7 +245,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		}
 		return result;
 	}
-	private boolean updateObj(FormEntity entity) {
+	public boolean updateObj(FormEntity entity) {
 		boolean result = true;
 		Object obj = entity.getFormId();
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE)) {
@@ -265,15 +283,10 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		// TODO Auto-generated method stub
 		
 		boolean result = true;
-		if((result = this.saveObj(entity))) {
-			String sql = "INSERT INTO flow.form (id,name,description,formtype,formid,tag,condition,versionid) "
+		String sql = "INSERT INTO flow.form (id,name,description,formtype,formid,tag,condition,versionid) "
 					   + "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFormType().getId()+"','"+((AbstractEntity)entity.getFormId()).getId()+"',"
 					   + (entity.getTag() == null ? "NULL" : entity.getTag().getId())+","+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId() )+",'"+entity.getVersionId().getId()+"')";
-			result = db.ExecuteSql(sql);
-			if(!result) {
-				deleteObj(entity);
-			}
-		}
+		result = db.ExecuteSql(sql);
 		return result;
 		
 	}
@@ -281,15 +294,14 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	@Override
 	public boolean update(FormEntity entity) {
 		boolean result = true;
-		if((result = this.updateObj(entity))) {
-			String sql = "UPDATE flow.form SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',"
+		String sql = "UPDATE flow.form SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',"
 					   + "formtype='"+entity.getFormType().getId()+"',formid='"+((AbstractEntity)entity.getFormId()).getId()+"',"
 					   + "tag="+(entity.getTag() == null ? "NULL" :  entity.getTag().getId())+","
 					   + "condition="+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId())+","
 					   + "versionid='"+entity.getVersionId().getId()+"' "
 					   + "WHERE id = '"+entity.getId()+"' ";
-			result = db.ExecuteSql(sql);
-		}
+		result = db.ExecuteSql(sql);
+		
 		return result;
 	}
 
@@ -297,11 +309,11 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	public boolean delete(FormEntity entity) {
 		// TODO Auto-generated method stub
 		
-		boolean result = this.deleteObj(entity);
-		if(result) {
-			String sql = "DELETE flow.form WHERE id ='"+entity.getId()+"' ";
-			result = db.ExecuteSql(sql);
-		}
+		boolean result = true;
+		
+		String sql = "DELETE flow.form WHERE id ='"+entity.getId()+"' ";
+		result = db.ExecuteSql(sql);
+		
 		return result;
 	}
 

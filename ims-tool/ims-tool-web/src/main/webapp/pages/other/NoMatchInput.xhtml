@@ -55,13 +55,13 @@
 	 			</p:selectOneMenu>
 		 				 			
 	 			
-	            <h:outputLabel id="label_other_nmi_name" for="other_nmi_name" value="Name:" />
-	            <p:inputText id="other_nmi_name" value="#{nomatchinputEditorView.noMatchInput.name}" required="true" requiredMessage="Please,inform a Name" label="label_other_nmi_name" />
+	            <h:outputLabel id="label_other_nmi_name" for="other_nmi_name" value="Name: *" />
+	            <p:inputText id="other_nmi_name" value="#{nomatchinputEditorView.noMatchInput.name}" requiredMessage="Please,inform a Name" label="label_other_nmi_name" />
 	            
-	            <h:outputLabel id="label_other_nmi_threshold" for="other_nmi_threshold" value="Threshold:" />
-	            <p:inputText id="other_nmi_threshold" value="#{nomatchinputEditorView.noMatchInput.threshold}" required="true" type="number" requiredMessage="Please,inform a Threshold" label="label_other_nmi_threshold" />
+	            <h:outputLabel id="label_other_nmi_threshold" for="other_nmi_threshold" value="Threshold: *" />
+	            <p:inputText id="other_nmi_threshold" value="#{nomatchinputEditorView.noMatchInput.threshold}" type="number" requiredMessage="Please,inform a Threshold" label="label_other_nmi_threshold" />
 	            
-	            <h:outputLabel id="label_other_nmi_prompt" for="panel_other_nmi_prompt" value="Prompt:" />
+	            <h:outputLabel id="label_other_nmi_prompt" for="panel_other_nmi_prompt" value="Prompt: " />
 	 			<h:panelGrid columns="3" cellpadding="5" id="panel_other_nmi_prompt">
 		 			<p:selectOneMenu value="#{nomatchinputEditorView.promptId}" 
 		 			                 id="other_nmi_prompt"
@@ -80,7 +80,14 @@
 	 			</h:panelGrid>
 	            
 	            <f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleOtherSaveRequest(xhr, status, args)"  update="formForm,formFlow,formComplement,formOther" actionListener="#{nomatchinputEditorView.save}"/>
+	                
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{nomatchinputEditorView.insert eq true}" update="@form" actionListener="#{nomatchinputEditorView.newNoMatchInput}"/>
+	                <c:if test="#{nomatchinputEditorView.insert == true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleOtherSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther" actionListener="#{nomatchinputEditorView.save}"/>
+					</c:if>
+					<c:if test="#{nomatchinputEditorView.insert == false}">
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleOtherSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther" actionListener="#{nomatchinputEditorView.update}"/>
+					</c:if>
 	            </f:facet>  	           
 	        </h:panelGrid>	
 	        <p:separator />
@@ -103,11 +110,14 @@
 			        </p:column>
 			        <p:column headerText="IN USE" >
 			            <h:outputText rendered="#{nomatchinputEditorView.isUsed(n.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{nomatchinputEditorView.isUsed(n.id)}" icon="ui-icon-search" title="Yes" />
+			            
+			            <p:commandButton rendered="#{nomatchinputEditorView.isUsed(n.id) eq true}" icon="ui-icon-search" actionListener="#{nomatchinputEditorView.viewDependence(n.id,n.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
-			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
-			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{nomatchinputEditorView.edit(n.id)}" update="@form"/>
+			             <p:commandButton icon="ui-icon-close" disabled="#{nomatchinputEditorView.isUsed(n.id)}"  title="Delete" actionListener="#{nomatchinputEditorView.delete(n.id)}" update="@form">
+			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
+			             </p:commandButton>			                
 			        </p:column>
 				</p:dataTable>
 			</p:panel>	   

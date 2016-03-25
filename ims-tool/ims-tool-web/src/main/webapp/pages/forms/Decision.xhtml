@@ -36,7 +36,7 @@
 						                 immediate="true" 
 						                 oncomplete="PF('settingAuxiliarDlg').show()"  />			            				
 		 			</h:panelGrid>
-		 			<p:commandButton value="Add" update="panel_dialog_form_chance_add,panel_dialog_form_chance_list" ajax="true" immediate="true" actionListener="#{bean.addChanceToDecision}"/>	 		
+		 			<p:commandButton value="Add" icon="ui-icon-plusthick" update="panel_dialog_form_chance_add,panel_dialog_form_chance_list" ajax="true" immediate="true" actionListener="#{bean.addChanceToDecision}"/>	 		
 					<p:separator />
 					<p:panel id="panel_dialog_form_chance_list" header="Chances" style="margin-bottom:20px">
 		 				<p:dataTable  

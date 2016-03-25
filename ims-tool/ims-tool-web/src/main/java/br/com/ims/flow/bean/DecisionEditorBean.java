@@ -15,6 +15,7 @@ import org.primefaces.model.diagram.Element;
 
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Node;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.DecisionChanceEntity;
@@ -147,6 +148,7 @@ public class DecisionEditorBean extends AbstractBean {
 				FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_DECISION_CHANCE);
 				
 				FormEntity formChance = new FormEntity();
+				formChance.setId(Util.getUID());
 				if(chance.getCondition() == null) {
 					formChance.setDescription(this.decision.getName()+"_Default");
 					formChance.setName(this.decision.getName()+"_Default");
@@ -293,6 +295,7 @@ public class DecisionEditorBean extends AbstractBean {
 		}
 		
 		DecisionChanceEntity chance = new DecisionChanceEntity();
+		chance.setId(Util.getUID());
 		chance.setOrderNum(Integer.valueOf(this.orderNum));
 		
 		if(this.conditionId != null && this.conditionId.length() >0) {

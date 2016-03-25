@@ -57,9 +57,10 @@
 	                                 oncomplete="handleAdminSaveRequest(xhr, status, args)" 
 	                                 update="formAdmin,formFlow" 
 	                                 immediate="true"
+	                                 icon="ui-icon-newwin"
 	                                 actionListener="#{bean.init}" />
 
-	                <p:commandButton value="Save" oncomplete="handleAdminSaveRequest(xhr, status, args)" update="formAdmin,formFlow" actionListener="#{bean.save}">
+	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleAdminSaveRequest(xhr, status, args)" update="formAdmin,formFlow" actionListener="#{bean.save}">
 	                	<p:confirm header="Confirmation" message="Are you sure? After you save, you won't be able to update or delete." icon="ui-icon-alert" />
 	                </p:commandButton>	
 	            </f:facet>  

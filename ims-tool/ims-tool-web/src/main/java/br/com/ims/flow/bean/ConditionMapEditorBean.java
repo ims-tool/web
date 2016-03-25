@@ -81,7 +81,7 @@ public class ConditionMapEditorBean extends AbstractBean {
 	}
 
 	public void viewDependence(String id, String name) {
-		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_CONDITION_MAP,id, name);
+		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_CONDITION_MAP,id, name);
 	}
 	
 	private boolean validateFields() {

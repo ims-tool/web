@@ -10,6 +10,8 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Constants;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.OperationMapEntity;
  
@@ -35,7 +37,7 @@ public class OperationMapEditorBean extends AbstractBean {
     
     public void init() {
     	this.operationMap = new OperationMapEntity();
-    	
+    	this.operationMap.setId(Util.getUID());
     	this.insert = true;
     	
     	this.operationGroupBean = null;
@@ -71,48 +73,77 @@ public class OperationMapEditorBean extends AbstractBean {
 		this.operationGroupBean = operationGroupBean;
 	}
 
-	
+	private boolean validateFields() {
+		if(this.operationMap.getName() == null || this.operationMap.getName().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Map","Please,inform the Name!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(this.operationMap.getDescription() == null || this.operationMap.getDescription().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Map","Please,inform the Description!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(this.operationMap.getMethodReference() == null || this.operationMap.getMethodReference().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Map","Please,inform the Method Reference!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		
+		OperationMapEntity tmp = ServicesFactory.getInstance().getOperationMapService().getByName(this.operationMap.getName()) ;
+		
+		if(tmp != null && 
+				tmp.getName().equalsIgnoreCase(this.operationMap.getName()) &&
+				!tmp.getId().equals(operationMap.getId())) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Map","Operation Map with name '"+this.operationMap.getName()+"' already exists!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		tmp = ServicesFactory.getInstance().getOperationMapService().getByMethodReference(this.operationMap.getMethodReference()) ;
+		
+		if(tmp != null && 
+				tmp.getMethodReference().equalsIgnoreCase(this.operationMap.getMethodReference()) &&
+				!tmp.getId().equals(operationMap.getId())) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Map","Operation Map with MethodReference '"+this.operationMap.getMethodReference()+"' already exists!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return false;
+		}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
+		}
+		this.operationMap.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		return true;
+	}
 
 	
 	public void save(ActionEvent event) {
 
-		this.operationMaps = this.getOperationMaps();
-		for(OperationMapEntity map : this.operationMaps) {
-			if(!map.getId().equals(this.operationMap.getId()) &&
-					map.getName().equalsIgnoreCase(this.operationMap.getName())) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Group - Map","Opertion Map with name '"+this.operationMap.getName()+"' already exists!");
+		if(validateFields()) {
+			if(ServicesFactory.getInstance().getOperationMapService().save(this.operationMap)) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Operation Group - Map","Operation Map "+this.operationMap.getName()+" - Saved!");
+				
 				FacesContext.getCurrentInstance().addMessage(null, msg);
-				return;
-			}
-			if(!map.getId().equals(this.operationMap.getId()) &&
-					map.getMethodReference().equalsIgnoreCase(this.operationMap.getMethodReference())) {
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Group - Map","Operation Map with Method Reference '"+this.operationMap.getMethodReference()+"' already exists!");
+				
+				updateExternalsBean();
+				
+				init(); 
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Map","Error on Save "+this.operationMap.getName()+", please contact your support.");
+				 
 				FacesContext.getCurrentInstance().addMessage(null, msg);
-				return;
-			}
+			}	
+
 		}
-		
-		FacesMessage msg = null;
-		if(insert) {
-			ServicesFactory.getInstance().getOperationMapService().save(this.operationMap);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Group - Map","Condition Map "+this.operationMap.getName()+" - Saved!");
-			
-		}
-		else {
-			ServicesFactory.getInstance().getOperationMapService().update(this.operationMap);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Group - Map","Condition Map "+this.operationMap.getName()+" - Updated!");
-		}
-		
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		
-		updateExternalsBean();
-		
-		init(); 
-		
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean saved = true;
-		context.addCallbackParam("saved", saved);
-		
 		
     }   
 	
@@ -127,7 +158,26 @@ public class OperationMapEditorBean extends AbstractBean {
 
 	@Override
 	public void update(ActionEvent event) {
-		// TODO Auto-generated method stub
+		if(validateFields()) {
+			if(ServicesFactory.getInstance().getOperationMapService().update(this.operationMap)) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Operation Group - Map","Operation Map "+this.operationMap.getName()+" - Updated!");
+				
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				
+				updateExternalsBean();
+				
+				init(); 
+				
+				RequestContext context = RequestContext.getCurrentInstance();
+				boolean saved = true;
+				context.addCallbackParam("saved", saved);
+			} else {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Map","Error on Update "+this.operationMap.getName()+", please contact your support.");
+				 
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+			}	
+
+		}
 		
 	}
 
@@ -142,14 +192,44 @@ public class OperationMapEditorBean extends AbstractBean {
 	@Override
 	public void edit(String id) {
 		// TODO Auto-generated method stub
+		this.operationMap = ServicesFactory.getInstance().getOperationMapService().get(id);
+		this.insert = false;
 		
 	}
 
 	@Override
 	public void delete(String id) {
-		// TODO Auto-generated method stub
+		this.operationMap = ServicesFactory.getInstance().getOperationMapService().get(id);
+		if(ServicesFactory.getInstance().getOperationMapService().delete(this.operationMap)) {
+			
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Operation Map",this.operationMap.getName()+" - Deleted!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			updateExternalsBean();
+			
+			init();
+			
+			RequestContext context = RequestContext.getCurrentInstance();
+			boolean saved = true;
+			context.addCallbackParam("saved", saved);
+		} else {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Operation Map","Error on Delete "+this.operationMap.getName()+", please contact your support.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 		
 	}
+	
+	public void viewDependence(String id, String name) {
+		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_OPERATION_MAP,id, name);
+	}
+	public void newMap() {
+    	this.operationMap = new OperationMapEntity();
+    	this.operationMap.setId(Util.getUID());
+    	
+    	this.insert = true;
+    }
 	
     
 }

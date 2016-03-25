@@ -122,7 +122,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		
 	}
 	public PromptEntity getByName(String name) {
-		List<PromptEntity> result = this.getByFilter("WHERE name = '"+name+"'");
+		List<PromptEntity> result = this.getByFilter("WHERE lower(name) = '"+name.toLowerCase()+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -184,10 +184,10 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	@Override
 	public boolean delete(PromptEntity entity) {
 		// TODO Auto-generated method stub
-		String sql = "DELETE FROM flow.promptaudio WHERE prompt = "+entity.getId();
+		String sql = "DELETE FROM flow.promptaudio WHERE prompt = '"+entity.getId()+"'";
 		boolean result = db.ExecuteSql(sql);
 		if(result) {
-			sql = "DELETE flow.prompt WHERE id="+entity.getId()+" ";
+			sql = "DELETE FROM flow.prompt WHERE id='"+entity.getId()+"' ";
 			             
 			result = result & db.ExecuteSql(sql);
 		}

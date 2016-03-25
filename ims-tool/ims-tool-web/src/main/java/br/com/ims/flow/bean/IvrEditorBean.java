@@ -506,13 +506,21 @@ public class IvrEditorBean extends AbstractBean {
 				 
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				return;
-			}
+			}			
 		}
 		this.editing.setBooleanValue(false);
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flow ("+nameFlow+") saved successfully!",
-                "IVR Editor");
-		 
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if(ServicesFactory.getInstance().getIvrEditorService().save(this.logicalFlow,this.version)) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flow ("+nameFlow+") saved successfully!",
+	                "IVR Editor");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		} else {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error on Save '"+nameFlow+"', please contact your support.",
+	                "IVR Editor");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+		}
  
     }   
 

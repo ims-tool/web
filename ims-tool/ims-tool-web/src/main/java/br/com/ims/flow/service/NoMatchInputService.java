@@ -43,6 +43,10 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 		
 		return DAOFactory.getInstance().getNoMatchInputDAO().get(id);
 	}
+	public NoMatchInputEntity getByName(String name) {
+		
+		return DAOFactory.getInstance().getNoMatchInputDAO().getByName(name);
+	}
 	
 	public boolean save(NoMatchInputEntity entity) {
 		return DAOFactory.getInstance().getNoMatchInputDAO().save(entity);		

@@ -113,3 +113,15 @@ alter table flow.conditionmap ALTER COLUMN description TYPE character varying(20
 alter table flow.conditionmap ALTER COLUMN "type" TYPE character varying(10)
 alter table flow.conditionmap ALTER COLUMN methodreference TYPE character varying(100)
 
+-- inserir registros na tabela formtype
+
+
+insert into flow.formtype (id,name) values('0','Answer');
+
+insert into flow.formtype (id,name) values('12','NoMatchInput');
+
+insert into flow.formtype (id,name) values('13','Choice');
+
+insert into flow.formtype (id,name) values('14','DecisionChance');
+
+insert into flow.formtype (id,name) values('15','Return');

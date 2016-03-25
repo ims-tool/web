@@ -81,7 +81,7 @@
 		            	<h:outputLabel id="label_operationgroup_paramvalue" for="operationgroup_paramvalue" value="Value:" style="margin-left:5px" />
 		            	<p:inputText id="operationgroup_paramvalue" value="#{bean.operationParameter.paramValue}" label="label_operationgroup_paramvalue" style="margin-right:5px" />
 		 
-	            		<p:commandButton value="Add" update="panelOperationGroupAddParameter,panelOperationGroupParameterList,msg" ajax="true" immediate="true" actionListener="#{bean.addParameter}"/>
+	            		<p:commandButton value="Add" icon="ui-icon-plusthick" update="panelOperationGroupAddParameter,panelOperationGroupParameterList,msg" ajax="true" immediate="true" actionListener="#{bean.addParameter}"/>
 			        </p:panel>
 			        <p:panel id="panelOperationGroupParameterList" style="margin-bottom:10px">
 		 				<p:dataTable  
@@ -107,7 +107,7 @@
 	            
 	            	
 	 			<f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleComplementSaveRequest(xhr, status, args)" update="formForm,msg" actionListener="#{bean.save}"/>
+	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleComplementSaveRequest(xhr, status, args)" update="formForm,msg" actionListener="#{bean.save}"/>
 	            </f:facet>  
 	        </h:panelGrid>
 	        	

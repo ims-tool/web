@@ -43,25 +43,39 @@
 				<h:outputLabel id="label_operationmap_id" for="operationmap_id" value="ID:" />
 	            <p:inputText id="operationmap_id" value="#{bean.operationMap.id}" readonly="true" label="label_operationmap_id" />
 	 
-	            <h:outputLabel id="label_operationmap_name" for="operationmap_name" value="Name:" />
-	            <p:inputText id="operationmap_name" value="#{bean.operationMap.name}" required="true" requiredMessage="Please,inform a Name" label="label_operationmap_name" />
+	            <h:outputLabel id="label_operationmap_name" for="operationmap_name" value="Name: *" />
+	            <p:inputText id="operationmap_name" value="#{bean.operationMap.name}" requiredMessage="Please,inform a Name" label="label_operationmap_name" />
 	            
-	            <h:outputLabel id="label_operationmap_description" for="operationmap_description" value="Description:" />
-	            <p:inputTextarea id="operationmap_description" value="#{bean.operationMap.description}" required="true" requiredMessage="Please,inform a Description" label="label_operationmap_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            <h:outputLabel id="label_operationmap_description" for="operationmap_description" value="Description: *" />
+	            <p:inputTextarea id="operationmap_description" value="#{bean.operationMap.description}" requiredMessage="Please,inform a Description" label="label_operationmap_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
 	            
 	            
-	            <h:outputLabel id="label_operationmap_method" for="operationmap_method" value="Method Reference:" />
-	            <p:inputText id="operationmap_method" value="#{bean.operationMap.methodReference}" required="true" requiredMessage="Please,inform a Method Reference" label="label_operationmap_method" />
+	            <h:outputLabel id="label_operationmap_method" for="operationmap_method" value="Method Reference: *" />
+	            <p:inputText id="operationmap_method" value="#{bean.operationMap.methodReference}" requiredMessage="Please,inform a Method Reference" label="label_operationmap_method" />
+	            
+	            <h:outputLabel id="label_operationmap_log" for="operationmap_log" value="LOG ACTIVE:" />
+	            <p:selectOneMenu value="#{bean.operationMap.logActive}" 
+	 			                 id="operationmap_log"	 			                 
+	 			                 label="label_operationmap_log">
+	 				<f:selectItem itemLabel="NO" itemValue="0" />
+	 				<f:selectItem itemLabel="YES" itemValue="1" />
+	 			</p:selectOneMenu>
 	            
 	            <f:facet name="footer">
-	                <p:commandButton value="Save" oncomplete="handleUtilSaveRequest(xhr, status, args)" update="formComplement,msg" actionListener="#{bean.save}"/>
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{bean.insert eq true}" update="@form,formComplement,msg" actionListener="#{bean.newMap}"/>
+	                <c:if test="#{bean.insert == true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleUtilSaveRequest(xhr, status, args)" update="@form,formComplement,msg" actionListener="#{bean.save}"/>
+					</c:if>
+					<c:if test="#{bean.insert == false}">
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleUtilSaveRequest(xhr, status, args)"  update="@form,formComplement,msg" actionListener="#{bean.update}"/>
+					</c:if>
 	            </f:facet>  
 	        </h:panelGrid>
 	        
 	        <p:separator />
 	        
 	        <p:panel id="panelOperationMapRegistered" header="Operation Maps Registered" style="margin-bottom:20px">
- 				<p:dataTable  scrollable="true" scrollHeight="300" var="c" value="#{bean.operationMaps}">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="c" value="#{bean.operationMaps}" resizableColumns="true">
 			        <p:column headerText="ID" >
 			            <h:outputText value="#{c.id}" />
 			        </p:column>
@@ -77,13 +91,14 @@
 			        </p:column>
 			        <p:column headerText="IN USE" >
 			            <h:outputText rendered="#{bean.isUsed(c.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{bean.isUsed(c.id)}" icon="ui-icon-search" title="YES" />
+			            <p:commandButton rendered="#{bean.isUsed(c.id)}" icon="ui-icon-search" actionListener="#{bean.viewDependence(c.id,c.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
-			             <p:commandButton icon="ui-icon-pencil" title="Edit" ajax="true" immediate="true" update="formUtil:panelOperationMapRegistered">
-			             	  <f:setPropertyActionListener value="#{c}" target="#{bean.operationMap}" />
-			             </p:commandButton>
-			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			             
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{bean.edit(c.id)}" update="@form"/>
+			             <p:commandButton icon="ui-icon-close" disabled="#{bean.isUsed(c.id)}"  title="Delete" actionListener="#{bean.delete(c.id)}" update="@form">
+			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
+			             </p:commandButton>			                
 			        </p:column>
 				</p:dataTable>
 			</p:panel>	        	        

@@ -83,7 +83,7 @@
 	        <p:separator />
 	        
 	        <p:panel id="panelConditionMapRegistered" header="Condition Maps Registered" style="margin-bottom:20px">
- 				<p:dataTable  scrollable="true" scrollHeight="300" var="c" value="#{bean.conditionMaps}">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="c" value="#{bean.conditionMaps}" resizableColumns="true">
 			        <p:column headerText="ID" >
 			            <h:outputText value="#{c.id}" />
 			        </p:column>
@@ -102,7 +102,6 @@
 			        </p:column>
 			        <p:column headerText="IN USE" >
 			            <h:outputText rendered="#{bean.isUsed(c.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{bean.isUsed(c.id)}" icon="ui-icon-search" title="YES" />
 			            <p:commandButton rendered="#{bean.isUsed(c.id)}" icon="ui-icon-search" actionListener="#{bean.viewDependence(c.id,c.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">

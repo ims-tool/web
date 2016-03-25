@@ -27,7 +27,11 @@ public class Constants {
 	public final static String DEPENDENCE_OBJECT_TYPE_AUDIO = "Audio";
 	public final static String DEPENDENCE_OBJECT_TYPE_PROMPT = "Prompt";
 	public final static String DEPENDENCE_OBJECT_TYPE_TAG = "Tag";	
-	public final static String DEPENDENCE_OBJECT_CONDITION_MAP = "ConditionMap";
+	public final static String DEPENDENCE_OBJECT_TYPE_CONDITION_MAP = "ConditionMap";
+	public final static String DEPENDENCE_OBJECT_TYPE_CONDITION = "Condition";
+	public final static String DEPENDENCE_OBJECT_TYPE_GRAMMAR = "Grammar";
+	public final static String DEPENDENCE_OBJECT_TYPE_NOMATCH_NOINPUT = "NoMatchNoInput";
+	public final static String DEPENDENCE_OBJECT_TYPE_OPERATION_MAP = "OperationMap";
 	
 	public final static String NO_MATCH = "NOMATCH";
 	public final static String NO_INPUT = "NOINPUT";

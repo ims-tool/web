@@ -1,7 +1,11 @@
 package br.com.ims.flow.service;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.el.ELContext;
 import javax.faces.context.FacesContext;
@@ -16,10 +20,14 @@ import org.primefaces.model.diagram.endpoint.EndPointAnchor;
 import org.primefaces.model.diagram.endpoint.RectangleEndPoint;
 
 import br.com.ims.flow.bean.IvrEditorBean;
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
+import br.com.ims.flow.factory.ServicesFactory;
+import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
+import br.com.ims.flow.model.VersionEntity;
 
 public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 	
@@ -200,6 +208,77 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     
     public void alingMenuChoices(Element element) {
     	this.bean.getLogicalFlow().alingMenuChoices(element);
+    	
+    }
+    public boolean save(LogicalFlow logicalFlow, VersionEntity version) {
+    	boolean result = true;
+    	Map<String,List<FormEntity>> map = new HashMap<String,List<FormEntity>>();
+    	for(Node node : logicalFlow.getListNode()) {
+    		
+    		FormEntity form = node.getForm();
+    		form.setVersionId(version);
+    		((AbstractFormEntity)form.getFormId()).setVersionId(version);
+    		if(form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_MENU) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_FLOW) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_OPERATION) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_DISCONNECT) ||
+    			form.getFormType().getName().equals(Constants.FORM_TYPE_RETURN)) {
+    			if(ServicesFactory.getInstance().getFormService().get(form.getId(),true) == null) {
+    				result = ServicesFactory.getInstance().getFormService().save(form);
+    				if(!result) {
+    					return result;
+    				}
+        			List<FormEntity> listForm =  null;
+        			if(map.get("INSERT") == null) {
+        				listForm = new ArrayList<FormEntity>();
+        				map.put("INSERT", listForm);
+        			}
+        			listForm = map.get("INSERT");
+        			listForm.add(form); 
+        		} else {
+        			result = ServicesFactory.getInstance().getFormService().update(form);
+        			if(!result) {
+    					return result;
+    				}
+        			List<FormEntity> listForm =  null;
+        			if(map.get("UPDATE") == null) {
+        				listForm = new ArrayList<FormEntity>();
+        				map.put("UPDATE", listForm);
+        			}
+        			listForm = map.get("UPDATE");
+        			listForm.add(form); 
+        		}
+    		}
+    		
+    	}
+    	for(Entry<String,List<FormEntity>> entry : map.entrySet()) {
+    		if(entry.getKey().equals("INSERT")) {
+    			List<FormEntity> list = entry.getValue();
+    			for(FormEntity form : list) {
+    				result = ServicesFactory.getInstance().getFormService().saveObj(form);
+    				if(!result) {
+    					return result;
+    				}
+    			}
+    		} else {
+    			List<FormEntity> list = entry.getValue();
+    			for(FormEntity form : list) {
+    				result = ServicesFactory.getInstance().getFormService().updateObj(form);
+    				if(!result) {
+    					return result;
+    				}
+    			}
+    		}
+    	}
+    	return result;
+		
+    }
+    public void update(FormEntity formEntity) {
     	
     }
      

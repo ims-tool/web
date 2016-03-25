@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.OperationGroupEntity;
 import br.com.ims.flow.model.OperationMapEntity;
@@ -41,8 +42,11 @@ public class OperationGroupEditorBean extends AbstractBean {
     
     public void init() {
     	this.operationGroup = new OperationGroupEntity();
+    	this.operationGroup.setId(Util.getUID());
     	this.operationParameter = new OperationParameterEntity();
+    	this.operationParameter.setId(Util.getUID());
     	this.listOperationParameter = new ArrayList<OperationParameterEntity>();
+    	
     	
     	this.insert = true;
     	
@@ -172,6 +176,7 @@ public class OperationGroupEditorBean extends AbstractBean {
 			return;
 		}
 		OperationParameterEntity op = new OperationParameterEntity();
+		op.setId(Util.getUID());
 		op.setParamName(paramName);
 		op.setParamValue(paramValue);
 		op.setOperationGroupId(this.operationGroup.getId());

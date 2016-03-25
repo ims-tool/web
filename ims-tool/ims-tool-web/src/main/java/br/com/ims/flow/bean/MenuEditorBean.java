@@ -16,6 +16,7 @@ import org.primefaces.model.diagram.Element;
 
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Node;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.ConditionEntity;
@@ -184,7 +185,8 @@ public class MenuEditorBean extends AbstractBean {
 		
 		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
 		
-		FormEntity formNoInput = new FormEntity();		
+		FormEntity formNoInput = new FormEntity();
+		formNoInput.setId(Util.getUID());
 		formNoInput.setDescription(noInput.getDescription());
 		formNoInput.setName(noInput.getName());
 		formNoInput.setFormType(formType);
@@ -228,6 +230,7 @@ public class MenuEditorBean extends AbstractBean {
 		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
 		
 		FormEntity formNoMatch = new FormEntity();
+		formNoMatch.setId(Util.getUID());
 		formNoMatch.setDescription(noMatch.getDescription());
 		formNoMatch.setName(noMatch.getName());
 		formNoMatch.setFormType(formType);
@@ -281,6 +284,7 @@ public class MenuEditorBean extends AbstractBean {
 				FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_CHOICE);
 				
 				FormEntity formChoice = new FormEntity();
+				formChoice.setId(Util.getUID());
 				formChoice.setDescription(this.menu.getName()+"_"+choice.getName());
 				formChoice.setName(this.menu.getName()+"_"+choice.getName());
 				formChoice.setFormType(formType,choice);
@@ -431,6 +435,7 @@ public class MenuEditorBean extends AbstractBean {
 		}
 		
 		ChoiceEntity choice = new ChoiceEntity();
+		choice.setId(Util.getUID());
 		choice.setName(this.choiceName);
 		choice.setDtmf(this.choiceDtmf);
 		

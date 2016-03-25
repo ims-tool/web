@@ -48,7 +48,7 @@
 	            <p:inputText id="auxiliar_condition_name" value="#{bean.condition.name}" requiredMessage="Please,inform the Name" label="label_auxiliar_condition_name" maxlength="30" style="width:350px" />
 	            
 	            <h:outputLabel id="label_auxiliar_condition_description" for="auxiliar_condition_description" value="Description: *" />
-	            <p:inputTextarea id="auxiliar_condition_description" value="#{bean.condition.description}" required="true" requiredMessage="Please,inform a Description" label="label_auxiliar_condition_description" rows="2" maxlength="256" autoResize="false" style="width:350px; cursor:text;"/>
+	            <p:inputTextarea id="auxiliar_condition_description" value="#{bean.condition.description}" requiredMessage="Please,inform a Description" label="label_auxiliar_condition_description" rows="2" maxlength="256" autoResize="false" style="width:350px; cursor:text;"/>
 	            
 	            <p:column colspan="2">
 					<p:commandButton value="Add Condition Group" icon="ui-icon-plusthick" update="settingOtherDlgId" oncomplete="PF('settingOtherDlg').show()" ajax="true" immediate="true" actionListener="#{bean.addNewGroup}"/>
@@ -84,8 +84,8 @@
 							    </p:dataTable>						            
 					        </p:column>
 					        <p:column style="width:32px;text-align: center">
-					        	 <p:commandButton update="settingOtherDlgId" oncomplete="PF('settingOtherDlg').show()" ajax="true" immediate="true" actionListener="#{bean.edit(group.id)}" icon="ui-icon-pencil" title="Edit" />
-					             <p:commandButton update="formAuxiliar:panelConditionGroup" icon="ui-icon-close" title="Delete" ajax="true" immediate="true" actionListener="#{bean.delete(group.id)}" />					                		                
+					        	 <p:commandButton update="settingOtherDlgId" oncomplete="PF('settingOtherDlg').show()" ajax="true" immediate="true" actionListener="#{bean.editGroup(group.id)}" icon="ui-icon-pencil" title="Edit" />
+					             <p:commandButton update="formAuxiliar:panelConditionGroup" icon="ui-icon-close" title="Delete" ajax="true" immediate="true" actionListener="#{bean.deleteGroup(group.id)}" />					                		                
 					        </p:column>
 					    </p:dataTable>
 		 						 				
@@ -95,7 +95,7 @@
 	 			<f:facet name="footer">
 	                
 	                
-	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{bean.insert eq true}" update="@form" actionListener="#{audioEditorView.newAudio}"/>
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{bean.insert eq true}" update="@form" actionListener="#{bean.newCondition}"/>
 	                <c:if test="#{conditionEditorView.insert eq true}">
 					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)" update="@form,formComplement,formForm" actionListener="#{bean.save}"/>
 					</c:if>
@@ -118,11 +118,13 @@
 			        </p:column>
 			        <p:column headerText="IN USE" >
 			            <h:outputText rendered="#{conditionEditorView.isUsed(c.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{conditionEditorView.isUsed(c.id)}" icon="ui-icon-search" title="Yes" />
+			            <p:commandButton rendered="#{conditionEditorView.isUsed(c.id) eq true}" icon="ui-icon-search" actionListener="#{conditionEditorView.viewDependence(c.id,c.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
-			             <p:commandButton icon="ui-icon-pencil" title="Edit" />
-			             <p:commandButton icon="ui-icon-close" title="Delete" />			                
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{conditionEditorView.edit(c.id)}" update="@form"/>
+			             <p:commandButton icon="ui-icon-close" disabled="#{conditionEditorView.isUsed(c.id)}"  title="Delete" actionListener="#{conditionEditorView.delete(c.id)}" update="@form">
+			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
+			             </p:commandButton>			                
 			        </p:column>
 				</p:dataTable>
 			</p:panel>	        	        

@@ -12,6 +12,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionEntity;
@@ -142,21 +143,27 @@ public class ConditionEditorBean extends AbstractBean {
 			this.decisionBean.setConditionId(this.condition.getId());
 		}
     }
+	@SuppressWarnings("unchecked")
+	public void newCondition() {
+		this.condition = new ConditionEntity();
+    	this.condition.setId(Util.getUID());
+    	if(this.condition.getListConditionGroup() == null) {
+    		this.condition.setListConditionGroup(new ArrayList<ConditionGroupEntity>());
+    	}
+
+    	this.conditionGroups = (List<ConditionGroupEntity>)((ArrayList<ConditionGroupEntity>)this.condition.getListConditionGroup()).clone(); 
+    	
+    	
+    	this.insert = true;
+	}
 	private boolean validateFields() {
 		
-		if(ServicesFactory.getInstance().getConditionService().getByName(this.condition.getName()) != null) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition","Condition with name '"+this.condition.getName()+"' already exists.");
-			 
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-			return false;
-		}
 		if(this.conditionGroups.size() ==0 ){
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition","Please, configure at least one Condition Group.");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		this.condition.setListConditionGroup(this.conditionGroups);
 		
 		ConditionEntity tmp = ServicesFactory.getInstance().getConditionService().getByName(this.condition.getName()) ;
 		
@@ -172,6 +179,7 @@ public class ConditionEditorBean extends AbstractBean {
 			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
 			return false;
 		}
+		this.condition.setListConditionGroup(this.conditionGroups);
 		this.condition.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
 		return true;
 	}
@@ -324,10 +332,7 @@ public class ConditionEditorBean extends AbstractBean {
 			}
 		}
 	}
-
-
-	@Override
-	public void edit(String id) {
+	public void editGroup(String id) {
 		collect();
 		
 		ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/auxiliar/ConditionGroup.xhtml");
@@ -340,19 +345,51 @@ public class ConditionEditorBean extends AbstractBean {
 				ServicesFactory.getInstance().getConditionGroupEditorService().getBean().setConditionGroup(group);
 			}
 		}
-		
 	}
-
-	@Override
-	public void delete(String id) {
+	public void deleteGroup(String id) {
 		for(int index = 0; index < this.conditionGroups.size(); index++) {
 			ConditionGroupEntity group = this.conditionGroups.get(index);
 			if(group.getId().equals(id)) {
 				this.conditionGroups.remove(index);
 				return;
 			}
-		}		
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void edit(String id) {
+		this.condition = ServicesFactory.getInstance().getConditionService().get(id);
+		this.conditionGroups = (List<ConditionGroupEntity>)((ArrayList<ConditionGroupEntity>)this.condition.getListConditionGroup()).clone();
+		this.insert= false;
 		
+	}
+
+	@Override
+	public void delete(String id) {
+		this.condition = ServicesFactory.getInstance().getConditionService().get(id);
+		if(ServicesFactory.getInstance().getConditionService().delete(this.condition)) {
+			
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition",this.condition.getName()+" - Deleted!");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			
+			updateExternalsBean();
+			
+			init();
+			
+			RequestContext context = RequestContext.getCurrentInstance();
+			boolean saved = true;
+			context.addCallbackParam("saved", saved);
+		} else {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition","Error on Delete "+this.condition.getName()+", please contact your support.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+	}
+	public void viewDependence(String id, String name) {
+		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_CONDITION,id, name);
 	}
 	
     

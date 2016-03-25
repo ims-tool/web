@@ -308,6 +308,11 @@ public class PromptEditorBean extends AbstractBean {
 				FacesContext.getCurrentInstance().addMessage(null, msg);
 				return;
 			}
+			if(promptAudio.getAudio().getId().equals(this.audioId)) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Audio '"+promptAudio.getAudio().getName()+"' is already on list!");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				return;
+			}
 		}
 		PromptAudioEntity promptAudio = new PromptAudioEntity(); 
 		promptAudio.setAudio(ServicesFactory.getInstance().getAudioService().get(this.audioId));
@@ -363,6 +368,15 @@ public class PromptEditorBean extends AbstractBean {
 		
 	}
 
+	public void deleteAudio(String id) {
+		for(int index = 0; index < this.prompt.getAudios().size(); index++) {
+			PromptAudioEntity promptAudio = this.prompt.getAudios().get(index);
+			if(promptAudio.getId().equals(id)) {
+				this.prompt.getAudios().remove(index);
+				index = this.prompt.getAudios().size();
+			}
+		}
+	}
 	@Override
 	public void delete(String id) {
 		// TODO Auto-generated method stub

@@ -124,7 +124,7 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		
 		
 		formType = new FormTypeEntity();
-		formType.setId("9");
+		formType.setId("12");
 		formType.setName("NoMatchInput");
 		formType.setDescription("NoMatchInput");
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "<NOMACHINPUT>.png");
@@ -140,7 +140,7 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		
 				
 		formType = new FormTypeEntity();
-		formType.setId("10");
+		formType.setId("13");
 		formType.setName("Choice");
 		formType.setDescription("Choice");
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "choice_<NUMBER>.png");
@@ -155,7 +155,7 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		result.add(formType);
 		
 		formType = new FormTypeEntity();
-		formType.setId("11");
+		formType.setId("14");
 		formType.setName("DecisionChance");
 		formType.setDescription("DecisionChance");
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "decision_chance.png");
@@ -171,7 +171,7 @@ public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 		
 
 		formType = new FormTypeEntity();
-		formType.setId("12");
+		formType.setId("15");
 		formType.setName("Return");
 		formType.setDescription("Return");
 		formType.setImagePathSuccess(Constants.ICON_FLOW_PATH + "return.png");

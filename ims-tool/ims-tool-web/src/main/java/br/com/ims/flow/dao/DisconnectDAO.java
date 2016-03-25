@@ -95,7 +95,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 	public boolean save(DisconnectEntity disconnect) {
 		boolean result = true;
 		
-		String sql = "INSERT INTO flow.disconnect (id,name,description,nextform,tag,versionid) "+
+		String sql = "INSERT INTO flow.disconnect (id,name,description,tag,versionid) "+
 					 "VALUES ('"+disconnect.getId()+"','"+disconnect.getName()+"','"+disconnect.getDescription()+"',"
 					 		+ (disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",'"+disconnect.getVersionId().getId()+"') ";
 		             

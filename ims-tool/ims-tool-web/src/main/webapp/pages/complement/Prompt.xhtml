@@ -103,7 +103,7 @@
 					        	<h:outputText value="#{promptAudio.condition != null ? promptAudio.condition.name : 'N/A'}" />					            
 					        </p:column>
 					        <p:column style="width:32px;text-align: center">
-					             <p:commandButton update="@this" icon="ui-icon-close" title="Delete" />					                
+					             <p:commandButton update="@this" icon="ui-icon-close" title="Delete" actionListener="#{promptEditorView.deleteAudio}"  />					                
 					        </p:column>
 					    </p:dataTable>
 		 						 				

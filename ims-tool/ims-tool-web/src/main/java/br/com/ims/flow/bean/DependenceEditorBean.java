@@ -43,8 +43,20 @@ public class DependenceEditorBean extends AbstractBean {
     	if(Constants.DEPENDENCE_OBJECT_TYPE_PROMPT.equals(this.objectType)) {
     		this.objects = ServicesFactory.getInstance().getPromptService().getUsed(this.objectId);
     	}
-    	if(Constants.DEPENDENCE_OBJECT_CONDITION_MAP.equals(this.objectType)) {
+    	if(Constants.DEPENDENCE_OBJECT_TYPE_CONDITION_MAP.equals(this.objectType)) {
     		this.objects = ServicesFactory.getInstance().getConditionMapService().getUsed(this.objectId);
+    	}
+    	if(Constants.DEPENDENCE_OBJECT_TYPE_CONDITION.equals(this.objectType)) {
+    		this.objects = ServicesFactory.getInstance().getConditionService().getUsed(this.objectId);
+    	}
+    	if(Constants.DEPENDENCE_OBJECT_TYPE_GRAMMAR.equals(this.objectType)) {
+    		this.objects = ServicesFactory.getInstance().getGrammarService().getUsed(this.objectId);
+    	}
+    	if(Constants.DEPENDENCE_OBJECT_TYPE_NOMATCH_NOINPUT.equals(this.objectType)) {
+    		this.objects = ServicesFactory.getInstance().getNoMatchInputService().getUsed(this.objectId);
+    	}
+    	if(Constants.DEPENDENCE_OBJECT_TYPE_OPERATION_MAP.equals(this.objectType)) {
+    		this.objects = ServicesFactory.getInstance().getOperationMapService().getUsed(this.objectId);
     	}
     	return objects;
 	}
