@@ -85,7 +85,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		return this.getByFilter(null);
 	}
 	public DisconnectEntity get(String id) {
-		List<DisconnectEntity> result = this.getByFilter("WHERE d.id = "+id);
+		List<DisconnectEntity> result = this.getByFilter("WHERE d.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

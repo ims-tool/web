@@ -85,7 +85,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 		return this.getByFilter(null);
 	}
 	public ReturnEntity get(String id) {
-		List<ReturnEntity> result = this.getByFilter("WHERE r.id = "+id);
+		List<ReturnEntity> result = this.getByFilter("WHERE r.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

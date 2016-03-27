@@ -47,7 +47,15 @@ public class LogicalFlow {
 	}
 	public Node getNode(FormEntity form) {
 		for(Node node : listNode) {
-			if((FormEntity)node.getElement().getData() == form) {
+			if(((FormEntity)node.getElement().getData()).getId().equals(form.getId())) {
+				return node;
+			}
+		}
+		return null;
+	}
+	public Node getNode(String formId) {
+		for(Node node : listNode) {
+			if(((FormEntity)node.getElement().getData()).getId().equals(formId)) {
 				return node;
 			}
 		}

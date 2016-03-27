@@ -7,6 +7,7 @@ public abstract class AbstractFormEntity extends AbstractEntity{
 	protected String name;
 	protected String description;
 	protected String nextForm;
+	protected TagEntity tag;
 
 	public String getName() {
 		return name;
@@ -30,6 +31,14 @@ public abstract class AbstractFormEntity extends AbstractEntity{
 
 	public void setNextForm(String nextForm) {
 		this.nextForm = nextForm;
+	}
+
+	public TagEntity getTag() {
+		return tag;
+	}
+
+	public void setTag(TagEntity tag) {
+		this.tag = tag;
 	}
 	
 	

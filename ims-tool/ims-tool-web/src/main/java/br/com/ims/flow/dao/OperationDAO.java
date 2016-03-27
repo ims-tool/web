@@ -168,7 +168,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		
 	}
 	public OperationEntity get(String id) {
-		List<OperationEntity> result = this.getByFilter("WHERE o.id = "+id);
+		List<OperationEntity> result = this.getByFilter("WHERE o.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

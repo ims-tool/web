@@ -65,7 +65,7 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 	}
 	
 	public VersionEntity get(String id) {
-		List<VersionEntity> result = this.getByFilter("WHERE id = "+id);
+		List<VersionEntity> result = this.getByFilter("WHERE id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

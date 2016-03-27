@@ -155,7 +155,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		
 	}
 	public PromptCollectEntity get(String id) {
-		List<PromptCollectEntity> result = this.getByFilter("WHERE pc.id = "+id);
+		List<PromptCollectEntity> result = this.getByFilter("WHERE pc.id ='"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

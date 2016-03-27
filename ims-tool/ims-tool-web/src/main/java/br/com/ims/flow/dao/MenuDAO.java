@@ -197,7 +197,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		
 	}
 	public MenuEntity get(String id) {
-		List<MenuEntity> result = this.getByFilter("WHERE m.id = "+id);
+		List<MenuEntity> result = this.getByFilter("WHERE m.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -270,6 +270,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		
 		
 	}
+	
 
 	@Override
 	public boolean delete(MenuEntity menu) {

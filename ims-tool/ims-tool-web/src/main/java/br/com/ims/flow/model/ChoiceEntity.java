@@ -9,7 +9,6 @@ public class ChoiceEntity extends AbstractFormEntity implements Comparable<Choic
 	private String menuId;
 	private String dtmf;
 	private ConditionEntity condition;
-	private TagEntity tag;
 	
 	
 	public String getName() {
@@ -36,12 +35,6 @@ public class ChoiceEntity extends AbstractFormEntity implements Comparable<Choic
 	}
 	public void setCondition(ConditionEntity condition) {
 		this.condition = condition;
-	}
-	public TagEntity getTag() {
-		return tag;
-	}
-	public void setTag(TagEntity tag) {
-		this.tag = tag;
 	}
 	@Override
 	public int compareTo(ChoiceEntity o) {

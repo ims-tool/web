@@ -29,12 +29,12 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	private List<DecisionChanceEntity> getChances(String decisionId) {
 		String sql = "SELECT dc.id dc_id,dc.decisionid dc_decisionid,dc.ordernum dc_ordernum,dc.condition dc_condition,dc.nextformid dc_nextformid, "+
 					 "t.id t_id, t.description t_description, "+ 
-					 "tt.id tt_id, tt.name tt_name,tt.description tt_description, "+	                 
+					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.decisionchance dc "+
 	                 "LEFT JOIN flow.tag t ON dc.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
 	                 "WHERE dc.decisionid ='"+decisionId+"' "+
-	                 "ORDER BY c.dtmf ";
+	                 "ORDER BY dc.ordernum ";
 		List<DecisionChanceEntity> result = new ArrayList<DecisionChanceEntity>();
 		ResultSet rs = null;
 		try {
@@ -147,7 +147,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		
 	}
 	public DecisionEntity get(String id) {
-		List<DecisionEntity> result = this.getByFilter("WHERE d.id = "+id);
+		List<DecisionEntity> result = this.getByFilter("WHERE d.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

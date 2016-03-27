@@ -76,7 +76,7 @@ public class IvrEditorBean extends AbstractBean {
     private List<FormEntity> flows;
     
     private String deleteControl;
-    
+    private String cleanTabControl;
     public IvrEditorBean() {
     	init();
     }
@@ -97,6 +97,7 @@ public class IvrEditorBean extends AbstractBean {
             
         }
     }
+    
     
     private void initTab0() {
     	this.model = new DefaultDiagramModel();
@@ -168,15 +169,16 @@ public class IvrEditorBean extends AbstractBean {
 	}
 
 	public void addNewFlow() {
+		cleanTabControl  = "NEW_FLOW";
+		this.tempTabCloseEvent = null;
 		if(this.isFlowEditing(null)) {
-			this.tempTabCloseEvent = null;
 			RequestContext context = RequestContext.getCurrentInstance();
             // execute javascript and show dialog                    
 			context.execute("PF('tabFlowCloseConfirmDlg').show();");			
 			return;
-		} else {
-			
-		}    	
+		}  else {
+			closeTabFlow();
+		}
     }
 	
 	private boolean isFlowEditing(Tab tab) {
@@ -196,7 +198,16 @@ public class IvrEditorBean extends AbstractBean {
 	}
 	
     public void select() {
-    	
+    	cleanTabControl  = "SELECT_FLOW";
+    	this.tempTabCloseEvent = null;
+    	if(isFlowEditing(null)) {
+    		RequestContext context = RequestContext.getCurrentInstance();
+            // execute javascript and show dialog                    
+			context.execute("PF('tabFlowCloseConfirmDlg').show();");			
+			return;
+    	} else {
+    		closeTabFlow();
+    	}
     }
 	
 	public void onTabChange(TabChangeEvent event) {
@@ -235,6 +246,10 @@ public class IvrEditorBean extends AbstractBean {
         
                         	
     }
+    private void loadFlow() {
+    	ServicesFactory.getInstance().getIvrEditorService().loadFlow(null,this.flowId);
+    	
+    }
     public void closeTabFlow() {
     	
         if(this.tempTabCloseEvent == null) {
@@ -242,6 +257,9 @@ public class IvrEditorBean extends AbstractBean {
         	this.tabFlowView.setActiveIndex(0);
         	this.tabFlowView.getChildren().clear();
         	initTab0();
+        	if(cleanTabControl.equals("SELECT_FLOW")) {
+        		loadFlow();
+        	}
         } else {
         	boolean find = false;
 	    	

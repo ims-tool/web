@@ -153,7 +153,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		
 	}
 	public TransferEntity get(String id) {
-		List<TransferEntity> result = this.getByFilter("WHERE tr.id = "+id);
+		List<TransferEntity> result = this.getByFilter("WHERE tr.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

@@ -7,11 +7,7 @@ public class DecisionChanceEntity extends AbstractFormEntity implements Comparab
 	private String decisionId;
 	private Integer orderNum;
 	private ConditionEntity condition;
-	private TagEntity tag;
 	
-	
-
-
 
 	public String getDecisionId() {
 		return decisionId;
@@ -39,17 +35,7 @@ public class DecisionChanceEntity extends AbstractFormEntity implements Comparab
 	}
 
 
-	public TagEntity getTag() {
-		return tag;
-	}
-
-
-
-
-	public void setTag(TagEntity tag) {
-		this.tag = tag;
-	}
-
+	
 	
 
 

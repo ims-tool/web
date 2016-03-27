@@ -8,7 +8,6 @@ public class FormEntity extends AbstractFormEntity{
 	
 	private FormTypeEntity formType;
 	private Object formId;
-	private TagEntity tag;
 	private ConditionEntity condition;
 	private FormEntity nextFormDefault;
 	private VersionEntity versionId;
@@ -88,14 +87,7 @@ public class FormEntity extends AbstractFormEntity{
 		this.formId = formId;
 	}
 	
-	public TagEntity getTag() {
-		return tag;
-	}
-
-	public void setTag(TagEntity tag) {
-		this.tag = tag;
-	}
-
+	
 	public ConditionEntity getCondition() {
 		return condition;
 	}

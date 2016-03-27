@@ -5,7 +5,6 @@ public class AnnounceEntity extends AbstractFormEntity{
 	
 	private Integer flushprompt;
 	private PromptEntity prompt;
-	private TagEntity tag;
 		
 	
 	public Integer getFlushprompt() {
@@ -20,12 +19,7 @@ public class AnnounceEntity extends AbstractFormEntity{
 	public void setPrompt(PromptEntity prompt) {
 		this.prompt = prompt;
 	}
-	public TagEntity getTag() {
-		return tag;
-	}
-	public void setTag(TagEntity tag) {
-		this.tag = tag;
-	}
+	
 	
 	
 	

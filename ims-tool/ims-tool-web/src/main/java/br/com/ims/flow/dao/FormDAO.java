@@ -9,6 +9,7 @@ import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AbstractEntity;
+import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.AnnounceEntity;
 import br.com.ims.flow.model.AnswerEntity;
 import br.com.ims.flow.model.ConditionEntity;
@@ -39,6 +40,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 			instance = new FormDAO();
 		}
 		return instance;
+	}
+	public boolean clean() {
+		return true;
 	}
 	public Object getObject(FormTypeEntity formType, String objectId ) {
 		Object obj = null;
@@ -120,7 +124,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 					if(rs.getString("f_condition") != null && rs.getString("f_condition").length() > 0) {
 						condition =  ServicesFactory.getInstance().getConditionService().get(rs.getString("f_condition"));
 					}
-					obj = this.getObject(formType, rs.getString("f_id"));
+					obj = this.getObject(formType, rs.getString("f_formid"));
 				}
 				
 				FormEntity form = new FormEntity();
@@ -184,6 +188,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	public boolean saveObj(FormEntity entity) {
 		boolean result = true;
 		Object obj = entity.getFormId();
+		((AbstractFormEntity)obj).setTag(entity.getTag()); 
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE)) {
 			result = ServicesFactory.getInstance().getAnnounceService().save((AnnounceEntity)obj);
 		}
@@ -206,6 +211,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 			result = ServicesFactory.getInstance().getDecisionService().save((DecisionEntity)obj);
 		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
+			
 			result = ServicesFactory.getInstance().getFlowService().save((FlowEntity)obj);
 		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
@@ -283,9 +289,10 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		// TODO Auto-generated method stub
 		
 		boolean result = true;
-		String sql = "INSERT INTO flow.form (id,name,description,formtype,formid,tag,condition,versionid) "
+		String sql = "INSERT INTO flow.form (id,name,description,formtype,formid,tag,condition,positionx,positiony,versionid) "
 					   + "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFormType().getId()+"','"+((AbstractEntity)entity.getFormId()).getId()+"',"
-					   + (entity.getTag() == null ? "NULL" : entity.getTag().getId())+","+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId() )+",'"+entity.getVersionId().getId()+"')";
+					   + (entity.getTag() == null ? "NULL" : entity.getTag().getId())+","+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId() )+","
+					   + "'"+entity.getPositionX()+"','"+entity.getPositionY()+"','"+entity.getVersionId().getId()+"')";
 		result = db.ExecuteSql(sql);
 		return result;
 		

@@ -85,7 +85,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		return this.getByFilter(null);
 	}
 	public AnswerEntity get(String id) {
-		List<AnswerEntity> result = this.getByFilter("WHERE a.id = "+id);
+		List<AnswerEntity> result = this.getByFilter("WHERE a.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

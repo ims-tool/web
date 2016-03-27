@@ -12,8 +12,6 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	private String interDigitTimeout;
 	private String terminatingTimeout;
 	private String terminatingCharacter;
-	private TagEntity tag;
-	
 	
 	public GrammarEntity getGrammar() {
 		return grammar;
@@ -69,14 +67,6 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	public void setTerminatingCharacter(String terminatingCharacter) {
 		this.terminatingCharacter = terminatingCharacter;
 	}
-	public TagEntity getTag() {
-		return tag;
-	}
-	public void setTag(TagEntity tag) {
-		this.tag = tag;
-	}
-	
-
 
 
 		

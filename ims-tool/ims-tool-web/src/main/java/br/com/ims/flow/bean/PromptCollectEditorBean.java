@@ -160,8 +160,7 @@ public class PromptCollectEditorBean extends AbstractBean {
 			Node source = logicalFlow.getNode(this.form);
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
-				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) &&
-				   formTarget.getName().equals(this.promptCollect.getNoInput().getName())) {
+				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
 					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
 				}
 				
@@ -173,8 +172,7 @@ public class PromptCollectEditorBean extends AbstractBean {
 			Node source = logicalFlow.getNode(this.form);
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
-				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) &&
-				   formTarget.getName().equals(this.promptCollect.getNoMatch().getName())) {
+				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
 					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
 				}
 				
@@ -185,6 +183,12 @@ public class PromptCollectEditorBean extends AbstractBean {
 		
 		
 		if(this.promptCollect.getNoInput() != null && this.promptCollect.getNoInput().getId().equals(this.noInputId)  ) {
+			/**
+			 * Update name
+			 */
+			updateNoMatchInputName(this.noInputId);
+			
+			
 			return;
 		}
 		
@@ -196,12 +200,12 @@ public class PromptCollectEditorBean extends AbstractBean {
 		this.promptCollect.setNoInput(noInput);
 		
 		
-		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
+		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOINPUT);
 		
 		FormEntity formNoInput = new FormEntity();
 		formNoInput.setId(Util.getUID());
 		formNoInput.setDescription(noInput.getDescription());
-		formNoInput.setName(noInput.getName());
+		formNoInput.setName(this.promptCollect.getName()+"_"+noInput.getName());
 		formNoInput.setFormType(formType);
 		formNoInput.setPositionX(this.form.getPositionX());
 		formNoInput.setPositionY(this.form.getPositionY());
@@ -230,9 +234,27 @@ public class PromptCollectEditorBean extends AbstractBean {
 		ServicesFactory.getInstance().getIvrEditorService().connectForm(source.getElement(), element);
 	
 	}
+	private void updateNoMatchInputName(String noMatchInputId) {
+		/**
+		 * Update name
+		 */
+		Node source = logicalFlow.getNode(this.form);
+		for(Node target : source.getListTarget()) {
+			FormEntity formTarget = (FormEntity)target.getElement().getData();
+			if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) ) {
+				NoMatchInputEntity noMatchInput = (NoMatchInputEntity)formTarget.getFormId();
+				if(noMatchInput.getId().equals(noMatchInputId)) {
+					formTarget.setName(this.promptCollect.getName()+"_"+noMatchInput.getName());
+				}
+			}
+			
+		}
+	}
 	private void addNoMatch() {
 		
 		if(this.promptCollect.getNoMatch() != null && this.promptCollect.getNoMatch().getId().equals(this.noMatchId) ) {
+			updateNoMatchInputName(this.noMatchId);
+			
 			
 			return;
 		}
@@ -241,11 +263,11 @@ public class PromptCollectEditorBean extends AbstractBean {
 		
 		this.promptCollect.setNoMatch(noMatch);
 		
-		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
+		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCH);
 		
 		FormEntity formNoMatch = new FormEntity();
 		formNoMatch.setId(Util.getUID());
-		formNoMatch.setDescription(noMatch.getDescription());
+		formNoMatch.setDescription(this.promptCollect.getName()+"_"+noMatch.getDescription());
 		formNoMatch.setName(noMatch.getName());
 		formNoMatch.setFormType(formType);
 		

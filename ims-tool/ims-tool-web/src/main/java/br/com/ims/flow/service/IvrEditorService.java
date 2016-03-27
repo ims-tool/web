@@ -18,6 +18,7 @@ import org.primefaces.model.diagram.endpoint.DotEndPoint;
 import org.primefaces.model.diagram.endpoint.EndPoint;
 import org.primefaces.model.diagram.endpoint.EndPointAnchor;
 import org.primefaces.model.diagram.endpoint.RectangleEndPoint;
+import org.primefaces.model.diagram.overlay.LabelOverlay;
 
 import br.com.ims.flow.bean.IvrEditorBean;
 import br.com.ims.flow.common.Constants;
@@ -25,8 +26,15 @@ import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AbstractFormEntity;
+import br.com.ims.flow.model.ChoiceEntity;
+import br.com.ims.flow.model.DecisionChanceEntity;
+import br.com.ims.flow.model.DecisionEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
+import br.com.ims.flow.model.MenuEntity;
+import br.com.ims.flow.model.NoMatchInputEntity;
+import br.com.ims.flow.model.PromptCollectEntity;
+import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.VersionEntity;
 
 public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
@@ -218,6 +226,20 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		FormEntity form = node.getForm();
     		form.setVersionId(version);
     		((AbstractFormEntity)form.getFormId()).setVersionId(version);
+    		boolean exists = false;
+    		if(ServicesFactory.getInstance().getFormService().get(form.getId(),true) == null) {
+    			result = ServicesFactory.getInstance().getFormService().save(form);
+				if(!result) {
+					return result;
+				}
+    		} else {
+    			exists = true;
+    			result = ServicesFactory.getInstance().getFormService().update(form);
+    			if(!result) {
+					return result;
+				}
+    			
+    		}
     		if(form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER) ||
     			form.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE) ||
     			form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT) ||
@@ -228,12 +250,8 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			form.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER) ||
     			form.getFormType().getName().equals(Constants.FORM_TYPE_DISCONNECT) ||
     			form.getFormType().getName().equals(Constants.FORM_TYPE_RETURN)) {
-    			if(ServicesFactory.getInstance().getFormService().get(form.getId(),true) == null) {
-    				result = ServicesFactory.getInstance().getFormService().save(form);
-    				if(!result) {
-    					return result;
-    				}
-        			List<FormEntity> listForm =  null;
+    			if(!exists) {
+    				List<FormEntity> listForm =  null;
         			if(map.get("INSERT") == null) {
         				listForm = new ArrayList<FormEntity>();
         				map.put("INSERT", listForm);
@@ -241,10 +259,6 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
         			listForm = map.get("INSERT");
         			listForm.add(form); 
         		} else {
-        			result = ServicesFactory.getInstance().getFormService().update(form);
-        			if(!result) {
-    					return result;
-    				}
         			List<FormEntity> listForm =  null;
         			if(map.get("UPDATE") == null) {
         				listForm = new ArrayList<FormEntity>();
@@ -278,6 +292,172 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     	return result;
 		
     }
+    
+    private Element createElement(Element source,FormEntity form) {
+    	this.bean.getListForm().add(form);
+    	
+    	Element element = new Element(form);
+		element.setX(form.getPositionX());
+		element.setY(form.getPositionY());
+		
+		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(form.getFormType(), element);
+		bean.getModel().addElement(element);
+		bean.getLogicalFlow().addNode(element);
+		
+		this.connect(source, element);
+		return element;
+    }
+    public void loadFlow(Element source, String formId) {
+    	
+    	Node node = bean.getLogicalFlow().getNode(formId);    	
+    	if(node != null) {
+    		this.connect(source, node.getElement());
+    		return;
+    	}
+    	FormEntity form = ServicesFactory.getInstance().getFormService().get(formId);
+    	Element element = createElement(source,form);
+		form.setNextForm(((AbstractFormEntity)form.getFormId()).getNextForm());
+		if(form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
+			this.bean.updateTabFlowName(form.getName());
+    		
+    	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+			PromptCollectEntity pc = (PromptCollectEntity)form.getFormId();
+			
+			FormEntity noInput = this.getFormNoMatchInput(pc.getNoInput());
+			FormEntity noMatch= this.getFormNoMatchInput(pc.getNoMatch());
+	    	
+			Element elementNoInput = createElement(element,noInput);
+			Element elementNoMatch = createElement(element,noMatch);
+			
+			if(noInput.getNextForm() != null) {
+				loadFlow(elementNoInput, noInput.getNextForm());
+			}
+			if(noMatch.getNextForm() != null) {
+				loadFlow(elementNoMatch, noMatch.getNextForm());
+			}
+			
+    	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
+			
+			MenuEntity menu = (MenuEntity)form.getFormId();
+			
+			FormEntity noInput = this.getFormNoMatchInput(menu.getNoInput());
+			FormEntity noMatch= this.getFormNoMatchInput(menu.getNoMatch());
+	    	
+			Element elementNoInput = createElement(element,noInput);
+			Element elementNoMatch = createElement(element,noMatch);
+			
+			if(noInput.getNextForm() != null) {
+				loadFlow(elementNoInput, noInput.getNextForm());
+			}
+			if(noMatch.getNextForm() != null) {
+				loadFlow(elementNoMatch, noMatch.getNextForm());
+			}
+			for(ChoiceEntity choice : menu.getChoices()) {
+				FormEntity formChoice = this.getFormChoice(choice);
+				Element elementForm = createElement(element,formChoice);
+				if(formChoice.getNextForm() != null) {
+					loadFlow(elementForm, formChoice.getNextForm());
+				}
+				
+			}
+		} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
+			DecisionEntity decision = (DecisionEntity)form.getFormId();
+			for(DecisionChanceEntity chance : decision.getListDecisionChance()) {
+				FormEntity formChance = this.getFormDecisionChance(chance);
+				Element elementForm = createElement(element,formChance);
+				if(formChance.getNextForm() != null) {
+					loadFlow(elementForm, formChance.getNextForm());
+				}
+			}
+		}
+		if(form.getNextForm() != null) {
+			loadFlow(element, form.getNextForm());
+		}
+   
+		
+    }
+    private FormEntity getFormNoMatchInput(NoMatchInputEntity noMatchInput) {
+
+    	List<FormEntity> listForm = ServicesFactory.getInstance().getFormService().getByFilter("WHERE f.formid = '"+noMatchInput.getId()+"' AND ft.name in('"+Constants.FORM_TYPE_NOINPUT+"','"+Constants.FORM_TYPE_NOMATCH+"') ", true);
+    	FormEntity form = null;
+    	if(listForm.size() > 0) {
+    		form = listForm.get(0);
+	    	
+    		String imgPath = form.getFormType().getImagePathSuccess();
+			if(noMatchInput.getType().equalsIgnoreCase("NOINPUT")) {
+				form.getFormType().setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
+			} else {
+				form.getFormType().setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));
+			}
+			imgPath = form.getFormType().getImagePathError();
+			if(noMatchInput.getType().equalsIgnoreCase("NOINPUT")) {
+				form.getFormType().setImagePathError(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
+			} else {
+				form.getFormType().setImagePathError(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));
+			}
+			
+		}
+    	return form;
+		
+    }
+    private FormEntity getFormChoice(ChoiceEntity choice) {
+
+    	List<FormEntity> listForm = ServicesFactory.getInstance().getFormService().getByFilter("WHERE f.formid = '"+choice.getId()+"' AND ft.name = '"+Constants.FORM_TYPE_CHOICE+"' ", true);
+    	FormEntity form = null;
+    	if(listForm.size() > 0) {
+    		form = listForm.get(0);
+	    	
+    		
+			String imgPath = form.getFormType().getImagePathSuccess();
+			form.getFormType().setImagePathSuccess(imgPath.replace("<NUMBER>", choice.getDtmf().equals("*") ? "x" : choice.getDtmf()  ));
+			
+			imgPath = form.getFormType().getImagePathError();
+			form.getFormType().setImagePathError(imgPath.replace("<NUMBER>", choice.getDtmf().equals("*") ? "x" : choice.getDtmf() ));
+			
+		}
+    	return form;
+		
+    }
+    private FormEntity getFormDecisionChance(DecisionChanceEntity decisionChance) {
+
+    	List<FormEntity> listForm = ServicesFactory.getInstance().getFormService().getByFilter("WHERE f.formid = '"+decisionChance.getId()+"' AND ft.name = '"+Constants.FORM_TYPE_DECISION_CHANCE+"' ", true);
+    	FormEntity form = null;
+    	if(listForm.size() > 0) {
+    		form = listForm.get(0);
+		}
+    	return form;
+		
+    }
+    private void connect(Element source, Element target) {
+    	if(source != null) {
+    		EndPoint epSource = null;
+    		EndPoint epTarget = null;
+    		for(EndPoint ep : source.getEndPoints()) {
+    			endPoint = new BlankEndPoint(EndPointAnchor.LEFT);
+    			ep.getAnchor()
+    			//continuar aqui...ajustar para promptcollect
+    			if(ep.isSource()) {
+    				epSource = ep;
+    				break;
+    			}
+    		}
+    		for(EndPoint ep : target.getEndPoints()) {
+    			if(ep.isTarget()) {
+    				epTarget = ep;
+    				break;
+    			}
+    		}
+    		
+    		Connection conn = new Connection(epSource, epTarget);
+			TagEntity tag = ((FormEntity)source.getData()).getTag();
+			if(tag != null) {
+				conn.getOverlays().add(new LabelOverlay("Tag "+tag.getId(), "flow-label", 0.5));
+			}
+			bean.getModel().connect(conn);
+			//this.connectForm(source, target);
+		}
+    }
+    
     public void update(FormEntity formEntity) {
     	
     }

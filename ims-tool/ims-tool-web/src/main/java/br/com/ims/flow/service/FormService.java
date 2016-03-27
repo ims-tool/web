@@ -133,7 +133,9 @@ public class FormService extends AbstractEntityService<FormEntity> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+	public List<FormEntity> getByFilter(String where, boolean lazy) {
+		return DAOFactory.getInstance().getFormDAO().getByFilter(where, lazy);
+	}
 	
 
 }

@@ -86,7 +86,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 		return this.getByFilter(null);
 	}
 	public FlowEntity get(String id) {
-		List<FlowEntity> result = this.getByFilter("WHERE f.id = "+id);
+		List<FlowEntity> result = this.getByFilter("WHERE f.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}

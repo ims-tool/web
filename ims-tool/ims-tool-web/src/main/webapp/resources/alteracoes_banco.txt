@@ -125,3 +125,7 @@ insert into flow.formtype (id,name) values('13','Choice');
 insert into flow.formtype (id,name) values('14','DecisionChance');
 
 insert into flow.formtype (id,name) values('15','Return');
+
+insert into flow.formtype (id,name) values('16','NoMatch');
+
+insert into flow.formtype (id,name) values('17','NoInput');

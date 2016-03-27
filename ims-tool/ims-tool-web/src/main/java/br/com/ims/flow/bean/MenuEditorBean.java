@@ -146,8 +146,7 @@ public class MenuEditorBean extends AbstractBean {
 			Node source = logicalFlow.getNode(this.form);
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
-				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) &&
-				   formTarget.getName().equals(this.menu.getNoInput().getName())) {
+				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
 					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
 				}
 				
@@ -159,8 +158,7 @@ public class MenuEditorBean extends AbstractBean {
 			Node source = logicalFlow.getNode(this.form);
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
-				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) &&
-				   formTarget.getName().equals(this.menu.getNoMatch().getName())) {
+				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
 					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
 				}
 				
@@ -172,6 +170,7 @@ public class MenuEditorBean extends AbstractBean {
 		
 		
 		if(this.menu.getNoInput() != null && this.menu.getNoInput().getId().equals(this.noInputId)  ) {
+			updateNoMatchInputName(this.noInputId);
 			return;
 		}
 		
@@ -183,12 +182,12 @@ public class MenuEditorBean extends AbstractBean {
 		this.menu.setNoInput(noInput);
 		
 		
-		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
+		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOINPUT);
 		
 		FormEntity formNoInput = new FormEntity();
 		formNoInput.setId(Util.getUID());
 		formNoInput.setDescription(noInput.getDescription());
-		formNoInput.setName(noInput.getName());
+		formNoInput.setName(this.menu.getName()+"_"+noInput.getName());
 		formNoInput.setFormType(formType);
 		formNoInput.setPositionX(this.form.getPositionX());
 		formNoInput.setPositionY(this.form.getPositionY());
@@ -217,9 +216,26 @@ public class MenuEditorBean extends AbstractBean {
 		ServicesFactory.getInstance().getIvrEditorService().connectForm(source.getElement(), element);
 	
 	}
+	private void updateNoMatchInputName(String noMatchInputId) {
+		/**
+		 * Update name
+		 */
+		Node source = logicalFlow.getNode(this.form);
+		for(Node target : source.getListTarget()) {
+			FormEntity formTarget = (FormEntity)target.getElement().getData();
+			if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT) || 
+					formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
+				
+				NoMatchInputEntity noMatchInput = ServicesFactory.getInstance().getNoMatchInputService().get(noMatchInputId);
+				formTarget.setName(this.menu.getName()+"_"+noMatchInput.getName());
+			}
+			
+		}
+	}
 	private void addNoMatch() {
 		
 		if(this.menu.getNoMatch() != null && this.menu.getNoMatch().getId().equals(this.noMatchId) ) {
+			updateNoMatchInputName(this.noMatchId);
 			return;
 		}
 		
@@ -227,12 +243,12 @@ public class MenuEditorBean extends AbstractBean {
 		
 		this.menu.setNoMatch(noMatch);
 		
-		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCHINPUT);
+		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCH);
 		
 		FormEntity formNoMatch = new FormEntity();
 		formNoMatch.setId(Util.getUID());
 		formNoMatch.setDescription(noMatch.getDescription());
-		formNoMatch.setName(noMatch.getName());
+		formNoMatch.setName(this.menu.getName()+"_"+noMatch.getName());
 		formNoMatch.setFormType(formType);
 		formNoMatch.setPositionX(this.form.getPositionX());
 		formNoMatch.setPositionY(this.form.getPositionY());
