@@ -428,21 +428,38 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     	return form;
 		
     }
-    private void connect(Element source, Element target) {
+    public void connect(Element source, Element target) {
     	if(source != null) {
     		EndPoint epSource = null;
     		EndPoint epTarget = null;
+    		
+    		FormEntity fSource = (FormEntity)source.getData();
+    		FormEntity fTarget = (FormEntity)target.getData();
     		for(EndPoint ep : source.getEndPoints()) {
-    			endPoint = new BlankEndPoint(EndPointAnchor.LEFT);
-    			ep.getAnchor()
-    			//continuar aqui...ajustar para promptcollect
-    			if(ep.isSource()) {
-    				epSource = ep;
-    				break;
+    			if(fSource.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+    				if(fTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT) || 
+    						fTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)	) {
+    					if(ep.getAnchor().equals(EndPointAnchor.LEFT)) {
+        					epSource = ep;
+        					break;
+        				}
+    				} else {
+    					if(ep.getAnchor().equals(EndPointAnchor.BOTTOM)) {
+        					epSource = ep;
+        					break;
+        				}
+    				}
+    				
+    			} else {
+    				if(ep.isSource()) {
+        				epSource = ep;
+        				break;
+        			}
     			}
+    			
     		}
     		for(EndPoint ep : target.getEndPoints()) {
-    			if(ep.isTarget()) {
+    			if(ep.getAnchor().equals(EndPointAnchor.TOP)) {
     				epTarget = ep;
     				break;
     			}
@@ -454,6 +471,8 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 				conn.getOverlays().add(new LabelOverlay("Tag "+tag.getId(), "flow-label", 0.5));
 			}
 			bean.getModel().connect(conn);
+			bean.getLogicalFlow().connect(source, target, conn);
+
 			//this.connectForm(source, target);
 		}
     }

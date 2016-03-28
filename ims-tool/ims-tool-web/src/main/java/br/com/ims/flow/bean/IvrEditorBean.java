@@ -429,17 +429,19 @@ public class IvrEditorBean extends AbstractBean {
 		this.form = ServicesFactory.getInstance().getIvrEditorService().getForm(this, formId); 
 	
 		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE) || 
+		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOINPUT) ||
+		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCH) ||
 		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCHINPUT) ||
 		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_DECISION_CHANCE)) {
-			Node node = logicalFlow.getNode(this.form);
+			Node node = logicalFlow.getNode(this.form.getId());
 			Node parent = node.getListSource().get(0);
 			this.form = (FormEntity)parent.getElement().getData();
 			this.formId = this.form.getId();
 			
 		}
 		
-		
 		this.formPageEditor = "/pages/forms/"+form.getFormType().getName()+".xhtml";
+		
 		
 		Object bean = ServicesFactory.getInstance().getIvrEditorService().getBean(form.getFormType().getName());
 		((AbstractBean)bean).init();

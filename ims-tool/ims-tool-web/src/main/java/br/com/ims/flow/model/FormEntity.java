@@ -60,6 +60,10 @@ public class FormEntity extends AbstractFormEntity{
 		this.formType = formType;
 		if(this.formType != null) {
 			String entity = Constants.CLASS_ENTITY_PATH + this.formType.getName()+"Entity";
+			if(this.formType.getName().equals(Constants.FORM_TYPE_NOINPUT) ||
+					this.formType.getName().equals(Constants.FORM_TYPE_NOMATCH)) {
+				entity = Constants.CLASS_ENTITY_PATH + Constants.FORM_TYPE_NOMATCHINPUT +"Entity";
+			}
 			
 			try {
 				this.formId = Class.forName(entity).newInstance();

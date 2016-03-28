@@ -28,7 +28,7 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	
 					 "FROM flow.tag t "+
 					 "INNER JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
-					 "<WHERE> ORDER BY t.id ";
+					 "<WHERE> ORDER BY t.id DESC";
 		if(where != null && where.length() > 0) {
 			sql = sql.replace("<WHERE>", where);
 		}
