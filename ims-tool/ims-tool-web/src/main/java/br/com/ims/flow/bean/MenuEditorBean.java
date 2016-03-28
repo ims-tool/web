@@ -126,7 +126,7 @@ public class MenuEditorBean extends AbstractBean {
 						}
 						if(remove) {
 							this.menu.getChoices().remove(menuChoice);
-							ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
+							ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
 						} 
 						 
 					}
@@ -147,7 +147,7 @@ public class MenuEditorBean extends AbstractBean {
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
-					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
+					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
 				}
 				
 			}
@@ -159,7 +159,7 @@ public class MenuEditorBean extends AbstractBean {
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
-					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
+					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
 				}
 				
 			}
@@ -188,7 +188,7 @@ public class MenuEditorBean extends AbstractBean {
 		formNoInput.setId(Util.getUID());
 		formNoInput.setDescription(noInput.getDescription());
 		formNoInput.setName(this.menu.getName()+"_"+noInput.getName());
-		formNoInput.setFormType(formType);
+		formNoInput.setFormType(formType, noInput);
 		formNoInput.setPositionX(this.form.getPositionX());
 		formNoInput.setPositionY(this.form.getPositionY());
 		
@@ -249,9 +249,10 @@ public class MenuEditorBean extends AbstractBean {
 		formNoMatch.setId(Util.getUID());
 		formNoMatch.setDescription(noMatch.getDescription());
 		formNoMatch.setName(this.menu.getName()+"_"+noMatch.getName());
-		formNoMatch.setFormType(formType);
+		formNoMatch.setFormType(formType, noMatch);
 		formNoMatch.setPositionX(this.form.getPositionX());
 		formNoMatch.setPositionY(this.form.getPositionY());
+
 		
 		String imgPath = formType.getImagePathSuccess();
 		formType.setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));

@@ -76,6 +76,17 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(formType.getName().equals(Constants.FORM_TYPE_OPERATION)) {
 			obj = (Object)ServicesFactory.getInstance().getOperationService().get(objectId);
 		}
+		if(formType.getName().equals(Constants.FORM_TYPE_NOINPUT) ||
+		   formType.getName().equals(Constants.FORM_TYPE_NOMATCH) ||
+			formType.getName().equals(Constants.FORM_TYPE_NOMATCHINPUT)) {
+			obj = (Object)ServicesFactory.getInstance().getNoMatchInputService().get(objectId);
+		}
+		if(formType.getName().equals(Constants.FORM_TYPE_DECISION_CHANCE)) {
+			obj = (Object)ServicesFactory.getInstance().getDecisionService().getChance(objectId);
+		}
+		if(formType.getName().equals(Constants.FORM_TYPE_CHOICE)) {
+			obj = (Object)ServicesFactory.getInstance().getMenuService().getChoice(objectId);
+		}
 		return obj;
 	}
 	

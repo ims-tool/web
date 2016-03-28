@@ -1,5 +1,6 @@
 package br.com.ims.flow.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ import br.com.ims.flow.model.OperationEntity;
 import br.com.ims.flow.model.PromptCollectEntity;
 import br.com.ims.flow.model.TransferEntity;
 
-public class LogicalFlow {
+@SuppressWarnings("serial")
+public class LogicalFlow implements Serializable{
 	private int minSizeWidth = 70;
 	private int minSizeHeight = 70;
 	private int sizeWidth = 70;
@@ -66,18 +68,18 @@ public class LogicalFlow {
 		listNode.add(node);
 		listFirstNode.add(node);
 	}
-	public void delNode(Element element) {
+	public void delNode(Element element,boolean allNode) {
 		Node node = getNode(element);
 		
-		disconnectAll(element);
+		disconnectAll(element,allNode);
 		
 		listNode.remove(node);
 		listFirstNode.remove(node);
 	}
-	public void delNode(FormEntity form) {
+	public void delNode(FormEntity form,boolean allNode) {
 		Node node = getNode(form);
 		Element element = node.getElement();
-		disconnectAll(element);
+		disconnectAll(element,allNode);
 		
 		listNode.remove(node);
 		listFirstNode.remove(node);
@@ -95,16 +97,16 @@ public class LogicalFlow {
 	    
 	}
 	
-	public void disconnectAll(Element element) {
+	public void disconnectAll(Element element,boolean allNode) {
 		
 		Node node = getNode(element);
 
 		List<Node> sources = node.getListSource();
 		for(Node source : sources) {
-			disconnect(source.getElement());
+			disconnect(source.getElement(),allNode);
 			
 		}
-		disconnect(element);
+		disconnect(element,allNode);
 		
 		
 	}
@@ -123,21 +125,45 @@ public class LogicalFlow {
 		}
 	}
 			
-	public void disconnect(Element source) {
+	public void disconnect(Element source, boolean allNodes) {
 		Node nodeSource = getNode(source);
 
+		FormEntity formSource = nodeSource.getForm();
 		List<Node> targets = nodeSource.getListTarget();
-		for(Node target : targets) {
-			target.remSource(nodeSource);
-			if(target.getListSource().size() == 0) {
-				listFirstNode.add(target);
+		
+		if(formSource.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT) && !allNodes) {
+			boolean found = false;
+			for(int index = 0; index < targets.size() && !found; index++) {
+				Node target = targets.get(index); 
+				FormEntity formTarget = target.getForm();
+				if(!(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT) || 
+						formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH))) {
+					target.remSource(nodeSource);
+					if(target.getListSource().size() == 0) {
+						listFirstNode.add(target);
+					}
+					nodeSource.remTarget(target);
+					found = true;
+				}				
 			}
+			
+			
+		} else {
+		
+		
+			for(Node target : targets) {
+				target.remSource(nodeSource);
+				if(target.getListSource().size() == 0) {
+					listFirstNode.add(target);
+				}
+			}
+			nodeSource.cleanTarget();
 		}
-		nodeSource.cleanTarget();
 		nodeSource.setConnection(null);
 		((FormEntity)nodeSource.getElement().getData()).setTag(null);
 		Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();
 	    ((AbstractFormEntity)formId).setNextForm(null);
+		
 		
 	}
 	public boolean existsStart() {

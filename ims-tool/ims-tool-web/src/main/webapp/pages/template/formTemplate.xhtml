@@ -32,7 +32,7 @@
 	            <p:inputText id="dialog_form_id" value="#{bean.form.id}" readonly="true" label="label_dialog_form_id" />
 	 
 	            <h:outputLabel id="label_dialog_form_name" for="dialog_form_name" value="Name:" />
-	            <p:inputText id="dialog_form_name" value="#{bean.form.name}" required="true" requiredMessage="Please,inform a Name" label="label_dialog_form_name" />
+	            <p:inputText id="dialog_form_name" value="#{bean.form.name}" required="true" requiredMessage="Please,inform the Name" label="label_dialog_form_name" maxlength="30" />
 	            
 	            <h:outputLabel id="label_dialog_form_description" for="dialog_form_description" value="Description:" />
 	            <p:inputTextarea id="dialog_form_description" value="#{bean.form.description}" label="label_dialog_form_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>

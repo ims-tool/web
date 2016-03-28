@@ -12,6 +12,10 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	private String interDigitTimeout;
 	private String terminatingTimeout;
 	private String terminatingCharacter;
+	private String noInput_NextForm;
+	private String noMatch_NextForm;
+	private TagEntity noInput_Tag;
+	private TagEntity noMatch_Tag;
 	
 	public GrammarEntity getGrammar() {
 		return grammar;
@@ -67,6 +71,31 @@ public class PromptCollectEntity extends AbstractFormEntity {
 	public void setTerminatingCharacter(String terminatingCharacter) {
 		this.terminatingCharacter = terminatingCharacter;
 	}
+	public String getNoInput_NextForm() {
+		return noInput_NextForm;
+	}
+	public void setNoInput_NextForm(String noInput_NextForm) {
+		this.noInput_NextForm = noInput_NextForm;
+	}
+	public String getNoMatch_NextForm() {
+		return noMatch_NextForm;
+	}
+	public void setNoMatch_NextForm(String noMatch_NextForm) {
+		this.noMatch_NextForm = noMatch_NextForm;
+	}
+	public TagEntity getNoInput_Tag() {
+		return noInput_Tag;
+	}
+	public void setNoInput_Tag(TagEntity noInput_Tag) {
+		this.noInput_Tag = noInput_Tag;
+	}
+	public TagEntity getNoMatch_Tag() {
+		return noMatch_Tag;
+	}
+	public void setNoMatch_Tag(TagEntity noMatch_Tag) {
+		this.noMatch_Tag = noMatch_Tag;
+	}
+	
 
 
 		

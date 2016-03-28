@@ -30,7 +30,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.return r "+
-					 "LEFT JOIN flow.tag t ON a.tag = t.id "+ 
+					 "LEFT JOIN flow.tag t ON r.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
 					 "<WHERE> "+
 				     "ORDER BY r.name";
@@ -96,7 +96,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 	public boolean save(ReturnEntity _return) {
 		boolean result = true;
 		
-		String sql = "INSERT INTO flow.return (id,name,description,nextform,tag,versionid) "+
+		String sql = "INSERT INTO flow.return (id,name,description,tag,versionid) "+
 					 "VALUES ('"+_return.getId()+"','"+_return.getName()+"','"+_return.getDescription()+"',"
 					+(_return.getTag() == null ? "NULL" : _return.getTag().getId())+",'"+_return.getVersionId().getId()+"') ";
 		             

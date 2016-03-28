@@ -28,15 +28,27 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		}
 		return instance;
 	}
-	private List<ChoiceEntity> getChoices(String menuId) {
-		String sql = "SELECT c.id c_id,c.name c_name,c.menu c_menu,c.dtmf c_dtmf,c.nextform c_nextform,c.condition c_condition, "+
+	public ChoiceEntity getChoice(String id) {
+		List<ChoiceEntity> result = getChoicesByFilter("WHERE c.id = '"+id+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
+	private List<ChoiceEntity> getChoicesByFilter(String where) {
+		String sql = "SELECT c.id c_id,c.name c_name,c.menu c_menu,c.dtmf c_dtmf,c.nextform c_nextform,c.condition c_condition, "+					
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.choice c "+
 	                 "LEFT JOIN flow.tag t ON c.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
-	                 "WHERE c.menu ='"+menuId+"' "+
+	                 "<WHERE> "+
 	                 "ORDER BY c.dtmf ";
+		if(where != null && where.length() > 0) {
+			sql = sql.replace("<WHERE>", where);
+		} else {
+			sql = sql.replace("<WHERE>", "");
+		}
 		List<ChoiceEntity> result = new ArrayList<ChoiceEntity>();
 		ResultSet rs = null;
 		try {
@@ -85,7 +97,9 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	}
 	
 	public List<MenuEntity> getByFilter(String where) {
-		String sql = "SELECT m.id m_id,m.name m_name,m.description m_description,m.prompt m_prompt,m.fetchtimeout m_fetchtimeout, m.terminatingtimeout m_terminatingtimeout, m.terminatingcharacter m_terminatingcharacter, "+
+		String sql = "SELECT m.id m_id,m.name m_name,m.description m_description,m.prompt m_prompt,m.fetchtimeout m_fetchtimeout, "+
+				 "m.terminatingtimeout m_terminatingtimeout, m.terminatingcharacter m_terminatingcharacter, "+
+				 "m.noinput_nextform m_noinput_nextform,m.nomatch_nextform m_nomatch_nextform, "+
 				 "ni.id ni_id,ni.name ni_name, ni.type ni_type,ni.threshold ni_threshold, ni.prompt ni_prompt, ni.nextform ni_nextform, "+
 			     "nm.id nm_id,nm.name nm_name, nm.type nm_type,nm.threshold nm_threshold, nm.prompt nm_prompt, nm.nextform nm_nextform, "+
 				 "t_ni.id t_ni_id, t_ni.description t_ni_description, "+ 
@@ -95,9 +109,9 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				 "FROM flow.menu m "+
 				 "INNER JOIN flow.nomatchinput ni ON ni.id = m.noinput "+
 				 "INNER JOIN flow.nomatchinput nm ON nm.id = m.nomatch "+
-				 "LEFT JOIN flow.tag t_ni ON ni.tag = t_ni.id "+ 
+				 "LEFT JOIN flow.tag t_ni ON m.noinput_tag = t_ni.id "+ 
 				 "LEFT JOIN flow.tagtype tt_ni ON t_ni.tagtypeid = tt_ni.id "+
-				 "LEFT JOIN flow.tag t_nm ON nm.tag = t_nm.id "+ 
+				 "LEFT JOIN flow.tag t_nm ON m.nomatch_tag = t_nm.id "+ 
 				 "LEFT JOIN flow.tagtype tt_nm ON t_nm.tagtypeid = tt_nm.id "+
 			     "<WHERE> "+
 				 "ORDER BY m.name";
@@ -138,8 +152,12 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			}
 			
 			PromptEntity prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("m_prompt"));
-			PromptEntity prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
-			PromptEntity prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
+			PromptEntity prompt_ni = null;
+			PromptEntity prompt_nm = null;
+			if(rs.getString("ni_prompt") != null && rs.getString("ni_prompt").length() > 0)
+				prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
+			if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0)
+				prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
 			
 			
 			
@@ -159,8 +177,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			noMatch.setPrompt(prompt_nm);
 			noMatch.setNextForm(rs.getString("nm_nextform"));
 			
-			List<ChoiceEntity> choices = this.getChoices(rs.getString("m_id"));
-			
+			List<ChoiceEntity> choices = this.getChoicesByFilter("WHERE c.menu = '"+rs.getString("m_id")+"'");
 			
 			MenuEntity menu = new MenuEntity();
 			menu.setId(rs.getString("m_id"));
@@ -173,6 +190,10 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			menu.setTerminatingTimeOut(rs.getString("m_terminatingtimeout"));
 			menu.setTerminatingCharacter(rs.getString("m_terminatingcharacter"));
 			menu.setChoices(choices);
+			menu.setNoInput_NextForm(rs.getString("m_noinput_nextform"));
+			menu.setNoMatch_NextForm(rs.getString("m_nomatch_nextform"));
+			menu.setNoInput_Tag(tag_ni);
+			menu.setNoMatch_Tag(tag_nm);
 				
 			result.add(menu);
 		}
@@ -206,9 +227,13 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	
 	public boolean save(MenuEntity menu) {
 		boolean result = true;
-		String sql = "INSERT INTO flow.menu (id,name,description,prompt,noinput,nomatch,fetchtimeout,terminatingtimeout,terminatingcharacter,versionid) "+
+		String sql = "INSERT INTO flow.menu (id,name,description,prompt,noinput,nomatch,noinput_nextform,nomatch_nextform,noinput_tag,nomatch_tag,fetchtimeout,terminatingtimeout,terminatingcharacter,versionid) "+
 					 "VALUES ('"+menu.getId()+"','"+menu.getName()+"','"+menu.getDescription()+"','"+menu.getPrompt().getId()+"','"+menu.getNoInput().getId()+"','"+
 				     menu.getNoMatch().getId()+"',"+
+					 "'"+menu.getNoInput_NextForm()+"',"+
+					 "'"+menu.getNoMatch_NextForm()+"',"+
+					 (menu.getNoInput_Tag() == null ? "NULL" : menu.getNoInput_Tag().getId())+","+
+					 (menu.getNoMatch_Tag() == null ? "NULL" : menu.getNoMatch_Tag().getId())+","+
 					 (menu.getFetchTimeOut() == null || menu.getFetchTimeOut().length() == 0 ? "NULL" : menu.getFetchTimeOut())+","+
 				     (menu.getTerminatingTimeOut() == null || menu.getTerminatingTimeOut().length() == 0 ? "NULL" : menu.getFetchTimeOut() )+","+
 					 (menu.getTerminatingCharacter() ==  null || menu.getTerminatingCharacter().length() == 0? "NULL" : "'"+menu.getTerminatingCharacter()+"'")+",'"+menu.getVersionId().getId()+"') ";
@@ -242,6 +267,10 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		String sql = "UPDATE flow.menu SET name = '"+menu.getName()+"',description='"+menu.getDescription()+"',"
 				+ "prompt = '"+menu.getPrompt().getId()+"',noinput='"+menu.getNoInput().getId()+"',"
 				+ "nomatch ='"+menu.getNoMatch().getId()+"',"
+				+ "noinput_nextform ='"+menu.getNoInput_NextForm()+"',"
+				+ "nomatch_nextform = '"+menu.getNoMatch_NextForm()+"',"
+				+ "noinput_tag = "+(menu.getNoInput_Tag() == null ? "NULL" : menu.getNoInput_Tag().getId())+","
+				+ "nomatch_tag = "+(menu.getNoMatch_Tag() == null ? "NULL" : menu.getNoMatch_Tag().getId())+","
 				+ "fetchtimeout = "+(menu.getFetchTimeOut() == null || menu.getFetchTimeOut().length() == 0? "NULL" : menu.getFetchTimeOut())+","
 				+ "terminatingtimeout = "+(menu.getTerminatingTimeOut() == null || menu.getTerminatingTimeOut().length() == 0? "NULL" : menu.getTerminatingTimeOut())+","
 				+ "terminatingcharacter = "+(menu.getTerminatingCharacter() == null || menu.getTerminatingCharacter().length()==0? "NULL" :  "'"+menu.getTerminatingCharacter()+"'")+","

@@ -320,7 +320,7 @@ public class IvrEditorBean extends AbstractBean {
         	Node node = logicalFlow.getNode(event.getSourceElement());
         	if(node.getListTarget().size() > 0) {
         		//continuar
-        		ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getSourceElement());
+        		ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getSourceElement(),false);
         	}
         	
         	ServicesFactory.getInstance().getIvrEditorService().connectForm(model, logicalFlow, event.getSourceElement(),event.getTargetElement());
@@ -342,7 +342,7 @@ public class IvrEditorBean extends AbstractBean {
     public void onDisconnect(DisconnectEvent event) {
     	this.editing.setBooleanValue(true);
     	this.auxiliarPageEditor = "";
-    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getSourceElement());
+    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getSourceElement(),false);
     	logicalFlow.validateNodes();
         //logicalFlow.align();
     }
@@ -350,7 +350,7 @@ public class IvrEditorBean extends AbstractBean {
     public void onConnectionChange(ConnectionChangeEvent event) {
     	this.editing.setBooleanValue(true);
     	
-    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getOriginalSourceElement());
+    	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getOriginalSourceElement(),false);
 
     	ServicesFactory.getInstance().getIvrEditorService().connectForm(model, logicalFlow, event.getNewSourceElement(),event.getNewTargetElement());
     	
@@ -611,14 +611,28 @@ public class IvrEditorBean extends AbstractBean {
 				for(Node nodeTarget :  node.getListTarget()) {
 					if(nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_CHOICE) ||
 							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_DECISION_CHANCE) ||
-							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT)) {
-						ServicesFactory.getInstance().getIvrEditorService().deleteForm(nodeTarget.getElement());
+							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) || 
+							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT) ||
+							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
+						ServicesFactory.getInstance().getIvrEditorService().deleteForm(nodeTarget.getElement(),true);
 					}
 				}
 				
-				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement());
-			} else {
-				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement());
+				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement(),true);
+			} else if(this.form.getFormType().getName().equals(Constants.FORM_TYPE_CHOICE) ||
+					  this.form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION_CHANCE) ||
+					  this.form.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) || 
+					  this.form.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT) ||
+					  this.form.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
+				Node aux = logicalFlow.getNode(this.form);
+				if(aux.getListSource() != null && aux.getListSource().size() > 0) {
+					Node source = aux.getListSource().get(0);
+					this.formId = source.getForm().getId();
+					deleteNode(param);
+				}
+			}
+			else {
+				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement(),true);
 			}
 			
 		}

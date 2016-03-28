@@ -28,10 +28,12 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	}
 	
 	public List<PromptCollectEntity> getByFilter(String where) {
-		String sql = "SELECT pc.id pc_id,pc.name pc_name,pc.description pc_description,pc.flushprompt pc_flushprompt,pc.prompt pc_prompt,pc.fetchtimeout pc_fetchtimeout, pc.interdigittimeout pc_interdigittimeout, pc.terminatingcharacter pc_terminatingcharacter, pc.nextform pc_nextform, "+
+		String sql = "SELECT pc.id pc_id,pc.name pc_name,pc.description pc_description,pc.flushprompt pc_flushprompt,pc.prompt pc_prompt,"+
+				 "pc.fetchtimeout pc_fetchtimeout, pc.interdigittimeout pc_interdigittimeout, pc.terminatingcharacter pc_terminatingcharacter, "+
+				 "pc.nextform pc_nextform, pc.noinput_nextform pc_noinput_nextform,pc.nomatch_nextform pc_nomatch_nextform,"+
 				 "g.id g_id, g.name g_name,g.description g_description,g.type g_type,g.sizemax g_sizemax,g.sizemin g_sizemin, "+
-			     "ni.id ni_id,ni.name ni_name, ni.type ni_type,ni.threshold ni_threshold, ni.prompt ni_prompt, ni.nextform ni_nextform, "+
-			     "nm.id nm_id,nm.name nm_name, nm.type nm_type,nm.threshold nm_threshold, nm.prompt nm_prompt, nm.nextform nm_nextform, "+
+			     "ni.id ni_id,ni.name ni_name, ni.type ni_type,ni.threshold ni_threshold, ni.prompt ni_prompt, "+
+			     "nm.id nm_id,nm.name nm_name, nm.type nm_type,nm.threshold nm_threshold, nm.prompt nm_prompt,  "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description, "+
 				 "t_ni.id t_ni_id, t_ni.description t_ni_description, "+ 
@@ -44,9 +46,9 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 				 "INNER JOIN flow.nomatchinput nm ON nm.id = pc.nomatch "+
 				 "LEFT JOIN flow.tag t ON pc.tag = t.id "+ 
 				 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
-				 "LEFT JOIN flow.tag t_ni ON ni.tag = t_ni.id "+ 
+				 "LEFT JOIN flow.tag t_ni ON pc.noinput_tag = t_ni.id "+ 
 				 "LEFT JOIN flow.tagtype tt_ni ON t_ni.tagtypeid = tt_ni.id "+
-				 "LEFT JOIN flow.tag t_nm ON nm.tag = t_nm.id "+ 
+				 "LEFT JOIN flow.tag t_nm ON pc.nomatch_tag = t_nm.id "+ 
 				 "LEFT JOIN flow.tagtype tt_nm ON t_nm.tagtypeid = tt_nm.id "+
 			     "<WHERE> "+
 				 "ORDER BY pc.name";
@@ -98,8 +100,12 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			}
 			
 			PromptEntity prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("pc_prompt"));
-			PromptEntity prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
-			PromptEntity prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
+			PromptEntity prompt_ni = null;
+			PromptEntity prompt_nm = null;
+			if(rs.getString("ni_prompt") != null && rs.getString("ni_prompt").length() > 0)
+				prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
+			if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0) 
+				prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
 			
 			
 			
@@ -109,7 +115,6 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			noInput.setType(rs.getString("ni_type"));
 			noInput.setThreshold(rs.getInt("ni_threshold"));
 			noInput.setPrompt(prompt_ni);
-			noInput.setNextForm(rs.getString("ni_nextform"));
 			
 			NoMatchInputEntity noMatch = new NoMatchInputEntity();
 			noMatch.setId(rs.getString("nm_id"));
@@ -117,7 +122,6 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			noMatch.setType(rs.getString("nm_type"));
 			noMatch.setThreshold(rs.getInt("nm_threshold"));
 			noMatch.setPrompt(prompt_nm);
-			noMatch.setNextForm(rs.getString("nm_nextform"));
 			
 			PromptCollectEntity promptCollect = new PromptCollectEntity();
 			promptCollect.setId(rs.getString("pc_id"));
@@ -131,7 +135,12 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			promptCollect.setInterDigitTimeout(rs.getString("pc_interdigittimeout"));
 			promptCollect.setTerminatingCharacter(rs.getString("pc_terminatingcharacter"));
 			promptCollect.setNextForm(rs.getString("pc_nextform"));
-				
+			promptCollect.setNoInput_NextForm(rs.getString("pc_noinput_nextform"));
+			promptCollect.setNoMatch_NextForm(rs.getString("pc_nomatch_nextform"));
+			promptCollect.setNoInput_Tag(tag_ni);
+			promptCollect.setNoMatch_Tag(tag_nm);
+			
+		
 			result.add(promptCollect);
 		}
 	} catch (SQLException e) {
@@ -165,19 +174,24 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	public boolean save(PromptCollectEntity promptCollect) {
 		boolean result = true;
 		
-		String sql = "INSERT INTO flow.promptcollect (id,name,description,flushprompt,prompt,noinput,nomatch,"
-					+ "fechtimeout,interdigittimeout,terminatingtimeout,terminatincharacter,nextform,tag,"
-					+ "versionid) "+
+		String sql = "INSERT INTO flow.promptcollect (id,name,description,flushprompt,prompt,grammar,noinput,nomatch,noinput_nextform,nomatch_nextform,"
+					+ "noinput_tag,nomatch_tag,fetchtimeout,interdigittimeout,terminatingtimeout,terminatingcharacter,nextform,tag,versionid) "+
 					 "VALUES ('"+promptCollect.getId()+"','"+promptCollect.getName()+"',"
 					+ "'"+promptCollect.getDescription()+"','"+promptCollect.getFlushprompt()+"',"
-					+ "'"+promptCollect.getPrompt().getId()+"','"+promptCollect.getNoInput().getId()+"',"
+					+ "'"+promptCollect.getPrompt().getId()+"',"
+					+ "'"+promptCollect.getGrammar().getId()+"',"
+					+ "'"+promptCollect.getNoInput().getId()+"',"
 					+ "'"+promptCollect.getNoMatch().getId()+"',"
+					+ "'"+promptCollect.getNoInput_NextForm()+"',"
+					+ "'"+promptCollect.getNoMatch_NextForm()+"',"
+					+ (promptCollect.getNoInput_Tag() == null ? "NULL" : promptCollect.getNoInput_Tag().getId() )+","
+					+ (promptCollect.getNoMatch_Tag() == null ? "NULL" : promptCollect.getNoMatch_Tag().getId() )+","
 					+ (promptCollect.getFetchTimeout() == null || promptCollect.getFetchTimeout().length() == 0? "NULL" : promptCollect.getFetchTimeout() )+","
 					+ (promptCollect.getInterDigitTimeout() == null ||  promptCollect.getInterDigitTimeout().length() == 0 ? "NULL" : promptCollect.getInterDigitTimeout())+","
 					+ (promptCollect.getTerminatingTimeout() ==  null || promptCollect.getTerminatingTimeout().length() == 0 ? "NULL" : promptCollect.getTerminatingTimeout())+","
 					+ (promptCollect.getTerminatingCharacter() == null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","
 					+ promptCollect.getNextForm()+","
-					+ (promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+"','"+promptCollect.getVersionId().getId()+"') ";
+					+ (promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",'"+promptCollect.getVersionId().getId()+"') ";
 		             
 		result = db.ExecuteSql(sql);
 		return result;
@@ -188,12 +202,18 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.promptcollect SET name = '"+promptCollect.getName()+"', "+
 		             "description = '"+promptCollect.getDescription()+"',flushprompt = "+promptCollect.getFlushprompt()+", "+
-				     "prompt= '"+promptCollect.getPrompt().getId()+"',noinput='"+promptCollect.getNoInput().getId()+"', "+
+				     "prompt= '"+promptCollect.getPrompt().getId()+"',"+
+				     "grammar= '"+promptCollect.getGrammar().getId()+"',"+
+				     "noinput='"+promptCollect.getNoInput().getId()+"', "+
 		             "nomatch='"+promptCollect.getNoMatch().getId()+"',"+
-		             "fechtimeout="+(promptCollect.getFetchTimeout() == null || promptCollect.getFetchTimeout().length() == 0 ? "NULL" : promptCollect.getFetchTimeout())+", "+
+				     "noinput_nextform='"+promptCollect.getNoInput_NextForm()+"',"+
+				     "nomatch_nextform='"+promptCollect.getNoMatch_NextForm()+"',"+
+				     "noinput_tag="+(promptCollect.getNoInput_Tag() == null ? "NULL" : promptCollect.getNoInput_Tag().getId())+","+
+				     "nomatch_tag="+(promptCollect.getNoMatch_Tag() == null ? "NULL" : promptCollect.getNoMatch_Tag().getId())+","+
+		             "fetchtimeout="+(promptCollect.getFetchTimeout() == null || promptCollect.getFetchTimeout().length() == 0 ? "NULL" : promptCollect.getFetchTimeout())+", "+
 				     "interdigittimeout="+(promptCollect.getInterDigitTimeout() == null || promptCollect.getInterDigitTimeout().length() == 0 ? "NULL" : promptCollect.getInterDigitTimeout())+","+
 				     "terminatingtimeout="+(promptCollect.getTerminatingTimeout() == null || promptCollect.getTerminatingTimeout().length() == 0 ? "NULL" : promptCollect.getTerminatingTimeout())+", "+
-		             "terminatincharacter="+(promptCollect.getTerminatingCharacter()== null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","+
+		             "terminatingcharacter="+(promptCollect.getTerminatingCharacter()== null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","+
 		             "nextform='"+promptCollect.getNextForm()+"', "+
 				     "tag="+(promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",versionid='"+promptCollect.getVersionId().getId()+"' "+
 					 "WHERE id = '"+promptCollect.getId()+"' ";

@@ -26,15 +26,31 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		}
 		return instance;
 	}
-	private List<DecisionChanceEntity> getChances(String decisionId) {
+	
+
+	public DecisionChanceEntity getChance(String id) {
+		List<DecisionChanceEntity> result = getChancesByFilter("WHERE dc.id = '"+id+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+		
+	}
+	
+	private List<DecisionChanceEntity> getChancesByFilter(String where) {
 		String sql = "SELECT dc.id dc_id,dc.decisionid dc_decisionid,dc.ordernum dc_ordernum,dc.condition dc_condition,dc.nextformid dc_nextformid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.decisionchance dc "+
 	                 "LEFT JOIN flow.tag t ON dc.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
-	                 "WHERE dc.decisionid ='"+decisionId+"' "+
+	                 "<WHERE> "+
 	                 "ORDER BY dc.ordernum ";
+		if(where != null && where.length() > 0) {
+			sql = sql.replace("<WHERE>", where);
+		} else {
+			sql = sql.replace("<WHERE>", "");
+		}
 		List<DecisionChanceEntity> result = new ArrayList<DecisionChanceEntity>();
 		ResultSet rs = null;
 		try {
@@ -114,7 +130,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 					tag.setType(tagType);
 				}
 				
-				List<DecisionChanceEntity> chances = this.getChances(rs.getString("d_id"));
+				List<DecisionChanceEntity> chances = this.getChancesByFilter("WHERE dc.decisionid ='"+rs.getString("d_id")+"' " );
 				
 				
 				DecisionEntity decision = new DecisionEntity();

@@ -161,7 +161,7 @@ public class PromptCollectEditorBean extends AbstractBean {
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
-					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
+					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
 				}
 				
 			}
@@ -173,7 +173,7 @@ public class PromptCollectEditorBean extends AbstractBean {
 			for(Node target : source.getListTarget()) {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
-					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement());
+					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
 				}
 				
 			}
@@ -206,9 +206,10 @@ public class PromptCollectEditorBean extends AbstractBean {
 		formNoInput.setId(Util.getUID());
 		formNoInput.setDescription(noInput.getDescription());
 		formNoInput.setName(this.promptCollect.getName()+"_"+noInput.getName());
-		formNoInput.setFormType(formType);
+		formNoInput.setFormType(formType,noInput);
 		formNoInput.setPositionX(this.form.getPositionX());
 		formNoInput.setPositionY(this.form.getPositionY());
+
 		
 		String imgPath = formType.getImagePathSuccess();
 		formType.setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
@@ -269,9 +270,10 @@ public class PromptCollectEditorBean extends AbstractBean {
 		formNoMatch.setId(Util.getUID());
 		formNoMatch.setDescription(noMatch.getName());
 		formNoMatch.setName(this.promptCollect.getName()+"_"+noMatch.getName());
-		formNoMatch.setFormType(formType);
+		formNoMatch.setFormType(formType,noMatch);
 		formNoMatch.setPositionX(this.form.getPositionX());
 		formNoMatch.setPositionY(this.form.getPositionY());
+
 		
 		String imgPath = formType.getImagePathSuccess();
 		formType.setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));

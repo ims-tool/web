@@ -1,3 +1,8 @@
+ivr_operator
+- Reconhecer formtype: ANSWER,RETURN
+- Reconhecer os campos noinput_nextform, nomatch_nextform das tabelas menu e promptcollect no lugar da coluna nextform da
+  tabela nomatchinput
+
 Tabelas:
 - version: adicionar dois novos campos (system_user varchar2 (50), date_create datetime)
 
@@ -108,11 +113,21 @@ create index ix_conditionmap_method on flow.conditionmap(methodreference)
 
 -- alterar colunas
 
-alter table flow.conditionmap ALTER COLUMN "name" TYPE character varying(30)
-alter table flow.conditionmap ALTER COLUMN description TYPE character varying(2000)
-alter table flow.conditionmap ALTER COLUMN "type" TYPE character varying(10)
-alter table flow.conditionmap ALTER COLUMN methodreference TYPE character varying(100)
+alter table flow.conditionmap ALTER COLUMN "name" TYPE character varying(30);
+alter table flow.conditionmap ALTER COLUMN description TYPE character varying(2000);
+alter table flow.conditionmap ALTER COLUMN "type" TYPE character varying(10);
+alter table flow.conditionmap ALTER COLUMN methodreference TYPE character varying(100);
 
+alter table flow.form ALTER COLUMN "name" TYPE character varying(100);
+
+alter table flow.promptcollect ADD COLUMN noinput_nextform integer NOT NULL;
+alter table flow.promptcollect ADD COLUMN nomatch_nextform integer NOT NULL;
+alter table flow.promptcollect ADD COLUMN noinput_tag integer;
+alter table flow.promptcollect ADD COLUMN nomatch_tag integer;
+alter table flow.menu ADD COLUMN noinput_nextform integer NOT NULL;
+alter table flow.menu ADD COLUMN nomatch_nextform integer NOT NULL;
+alter table flow.menu ADD COLUMN noinput_tag integer;
+alter table flow.menu ADD COLUMN nomatch_tag integer;
 -- inserir registros na tabela formtype
 
 

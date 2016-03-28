@@ -3,6 +3,7 @@ package br.com.ims.flow.service;
 import java.util.List;
 
 import br.com.ims.flow.factory.DAOFactory;
+import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.MenuEntity;
 
 public class MenuService extends AbstractEntityService <MenuEntity>{
@@ -15,6 +16,9 @@ public class MenuService extends AbstractEntityService <MenuEntity>{
 	public MenuEntity get(String id) {
 		
 		return DAOFactory.getInstance().getMenuDAO().get(id);
+	}
+	public ChoiceEntity getChoice(String id) {
+		return DAOFactory.getInstance().getMenuDAO().getChoice(id);
 	}
 	
 	public boolean save(MenuEntity entity) {

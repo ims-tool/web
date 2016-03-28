@@ -3,6 +3,7 @@ package br.com.ims.flow.service;
 import java.util.List;
 
 import br.com.ims.flow.factory.DAOFactory;
+import br.com.ims.flow.model.DecisionChanceEntity;
 import br.com.ims.flow.model.DecisionEntity;
 
 public class DecisionService extends AbstractEntityService<DecisionEntity>{
@@ -15,6 +16,9 @@ public class DecisionService extends AbstractEntityService<DecisionEntity>{
 	public DecisionEntity get(String id) {
 		
 		return DAOFactory.getInstance().getDecisionDAO().get(id);
+	}
+	public DecisionChanceEntity getChance(String id) {
+		return DAOFactory.getInstance().getDecisionDAO().getChance(id);
 	}
 	
 	public boolean save(DecisionEntity entity) {
