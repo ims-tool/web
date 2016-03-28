@@ -38,7 +38,6 @@ public class NextFormFacadeREST extends AbstractFacade<Form> {
     @Path("{id}")
     @Produces({"application/json"})
     public Form find(@PathParam("id") BigDecimal id) {
-    	System.out.println("Tteste");
         return super.find(id);
     }
 
