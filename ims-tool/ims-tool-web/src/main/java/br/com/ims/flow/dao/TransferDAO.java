@@ -169,17 +169,17 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		result = db.ExecuteSql(sql);
 		if(result) {
 			for(TransferRuleEntity rule : transfer.getTransferRules()) {
-				sql = "INSERT INTO flow.transferule (id,ordernum,transferid,condition,tag,prompt,number,versionid) "+
-					   "VALUES ('"+rule.getId()+"',"+rule.getOrderNum()+",'"+rule.getTransferId()+"',"
+				sql = "INSERT INTO flow.transferrule (id,ordernum,transferid,condition,tag,prompt,number,versionid) "+
+					   "VALUES ('"+rule.getId()+"',"+rule.getOrderNum()+",'"+transfer.getId()+"',"
 					  + (rule.getCondition() == null ? "NULL" : rule.getCondition().getId())+","
 					  + (rule.getTag() == null ? "NULL" : rule.getTag().getId())+","
 					  + (rule.getPrompt() == null ? "NULL" : rule.getPrompt().getId())+","
-					  + "'"+rule.getNumber()+"','"+rule.getVersionId().getId()+"')";
+					  + "'"+rule.getNumber()+"','"+transfer.getVersionId().getId()+"')";
 					
 				result = result & db.ExecuteSql(sql);
 				if(!result) {
 					//rollback
-					sql = "DELETE FROM flow.transferule WHERE transferid = '"+transfer.getId()+"' ";
+					sql = "DELETE FROM flow.transferrule WHERE transferid = '"+transfer.getId()+"' ";
 					db.ExecuteSql(sql);
 					sql = "DELETE FROM flow.transfer WHERE id = '"+transfer.getId()+"' ";
 					db.ExecuteSql(sql);
@@ -197,7 +197,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.transfer SET name = '"+transfer.getName()+"',description='"+transfer.getDescription()+"',"
 				+ "tag = "+(transfer.getTag() == null ? "NULL" : transfer.getTag().getId())+","
-				+ "versionid = "+transfer.getVersionId().getVersionId()+") "
+				+ "versionid = "+transfer.getVersionId().getId()+" "
 				+ "WHERE id = "+transfer.getId();
 		             
 		result = db.ExecuteSql(sql);
@@ -206,12 +206,12 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 			result = db.ExecuteSql(sql);
 			if(result) {
 				for(TransferRuleEntity rule : transfer.getTransferRules()) {
-					sql = "INSERT INTO flow.transferule (id,ordernum,transferid,condition,tag,prompt,number,versionid) "+
-							   "VALUES ('"+rule.getId()+"',"+rule.getOrderNum()+",'"+rule.getTransferId()+"',"
+					sql = "INSERT INTO flow.transferrule (id,ordernum,transferid,condition,tag,prompt,number,versionid) "+
+							   "VALUES ('"+rule.getId()+"',"+rule.getOrderNum()+",'"+transfer.getId()+"',"
 							  + (rule.getCondition() == null ? "NULL" : rule.getCondition().getId())+","
 							  + (rule.getTag() == null ? "NULL" : rule.getTag().getId())+","
 							  + (rule.getPrompt() == null ? "NULL" : rule.getPrompt().getId())+","
-							  + "'"+rule.getNumber()+"','"+rule.getVersionId().getId()+"')";
+							  + "'"+rule.getNumber()+"','"+transfer.getVersionId().getId()+"')";
 							
 						result = result & db.ExecuteSql(sql);
 						if(!result) {

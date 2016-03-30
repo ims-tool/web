@@ -13,7 +13,6 @@ import org.primefaces.model.diagram.Element;
 
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Node;
-import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
@@ -203,8 +202,8 @@ public class PromptCollectEditorBean extends AbstractBean {
 		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOINPUT);
 		
 		FormEntity formNoInput = new FormEntity();
-		formNoInput.setId(Util.getUID());
-		formNoInput.setDescription(noInput.getDescription());
+		formNoInput.setId(this.promptCollect.getId()+this.noInputId);
+		formNoInput.setDescription("Form de Controle para guardar a posição X e Y do NoInput, PromptCollect: "+promptCollect.getId()+", NoMatch: "+this.noMatchId);
 		formNoInput.setName(this.promptCollect.getName()+"_"+noInput.getName());
 		formNoInput.setFormType(formType,noInput);
 		formNoInput.setPositionX(this.form.getPositionX());
@@ -232,7 +231,6 @@ public class PromptCollectEditorBean extends AbstractBean {
 		Node source = logicalFlow.getNode(this.form);
 		
 		
-		//ServicesFactory.getInstance().getIvrEditorService().connectForm(source.getElement(), element);
 		ServicesFactory.getInstance().getIvrEditorService().connect(source.getElement(), element);
 	
 	}
@@ -267,8 +265,8 @@ public class PromptCollectEditorBean extends AbstractBean {
 		
 		FormTypeEntity formType = ServicesFactory.getInstance().getFormTypeService().getByName(Constants.FORM_TYPE_NOMATCH);
 		FormEntity formNoMatch = new FormEntity();
-		formNoMatch.setId(Util.getUID());
-		formNoMatch.setDescription(noMatch.getName());
+		formNoMatch.setId(this.promptCollect.getId()+this.noMatchId);
+		formNoMatch.setDescription("Form de Controle para guardar a posição X e Y do NoMatch, PromptCollect: "+promptCollect.getId()+", NoMatch: "+this.noMatchId);
 		formNoMatch.setName(this.promptCollect.getName()+"_"+noMatch.getName());
 		formNoMatch.setFormType(formType,noMatch);
 		formNoMatch.setPositionX(this.form.getPositionX());

@@ -10,6 +10,168 @@ Tabelas:
    -- deixei os registros hardcode, pois se alterar alguma tipificação terá que ser ajustado no código de qualquer forma.
    -- Só adicionar as novas tipificaçõs só para ter o mapeamento
 
+- Adicionar colunas na tabela form
+
+ALTER TABLE flow.form ADD COLUMN "positionx" character varying(10);
+
+ALTER TABLE flow.form ADD COLUMN "positiony" character varying(10);
+
+--Criar sequences
+
+create sequence flow.seq_uid;
+
+create sequence flow.seq_tag;
+
+create sequence flow.seq_version start with 1000;
+
+--criar indices
+
+create index ix_conditionmap_method on flow.conditionmap(methodreference)
+
+-- alterar colunas
+alter table flow.form alter column id type numeric;
+alter table flow.form alter column formid type numeric;
+alter table flow.form alter column condition type numeric;
+
+alter table flow.prompt alter column id type numeric;
+
+alter table flow.announce alter column id type numeric;
+alter table flow.announce alter column prompt type numeric;
+alter table flow.announce alter column nextform type numeric;
+
+alter table flow.answer alter column id type numeric;
+alter table flow.answer alter column nextform type numeric;
+
+alter table flow.audio alter column id type numeric;
+
+alter table flow.audiovar alter column id type numeric;
+alter table flow.audiovar alter column audioid type numeric;
+
+alter table flow.condition alter column id type numeric;
+alter table flow.condition alter column "name" type character varying(30);
+alter table flow.condition alter column description type character varying(256);
+
+alter table flow.conditiongroup alter column id type numeric;
+alter table flow.conditiongroup alter column conditionid type numeric;
+alter table flow.conditiongroup alter column conditionmapid type numeric;
+alter table flow.conditiongroup alter column description type character varying(100);
+
+alter table flow.conditionmap alter column id type numeric USING to_number(id,'99999999');
+alter table flow.conditionmap ALTER COLUMN "name" TYPE character varying(30);
+alter table flow.conditionmap ALTER COLUMN description TYPE character varying(2000);
+alter table flow.conditionmap ALTER COLUMN "type" TYPE character varying(10);
+alter table flow.conditionmap ALTER COLUMN methodreference TYPE character varying(100);
+
+alter table flow.conditionparameters alter column id type numeric;
+alter table flow.conditionparameters alter column conditiongroupid type numeric;
+alter table flow.conditionparameters alter column paramname type character varying(50);
+alter table flow.conditionparameters alter column paramvalue type character varying(500);
+
+alter table flow.conditionvalue alter column id type numeric;
+alter table flow.conditionvalue alter column conditiongroupid type numeric;
+alter table flow.conditionvalue alter column operation type character varying(10);
+alter table flow.conditionvalue alter column value1 type character varying(50);
+alter table flow.conditionvalue alter column value2 type character varying(50);
+alter table flow.conditionvalue alter column value3 type character varying(50);
+alter table flow.conditionvalue alter column value4 type character varying(50);
+alter table flow.conditionvalue alter column value5 type character varying(50);
+alter table flow.conditionvalue alter column value6 type character varying(50);
+alter table flow.conditionvalue alter column value7 type character varying(50);
+alter table flow.conditionvalue alter column value8 type character varying(50);
+alter table flow.conditionvalue alter column value9 type character varying(50);
+alter table flow.conditionvalue alter column value10 type character varying(50);
+
+alter table flow.choice alter column id type numeric;
+alter table flow.choice alter column menu type numeric;
+alter table flow.choice alter column nextform type numeric;
+alter table flow.choice alter column condition type numeric;
+
+alter table flow.decision alter column id type numeric;
+alter table flow.decision alter column "name" type character varying(50);
+alter table flow.decision alter column description type character varying(256);
+
+alter table flow.disconnect alter column id type numeric;
+
+alter table flow.flow alter column id type numeric;
+alter table flow.flow alter column "name" type character varying(30);
+alter table flow.flow alter column flowname type character varying(100);
+alter table flow.flow alter column nextform type numeric;
+
+alter table flow.form ALTER COLUMN "name" TYPE character varying(100);
+alter table flow.form alter column id type numeric;
+alter table flow.form alter column formid type numeric;
+alter table flow.form alter column condition type numeric;
+alter table flow.form alter column nextformdefault type numeric;
+alter table flow.form alter column nextformdefault type numeric;
+
+alter table flow.grammar alter column id type numeric;
+
+alter table flow.promptcollect alter column id type numeric;
+alter table flow.promptcollect alter column grammar type numeric;
+alter table flow.promptcollect alter column prompt type numeric;
+alter table flow.promptcollect alter column noinput type numeric;
+alter table flow.promptcollect alter column nomatch type numeric;
+alter table flow.promptcollect alter column nextform type numeric;
+alter table flow.promptcollect ADD COLUMN noinput_nextform numeric NOT NULL;
+alter table flow.promptcollect ADD COLUMN nomatch_nextform numeric NOT NULL;
+alter table flow.promptcollect ADD COLUMN noinput_tag integer;
+alter table flow.promptcollect ADD COLUMN nomatch_tag integer;
+
+alter table flow.menu ADD COLUMN noinput_nextform numeric NOT NULL;
+alter table flow.menu ADD COLUMN nomatch_nextform numeric NOT NULL;
+alter table flow.menu ADD COLUMN noinput_tag integer;
+alter table flow.menu ADD COLUMN nomatch_tag integer;
+
+alter table flow.nomatchinput alter column id type numeric;
+alter table flow.nomatchinput alter column "type" type character varying(7);
+alter table flow.nomatchinput alter column prompt type numeric;
+alter table flow.nomatchinput alter column nextform type numeric;
+alter table flow.nomatchinput alter column "name" type character varying(30);
+
+alter table flow.operation alter column id type numeric;
+alter table flow.operation alter column "name" type character varying(30);
+alter table flow.operation alter column description type character varying(30);
+alter table flow.operation alter column nextformid type numeric;
+
+alter table flow.operationmap alter column id type numeric;
+alter table flow.operationmap alter column "name" type character varying(30);
+alter table flow.operationmap alter column description type character varying(2000);
+alter table flow.operationmap alter column methodreference type character varying(100);
+
+alter table flow.operationgroup alter column id type numeric;
+alter table flow.operationgroup alter column operationid type numeric;
+alter table flow.operationgroup alter column operationmapid type numeric;
+alter table flow.operationgroup alter column description type character varying(200);
+
+alter table flow.operationparameters alter column id type numeric;
+alter table flow.operationparameters alter column operationgroupid type numeric;
+alter table flow.operationparameters alter column paramname type character varying(50);
+alter table flow.operationparameters alter column paramvalue type character varying(500);
+
+alter table flow.promptaudio alter column prompt type numeric;
+alter table flow.promptaudio alter column audio type numeric;
+
+alter table flow.transfer alter column id type numeric;
+alter table flow.transfer alter column "name" type character varying(30);
+alter table flow.transfer alter column description type character varying(256);
+
+-- inserir registros na tabela formtype
+
+
+insert into flow.formtype (id,name) values('0','Answer');
+
+insert into flow.formtype (id,name) values('12','NoMatchInput');
+
+insert into flow.formtype (id,name) values('13','Choice');
+
+insert into flow.formtype (id,name) values('14','DecisionChance');
+
+insert into flow.formtype (id,name) values('15','Return');
+
+insert into flow.formtype (id,name) values('16','NoMatch');
+
+insert into flow.formtype (id,name) values('17','NoInput');
+
 - Criar tabela flow.answer
 
 CREATE TABLE flow.answer
@@ -57,11 +219,11 @@ drop table flow.decisionchance;
 
 CREATE TABLE flow.decisionchance
 (
-  id bigint NOT NULL,
-  decisionid bigint,
+  id numeric NOT NULL,
+  decisionid numeric,
   ordernum bigint,
-  condition bigint,
-  nextformid bigint,
+  condition numeric,
+  nextformid numeric,
   tag bigint,
   versionid bigint,
   CONSTRAINT pk_decisionchance PRIMARY KEY (id),
@@ -79,13 +241,13 @@ ALTER TABLE flow.decisionchance
 
 CREATE TABLE flow.transferrule 
 (
-	id bigint NOT NULL,
+	id numeric NOT NULL,
 	ordernum int NOT NULL, 
-	transferid bigint NOT NULL,
-	condition bigint,
-        tag bigint,
-	prompt bigint,
-	number bigint,
+	transferid numeric NOT NULL,
+	condition numeric,
+    tag bigint,
+	prompt numeric,
+	number numeric,
 	versionid bigint,
   	CONSTRAINT pk_transferrule PRIMARY KEY (id),
   	CONSTRAINT fk_transferrule_transfer FOREIGN KEY (transferid)
@@ -93,54 +255,4 @@ CREATE TABLE flow.transferrule
       	ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 
-- Adicionar colunas na tabela form
 
-ALTER TABLE flow.form ADD COLUMN "positionx" character varying(10);
-
-ALTER TABLE flow.form ADD COLUMN "positiony" character varying(10);
-
---Criar sequences
-
-create sequence flow.seq_uid;
-
-create sequence flow.seq_tag;
-
-create sequence flow.seq_version start with 1000;
-
---criar indices
-
-create index ix_conditionmap_method on flow.conditionmap(methodreference)
-
--- alterar colunas
-
-alter table flow.conditionmap ALTER COLUMN "name" TYPE character varying(30);
-alter table flow.conditionmap ALTER COLUMN description TYPE character varying(2000);
-alter table flow.conditionmap ALTER COLUMN "type" TYPE character varying(10);
-alter table flow.conditionmap ALTER COLUMN methodreference TYPE character varying(100);
-
-alter table flow.form ALTER COLUMN "name" TYPE character varying(100);
-
-alter table flow.promptcollect ADD COLUMN noinput_nextform integer NOT NULL;
-alter table flow.promptcollect ADD COLUMN nomatch_nextform integer NOT NULL;
-alter table flow.promptcollect ADD COLUMN noinput_tag integer;
-alter table flow.promptcollect ADD COLUMN nomatch_tag integer;
-alter table flow.menu ADD COLUMN noinput_nextform integer NOT NULL;
-alter table flow.menu ADD COLUMN nomatch_nextform integer NOT NULL;
-alter table flow.menu ADD COLUMN noinput_tag integer;
-alter table flow.menu ADD COLUMN nomatch_tag integer;
--- inserir registros na tabela formtype
-
-
-insert into flow.formtype (id,name) values('0','Answer');
-
-insert into flow.formtype (id,name) values('12','NoMatchInput');
-
-insert into flow.formtype (id,name) values('13','Choice');
-
-insert into flow.formtype (id,name) values('14','DecisionChance');
-
-insert into flow.formtype (id,name) values('15','Return');
-
-insert into flow.formtype (id,name) values('16','NoMatch');
-
-insert into flow.formtype (id,name) values('17','NoInput');

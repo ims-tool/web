@@ -27,6 +27,10 @@ public class FormService extends AbstractEntityService<FormEntity> {
 		// TODO Auto-generated method stub
 		return DAOFactory.getInstance().getFormDAO().get(id);
 	}
+	public FormEntity getByName(String name,boolean lazy) {
+
+		return DAOFactory.getInstance().getFormDAO().getByName(name, lazy);
+	}
 	public FormEntity get(String id,boolean lazy) {
 		// TODO Auto-generated method stub
 		return DAOFactory.getInstance().getFormDAO().get(id,lazy);

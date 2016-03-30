@@ -26,11 +26,11 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 	
 	public List<FlowEntity> getByFilter(String where) {
 		
-		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.flowname f_flowname,a.nextform a_nextform, "+
+		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.flowname f_flowname,f.nextform f_nextform, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.flow f "+
-					 "LEFT JOIN flow.tag t ON a.tag = t.id "+ 
+					 "LEFT JOIN flow.tag t ON f.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
 					 "<WHERE> "+
 				     "ORDER BY f.name";
@@ -62,7 +62,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 				flow.setName(rs.getString("f_name"));
 				flow.setDescription(rs.getString("f_description"));
 				flow.setFlowName(rs.getString("f_flowname"));
-				flow.setNextForm(rs.getString("a_nextform"));
+				flow.setNextForm(rs.getString("f_nextform"));
 				flow.setTag(tag);
 				
 				result.add(flow);

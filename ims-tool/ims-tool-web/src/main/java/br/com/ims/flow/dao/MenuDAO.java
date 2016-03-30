@@ -240,19 +240,21 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		             
 		result = db.ExecuteSql(sql);
 		if(result) {
-			for(ChoiceEntity choice : menu.getChoices()) {
-				sql = "INSERT INTO flow.choice (id,name,menu,dtfm,nextform,condition,tag,versionid) "+
-					   "VALUES ('"+choice.getId()+"','"+choice.getName()+"','"+choice.getMenuId()+"','"+choice.getNextForm()+"',"+
-						(choice.getCondition() == null ? "NULL" : "'"+choice.getCondition().getId()+"'")+","+
-					   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+choice.getVersionId().getId()+") ";
-				result = result & db.ExecuteSql(sql);
-				if(!result) {
-					//rollback
-					sql = "DELETE FROM flow.choice WHERE menu = '"+menu.getId()+"' ";
-					db.ExecuteSql(sql);
-					sql = "DELETE FROM flow.menu WHERE id = '"+menu.getId()+"' ";
-					db.ExecuteSql(sql);
-					break;
+			if(menu.getChoices() != null && menu.getChoices().size() > 0) {
+				for(ChoiceEntity choice : menu.getChoices()) {
+					sql = "INSERT INTO flow.choice (id,name,menu,dtmf,nextform,condition,tag,versionid) "+
+						   "VALUES ('"+choice.getId()+"','"+choice.getName()+"','"+menu.getId()+"','"+choice.getDtmf()+"','"+choice.getNextForm()+"',"+
+							(choice.getCondition() == null ? "NULL" : "'"+choice.getCondition().getId()+"'")+","+
+						   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+menu.getVersionId().getId()+") ";
+					result = result & db.ExecuteSql(sql);
+					if(!result) {
+						//rollback
+						sql = "DELETE FROM flow.choice WHERE menu = '"+menu.getId()+"' ";
+						db.ExecuteSql(sql);
+						sql = "DELETE FROM flow.menu WHERE id = '"+menu.getId()+"' ";
+						db.ExecuteSql(sql);
+						break;
+					}
 				}
 			}
 						
@@ -274,7 +276,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				+ "fetchtimeout = "+(menu.getFetchTimeOut() == null || menu.getFetchTimeOut().length() == 0? "NULL" : menu.getFetchTimeOut())+","
 				+ "terminatingtimeout = "+(menu.getTerminatingTimeOut() == null || menu.getTerminatingTimeOut().length() == 0? "NULL" : menu.getTerminatingTimeOut())+","
 				+ "terminatingcharacter = "+(menu.getTerminatingCharacter() == null || menu.getTerminatingCharacter().length()==0? "NULL" :  "'"+menu.getTerminatingCharacter()+"'")+","
-				+ "versionid = "+menu.getVersionId().getVersionId()+") "
+				+ "versionid = "+menu.getVersionId().getId()+" "
 				+ "WHERE id = "+menu.getId();
 		             
 		result = db.ExecuteSql(sql);
@@ -282,14 +284,16 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			sql = "DELETE FROM flow.choice WHERE menu = '"+menu.getId()+"' ";
 			result = db.ExecuteSql(sql);
 			if(result) {
-				for(ChoiceEntity choice : menu.getChoices()) {
-					sql = "INSERT INTO flow.choice (id,name,menu,dtfm,nextform,condition,tag,versionid) "+
-						   "VALUES ('"+choice.getId()+"','"+choice.getName()+"','"+choice.getMenuId()+"','"+choice.getNextForm()+"',"+
-							(choice.getCondition() == null ? "NULL" : "'"+choice.getCondition().getId()+"'")+","+
-						   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+choice.getVersionId().getId()+") ";
-					result = result & db.ExecuteSql(sql);
-					if(!result) {
-						break;
+				if(menu.getChoices() != null && menu.getChoices().size() > 0) {
+					for(ChoiceEntity choice : menu.getChoices()) {
+						sql = "INSERT INTO flow.choice (id,name,menu,dtmf,nextform,condition,tag,versionid) "+
+							   "VALUES ('"+choice.getId()+"','"+choice.getName()+"','"+menu.getId()+"','"+choice.getDtmf()+"','"+choice.getNextForm()+"',"+
+								(choice.getCondition() == null ? "NULL" : "'"+choice.getCondition().getId()+"'")+","+
+							   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+menu.getVersionId().getId()+") ";
+						result = result & db.ExecuteSql(sql);
+						if(!result) {
+							break;
+						}
 					}
 				}
 			}

@@ -115,7 +115,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	public boolean update(AnnounceEntity announce) {
 		boolean result = true;
 		String sql = "UPDATE flow.announce SET name='"+announce.getName()+"',description='"+announce.getDescription()+"',"
-				   + "flushprompt='"+announce.getFlushprompt()+"',prompt='"+announce.getPrompt()+"',"
+				   + "flushprompt='"+announce.getFlushprompt()+"',prompt='"+announce.getPrompt().getId()+"',"
 				   + "nextform='"+announce.getNextForm()+"',"
 				   + "tag="+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",versionid='"+announce.getVersionId().getId()+"' "+
 					 "WHERE id = '"+announce.getId()+"' ";

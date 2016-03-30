@@ -22,7 +22,6 @@ public class FlowEditorBean extends AbstractBean {
      
 	private List<FormEntity> forms;
 	
-	private String formId;
 	
 	private FlowEntity flow;
 	
@@ -34,7 +33,7 @@ public class FlowEditorBean extends AbstractBean {
     public void init() {
     	super.init();
     	this.flow= (FlowEntity)this.form.getFormId();
-    	
+
     	if(form.isFormError())
     		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", form.getErrorDescription()));
     }
@@ -48,23 +47,7 @@ public class FlowEditorBean extends AbstractBean {
 		this.forms = forms;
 	}
 
-	public FormEntity getForm() {
-		return form;
-	}
-
-	public void setForm(FormEntity form) {
-		this.form = form;
-	}
-
-
-	public String getFormId() {
-		return formId;
-	}
-
-	public void setFormId(String formId) {
-		this.formId = formId;
-	}
-
+	
 	public FlowEntity getFlow() {
 		return flow;
 	}
@@ -74,8 +57,6 @@ public class FlowEditorBean extends AbstractBean {
 	}
 
 	public void update(ActionEvent event) {
-		
-		this.flow.setFlowName(ServicesFactory.getInstance().getFormService().get(this.formId).getName());
 		
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flow",this.flow.getName()+" - Updated!");
 		 
@@ -132,7 +113,7 @@ public class FlowEditorBean extends AbstractBean {
 	
 	protected void collect() {
 		super.collect();
-		this.formId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:form_flow_input").toString();
+
 						
 	}
     

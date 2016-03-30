@@ -16,13 +16,13 @@
 	 			<h:panelGrid columns="3" cellpadding="5" id="panel_dialog_form_prompt">
 		 			<p:selectOneMenu required="true" 
 		 			                 requiredMessage="Please,select a Flow" 
-		 			                 value="#{bean.formId}" 
+		 			                 value="#{bean.flow.flowName}" 
 		 			                 id="form_flow"
 		 			                 filter="true" filterMatchMode="startsWith" 
 		 			                 label="label_form_flow">
 		 				<f:selectItem itemLabel="Select One" itemValue="" />
 		 				<f:selectItems value="#{bean.forms}" var="form"
-							itemValue="#{form.id}" itemLabel="#{form.name}"  />
+							itemValue="#{form.name}" itemLabel="#{form.name}"  />
 		 			</p:selectOneMenu>
 		 			<p:commandButton value="Add New Flow" actionListener="#{bean.addNewFlow}" 
 		 										 update="formFlow" 

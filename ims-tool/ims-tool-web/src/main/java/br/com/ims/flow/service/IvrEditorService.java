@@ -170,7 +170,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 	
 	
 	private EndPoint createDotEndPoint(EndPointAnchor anchor) {
-        DotEndPoint endPoint = new DotEndPoint(anchor);
+        DotEndPoint endPoint = new DotEndPoint(anchor,4);
         endPoint.setScope("formEntity");
         endPoint.setTarget(true);
         endPoint.setSource(false);
@@ -181,7 +181,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     }
      
     private EndPoint createRectangleEndPoint(EndPointAnchor anchor) {
-        RectangleEndPoint endPoint = new RectangleEndPoint(anchor);
+        RectangleEndPoint endPoint = new RectangleEndPoint(anchor,10,10);
         endPoint.setScope("formEntity");
         endPoint.setTarget(false);
         endPoint.setSource(true);
@@ -231,6 +231,9 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		form.setVersionId(version);
     		((AbstractFormEntity)form.getFormId()).setVersionId(version);
     		boolean exists = false;
+    		/**
+    		 * Preciso salvar todos os forms pra manter a posição X e Y na tela
+    		 */
     		if(ServicesFactory.getInstance().getFormService().get(form.getId(),true) == null) {
     			result = ServicesFactory.getInstance().getFormService().save(form);
 				if(!result) {
@@ -251,12 +254,13 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			PromptCollectEntity pc = (PromptCollectEntity)form.getFormId();
     			
     			for(Node aux : node.getListTarget()) {
-    				if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
-    					pc.setNoInput_NextForm(aux.getForm().getNextForm());
-    					pc.setNoInput_Tag(aux.getForm().getTag());
+    				AbstractFormEntity abs = (AbstractFormEntity)aux.getForm().getFormId();
+    				if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {    					
+    					pc.setNoInput_NextForm(abs.getNextForm());
+    					pc.setNoInput_Tag(abs.getTag());
     				} else if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
-    					pc.setNoMatch_NextForm(aux.getForm().getNextForm());
-    					pc.setNoMatch_Tag(aux.getForm().getTag());
+    					pc.setNoMatch_NextForm(abs.getNextForm());
+    					pc.setNoMatch_Tag(abs.getTag());
     				}
     			}
     		}
@@ -264,12 +268,13 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			MenuEntity menu = (MenuEntity)form.getFormId();
     			
     			for(Node aux : node.getListTarget()) {
+    				AbstractFormEntity abs = (AbstractFormEntity)aux.getForm().getFormId();
     				if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
-    					menu.setNoInput_NextForm(aux.getForm().getNextForm());
-    					menu.setNoInput_Tag(aux.getForm().getTag());
+    					menu.setNoInput_NextForm(abs.getNextForm());
+    					menu.setNoInput_Tag(abs.getTag());
     				} else if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
-    					menu.setNoMatch_NextForm(aux.getForm().getNextForm());
-    					menu.setNoMatch_Tag(aux.getForm().getTag());
+    					menu.setNoMatch_NextForm(abs.getNextForm());
+    					menu.setNoMatch_Tag(abs.getTag());
     				}
     			}
     		}
@@ -358,9 +363,18 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
 			PromptCollectEntity pc = (PromptCollectEntity)form.getFormId();
 			
-			FormEntity noInput = this.getFormNoMatchInput(pc.getNoInput());
-			FormEntity noMatch= this.getFormNoMatchInput(pc.getNoMatch());
-	    	
+			FormEntity noInput = this.getFormNoMatchInput(pc.getId()+pc.getNoInput().getId(),
+														  Constants.FORM_TYPE_NOINPUT,
+														  pc.getNoInput_NextForm(),
+														  form,
+														  pc.getNoInput());
+			FormEntity noMatch = this.getFormNoMatchInput(pc.getId()+pc.getNoMatch().getId(),
+														  Constants.FORM_TYPE_NOMATCH,
+														  pc.getNoMatch_NextForm(),
+														  form,
+														  pc.getNoMatch());
+			
+			
 			Element elementNoInput = createElement(element,noInput);
 			Element elementNoMatch = createElement(element,noMatch);
 			
@@ -375,9 +389,16 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 			
 			MenuEntity menu = (MenuEntity)form.getFormId();
 			
-			FormEntity noInput = this.getFormNoMatchInput(menu.getNoInput());
-			FormEntity noMatch= this.getFormNoMatchInput(menu.getNoMatch());
-	    	
+			FormEntity noInput = this.getFormNoMatchInput(menu.getId()+menu.getNoInput().getId(),
+					  Constants.FORM_TYPE_NOINPUT,
+					  menu.getNoInput_NextForm(),
+					  form,
+					  menu.getNoInput());
+			FormEntity noMatch = this.getFormNoMatchInput(menu.getId()+menu.getNoMatch().getId(),
+								  Constants.FORM_TYPE_NOMATCH,
+								  menu.getNoMatch_NextForm(),
+								  form,
+								  menu.getNoMatch());
 			Element elementNoInput = createElement(element,noInput);
 			Element elementNoMatch = createElement(element,noMatch);
 			
@@ -387,13 +408,15 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 			if(noMatch.getNextForm() != null) {
 				loadFlow(elementNoMatch, noMatch.getNextForm());
 			}
-			for(ChoiceEntity choice : menu.getChoices()) {
-				FormEntity formChoice = this.getFormChoice(choice);
-				Element elementForm = createElement(element,formChoice);
-				if(formChoice.getNextForm() != null) {
-					loadFlow(elementForm, formChoice.getNextForm());
+			if(menu.getChoices() != null && menu.getChoices().size() > 0) {
+				for(ChoiceEntity choice : menu.getChoices()) {
+					FormEntity formChoice = this.getFormChoice(choice);
+					Element elementForm = createElement(element,formChoice);
+					if(formChoice.getNextForm() != null) {
+						loadFlow(elementForm, formChoice.getNextForm());
+					}
+					
 				}
-				
 			}
 		} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
 			DecisionEntity decision = (DecisionEntity)form.getFormId();
@@ -411,27 +434,31 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
    
 		
     }
-    private FormEntity getFormNoMatchInput(NoMatchInputEntity noMatchInput) {
+    private FormEntity getFormNoMatchInput(String id,String formType, String nextform,FormEntity parent, NoMatchInputEntity obj) {
 
-    	List<FormEntity> listForm = ServicesFactory.getInstance().getFormService().getByFilter("WHERE f.formid = '"+noMatchInput.getId()+"' AND ft.name in('"+Constants.FORM_TYPE_NOINPUT+"','"+Constants.FORM_TYPE_NOMATCH+"') ", false);
-    	FormEntity form = null;
-    	if(listForm.size() > 0) {
-    		form = listForm.get(0);
-    		form.setNextForm(((AbstractFormEntity)form.getFormId()).getNextForm());
-    		String imgPath = form.getFormType().getImagePathSuccess();
-			if(noMatchInput.getType().equalsIgnoreCase("NOINPUT")) {
-				form.getFormType().setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
-			} else {
-				form.getFormType().setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));
-			}
-			imgPath = form.getFormType().getImagePathError();
-			if(noMatchInput.getType().equalsIgnoreCase("NOINPUT")) {
-				form.getFormType().setImagePathError(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
-			} else {
-				form.getFormType().setImagePathError(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));
-			}
-			
+    	FormEntity form = ServicesFactory.getInstance().getFormService().get(id);
+    	
+    	if(form == null) {
+    		form = new FormEntity();
+    		form.setId(id);
+    		form.setFormType(ServicesFactory.getInstance().getFormTypeService().getByName(formType), obj);
+    		form.setPositionX(parent.getPositionX());
+    		form.setPositionY(parent.getPositionY());    		
 		}
+    	form.setNextForm(nextform);
+    	String imgPath = form.getFormType().getImagePathSuccess();
+		if(formType.equals(Constants.FORM_TYPE_NOINPUT)) {
+			form.getFormType().setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
+		} else {
+			form.getFormType().setImagePathSuccess(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));
+		}
+		imgPath = form.getFormType().getImagePathError();
+		if(formType.equals(Constants.FORM_TYPE_NOMATCH)) {
+			form.getFormType().setImagePathError(imgPath.replace("<NOMACHINPUT>", Constants.NO_INPUT.toLowerCase()));
+		} else {
+			form.getFormType().setImagePathError(imgPath.replace("<NOMACHINPUT>", Constants.NO_MATCH.toLowerCase()));
+		}
+		
     	return form;
 		
     }
@@ -442,6 +469,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     	if(listForm.size() > 0) {
     		form = listForm.get(0);
     		form.setNextForm(((AbstractFormEntity)form.getFormId()).getNextForm());
+    		form.setFormType(form.getFormType(),choice);
     		
 			String imgPath = form.getFormType().getImagePathSuccess();
 			form.getFormType().setImagePathSuccess(imgPath.replace("<NUMBER>", choice.getDtmf().equals("*") ? "x" : choice.getDtmf()  ));
@@ -454,12 +482,13 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 		
     }
     private FormEntity getFormDecisionChance(DecisionChanceEntity decisionChance) {
-
+    	
     	List<FormEntity> listForm = ServicesFactory.getInstance().getFormService().getByFilter("WHERE f.formid = '"+decisionChance.getId()+"' AND ft.name = '"+Constants.FORM_TYPE_DECISION_CHANCE+"' ", false);
     	FormEntity form = null;
     	if(listForm.size() > 0) {
     		form = listForm.get(0);
     		form.setNextForm(((AbstractFormEntity)form.getFormId()).getNextForm());
+    		form.setFormType(form.getFormType(),decisionChance);
 		}
     	return form;
 		
@@ -471,6 +500,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		
     		FormEntity fSource = (FormEntity)source.getData();
     		FormEntity fTarget = (FormEntity)target.getData();
+
     		for(EndPoint ep : source.getEndPoints()) {
     			if(fSource.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
     				if(fTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT) || 
@@ -487,7 +517,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     				}
     				
     			} else {
-    				if(ep.isSource()) {
+    				if(ep.getAnchor().equals(EndPointAnchor.BOTTOM)) {
         				epSource = ep;
         				break;
         			}
@@ -502,9 +532,14 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		}
     		
     		Connection conn = new Connection(epSource, epTarget);
-			TagEntity tag = ((FormEntity)source.getData()).getTag();
-			if(tag != null) {
-				conn.getOverlays().add(new LabelOverlay("Tag "+tag.getId(), "flow-label", 0.5));
+			if(!(fTarget.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE) ||
+				  fTarget.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOINPUT) ||
+				  fTarget.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCH) ||
+				  fTarget.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_DECISION_CHANCE))) {
+	    		TagEntity tag = ((FormEntity)source.getData()).getTag();
+				if(tag != null) {
+					conn.getOverlays().add(new LabelOverlay("Tag "+tag.getId(), "flow-label", 0.5));
+				}
 			}
 			bean.getModel().connect(conn);
 			bean.getLogicalFlow().connect(source, target, conn);

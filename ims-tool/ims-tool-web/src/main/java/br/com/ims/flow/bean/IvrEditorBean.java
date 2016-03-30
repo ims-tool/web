@@ -103,7 +103,7 @@ public class IvrEditorBean extends AbstractBean {
     	this.model = new DefaultDiagramModel();
     	this.model.setMaxConnections(20);
         
-    	this.model.getDefaultConnectionOverlays().add(new ArrowOverlay(20, 20, 1, 1));
+    	this.model.getDefaultConnectionOverlays().add(new ArrowOverlay(10, 10, 1, 1));
         FlowChartConnector connector = new FlowChartConnector();
         connector.setPaintStyle("{strokeStyle:'#98AFC7', lineWidth:1}");
         connector.setHoverPaintStyle("{strokeStyle:'#5C738B'}");
@@ -248,6 +248,7 @@ public class IvrEditorBean extends AbstractBean {
     }
     private void loadFlow() {
     	ServicesFactory.getInstance().getIvrEditorService().loadFlow(null,this.flowId);
+    	this.flowId = "";
     	
     }
     public void closeTabFlow() {

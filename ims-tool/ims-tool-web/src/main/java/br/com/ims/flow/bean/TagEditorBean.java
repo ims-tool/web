@@ -15,6 +15,7 @@ import org.primefaces.model.diagram.overlay.LabelOverlay;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
+import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.TagEntity;
@@ -183,8 +184,10 @@ public class TagEditorBean extends AbstractBean {
 			connection.getOverlays().add(new LabelOverlay("Tag "+this.tag.getId(), "flow-label", 0.5));
 			
 			
-			FormEntity form = (FormEntity)this.node.getElement().getData();
+			FormEntity form = (FormEntity)this.node.getElement().getData();			
 			form.setTag(this.tag);
+			AbstractFormEntity abs = (AbstractFormEntity)form.getFormId();
+			abs.setTag(this.tag);
 			hasExternalBean = true;
 		}	
     	if(this.noMatchInput != null) {

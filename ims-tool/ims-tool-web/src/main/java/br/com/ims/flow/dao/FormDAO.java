@@ -19,6 +19,7 @@ import br.com.ims.flow.model.FlowEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
 import br.com.ims.flow.model.MenuEntity;
+import br.com.ims.flow.model.OperationEntity;
 import br.com.ims.flow.model.PromptCollectEntity;
 import br.com.ims.flow.model.ReturnEntity;
 import br.com.ims.flow.model.TagEntity;
@@ -182,6 +183,15 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		return null;
 		
 	}
+	public FormEntity getByName(String name,boolean lazy) {
+		// TODO Auto-generated method stub
+		List<FormEntity> result = this.getByFilter("WHERE lower(f.name) = '"+name.toLowerCase()+"'",lazy);
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+		
+	}
 	public FormEntity get(String id,boolean lazy) {
 		// TODO Auto-generated method stub
 		List<FormEntity> result = this.getByFilter("WHERE f.id = '"+id+"'",lazy);
@@ -227,6 +237,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
 			result = ServicesFactory.getInstance().getTransferService().save((TransferEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_OPERATION)) {
+			result = ServicesFactory.getInstance().getOperationService().save((OperationEntity)obj);
 		}
 		return result;
 	}
@@ -314,6 +327,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.form SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',"
 					   + "formtype='"+entity.getFormType().getId()+"',formid='"+((AbstractEntity)entity.getFormId()).getId()+"',"
+					   + "positionx='"+entity.getPositionX()+"',positiony='"+entity.getPositionY()+"',"					   
 					   + "tag="+(entity.getTag() == null ? "NULL" :  entity.getTag().getId())+","
 					   + "condition="+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId())+","
 					   + "versionid='"+entity.getVersionId().getId()+"' "

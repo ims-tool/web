@@ -7,6 +7,7 @@ import java.util.List;
 import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.Element;
 
+import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.AnnounceEntity;
 import br.com.ims.flow.model.ChoiceEntity;
@@ -161,8 +162,9 @@ public class LogicalFlow implements Serializable{
 		}
 		nodeSource.setConnection(null);
 		((FormEntity)nodeSource.getElement().getData()).setTag(null);
-		Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();
+		Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();		
 	    ((AbstractFormEntity)formId).setNextForm(null);
+	    ((AbstractFormEntity)formId).setTag(null);
 		
 		
 	}
@@ -180,9 +182,17 @@ public class LogicalFlow implements Serializable{
 		for(Node node : listNode) {
 			
 			FormEntity form = (FormEntity)node.getElement().getData();
-			
 			form.setFormError(false);
 			form.setErrorDescription("");
+			
+			
+			FormEntity aux = ServicesFactory.getInstance().getFormService().getByName(form.getName(),true);
+
+			if(aux != null && !aux.getId().equals(form.getId())) {
+				form.setFormError(true);
+				form.setErrorDescription("Name "+form.getName()+" already assigned to another Element in another Flow");
+				continue;
+			}
 			
 			int startFlow = 0;
 			boolean stopFlow = false;
@@ -206,6 +216,7 @@ public class LogicalFlow implements Serializable{
 					stopFlow = true;
 				}
 			}
+			
 			
 			if(validateFormByType(form)) {
 				continue;

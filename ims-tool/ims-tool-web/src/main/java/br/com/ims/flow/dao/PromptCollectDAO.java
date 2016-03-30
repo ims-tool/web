@@ -7,6 +7,7 @@ import java.util.List;
 
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.factory.ServicesFactory;
+import br.com.ims.flow.model.GrammarEntity;
 import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.PromptCollectEntity;
 import br.com.ims.flow.model.PromptEntity;
@@ -107,7 +108,13 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0) 
 				prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
 			
-			
+			GrammarEntity grammar = new GrammarEntity();
+			grammar.setId(rs.getString("g_id"));
+			grammar.setName(rs.getString("g_name"));
+			grammar.setDescription(rs.getString("g_description"));
+			grammar.setType(rs.getString("g_type"));
+			grammar.setSizeMax(rs.getInt("g_sizemax"));
+			grammar.setSizeMax(rs.getInt("g_sizemin"));
 			
 			NoMatchInputEntity noInput = new NoMatchInputEntity();
 			noInput.setId(rs.getString("ni_id"));
@@ -129,6 +136,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			promptCollect.setDescription(rs.getString("pc_description"));
 			promptCollect.setFlushprompt(rs.getInt("pc_flushprompt"));
 			promptCollect.setPrompt(prompt);
+			promptCollect.setGrammar(grammar);
 			promptCollect.setNoInput(noInput);
 			promptCollect.setNoMatch(noMatch);
 			promptCollect.setFetchTimeout(rs.getString("pc_fetchtimeout"));

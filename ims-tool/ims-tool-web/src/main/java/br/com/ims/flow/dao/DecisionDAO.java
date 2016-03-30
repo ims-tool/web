@@ -70,7 +70,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 				}
 				ConditionEntity condition = null;
 				if(rs.getString("dc_condition") != null && rs.getString("dc_condition").length() > 0) {
-					condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("c_condition"));
+					condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("dc_condition"));
 				}
 				
 				DecisionChanceEntity chance = new DecisionChanceEntity();
@@ -182,9 +182,9 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		if(result) {
 			for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
 				sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
-					   "VALUES ('"+chance.getId()+"','"+chance.getDecisionId()+"','"+chance.getOrderNum()+"',"+
+					   "VALUES ('"+chance.getId()+"','"+entity.getId()+"','"+chance.getOrderNum()+"',"+
 					   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+chance.getNextForm()+","+
-					   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+chance.getVersionId().getId()+") ";
+					   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId().getId()+") ";
 				result = result & db.ExecuteSql(sql);
 				if(!result) {
 					//rollback
@@ -216,9 +216,9 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 			if(result) {
 				for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
 					sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
-							   "VALUES ('"+chance.getId()+"','"+chance.getDecisionId()+"','"+chance.getOrderNum()+"',"+
+							   "VALUES ('"+chance.getId()+"','"+entity.getId()+"','"+chance.getOrderNum()+"',"+
 							   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+chance.getNextForm()+","+
-							   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+chance.getVersionId().getId()+") ";
+							   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId().getId()+") ";
 						result = result & db.ExecuteSql(sql);
 						if(!result) {					
 							break;

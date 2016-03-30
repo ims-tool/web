@@ -12,6 +12,7 @@ import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.FormEntity;
@@ -237,6 +238,8 @@ public class TransferEditorBean extends AbstractBean {
 		}
 		
 		TransferRuleEntity rule = new TransferRuleEntity();
+		rule.setId(Util.getUID());
+		rule.setTransferId(this.transfer.getId());
 		rule.setOrderNum(Integer.valueOf(this.orderNum));
 		rule.setNumber(this.number);
 		if(this.conditionId != null && this.conditionId.length() > 0) {
