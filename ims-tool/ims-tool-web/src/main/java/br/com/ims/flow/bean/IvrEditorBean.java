@@ -200,6 +200,12 @@ public class IvrEditorBean extends AbstractBean {
     public void select() {
     	cleanTabControl  = "SELECT_FLOW";
     	this.tempTabCloseEvent = null;
+    	this.flowId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formFlow:select_flow_input");
+    	if(this.flowId == null || this.flowId.length() == 0) {
+    		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "IVR Editor","Select one Flow!");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+    	}
     	if(isFlowEditing(null)) {
     		RequestContext context = RequestContext.getCurrentInstance();
             // execute javascript and show dialog                    
@@ -225,9 +231,7 @@ public class IvrEditorBean extends AbstractBean {
         
     	this.tempTabCloseEvent = event;
     	
-    	FacesMessage msg = new FacesMessage("Tab Closed", "Closed tab: " + event.getTab().getId()+", Index: "+this.activeTabFlowIndex);;
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        
+    	
         for(int index = 0; index  < tabFlowList.size(); index++) {
         	TabItemFlow tab = tabFlowList.get(index);
         	if(event.getTab().getId().equals(tab.getTab().getId())) {

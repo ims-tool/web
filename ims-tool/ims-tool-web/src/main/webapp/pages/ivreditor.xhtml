@@ -48,10 +48,12 @@
 										itemValue="#{flow.id}" itemLabel="#{flow.name}"  />
 					 			</p:selectOneMenu>
 					 			
-					 			<p:commandButton value="Load" 
-					 							actionListener="#{ivrEditorView.select}" 
-					 							update="@form" 
-					 							icon="ui-icon-check"  />					 			
+					 			
+					 			<p:commandButton value="Load" actionListener="#{ivrEditorView.select}" 
+						 										 update="formFlow" 
+						 										 icon="ui-icon-check" 
+						 										 ajax="true" 
+												                 immediate="true" />									 			
 							</h:panelGrid>
 							<p:separator />
 							<h:panelGrid columns="3" cellpadding="5">

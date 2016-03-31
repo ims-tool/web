@@ -11,7 +11,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
 <h:head>
         <title><ui:insert name="title">IMS Tools</ui:insert></title>
-		<link href='imagens/icones/favicon.ico' rel='shortcut icon'
+		<link href="#{request.contextPath}/imagens/icones/favicon.ico" rel='shortcut icon'
 			type='imagens/x-icon' />
 		<script src="#{request.contextPath}/resources/js/context.js" type="text/javascript"></script>
 		<script src="#{request.contextPath}/resources/js/script.js" type="text/javascript"></script>
@@ -54,18 +54,9 @@
 					<h:form>  
 					    <p:menubar >  
 					        <p:submenu label="IVR Editor" id="FlowEditor" icon="ui-icon-pencil">  
-					           	<p:menuitem value="Ivr Editor" url="/pages/ivreditor.faces" />
-					           	<p:menuitem value="Ivr Editor 1 " url="/pages/ivreditor1.faces" />
-					           	<p:menuitem value="Ivr Editor 2 " url="/pages/ivreditor2.faces" />  								  
-					        </p:submenu>  
-					        <p:submenu label="Ajuda" id="Ajuda" icon="ui-icon-pencil">
-					        	<p:menuitem value="Ajudar" url="/pages/ivreditor1.faces"/>					        						       
-					        </p:submenu>
-					    </p:menubar>
-					    <p:breadCrumb>
-						    <p:menuitem value="Flow Editor" url="/pages/ivreditor.faces" />
-						    <p:menuitem value="Ajuda" url="/pages/ivreditor.faces" />						    
-						</p:breadCrumb>  
+					           	<p:menuitem value="Ivr Editor" url="/pages/ivreditor.faces" />					           	  								  
+					        </p:submenu>  					        
+					    </p:menubar>  
 					  
 					</h:form>  
 				</div>				
