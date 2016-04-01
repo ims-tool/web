@@ -106,17 +106,19 @@ public class MenuEditorBean extends AbstractBean {
 
 	private void removeChoices() {
 		
+		
 		if(this.menu.getChoices() != null) {
 			Node source = logicalFlow.getNode(this.form);
 			
-			for(ChoiceEntity menuChoice : this.menu.getChoices()) {
+			for(int index =0; index < this.menu.getChoices().size(); index++) {
+				ChoiceEntity menuChoice = this.menu.getChoices().get(index);	
 				
 				for(Node target : source.getListTarget()) {
 					FormEntity formTarget = (FormEntity)target.getElement().getData();
 					if(!(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) || 
 							formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH) ||
 							formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) &&
-						formTarget.getName().equals(menuChoice.getName())) {
+						formTarget.getName().equalsIgnoreCase(menuChoice.getName())) {
 						
 						boolean remove = true;
 						for(ChoiceEntity choiceTemp : this.choices) {
@@ -127,6 +129,7 @@ public class MenuEditorBean extends AbstractBean {
 						if(remove) {
 							this.menu.getChoices().remove(menuChoice);
 							ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
+							index = -1;
 						} 
 						 
 					}

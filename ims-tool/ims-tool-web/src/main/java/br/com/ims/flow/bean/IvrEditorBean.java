@@ -89,6 +89,7 @@ public class IvrEditorBean extends AbstractBean {
         formTypes = formTypeService.getAll();
         
         listAllForm = new ArrayList<FormEntity>();
+        
         if(version == null) {
         	
         	requestVersion(false);
