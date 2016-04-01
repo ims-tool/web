@@ -2,6 +2,8 @@ package br.com.ims.tool.nextform.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement
 public class MethodInvocationVO implements Serializable {
 
 	private static final long serialVersionUID = 3727390900408678399L;
