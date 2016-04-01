@@ -21,8 +21,8 @@ import br.com.ims.flow.model.TransferEntity;
 
 @SuppressWarnings("serial")
 public class LogicalFlow implements Serializable{
-	private int minSizeWidth = 70;
-	private int minSizeHeight = 70;
+	private int minSizeWidth = 1200;
+	private int minSizeHeight = 1200;
 	private int sizeWidth = 70;
 	private int sizeHeight = 70;
 	private int distanceX = 20;

@@ -81,7 +81,7 @@
 				 			
 				 			<p:diagram widgetVar="graph" 
 						               value="#{ivrEditorView.model}"						                
-						               style="height:100%" styleClass="ui-widget-content" 
+						               style="height:100%;" styleClass="ui-widget-content" 
 						               var="el" id="flowEditor" >
 						        
  
@@ -133,8 +133,9 @@
 						<p:panel id="panelForms" header="Nodes" style="margin-bottom:10px;">
 					        <h:panelGrid columns="1">
 					            <p:selectOneMenu id="nodesForm" value="#{ivrEditorView.form}" panelStyle="width:180px"
-						                         effect="fade" var="f" style="width:160px" filter="true" filterMatchMode="startsWith">
-						            <f:selectItems value="#{ivrEditorView.listForm}" var="form" itemLabel="#{form.description}" itemValue="#{form.id}" />
+						                         effect="fade" var="f" style="width:160px" filter="true" filterMatchMode="startsWith"
+						                         converter="formEntityConverter">
+						            <f:selectItems value="#{ivrEditorView.listAllForm}" var="form" itemLabel="#{form.name}" itemValue="#{form}" />
 						 
 						            <p:column style="width:10%">
 						            	<p:graphicImage url="#{f.imagePath}" width="40px" height="40px"/>
@@ -150,30 +151,24 @@
 						<p:panel id="panelProperties" header="Properties" style="margin-bottom:10px;">
 					        <h:panelGrid columns="1">
 					            <p:outputLabel for="formEntity_id" value="ID:" />
-					            <p:inputText id="formEntity_id" value="#{ivrEditorView.form != null ? ivrEditorView.form.id : ''}" readonly="true" label="ID" />
+					            <p:inputText id="formEntity_id" value="#{ivrEditorView.form.id}" readonly="true" />
 					            
 					            <p:outputLabel for="formEntity_name" value="Name:" />
-					            <p:inputText id="formEntity_name" value="#{ivrEditorView.form != null ? ivrEditorView.form.name : ''}" readonly="true" label="NAME" maxlength="30" size="30" />
-					                
-					            <p:message for="formEntity_name" />
-					 
+					            <p:inputText id="formEntity_name" value="#{ivrEditorView.form.name}" readonly="true" maxlength="30" size="30" />				             
+					           
+					            <p:outputLabel for="formEntity_description" value="Description:" />
+					            <p:inputTextarea id="formEntity_description" value="#{ivrEditorView.form.description}" readonly="true" rows="3" maxlength="200" autoResize="true" style="cursor:text;"/>				             
+					           
 					
 					        </h:panelGrid>
 					    </p:panel>
 					    <p:toolbar>
 					        <f:facet name="left">
-					            <p:commandButton value="Save" update="formFlow" actionListener="#{ivrEditorView.save}" style="margin-right:20px;" />
+					            <p:commandButton value="View" update="formFlow" immediate="true" onclick="selectElement('#{ivrEditorView.form.id}')"  style="margin-right:20px;" />
 					        </f:facet>
 					 
-					        <f:facet name="center">
-					            <p:commandButton value="Detail" update="formFlow" actionListener="#{ivrEditorView.detail}" style="margin-right:20px;" />
-					        </f:facet>
-					        <f:facet name="right">
-					            <p:commandButton value="Delete" update="formFlow" actionListener="#{ivrEditorView.delete}" style="margin-right:20px;" />
-					        </f:facet>
 					    </p:toolbar>
-					    
-					    <p:inputTextarea id="textArea" rows="2" autoResize="false" style="width:350px; cursor:text;"/> 
+					     
 					
 				 	</p:layoutUnit>
 				</p:layout>

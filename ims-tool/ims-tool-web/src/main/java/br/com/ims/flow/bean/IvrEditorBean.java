@@ -48,6 +48,7 @@ public class IvrEditorBean extends AbstractBean {
 	private DefaultDiagramModel model;
 	private List<FormTypeEntity> formTypes;
 	private List<FormEntity> listForm;
+	private List<FormEntity> listAllForm;
 	
 	private LogicalFlow logicalFlow;
 	
@@ -87,7 +88,7 @@ public class IvrEditorBean extends AbstractBean {
     	
         formTypes = formTypeService.getAll();
         
-        
+        listAllForm = new ArrayList<FormEntity>();
         if(version == null) {
         	
         	requestVersion(false);
@@ -300,6 +301,19 @@ public class IvrEditorBean extends AbstractBean {
 	public List<FormEntity> getListForm() {
 		return listForm;
 	}
+	
+
+	public List<FormEntity> getListAllForm() {
+		System.out.println("getListAllForm()");
+		this.listAllForm.clear();
+		this.listAllForm.addAll(ServicesFactory.getInstance().getFormService().getAll());
+		this.listAllForm.addAll(this.listForm);
+		return listAllForm;
+	}
+
+	public void setListAllForm(List<FormEntity> listAllForm) {
+		this.listAllForm = listAllForm;
+	}
 
 	public FormEntity getForm() {
 		return form;
@@ -413,6 +427,7 @@ public class IvrEditorBean extends AbstractBean {
 		logicalFlow.addNode(element);
 		logicalFlow.validateNodes();
 		logicalFlow.alingElementAlone();
+		logicalFlow.resize();
     }
 	
 	public void elementSelected(ActionEvent param) {
@@ -746,7 +761,7 @@ public class IvrEditorBean extends AbstractBean {
 	      } else {
 	    	  System.out.println("Didn't find element for ID " + id);	         
 	      }
-	      logicalFlow.resize();
+	      
 	   }
 
 

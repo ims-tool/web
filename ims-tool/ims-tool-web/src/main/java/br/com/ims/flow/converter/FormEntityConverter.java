@@ -7,7 +7,6 @@ import javax.faces.convert.FacesConverter;
 
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.FormEntity;
-import br.com.ims.flow.service.IvrEditorService;
 
 @FacesConverter(value = "formEntityConverter")
 public class FormEntityConverter implements Converter {
