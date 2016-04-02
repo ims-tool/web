@@ -1,7 +1,5 @@
 package br.com.ims.tool.nextform.model;
 
-import java.util.Map;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -12,7 +10,7 @@ public class RequestInvokeMethod {
 	private String methodName;
 	private Integer timeout;
 	private Boolean internalService;
-	private Map<String, String> parameters;
+	private String parameters;
 	public String getContext() {
 		return context;
 	}
@@ -43,10 +41,10 @@ public class RequestInvokeMethod {
 	public void setInternalService(Boolean internalService) {
 		this.internalService = internalService;
 	}
-	public Map<String, String> getParameters() {
+	public String getParameters() {
 		return parameters;
 	}
-	public void setParameters(Map<String, String> parameters) {
+	public void setParameters(String parameters) {
 		this.parameters = parameters;
 	}
 	

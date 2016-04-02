@@ -13,8 +13,7 @@ public interface MapValues extends Serializable {
 	public static final String MENU_OPTION = "_Menu";
 	public static final String CONTADOR_TENTATIVAS = "CONTADOR_TENTATIVAS";
 	
-	public static final String HIGHANI_QTDE = "highAni.highAniQtde";
-	public static final String TEM_FRAUDE = "fraude.temFraude";
+	public static final String TP_LOJA = "customer.loja";
 
 	public static final String ANI = "call.ani";
 	public static final String DNIS = "call.dnis";
