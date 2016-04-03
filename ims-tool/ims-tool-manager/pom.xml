@@ -1,17 +1,40 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>br.com.ims.tools</groupId>
-    <artifactId>ims-tool</artifactId>
-    <version>0.0.1</version>
-  </parent>
-  <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>br.com.ims.tools</groupId>
+		<artifactId>ims-tool</artifactId>
+		<version>0.0.1</version>
+	</parent>
+	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>ims-tool-util</artifactId>
 			<version>0.0.1</version>
-		</dependency>		
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2</artifactId>
+			<scope>provided</scope>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-kernel</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis2</groupId>
+			<artifactId>axis2-adb</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+
 	</dependencies>
-  <artifactId>ims-tool-manager</artifactId>
-  <packaging>war</packaging>
+	<artifactId>ims-tool-manager</artifactId>
+	<packaging>war</packaging>
 </project>

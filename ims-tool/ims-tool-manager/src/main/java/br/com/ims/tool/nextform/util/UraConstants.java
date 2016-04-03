@@ -6,6 +6,8 @@ public interface UraConstants {
 	public static final String NO = "NO";
 	public static final String NULL = "NULL";
 	public static final String NC = "NC";
+	public static final String SUCCESS = "SUCCESS";
+	public static final String FAIL = "FAIL";
 
 	public static final String DNIS_TRANSF_INTERNA1 = "2001015";
 	public static final String DNIS_TRANSF_INTERNA2 = "2001016";
@@ -108,6 +110,13 @@ public interface UraConstants {
 	public static final String PERFIL = "PERFIL";
 	public static final String PARCELAMENTO_CHANNEL= "uragvt";
 	
-	 
+	public static final String TP_BOTICARIO_LOJA= "BL";
+	public static final String TP_EUDORA_LOJA= "EL";
+	public static final String TP_QDB= "QDB";
+	public static final String TP_TBB= "TBB";
+	public static final String TP_BOTICARIO_INTERBELLE= "BI";
+	public static final String TP_QDB_INTERBELLE= "QI";
+	public static final String TP_BOTICARIO_VD= "BV";
+	public static final String TP_HIBRIDO= "HI";
 	
 }

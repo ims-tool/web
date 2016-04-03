@@ -176,7 +176,6 @@ public class NextFormService {
 				UraUtils.concatenaParametros("DOCUMENTO", MethodInvocationUtils.getContextValue(jsonContext, MapValues.DOCUMENT), parametros);
 				UraUtils.concatenaParametros("PERFIL", MethodInvocationUtils.getContextValue(jsonContext, MapValues.PERFIL), parametros);
 				UraUtils.concatenaParametros("URA", MethodInvocationUtils.getContextValue(jsonContext, MapValues.URA), parametros);
-				UraUtils.concatenaParametros("BLOQUEIO", MethodInvocationUtils.getContextValue(jsonContext, MapValues.BLOQUEIO_CLIENTE_BLOQ), parametros);
 				
 				transferenciaIn.setParametros(parametros.toString());
 				TransferenciaOut transferenciaOut = null;
