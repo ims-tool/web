@@ -38,8 +38,10 @@ public class SequenceDAO {
 					rs.close();
 			} 
 			catch(Exception e) {};
+			
 		}
 		return result;
 	}
 
 }
+	

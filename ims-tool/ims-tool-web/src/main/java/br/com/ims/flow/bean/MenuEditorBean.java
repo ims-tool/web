@@ -18,6 +18,7 @@ import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
+import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.FormEntity;
@@ -115,10 +116,11 @@ public class MenuEditorBean extends AbstractBean {
 				
 				for(Node target : source.getListTarget()) {
 					FormEntity formTarget = (FormEntity)target.getElement().getData();
+					AbstractFormEntity obj = (AbstractFormEntity)formTarget.getFormId();
 					if(!(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) || 
 							formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH) ||
 							formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) &&
-						formTarget.getName().equalsIgnoreCase(menuChoice.getName())) {
+							obj.getId().equals(menuChoice.getId())) {
 						
 						boolean remove = true;
 						for(ChoiceEntity choiceTemp : this.choices) {
@@ -127,7 +129,7 @@ public class MenuEditorBean extends AbstractBean {
 							}
 						}
 						if(remove) {
-							this.menu.getChoices().remove(menuChoice);
+							this.menu.getChoices().remove(index);
 							ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
 							index = -1;
 						} 

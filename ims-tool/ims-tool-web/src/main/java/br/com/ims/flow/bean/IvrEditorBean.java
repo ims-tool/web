@@ -48,7 +48,6 @@ public class IvrEditorBean extends AbstractBean {
 	private DefaultDiagramModel model;
 	private List<FormTypeEntity> formTypes;
 	private List<FormEntity> listForm;
-	private List<FormEntity> listAllForm;
 	
 	private LogicalFlow logicalFlow;
 	
@@ -87,8 +86,6 @@ public class IvrEditorBean extends AbstractBean {
     	initTab0();
     	
         formTypes = formTypeService.getAll();
-        
-        listAllForm = new ArrayList<FormEntity>();
         
         if(version == null) {
         	
@@ -304,18 +301,7 @@ public class IvrEditorBean extends AbstractBean {
 	}
 	
 
-	public List<FormEntity> getListAllForm() {
-		System.out.println("getListAllForm()");
-		this.listAllForm.clear();
-		this.listAllForm.addAll(ServicesFactory.getInstance().getFormService().getAll());
-		this.listAllForm.addAll(this.listForm);
-		return listAllForm;
-	}
-
-	public void setListAllForm(List<FormEntity> listAllForm) {
-		this.listAllForm = listAllForm;
-	}
-
+	
 	public FormEntity getForm() {
 		return form;
 	}
@@ -448,7 +434,8 @@ public class IvrEditorBean extends AbstractBean {
 	private void elementSelected(String formId) {
 		
 		this.form = ServicesFactory.getInstance().getIvrEditorService().getForm(this, formId); 
-	
+		
+		
 		if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_CHOICE) || 
 		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOINPUT) ||
 		   form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCH) ||
@@ -654,6 +641,14 @@ public class IvrEditorBean extends AbstractBean {
 			}
 			else {
 				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement(),true);
+			}
+			
+			for(int index = 0; index < this.listForm.size(); index++) {
+				FormEntity entity = this.listForm.get(index);
+				if(entity.getId().equals(this.form.getId())) {
+					this.listForm.remove(index);
+					break;
+				}
 			}
 			
 		}

@@ -2,7 +2,8 @@ ivr_operator
 - Reconhecer formtype: ANSWER,RETURN
 - Reconhecer os campos noinput_nextform, nomatch_nextform das tabelas menu e promptcollect no lugar da coluna nextform da
   tabela nomatchinput
-
+- Reconhecer o novo formato da decision
+- Reconhecer o novo formato do transfer
 Tabelas:
 - version: adicionar dois novos campos (system_user varchar2 (50), date_create datetime)
 
@@ -38,9 +39,6 @@ alter table flow.prompt alter column id type numeric;
 alter table flow.announce alter column id type numeric;
 alter table flow.announce alter column prompt type numeric;
 alter table flow.announce alter column nextform type numeric;
-
-alter table flow.answer alter column id type numeric;
-alter table flow.answer alter column nextform type numeric;
 
 alter table flow.audio alter column id type numeric;
 
@@ -106,6 +104,13 @@ alter table flow.form alter column nextformdefault type numeric;
 
 alter table flow.grammar alter column id type numeric;
 
+
+alter table flow.nomatchinput alter column id type numeric;
+alter table flow.nomatchinput alter column "type" type character varying(7);
+alter table flow.nomatchinput alter column prompt type numeric;
+alter table flow.nomatchinput alter column nextform type numeric;
+alter table flow.nomatchinput alter column "name" type character varying(30);
+
 alter table flow.promptcollect alter column id type numeric;
 alter table flow.promptcollect alter column grammar type numeric;
 alter table flow.promptcollect alter column prompt type numeric;
@@ -122,11 +127,6 @@ alter table flow.menu ADD COLUMN nomatch_nextform numeric NOT NULL;
 alter table flow.menu ADD COLUMN noinput_tag integer;
 alter table flow.menu ADD COLUMN nomatch_tag integer;
 
-alter table flow.nomatchinput alter column id type numeric;
-alter table flow.nomatchinput alter column "type" type character varying(7);
-alter table flow.nomatchinput alter column prompt type numeric;
-alter table flow.nomatchinput alter column nextform type numeric;
-alter table flow.nomatchinput alter column "name" type character varying(30);
 
 alter table flow.operation alter column id type numeric;
 alter table flow.operation alter column "name" type character varying(30);
@@ -150,7 +150,7 @@ alter table flow.operationparameters alter column paramvalue type character vary
 
 alter table flow.promptaudio alter column prompt type numeric;
 alter table flow.promptaudio alter column audio type numeric;
-
+alter table flow.promptaudio alter column condition type numeric;
 alter table flow.transfer alter column id type numeric;
 alter table flow.transfer alter column "name" type character varying(30);
 alter table flow.transfer alter column description type character varying(256);
@@ -176,14 +176,13 @@ insert into flow.formtype (id,name) values('17','NoInput');
 
 CREATE TABLE flow.answer
 (
-  id bigint NOT NULL,
+  id numeric NOT NULL,
   name character varying(30),
   description character varying(256),
-  nextform bigint,
+  nextform numeric,
   tag bigint,
   versionid bigint,
   CONSTRAINT pk_answer PRIMARY KEY (id),
-  CONSTRAINT fk_answer_nextform FOREIGN KEY (nextform) REFERENCES flow.form (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT uk_answer_name UNIQUE (name)
 )
 WITH (
@@ -199,7 +198,7 @@ ALTER TABLE flow.answer
 
 CREATE TABLE flow.return
 (
-  id bigint NOT NULL,
+  id numeric NOT NULL,
   name character varying(30),
   description character varying(256),
   tag bigint,
@@ -237,7 +236,7 @@ WITH (
 ALTER TABLE flow.decisionchance
   OWNER TO postgres;
 
-- Criar tabela flow.TransferRule
+-- Criar tabela flow.TransferRule
 
 CREATE TABLE flow.transferrule 
 (
@@ -253,6 +252,6 @@ CREATE TABLE flow.transferrule
   	CONSTRAINT fk_transferrule_transfer FOREIGN KEY (transferid)
       	REFERENCES flow.transfer (id) MATCH SIMPLE
       	ON UPDATE NO ACTION ON DELETE NO ACTION
-)
+);
 
 

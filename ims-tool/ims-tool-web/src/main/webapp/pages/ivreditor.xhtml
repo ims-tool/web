@@ -135,7 +135,7 @@
 					            <p:selectOneMenu id="nodesForm" value="#{ivrEditorView.form}" panelStyle="width:180px"
 						                         effect="fade" var="f" style="width:160px" filter="true" filterMatchMode="startsWith"
 						                         converter="formEntityConverter">
-						            <f:selectItems value="#{ivrEditorView.listAllForm}" var="form" itemLabel="#{form.name}" itemValue="#{form}" />
+						            <f:selectItems value="#{ivrEditorView.listForm}" var="form" itemLabel="#{form.name}" itemValue="#{form}" />
 						 
 						            <p:column style="width:10%">
 						            	<p:graphicImage url="#{f.imagePath}" width="40px" height="40px"/>
@@ -148,7 +148,7 @@
 						        </p:selectOneMenu>						            
 					         </h:panelGrid>
 					    </p:panel>
-						<p:panel id="panelProperties" header="Properties" style="margin-bottom:10px;">
+						<p:panel id="panelProperties" header="Forms" style="margin-bottom:10px;">
 					        <h:panelGrid columns="1">
 					            <p:outputLabel for="formEntity_id" value="ID:" />
 					            <p:inputText id="formEntity_id" value="#{ivrEditorView.form.id}" readonly="true" />

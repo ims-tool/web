@@ -18,6 +18,9 @@ public class FormService extends AbstractEntityService<FormEntity> {
 	public List<FormEntity> getAll() {
 		return DAOFactory.getInstance().getFormDAO().getAll();
 	}
+	public List<FormEntity> getAll(boolean lazy) {
+		return DAOFactory.getInstance().getFormDAO().getAll(lazy);
+	}
 	public List<FormEntity> getByFormTypeName(String formTypeName) {
 		return DAOFactory.getInstance().getFormDAO().getByTypeName(formTypeName);
 	}

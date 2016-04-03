@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AudioEntity;
@@ -13,6 +15,7 @@ import br.com.ims.flow.model.PromptAudioEntity;
 import br.com.ims.flow.model.PromptEntity;
 
 public class PromptDAO extends AbstractDAO<PromptEntity> {
+	public static Logger log = Logger.getLogger(PromptDAO.class);
 	private static PromptDAO instance = null;
 	private DbConnection db = null;
 	private PromptDAO() {
@@ -26,6 +29,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		return instance;
 	}
 	private List<PromptAudioEntity> getPromptAudio(String idPrompt) {
+		log.info("getPromptAudio("+idPrompt+")");
 		String sql = "SELECT pa.prompt pa_prompt,pa.ordernum pa_ordernum,pa.condition pa_condition, "+
 				     "a.id a_id,a.type a_type,a.name a_name,a.description a_description, a.path a_path,a.property a_property "+	                 
 	                 "FROM flow.promptaudio pa "+
@@ -65,6 +69,9 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(), e);
+			log.debug(sql);
+			
 		} finally {
 			try {
 				if(rs != null && !rs.isClosed())
@@ -76,22 +83,28 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		return result;
 	}
 	public List<PromptEntity> getByFilter(String where) {
+		return getByFilter(where,false);
+	}
+	public List<PromptEntity> getByFilter(String where,boolean lazy) {
 		
-		String sql = "SELECT id,name,versionid FROM flow.prompt <WHERE> ORDER BY name";
+		log.info("getByFilter("+where+")");
+		String sql = "SELECT p.id p_id,p.name p_name FROM flow.prompt p <WHERE> ORDER BY p.name";
 		if(where != null && where.length() > 0) {
 			sql = sql.replace("<WHERE>", where);
 		}
 		sql = sql.replace("<WHERE>", "");
-		
 		List<PromptEntity> result = new ArrayList<PromptEntity>();
 		ResultSet rs = null;
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
 				PromptEntity prompt = new PromptEntity ();
-				prompt.setId(rs.getString("id"));
-				prompt.setName(rs.getString("name"));
-				List<PromptAudioEntity> promptAudioList = getPromptAudio(rs.getString("id"));
+				prompt.setId(rs.getString("p_id"));
+				prompt.setName(rs.getString("p_name"));
+				List<PromptAudioEntity> promptAudioList = new ArrayList<PromptAudioEntity>();
+				if(!lazy) {
+					promptAudioList.addAll(getPromptAudio(rs.getString("p_id")));
+				}
 				prompt.setAudios(promptAudioList);
 				prompt.setVersionId(null);
 				result.add(prompt);
@@ -99,6 +112,8 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(), e);
+			log.debug(sql);
 		} finally {
 			try {
 				if(rs != null && !rs.isClosed())
@@ -113,16 +128,20 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	public List<PromptEntity> getAll() {
 		return this.getByFilter(null);
 	}
+	public List<PromptEntity> getAll(boolean lazy) {
+		return this.getByFilter(null,lazy);
+	}
 	public PromptEntity get(String id) {
-		List<PromptEntity> result = this.getByFilter("WHERE id = '"+id+"'");
+		List<PromptEntity> result = this.getByFilter("WHERE p.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}
 		return null;
 		
 	}
+	
 	public PromptEntity getByName(String name) {
-		List<PromptEntity> result = this.getByFilter("WHERE lower(name) = '"+name.toLowerCase()+"'");
+		List<PromptEntity> result = this.getByFilter("WHERE lower(p.name) = '"+name.toLowerCase()+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -131,7 +150,8 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	}
 	public boolean save(PromptEntity prompt) {
 		boolean result = true;
-		String sql = "INSERT INTO flow.prompt (id,name,versionid) "+
+		log.info("save()");
+		String sql = "INSERT INTO flow.prompt (id,\"name\",versionid) "+
 					 "VALUES ('"+prompt.getId()+"','"+prompt.getName()+"','"+prompt.getVersionId().getId()+"') ";
 		             
 		result = db.ExecuteSql(sql);
@@ -159,9 +179,9 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	@Override
 	public boolean update(PromptEntity entity) {
 		boolean result = true;
-		String sql = "UPDATE flow.prompt SET name='"+entity.getName()+"',versionid = "+entity.getVersionId().getId()+" "+
+		log.info("update()");
+		String sql = "UPDATE flow.prompt SET \"name\"='"+entity.getName()+"',versionid = "+entity.getVersionId().getId()+" "+
 					 "WHERE id="+entity.getId()+" ";
-		             
 		result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.promptaudio WHERE prompt = "+entity.getId();
@@ -184,6 +204,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	@Override
 	public boolean delete(PromptEntity entity) {
 		// TODO Auto-generated method stub
+		log.info("delete()");
 		String sql = "DELETE FROM flow.promptaudio WHERE prompt = '"+entity.getId()+"'";
 		boolean result = db.ExecuteSql(sql);
 		if(result) {

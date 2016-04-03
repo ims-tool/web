@@ -67,6 +67,8 @@ public class DbConnection{
 			
 	    } catch (Exception e) {
 	      e.printStackTrace();
+		  log.error(e.getMessage(), e);
+		  log.debug(sql);
 	      System.out.println(sql);
 	    }
 	    return rs;

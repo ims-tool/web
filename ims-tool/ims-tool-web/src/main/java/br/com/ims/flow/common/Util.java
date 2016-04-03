@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Random;
 
 import br.com.ims.flow.factory.DAOFactory;
 

@@ -31,7 +31,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	public List<PromptCollectEntity> getByFilter(String where) {
 		String sql = "SELECT pc.id pc_id,pc.name pc_name,pc.description pc_description,pc.flushprompt pc_flushprompt,pc.prompt pc_prompt,"+
 				 "pc.fetchtimeout pc_fetchtimeout, pc.interdigittimeout pc_interdigittimeout, pc.terminatingcharacter pc_terminatingcharacter, "+
-				 "pc.nextform pc_nextform, pc.noinput_nextform pc_noinput_nextform,pc.nomatch_nextform pc_nomatch_nextform,"+
+				 "pc.nextform pc_nextform, pc.noinput_nextform pc_noinput_nextform,pc.nomatch_nextform pc_nomatch_nextform, "+
 				 "g.id g_id, g.name g_name,g.description g_description,g.type g_type,g.sizemax g_sizemax,g.sizemin g_sizemin, "+
 			     "ni.id ni_id,ni.name ni_name, ni.type ni_type,ni.threshold ni_threshold, ni.prompt ni_prompt, "+
 			     "nm.id nm_id,nm.name nm_name, nm.type nm_type,nm.threshold nm_threshold, nm.prompt nm_prompt,  "+

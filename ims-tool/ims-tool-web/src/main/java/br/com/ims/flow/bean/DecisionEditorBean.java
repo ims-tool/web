@@ -17,6 +17,7 @@ import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Node;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
+import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.DecisionChanceEntity;
 import br.com.ims.flow.model.DecisionEntity;
@@ -101,7 +102,8 @@ public class DecisionEditorBean extends AbstractBean {
 				DecisionChanceEntity decisionChance = this.decision.getListDecisionChance().get(index);
 				for(Node target : source.getListTarget()) {
 					FormEntity formTarget = (FormEntity)target.getElement().getData();
-					if(formTarget.getName().equals(decisionChance.getName())) {
+					AbstractFormEntity obj = (AbstractFormEntity)formTarget.getFormId();
+					if(obj.getId().equals(decisionChance.getId())) {
 						
 						boolean remove = true;
 						for(DecisionChanceEntity chanceTemp : this.listDecisionChance) {

@@ -172,6 +172,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	public List<FormEntity> getAll() {
 		return this.getByFilter(null);
 	}
+	public List<FormEntity> getAll(boolean lazy) {
+		return this.getByFilter(null,lazy);
+	}
 
 	@Override
 	public FormEntity get(String id) {
