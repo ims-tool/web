@@ -16,6 +16,7 @@ window.onload = function(){
 		document.getElementById('webparameter').className = 'hidden';
 		document.getElementById('webhour').className = 'hidden';
 		document.getElementById('webaccess').className = 'hidden';
+		document.getElementById('webmensagem').className = 'hidden';
 		
 		
 		artifact = localStorage.getItem('artifact');
@@ -33,6 +34,9 @@ window.onload = function(){
 		    }
 		   if(access.description === 'webaccess'){
 			   document.getElementById('webaccess').className = '';
+		    }
+		   if(access.description === 'webmensagem'){
+			   document.getElementById('webmensagem').className = '';
 		    }
 		}
 		

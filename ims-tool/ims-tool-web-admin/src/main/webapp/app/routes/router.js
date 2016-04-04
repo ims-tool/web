@@ -69,6 +69,14 @@
 		      
 		   })
 		   
+		   .state('mensagem', {
+			   url : '/mensagem',
+			   templateUrl: 'app/views/mensagem.html',
+			   data: {
+			        requireLogin: true
+			      }
+		      
+		   })
 		   ;
 			 
 		   		    

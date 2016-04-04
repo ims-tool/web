@@ -3,7 +3,7 @@ app.controller(
 				function($rootScope, $location, $scope, $http, $mdDialog,
 						$mdMedia) {
 					
-					checkAccess('webaccess');
+					checkAccess('webmensagem');
 
 					var typeList;
 					$scope.status = '  ';
