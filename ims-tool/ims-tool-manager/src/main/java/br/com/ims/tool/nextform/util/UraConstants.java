@@ -118,5 +118,6 @@ public interface UraConstants {
 	public static final String TP_QDB_INTERBELLE= "QI";
 	public static final String TP_BOTICARIO_VD= "BV";
 	public static final String TP_HIBRIDO= "HI";
+	public static final String ERRO = "erro";
 	
 }

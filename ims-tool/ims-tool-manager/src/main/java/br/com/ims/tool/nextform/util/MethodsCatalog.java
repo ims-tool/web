@@ -18,13 +18,6 @@ import org.apache.log4j.Logger;
 import br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub;
 import br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Char2;
 import br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Z_CRMF_GET_CLASS_CLI2Response;
-import br.com.gvt.ura.co.persistence.CoDao;
-import br.com.gvt.ura.constants.UraConstants;
-import br.com.gvt.ura.factory.CommonFactoryDao;
-import br.com.gvt.ura.methodinvocationmanager.model.DaoException;
-import br.com.gvt.ura.methodinvocationmanager.model.FactoryDao;
-import br.com.gvt.ura.methodinvocationmanager.model.MapValues;
-import br.com.gvt.ura.methodinvocationmanager.util.MethodInvocationUtils;
 import br.com.ims.tool.nextform.model.MethodInvocationVO;
 import br.com.ims.tool.nextform.persistence.MethodsCatalogDao;
 
@@ -314,14 +307,13 @@ public class MethodsCatalog {
 
 		return methodInvocationVO;
 	}
-
+ 
 	public MethodInvocationVO getMensagensURA(String jsonContext, Map<String, String> parameters) {
 
 		MethodInvocationVO methodInvocationVO = MethodInvocationVO.getInstance();
 		methodInvocationVO.setValue(UraConstants.NO);
 
-		Boolean hasNext = Boolean
-				.parseBoolean(MethodInvocationUtils.getContextValue(jsonContext, MapValues.MSG_HAS_NEXT));
+		Boolean hasNext = Boolean.parseBoolean(MethodInvocationUtils.getContextValue(jsonContext, MapValues.MSG_HAS_NEXT));
 		String ddd = MethodInvocationUtils.getContextValue(jsonContext, MapValues.DDD);
 
 		// Caso não esteja setado o ddd no contexto, pegar os dois primeiros
@@ -341,43 +333,51 @@ public class MethodsCatalog {
 				Map<Integer, String> mapAudio = dao.getMessage(MethodInvocationUtils.getContextValue(jsonContext, MapValues.MSG_SPOT), ddd);
 
 				if (mapAudio.size() > 0) {
-					setMessageContext(mapAudio);
+					jsonContext = setMessageContext(mapAudio, jsonContext);
 					hasNext = Boolean.TRUE;
 					methodInvocationVO.setErrorCode(0);
 					methodInvocationVO.setValue(UraConstants.YES);
 				} else {
-					this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_COUNT, "-1", true);
-					this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_HAS_NEXT, "false",
-							true);
+					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT, "-1", true);
+					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_HAS_NEXT, "false", true);
 					methodInvocationVO.setErrorCode(0);
 					methodInvocationVO.setValue(UraConstants.NO);
 				}
 
-			} catch (DaoException e) {
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_COUNT, "-1", true);
+			} catch (Exception e) {
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT, "-1", true);
 				methodInvocationVO.setErrorCode(-1);
 				methodInvocationVO.setValue(UraConstants.ERRO);
 			}
 
 		} else {
 			// Já existe mensagem sendo trabalhada
-			MethodInvocationVO updateMessageContext = updateMessageContext(methodInvocationVO);
+			jsonContext = updateMessageContext(jsonContext);
+			if(MethodInvocationUtils.getContextValue(jsonContext, MapValues.MSG_HAS_NEXT).equalsIgnoreCase("true")){
+				methodInvocationVO.setValue(UraConstants.YES);
+				methodInvocationVO.setErrorCode(0);
+			}else{
+				methodInvocationVO.setValue(UraConstants.NO);
+				methodInvocationVO.setErrorCode(0);
+			}
 		}
 
-		methodInvocationVO.setJsonContext(this.context);
+		methodInvocationVO.setJsonContext(jsonContext);
 		return methodInvocationVO;
 	}
 
-	private void setMessageContext(Map<Integer, String> mapAudio) {
+	private String setMessageContext(Map<Integer, String> mapAudio, String jsonContext) {
 
 		String audios = "";
 		// Primeira vez set context
 		audios = setAudioList(mapAudio, audios);
-		this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_MESSAGES, audios, true);
-		this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_AUDIO, mapAudio.get(1), true);
-		this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_HAS_NEXT, "true", true);
-		this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_COUNT,
+		jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_MESSAGES, audios, true);
+		jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_AUDIO, mapAudio.get(1), true);
+		jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_HAS_NEXT, "true", true);
+		jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT,
 				String.valueOf(mapAudio.size()), true);
+		
+		return jsonContext;
 
 	}
 
@@ -393,10 +393,10 @@ public class MethodsCatalog {
 		return audios;
 	}
 
-	private MethodInvocationVO updateMessageContext(MethodInvocationVO methodInvocationVO) {
+	private String updateMessageContext(String jsonContext) {
 
-		Integer count = Integer.parseInt(MethodInvocationUtils.getContextValue(this.context, MapValues.MSG_COUNT));
-		String audios = MethodInvocationUtils.getContextValue(this.context, MapValues.MSG_MESSAGES);
+		Integer count = Integer.parseInt(MethodInvocationUtils.getContextValue(jsonContext, MapValues.MSG_COUNT));
+		String audios = MethodInvocationUtils.getContextValue(jsonContext, MapValues.MSG_MESSAGES);
 		String[] arrayAudio = audios.split(";");
 		try {
 			if (arrayAudio.length > 1) {
@@ -409,47 +409,27 @@ public class MethodsCatalog {
 					}
 				}
 				count--;
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_COUNT,
-						String.valueOf(count), true);
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_AUDIO, arrayAudio[1],
-						true);
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_MESSAGES, audios,
-						true);
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_HAS_NEXT, "true",
-						true);
-				methodInvocationVO.setValue(UraConstants.YES);
-				methodInvocationVO.setErrorCode(0);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT,String.valueOf(count), true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_AUDIO, arrayAudio[1], true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_MESSAGES, audios, true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_HAS_NEXT, "true", true);
+				
 			} else if (arrayAudio.length == 1) {
 
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_COUNT, "0", true);
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_HAS_NEXT, "false",
-						true);
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_AUDIO, "", true);
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_MESSAGES, "", true);
-				methodInvocationVO.setValue(UraConstants.NO);
-				methodInvocationVO.setErrorCode(0);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT, "0", true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_HAS_NEXT, "false", true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_AUDIO, "", true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_MESSAGES, "", true);
 			} else {
 
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_COUNT, "-1", true);
-				this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_HAS_NEXT, "false",
-						true);
-				methodInvocationVO.setValue(UraConstants.NO);
-				methodInvocationVO.setErrorCode(0);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT, "-1", true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_HAS_NEXT, "false",true);
 			}
 		} catch (Exception e) {
-			this.context = MethodInvocationUtils.setContextValue(this.context, MapValues.MSG_COUNT, "-1", true);
-			methodInvocationVO.setValue(UraConstants.ERRO);
-			methodInvocationVO.setErrorCode(-1);
+			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT, "-1", true);
 		}
-		return methodInvocationVO;
+		return jsonContext;
 	}
 
-	public MethodInvocationVO getMensagemURA(String jsonContext, Map<String, String> parameters) {
-
-		MethodInvocationVO methodInvocationVO = MethodInvocationVO.getInstance();
-
-		return methodInvocationVO;
-
-	}
 
 }

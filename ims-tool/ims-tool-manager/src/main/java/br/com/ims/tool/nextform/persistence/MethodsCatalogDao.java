@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import br.com.ims.tool.nextform.exception.DaoException;
@@ -149,7 +150,7 @@ public class MethodsCatalogDao {
 		
 	}
 
-	public Map<Integer, String> getMessage(String contextValue, String ddd) {
+	public Map<Integer, String> getMessage(String contextValue, String ddd) throws DaoException {
 		
 			
 			ResultSet rs = null;
@@ -158,11 +159,11 @@ public class MethodsCatalogDao {
 			Map<Integer, String> mapAudio = new HashMap<Integer, String>();
 			Integer i = 0;
 				
-				try {
+				try { 
 					conn = new ConnectionDB().getConnection();
 					
-					stm = conn.prepareStatement("select nome, flag, datai, dataf, ddd_in, ddd_not_in from ura.co_mensagens where upper(ponto) like upper(?) and flag = 'A'  order by ordem");
-					stm.setString(1, "%" + msgSpot + "%");
+					stm = conn.prepareStatement("select name, flag, datai, dataf, ddd_in, ddd_not_in from flow.mensagem where spot = (select id from flow.spot t where name like ? ) and flag = 'A' order by msg_order");
+					stm.setString(1, "%" + contextValue + "%");
 					
 					rs = stm.executeQuery();
 					
@@ -180,11 +181,78 @@ public class MethodsCatalogDao {
 					e.printStackTrace();
 					throw new DaoException("Erro ao recuperar audios mensagens ",e);
 				} finally {
-					super.closeResources(rs, stm, conn);
+					try {
+						conn.close();
+					} catch (SQLException e1) {
+					}
+					try {
+						stm.close();
+					} catch (SQLException e) {
+					}
 				}
 			return mapAudio;
 		
 	}
+	
+private boolean getDDD(String ddd_in, String ddd_not_in, String ddd) {
+		
+		Boolean isDDDIn = Boolean.TRUE;
+		Boolean isDDDNotIn = Boolean.TRUE;
+		Boolean result = Boolean.FALSE;
+		
+		if(StringUtils.isBlank(ddd_in)){
+			isDDDIn = Boolean.FALSE;
+		}
+		
+		if(StringUtils.isBlank(ddd_not_in)){
+			isDDDNotIn = Boolean.FALSE;
+		}
+		
+		if(isDDDIn){
+			if(ddd_in.contains(ddd)){
+				result = Boolean.TRUE;
+			}
+		}
+		
+		if(isDDDNotIn){
+			if(!ddd_not_in.contains(ddd)){
+				result = Boolean.TRUE;
+			}else{
+				result = Boolean.FALSE;
+			}
+		}
+		
+		if(!isDDDIn && !isDDDNotIn){
+			result = Boolean.TRUE;
+		}
+		
+		return result;
+		
+	}
+
+	private boolean getDate(String dataI, String dataF) throws DaoException {
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if(StringUtils.isBlank(dataI)||StringUtils.isBlank(dataF)){
+			return Boolean.TRUE;
+		}
+		Calendar cDataI = Calendar.getInstance();
+		Calendar cDataF = Calendar.getInstance();
+		
+		try {
+			cDataI.setTime(dateFormat.parse(dataI));
+			cDataF.setTime(dateFormat.parse(dataF));
+			
+			if(cDataF.after(Calendar.getInstance()) && cDataI.before(Calendar.getInstance())){
+				return Boolean.TRUE;
+			}
+		} catch (ParseException e) {
+			throw new DaoException("Erro ao realizar parse data getDate",e);
+		}
+		
+		return false;
+	}
+
 
 	
 
