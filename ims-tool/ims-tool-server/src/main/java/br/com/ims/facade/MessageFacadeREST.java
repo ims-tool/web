@@ -21,7 +21,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.json.JSONObject;
 
+import br.com.ims.control.MessageCtrl;
 import br.com.ims.control.ServiceHourCtrl;
+import br.com.ims.tool.entity.Message;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 
@@ -30,7 +32,7 @@ import br.com.ims.tool.entity.ServiceHourType;
  * @author Cesar
  */
 @Stateless
-@Path("servicehour")
+@Path("message")
 public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     @PersistenceContext(unitName = "ivrPersistence")
     private EntityManager em;
@@ -128,6 +130,29 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     @Produces("application/json")
     public String findType(@PathParam("user") String user) {
     	List<ServiceHourType> lista = ServiceHourCtrl.findType(user);
+    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    	String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return json;
+        
+    }
+    
+    @GET
+    @Path("findAll")
+    @Produces("application/json")
+    public String findListMessage() {
+    	List<Message> lista = MessageCtrl.findAll();
     	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     	String json = "";
 		try {

@@ -31,8 +31,8 @@ public class Message implements Serializable {
     private String name;
     private String description;
     private String flag;
-    private Date datai;
-    private Date dataf;
+    private String datai;
+    private String dataf;
     private String ddd_in;
     private String ddd_not_in;
     private String spot;
@@ -61,16 +61,17 @@ public class Message implements Serializable {
 	public void setFlag(String flag) {
 		this.flag = flag;
 	}
-	public Date getDatai() {
+	
+	public String getDatai() {
 		return datai;
 	}
-	public void setDatai(Date datai) {
+	public void setDatai(String datai) {
 		this.datai = datai;
 	}
-	public Date getDataf() {
+	public String getDataf() {
 		return dataf;
 	}
-	public void setDataf(Date dataf) {
+	public void setDataf(String dataf) {
 		this.dataf = dataf;
 	}
 	public String getDdd_in() {
