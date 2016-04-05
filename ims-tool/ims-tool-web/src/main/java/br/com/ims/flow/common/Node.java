@@ -1,5 +1,6 @@
 package br.com.ims.flow.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,8 @@ import org.primefaces.model.diagram.Element;
 
 import br.com.ims.flow.model.FormEntity;
 
-public class Node {
+@SuppressWarnings("serial")
+public class Node implements Serializable{
 	private FormEntity form;
 	private Element element;
 	private Connection connection;

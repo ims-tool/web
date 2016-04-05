@@ -36,7 +36,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 
-		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll();
+		/*List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll();
 		for(FormEntity form :  forms) {
 			
 			if(form.getVersionId() != null && form.getVersionId().getId().equals(id)) {
@@ -80,7 +80,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 				
 			}
 			
-		}
+		}*/
 		
 		return false;
 	}

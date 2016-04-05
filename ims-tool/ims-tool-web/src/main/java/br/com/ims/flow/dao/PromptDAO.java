@@ -30,6 +30,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	}
 	private List<PromptAudioEntity> getPromptAudio(String idPrompt) {
 		log.info("getPromptAudio("+idPrompt+")");
+		System.out.println("PromptDAO-getPromptAudio("+idPrompt+")");
 		String sql = "SELECT pa.prompt pa_prompt,pa.ordernum pa_ordernum,pa.condition pa_condition, "+
 				     "a.id a_id,a.type a_type,a.name a_name,a.description a_description, a.path a_path,a.property a_property "+	                 
 	                 "FROM flow.promptaudio pa "+
@@ -88,6 +89,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	public List<PromptEntity> getByFilter(String where,boolean lazy) {
 		
 		log.info("getByFilter("+where+")");
+		System.out.println("PromptDAO-getByFilter("+where+")");
 		String sql = "SELECT p.id p_id,p.name p_name FROM flow.prompt p <WHERE> ORDER BY p.name";
 		if(where != null && where.length() > 0) {
 			sql = sql.replace("<WHERE>", where);
@@ -151,6 +153,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	public boolean save(PromptEntity prompt) {
 		boolean result = true;
 		log.info("save()");
+		System.out.println("PromptDAO-save()");
 		String sql = "INSERT INTO flow.prompt (id,\"name\",versionid) "+
 					 "VALUES ('"+prompt.getId()+"','"+prompt.getName()+"','"+prompt.getVersionId().getId()+"') ";
 		             
@@ -180,6 +183,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	public boolean update(PromptEntity entity) {
 		boolean result = true;
 		log.info("update()");
+		System.out.println("PromptDAO-update()");
 		String sql = "UPDATE flow.prompt SET \"name\"='"+entity.getName()+"',versionid = "+entity.getVersionId().getId()+" "+
 					 "WHERE id="+entity.getId()+" ";
 		result = db.ExecuteSql(sql);
@@ -205,6 +209,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	public boolean delete(PromptEntity entity) {
 		// TODO Auto-generated method stub
 		log.info("delete()");
+		System.out.println("PromptDAO-delete()");
 		String sql = "DELETE FROM flow.promptaudio WHERE prompt = '"+entity.getId()+"'";
 		boolean result = db.ExecuteSql(sql);
 		if(result) {
