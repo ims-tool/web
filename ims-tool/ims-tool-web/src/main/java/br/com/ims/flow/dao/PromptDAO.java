@@ -80,6 +80,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 					rs.close();
 			} 
 			catch(Exception e) {};
+			
 		}
 		
 		return result;
