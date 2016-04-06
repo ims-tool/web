@@ -15,6 +15,7 @@ import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class MenuDAO extends AbstractDAO<MenuEntity>{
 	private static MenuDAO instance = null;
 	private DbConnection db =  null;
@@ -95,8 +96,11 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		
 		return result;
 	}
-	
 	public List<MenuEntity> getByFilter(String where) {
+		return getByFilter(where,false);
+	}
+	
+	public List<MenuEntity> getByFilter(String where,boolean lazy) {
 		String sql = "SELECT m.id m_id,m.name m_name,m.description m_description,m.prompt m_prompt,m.fetchtimeout m_fetchtimeout, "+
 				 "m.terminatingtimeout m_terminatingtimeout, m.terminatingcharacter m_terminatingcharacter, "+
 				 "m.noinput_nextform m_noinput_nextform,m.nomatch_nextform m_nomatch_nextform, "+
@@ -151,14 +155,18 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				tag_nm.setType(tagType_nm);
 			}
 			
-			PromptEntity prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("m_prompt"));
+			PromptEntity prompt = null;
 			PromptEntity prompt_ni = null;
 			PromptEntity prompt_nm = null;
-			if(rs.getString("ni_prompt") != null && rs.getString("ni_prompt").length() > 0)
-				prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
-			if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0)
-				prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
-			
+			List<ChoiceEntity> choices =  null;
+			if(!lazy) {
+				prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("m_prompt"));
+				if(rs.getString("ni_prompt") != null && rs.getString("ni_prompt").length() > 0)
+					prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
+				if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0)
+					prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
+				choices = this.getChoicesByFilter("WHERE c.menu = '"+rs.getString("m_id")+"'");
+			}
 			
 			
 			NoMatchInputEntity noInput = new NoMatchInputEntity();
@@ -177,7 +185,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			noMatch.setPrompt(prompt_nm);
 			noMatch.setNextForm(rs.getString("nm_nextform"));
 			
-			List<ChoiceEntity> choices = this.getChoicesByFilter("WHERE c.menu = '"+rs.getString("m_id")+"'");
+			
 			
 			MenuEntity menu = new MenuEntity();
 			menu.setId(rs.getString("m_id"));
@@ -214,6 +222,11 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	
 	public List<MenuEntity> getAll() {
 		return this.getByFilter(null);
+		
+		
+	}
+	public List<MenuEntity> getAll(boolean lazy) {
+		return this.getByFilter(null,lazy);
 		
 		
 	}

@@ -13,6 +13,7 @@ import br.com.ims.flow.model.OperationParameterEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class OperationDAO extends AbstractDAO<OperationEntity>{
 	private static OperationDAO instance = null;
 	private DbConnection db =  null;

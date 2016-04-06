@@ -10,6 +10,7 @@ import br.com.ims.flow.model.DisconnectEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 	private static DisconnectDAO instance = null;
 	private DbConnection db =  null;

@@ -14,6 +14,7 @@ import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.PromptAudioEntity;
 import br.com.ims.flow.model.PromptEntity;
 
+@SuppressWarnings("serial")
 public class PromptDAO extends AbstractDAO<PromptEntity> {
 	public static Logger log = Logger.getLogger(PromptDAO.class);
 	private static PromptDAO instance = null;

@@ -13,6 +13,7 @@ import br.com.ims.flow.model.DecisionEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	private static DecisionDAO instance = null;
 	private DbConnection db =  null;

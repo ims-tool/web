@@ -14,6 +14,7 @@ import br.com.ims.flow.model.ConditionValueEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	private DbConnection db =  null;
 	private static ConditionDAO instance = null;
@@ -185,6 +186,9 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		return result;			
 	}
 	public List<ConditionEntity> getByFilter(String where) {
+		return this.getByFilter(where, false);
+	}
+	public List<ConditionEntity> getByFilter(String where,boolean lazy) {
 		String sql = "SELECT c.id c_id,c.name c_name,c.description c_description, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
@@ -217,7 +221,10 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 					tag.setType(tagType);
 				}
 				
-				List<ConditionGroupEntity> groups = this.getConditionGroups(rs.getString("c_id"));
+				List<ConditionGroupEntity> groups = null;
+				if(!lazy) {
+					groups = this.getConditionGroups(rs.getString("c_id"));
+				}
 				
 				
 				ConditionEntity condition = new ConditionEntity();
@@ -247,6 +254,11 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	public List<ConditionEntity> getAll() {
 		
 		return this.getByFilter(null);
+		
+	}
+	public List<ConditionEntity> getAll(boolean lazy) {
+		
+		return this.getByFilter(null,lazy);
 		
 	}
 	public ConditionEntity get(String id) {

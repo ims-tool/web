@@ -11,6 +11,10 @@ public class PromptCollectService extends AbstractEntityService <PromptCollectEn
 		
 		return DAOFactory.getInstance().getPromptCollectDAO().getAll();
 	}
+	public List<PromptCollectEntity> getAll(boolean lazy) {
+		
+		return DAOFactory.getInstance().getPromptCollectDAO().getAll(lazy);
+	}
 	
 	public PromptCollectEntity get(String id) {
 		

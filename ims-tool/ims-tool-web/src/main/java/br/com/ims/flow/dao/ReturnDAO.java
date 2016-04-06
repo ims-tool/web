@@ -10,6 +10,7 @@ import br.com.ims.flow.model.ReturnEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 	private static ReturnDAO instance = null;
 	private DbConnection db =  null;

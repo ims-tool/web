@@ -57,7 +57,7 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 
-		List<MenuEntity> menus = DAOFactory.getInstance().getMenuDAO().getAll();
+		List<MenuEntity> menus = DAOFactory.getInstance().getMenuDAO().getAll(true);
 		for(MenuEntity menu :  menus) {
 			if(menu.getNoInput() != null && menu.getNoInput().getId().equals(id) ||
 					menu.getNoMatch() != null && menu.getNoMatch().getId().equals(id)) {
@@ -65,7 +65,7 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 			}
 			
 		}
-		List<PromptCollectEntity> promptCollects = DAOFactory.getInstance().getPromptCollectDAO().getAll();
+		List<PromptCollectEntity> promptCollects = DAOFactory.getInstance().getPromptCollectDAO().getAll(true);
 		for(PromptCollectEntity promptCollect :  promptCollects) {
 			if(promptCollect.getNoInput() !=null && promptCollect.getNoInput().getId().equals(id) ||
 					promptCollect.getNoMatch() !=null && promptCollect.getNoMatch().getId().equals(id)) {
@@ -94,7 +94,7 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 	@Override
 	public List<String[]> getUsed(String id) {
 		List<String[]> result = new ArrayList<String[]>();
-		List<MenuEntity> menus = DAOFactory.getInstance().getMenuDAO().getAll();
+		List<MenuEntity> menus = DAOFactory.getInstance().getMenuDAO().getAll(true);
 		for(MenuEntity menu :  menus) {
 			if(menu.getNoInput() != null && menu.getNoInput().getId().equals(id) ||
 					menu.getNoMatch() != null && menu.getNoMatch().getId().equals(id)) {
@@ -104,7 +104,7 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 			}
 			
 		}
-		List<PromptCollectEntity> promptCollects = DAOFactory.getInstance().getPromptCollectDAO().getAll();
+		List<PromptCollectEntity> promptCollects = DAOFactory.getInstance().getPromptCollectDAO().getAll(true);
 		for(PromptCollectEntity promptCollect :  promptCollects) {
 			if(promptCollect.getNoInput() !=null && promptCollect.getNoInput().getId().equals(id) ||
 					promptCollect.getNoMatch() !=null && promptCollect.getNoMatch().getId().equals(id)) {

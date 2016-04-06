@@ -26,6 +26,7 @@ import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 import br.com.ims.flow.model.TransferEntity;
 
+@SuppressWarnings("serial")
 public class FormDAO extends AbstractDAO<FormEntity>{
 	
 	private static FormDAO instance = null;

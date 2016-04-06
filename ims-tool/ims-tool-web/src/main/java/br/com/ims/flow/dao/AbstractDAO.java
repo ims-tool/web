@@ -1,10 +1,12 @@
 package br.com.ims.flow.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 import br.com.ims.flow.model.AbstractEntity;
 
-public abstract class AbstractDAO <T extends AbstractEntity> {
+@SuppressWarnings("serial")
+public abstract class AbstractDAO <T extends AbstractEntity> implements Serializable {
 	
 	public abstract List<T> getByFilter(String where);
 	

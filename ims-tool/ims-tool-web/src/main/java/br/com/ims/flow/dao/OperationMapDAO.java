@@ -8,6 +8,7 @@ import java.util.List;
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.model.OperationMapEntity;
 
+@SuppressWarnings("serial")
 public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 	private DbConnection db =  null;
 	private static OperationMapDAO instance = null;

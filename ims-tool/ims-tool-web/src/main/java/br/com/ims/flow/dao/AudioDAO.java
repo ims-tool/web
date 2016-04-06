@@ -8,6 +8,7 @@ import java.util.List;
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.model.AudioEntity;
 
+@SuppressWarnings("serial")
 public class AudioDAO extends AbstractDAO<AudioEntity>{
 	private static AudioDAO instance = null;
 	private DbConnection db =  null;

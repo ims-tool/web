@@ -1,11 +1,13 @@
 package br.com.ims.flow.dao;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import br.com.ims.flow.common.DbConnection;
 
-public class SequenceDAO {
+@SuppressWarnings("serial")
+public class SequenceDAO implements Serializable{
 	private static SequenceDAO instance = null;
 	private DbConnection db =  null;
 	private SequenceDAO() {

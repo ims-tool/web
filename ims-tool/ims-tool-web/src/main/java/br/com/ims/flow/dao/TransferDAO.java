@@ -14,6 +14,7 @@ import br.com.ims.flow.model.TagTypeEntity;
 import br.com.ims.flow.model.TransferEntity;
 import br.com.ims.flow.model.TransferRuleEntity;
 
+@SuppressWarnings("serial")
 public class TransferDAO extends AbstractDAO<TransferEntity>{
 	private static TransferDAO instance = null;
 	private DbConnection db =  null;

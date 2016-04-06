@@ -37,12 +37,13 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 		
 		List<OperationEntity> operations = DAOFactory.getInstance().getOperationDAO().getAll();
 		for(OperationEntity operation :  operations) {
-			
-			for(OperationGroupEntity group : operation.getListOperationGroup()) {
-				if(group.getOperationMap().getId().equals(id)) {
-					return true;
+			if(operation.getListOperationGroup() != null) {
+				for(OperationGroupEntity group : operation.getListOperationGroup()) {
+					if(group.getOperationMap().getId().equals(id)) {
+						return true;
+					}
 				}
-			}				
+			}
 			
 		}
 		return false;
@@ -70,13 +71,15 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 		List<OperationEntity> operations = DAOFactory.getInstance().getOperationDAO().getAll();
 		for(OperationEntity operation :  operations) {
 			boolean found = false;
-			for(int index = 0; index < operation.getListOperationGroup().size() && !found; index++) {
-				OperationGroupEntity group = operation.getListOperationGroup().get(index);
-				if(group.getOperationMap().getId().equals(id)) {
-					String [] obj = {"Operation",operation.getName()};
-					result.add(obj);
+			if(operation.getListOperationGroup() != null) {
+				for(int index = 0; index < operation.getListOperationGroup().size() && !found; index++) {
+					OperationGroupEntity group = operation.getListOperationGroup().get(index);
+					if(group.getOperationMap().getId().equals(id)) {
+						String [] obj = {"Operation",operation.getName()};
+						result.add(obj);
+					}
 				}
-			}				
+			}
 			
 		}
 		return result;

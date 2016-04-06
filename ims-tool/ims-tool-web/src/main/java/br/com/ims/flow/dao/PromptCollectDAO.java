@@ -13,7 +13,7 @@ import br.com.ims.flow.model.PromptCollectEntity;
 import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
-
+@SuppressWarnings("serial")
 public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	private static PromptCollectDAO instance = null;
 	private DbConnection db =  null;
@@ -27,8 +27,11 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		}
 		return instance;
 	}
-	
 	public List<PromptCollectEntity> getByFilter(String where) {
+		return getByFilter(where,false);
+	}
+	
+	public List<PromptCollectEntity> getByFilter(String where,boolean lazy) {
 		String sql = "SELECT pc.id pc_id,pc.name pc_name,pc.description pc_description,pc.flushprompt pc_flushprompt,pc.prompt pc_prompt,"+
 				 "pc.fetchtimeout pc_fetchtimeout, pc.interdigittimeout pc_interdigittimeout, pc.terminatingcharacter pc_terminatingcharacter, "+
 				 "pc.nextform pc_nextform, pc.noinput_nextform pc_noinput_nextform,pc.nomatch_nextform pc_nomatch_nextform, "+
@@ -100,13 +103,17 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 				tag_nm.setType(tagType_nm);
 			}
 			
-			PromptEntity prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("pc_prompt"));
+			PromptEntity prompt = null;
 			PromptEntity prompt_ni = null;
 			PromptEntity prompt_nm = null;
-			if(rs.getString("ni_prompt") != null && rs.getString("ni_prompt").length() > 0)
-				prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
-			if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0) 
-				prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
+			
+			if(!lazy) {
+				prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("pc_prompt"));
+				if(rs.getString("ni_prompt") != null && rs.getString("ni_prompt").length() > 0)
+					prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
+				if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0) 
+					prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
+			}
 			
 			GrammarEntity grammar = new GrammarEntity();
 			grammar.setId(rs.getString("g_id"));
@@ -167,8 +174,11 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	}
 	
 	public List<PromptCollectEntity> getAll() {
-		return this.getByFilter(null);
+		return this.getByFilter(null);		
 		
+	}
+	public List<PromptCollectEntity> getAll(boolean lazy) {
+		return this.getByFilter(null,lazy);		
 		
 	}
 	public PromptCollectEntity get(String id) {

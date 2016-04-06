@@ -5,6 +5,7 @@ import java.util.List;
 
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class TagTypeDAO extends AbstractDAO<TagTypeEntity> {
 	private List<TagTypeEntity> listTagTypes =  null;
 	private static TagTypeDAO instance = null;

@@ -52,11 +52,13 @@ public class PromptService extends AbstractEntityService<PromptEntity>{
 		}
 		List<TransferEntity> Transfers = DAOFactory.getInstance().getTransferDAO().getAll();
 		for(TransferEntity transfer: Transfers) {
-			for(TransferRuleEntity transferRule : transfer.getTransferRules()) {
-				if(transferRule.getPrompt() != null && transferRule.getPrompt().getId().equals(id)) {
-					return true;
+			if(transfer.getTransferRules() != null) {
+				for(TransferRuleEntity transferRule : transfer.getTransferRules()) {
+					if(transferRule.getPrompt() != null && transferRule.getPrompt().getId().equals(id)) {
+						return true;
+					}
 				}
-			}			
+			}
 		}
 		
 		
@@ -82,14 +84,16 @@ public class PromptService extends AbstractEntityService<PromptEntity>{
 		for(TransferEntity transfer: Transfers) {
 			boolean found = false;
 			
-			for(int index  = 0; index < transfer.getTransferRules().size() && !found; index++) {
-				TransferRuleEntity transferRule = transfer.getTransferRules().get(index);
-				if(transferRule.getPrompt() != null && transferRule.getPrompt().getId().equals(id)) {
-					String [] obj = {"Transfer",transfer.getName()};
-					result.add(obj);
-					found = true;
+			if(transfer.getTransferRules() != null) {
+				for(int index  = 0; index < transfer.getTransferRules().size() && !found; index++) {
+					TransferRuleEntity transferRule = transfer.getTransferRules().get(index);
+					if(transferRule.getPrompt() != null && transferRule.getPrompt().getId().equals(id)) {
+						String [] obj = {"Transfer",transfer.getName()};
+						result.add(obj);
+						found = true;
+					}
 				}
-			}			
+			}
 		}
 		
 		return result;

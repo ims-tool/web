@@ -6,6 +6,7 @@ import java.util.List;
 import br.com.ims.flow.model.FormTypeEntity;
 import br.com.ims.flow.common.*;
 
+@SuppressWarnings("serial")
 public class FormTypeDAO extends AbstractDAO<FormTypeEntity> {
 	
 	public List<FormTypeEntity> getByFilter(String where) {

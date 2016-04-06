@@ -31,7 +31,7 @@ public class GrammarService extends AbstractEntityService<GrammarEntity>{
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 
-		List<PromptCollectEntity> promptsCollect = DAOFactory.getInstance().getPromptCollectDAO().getAll();
+		List<PromptCollectEntity> promptsCollect = DAOFactory.getInstance().getPromptCollectDAO().getAll(true);
 		for(PromptCollectEntity promptCollect :  promptsCollect) {
 			if(promptCollect.getGrammar() != null && promptCollect.getGrammar().getId().equals(id)) {
 				return true;
@@ -61,7 +61,7 @@ public class GrammarService extends AbstractEntityService<GrammarEntity>{
 	public List<String[]> getUsed(String id) {
 		// TODO Auto-generated method stub
 		List<String[]> result = new ArrayList<String[]>();
-		List<PromptCollectEntity> promptsCollect = DAOFactory.getInstance().getPromptCollectDAO().getAll();
+		List<PromptCollectEntity> promptsCollect = DAOFactory.getInstance().getPromptCollectDAO().getAll(true);
 		for(PromptCollectEntity promptCollect :  promptsCollect) {
 			if(promptCollect.getGrammar() != null && promptCollect.getGrammar().getId().equals(id)) {
 				String [] obj = {"PromptCollect",promptCollect.getName()};

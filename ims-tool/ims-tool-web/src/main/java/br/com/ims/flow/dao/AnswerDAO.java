@@ -10,6 +10,7 @@ import br.com.ims.flow.model.AnswerEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	private static AnswerDAO instance = null;
 	private DbConnection db =  null;

@@ -8,6 +8,7 @@ import java.util.List;
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.model.GrammarEntity;
 
+@SuppressWarnings("serial")
 public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 	private DbConnection db = null;
 	private static GrammarDAO instance = null;

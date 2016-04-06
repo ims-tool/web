@@ -12,6 +12,7 @@ import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	private static AnnounceDAO instance = null;
 	private DbConnection db =  null;

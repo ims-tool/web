@@ -12,6 +12,7 @@ import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 	private DbConnection db =  null;
 	private static NoMatchInputDAO instance = null;

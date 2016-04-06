@@ -36,7 +36,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 
-		/*List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll();
+		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll(true);
 		for(FormEntity form :  forms) {
 			
 			if(form.getVersionId() != null && form.getVersionId().getId().equals(id)) {
@@ -63,7 +63,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 			}
 			
 		}
-		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll();
+		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll(true);
 		for(PromptEntity prompt :  prompts) {
 			
 			if(prompt.getVersionId() != null && prompt.getVersionId().getId().equals(id)) {
@@ -80,7 +80,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 				
 			}
 			
-		}*/
+		}
 		
 		return false;
 	}
@@ -101,7 +101,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 	public List<String[]> getUsed(String id) {
 		// TODO Auto-generated method stub
 		List<String []> result = new ArrayList<String[]>();
-		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll();
+		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll(true);
 		for(FormEntity form :  forms) {
 			
 			if(form.getVersionId() != null && form.getVersionId().getId().equals(id)) {
@@ -131,7 +131,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 			}
 			
 		}
-		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll();
+		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll(true);
 		for(PromptEntity prompt :  prompts) {
 			
 			if(prompt.getVersionId() != null && prompt.getVersionId().getId().equals(id)) {

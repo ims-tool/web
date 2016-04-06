@@ -9,6 +9,7 @@ import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.VersionEntity;
 
+@SuppressWarnings("serial")
 public class VersionDAO extends AbstractDAO<VersionEntity> {
 	private static VersionDAO instance = null;
 	private static DbConnection db = null;

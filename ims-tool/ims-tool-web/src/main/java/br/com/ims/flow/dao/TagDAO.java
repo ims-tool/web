@@ -9,6 +9,7 @@ import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class TagDAO extends AbstractDAO<TagEntity>{
 	private DbConnection db =  null;
 	private static TagDAO instance = null;

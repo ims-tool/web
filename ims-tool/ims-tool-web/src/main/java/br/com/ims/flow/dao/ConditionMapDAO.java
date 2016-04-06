@@ -8,6 +8,7 @@ import java.util.List;
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.model.ConditionMapEntity;
 
+@SuppressWarnings("serial")
 public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 	private DbConnection db =  null;
 	private static ConditionMapDAO instance = null;

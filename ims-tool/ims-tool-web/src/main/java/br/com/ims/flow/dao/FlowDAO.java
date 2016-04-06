@@ -10,6 +10,7 @@ import br.com.ims.flow.model.FlowEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class FlowDAO extends AbstractDAO<FlowEntity>{
 	private static FlowDAO instance = null;
 	private DbConnection db =  null;
