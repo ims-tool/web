@@ -13,7 +13,7 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 	private DbConnection db = null;
 	private static GrammarDAO instance = null;
 	private GrammarDAO() {
-		db = new DbConnection(""); 			
+		db = new DbConnection("GrammarDAO"); 			
 	}	
 	public static GrammarDAO getInstance() {
 		if(instance == null) {

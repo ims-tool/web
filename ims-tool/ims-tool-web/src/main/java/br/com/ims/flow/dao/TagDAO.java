@@ -14,7 +14,7 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 	private DbConnection db =  null;
 	private static TagDAO instance = null;
 	private TagDAO() {
-		db = new DbConnection(""); 			
+		db = new DbConnection("TagDAO"); 			
 	}
 	
 	public static TagDAO getInstance() {

@@ -18,7 +18,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 	private static OperationDAO instance = null;
 	private DbConnection db =  null;
 	private OperationDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("OperationDAO");
 	}
 	
 	public static OperationDAO getInstance() {

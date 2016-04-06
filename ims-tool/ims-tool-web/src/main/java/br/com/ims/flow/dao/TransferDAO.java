@@ -19,7 +19,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 	private static TransferDAO instance = null;
 	private DbConnection db =  null;
 	private TransferDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("TransferDAO");
 	}
 	
 	public static TransferDAO getInstance() {

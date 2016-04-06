@@ -20,7 +20,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	private static MenuDAO instance = null;
 	private DbConnection db =  null;
 	private MenuDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("MenuDAO");
 	}
 	
 	public static MenuDAO getInstance() {

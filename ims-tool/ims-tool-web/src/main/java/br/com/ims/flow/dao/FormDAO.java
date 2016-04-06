@@ -34,7 +34,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	
 	private FormDAO() {
 		super();
-		db = new DbConnection("");
+		db = new DbConnection("FlowDAO");
 	}
 	
 	public static FormDAO getInstance() {

@@ -15,7 +15,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 	private static DisconnectDAO instance = null;
 	private DbConnection db =  null;
 	private DisconnectDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("DisconnectDAO");
 	}
 	
 	public static DisconnectDAO getInstance() {

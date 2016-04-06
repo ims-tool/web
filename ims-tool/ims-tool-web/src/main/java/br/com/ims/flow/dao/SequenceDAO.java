@@ -11,7 +11,7 @@ public class SequenceDAO implements Serializable{
 	private static SequenceDAO instance = null;
 	private DbConnection db =  null;
 	private SequenceDAO() {
-		db =  new DbConnection("");		
+		db =  new DbConnection("SequenceDAO");		
 	}
 	
 	public static SequenceDAO getInstance() {

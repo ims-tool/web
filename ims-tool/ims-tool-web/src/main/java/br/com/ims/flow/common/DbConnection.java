@@ -24,7 +24,7 @@ public class DbConnection{
 	public DbConnection(String database) {
 		
 		try {
-			System.out.println("Constructing");
+			System.out.println("Constructing:"+database);
 			ctx = new InitialContext();
 			ds = (DataSource)ctx.lookup("java:/comp/env/jdbc/flow");
 			conn = ds.getConnection();

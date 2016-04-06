@@ -17,7 +17,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	private static AnnounceDAO instance = null;
 	private DbConnection db =  null;
 	private AnnounceDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("AnnounceDAO");
 	}
 	
 	public static AnnounceDAO getInstance() {

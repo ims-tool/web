@@ -19,7 +19,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	private DbConnection db =  null;
 	private static ConditionDAO instance = null;
 	private ConditionDAO() {
-		db =  new DbConnection(""); 			
+		db =  new DbConnection("ConditionDAO"); 			
 	}
 	
 	public static ConditionDAO getInstance() {

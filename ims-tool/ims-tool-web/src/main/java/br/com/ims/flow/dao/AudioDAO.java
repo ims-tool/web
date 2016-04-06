@@ -13,7 +13,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	private static AudioDAO instance = null;
 	private DbConnection db =  null;
 	private AudioDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("AudioDAO");
 	}
 	
 	public static AudioDAO getInstance() {

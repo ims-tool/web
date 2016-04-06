@@ -13,7 +13,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 	private DbConnection db =  null;
 	private static ConditionMapDAO instance = null;
 	private ConditionMapDAO() {
-		db = new DbConnection(""); 			
+		db = new DbConnection("ConditionMapDAO"); 			
 	}
 	
 	public static ConditionMapDAO getInstance() {

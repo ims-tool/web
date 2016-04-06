@@ -15,7 +15,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 	private static FlowDAO instance = null;
 	private DbConnection db =  null;
 	private FlowDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("FlowDAO");
 	}
 	
 	public static FlowDAO getInstance() {

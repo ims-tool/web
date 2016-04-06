@@ -18,7 +18,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	private static DecisionDAO instance = null;
 	private DbConnection db =  null;
 	private DecisionDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("DecisionDAO");
 	}
 	
 	public static DecisionDAO getInstance() {

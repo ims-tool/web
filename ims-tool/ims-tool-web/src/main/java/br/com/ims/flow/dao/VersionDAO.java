@@ -14,7 +14,7 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 	private static VersionDAO instance = null;
 	private static DbConnection db = null;
 	private VersionDAO() {
-		db = new DbConnection("");			
+		db = new DbConnection("TransferDAO");			
 	}
 	
 	public static VersionDAO getInstance() {

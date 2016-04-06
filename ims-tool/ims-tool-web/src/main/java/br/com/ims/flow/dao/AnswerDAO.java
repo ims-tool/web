@@ -15,7 +15,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	private static AnswerDAO instance = null;
 	private DbConnection db =  null;
 	private AnswerDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("AnswerDAO");
 	}
 	
 	public static AnswerDAO getInstance() {

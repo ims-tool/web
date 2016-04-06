@@ -17,7 +17,7 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 	private DbConnection db =  null;
 	private static NoMatchInputDAO instance = null;
 	private NoMatchInputDAO() {
-		db =  new DbConnection(""); 			
+		db =  new DbConnection("NoMatchInputDAO"); 			
 	}
 	
 	public static NoMatchInputDAO getInstance() {

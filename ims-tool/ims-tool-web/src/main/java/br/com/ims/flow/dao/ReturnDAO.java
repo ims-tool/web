@@ -15,7 +15,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 	private static ReturnDAO instance = null;
 	private DbConnection db =  null;
 	private ReturnDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("ReturnDAO");
 	}
 	
 	public static ReturnDAO getInstance() {

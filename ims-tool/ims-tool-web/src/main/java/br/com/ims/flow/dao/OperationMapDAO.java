@@ -13,7 +13,7 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 	private DbConnection db =  null;
 	private static OperationMapDAO instance = null;
 	private OperationMapDAO() {
-		db =  new DbConnection(""); 			
+		db =  new DbConnection("OperationMapDAO"); 			
 	}
 	
 	public static OperationMapDAO getInstance() {

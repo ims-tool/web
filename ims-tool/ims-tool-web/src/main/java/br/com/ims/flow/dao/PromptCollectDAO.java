@@ -18,7 +18,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	private static PromptCollectDAO instance = null;
 	private DbConnection db =  null;
 	private PromptCollectDAO() {
-		db =  new DbConnection("");
+		db =  new DbConnection("PromptCollectDAO");
 	}
 	
 	public static PromptCollectDAO getInstance() {
