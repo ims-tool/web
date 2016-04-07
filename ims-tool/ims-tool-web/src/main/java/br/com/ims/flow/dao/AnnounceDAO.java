@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AnnounceEntity;
@@ -14,6 +16,7 @@ import br.com.ims.flow.model.TagTypeEntity;
 
 @SuppressWarnings("serial")
 public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
+	public static Logger log = Logger.getLogger(AnnounceDAO.class);
 	private static AnnounceDAO instance = null;
 	private DbConnection db =  null;
 	private AnnounceDAO() {
@@ -28,7 +31,8 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	}
 	
 	public List<AnnounceEntity> getByFilter(String where) {
-		
+		log.info("getByFilter("+where+")");
+		System.out.println("AnnounceDAO-getByFilter("+where+")");
 		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.flushprompt a_flushprompt,a.prompt a_prompt,a.nextform a_nextform, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
@@ -102,6 +106,8 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	}
 	
 	public boolean save(AnnounceEntity announce) {
+		log.info("save()");
+		System.out.println("AnnounceDAO-save()");
 		boolean result = true;
 		
 		String sql = "INSERT INTO flow.announce (id,name,description,flushprompt,prompt,nextform,tag,versionid) "+
@@ -114,6 +120,8 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 
 	@Override
 	public boolean update(AnnounceEntity announce) {
+		log.info("update()");
+		System.out.println("AnnounceDAO-update()");
 		boolean result = true;
 		String sql = "UPDATE flow.announce SET name='"+announce.getName()+"',description='"+announce.getDescription()+"',"
 				   + "flushprompt='"+announce.getFlushprompt()+"',prompt='"+announce.getPrompt().getId()+"',"
@@ -129,6 +137,8 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	@Override
 	public boolean delete(AnnounceEntity announce) {
 		boolean result = true;
+		log.info("delete()");
+		System.out.println("AnnounceDAO-delete()");
 		String sql = "DELETE FROM flow.announce WHERE id = '"+announce.getId()+"' ";
 		             
 		result = db.ExecuteSql(sql);

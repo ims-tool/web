@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.GrammarEntity;
@@ -15,6 +17,7 @@ import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
+	public static Logger log = Logger.getLogger(PromptCollectDAO.class);
 	private static PromptCollectDAO instance = null;
 	private DbConnection db =  null;
 	private PromptCollectDAO() {
@@ -32,6 +35,9 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	}
 	
 	public List<PromptCollectEntity> getByFilter(String where,boolean lazy) {
+		log.info("getByFilter("+where+","+lazy+")");
+		System.out.println("PromptCollectDAO-getByFilter("+where+","+lazy+")");
+		
 		String sql = "SELECT pc.id pc_id,pc.name pc_name,pc.description pc_description,pc.flushprompt pc_flushprompt,pc.prompt pc_prompt,"+
 				 "pc.fetchtimeout pc_fetchtimeout, pc.interdigittimeout pc_interdigittimeout, pc.terminatingcharacter pc_terminatingcharacter, "+
 				 "pc.nextform pc_nextform, pc.noinput_nextform pc_noinput_nextform,pc.nomatch_nextform pc_nomatch_nextform, "+
