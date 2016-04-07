@@ -10,10 +10,10 @@ import br.com.ims.flow.model.GrammarEntity;
 
 @SuppressWarnings("serial")
 public class GrammarDAO extends AbstractDAO<GrammarEntity> {
-	private DbConnection db = null;
+	//private DbConnection db = null;
 	private static GrammarDAO instance = null;
 	private GrammarDAO() {
-		db = new DbConnection("GrammarDAO"); 			
+		//db = new DbConnection("GrammarDAO"); 			
 	}	
 	public static GrammarDAO getInstance() {
 		if(instance == null) {
@@ -32,6 +32,7 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 		
 		List<GrammarEntity> result = new ArrayList<GrammarEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("GrammarDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -49,11 +50,7 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 			e.printStackTrace();
 		} finally {
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;		
@@ -82,7 +79,9 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 		String sql = "INSERT INTO flow.grammar (id,name,description,type,sizemax,sizemin,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getType()+"','"+entity.getSizeMax()+"','"+entity.getSizeMin()+"',"+entity.getVersionId().getId()+") ";
 		             
+		DbConnection db = new DbConnection("GrammarDAO-save");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -91,8 +90,9 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 		boolean result = true;
 		String sql = "UPDATE flow.grammar SET name='"+entity.getName()+"',description='"+entity.getDescription()+"',type='"+entity.getType()+"',sizemax='"+entity.getSizeMax()+"',sizemin='"+entity.getSizeMin()+"',versionid='"+entity.getVersionId().getId()+"' "+
 					 "WHERE id ='"+entity.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("GrammarDAO-update");            
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -101,8 +101,9 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 	public boolean delete(GrammarEntity entity) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.grammar WHERE id ='"+entity.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("GrammarDAO-delete");         
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 

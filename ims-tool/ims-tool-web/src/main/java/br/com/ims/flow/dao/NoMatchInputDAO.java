@@ -14,10 +14,10 @@ import br.com.ims.flow.model.TagTypeEntity;
 
 @SuppressWarnings("serial")
 public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private static NoMatchInputDAO instance = null;
 	private NoMatchInputDAO() {
-		db =  new DbConnection("NoMatchInputDAO"); 			
+		//db =  new DbConnection("NoMatchInputDAO"); 			
 	}
 	
 	public static NoMatchInputDAO getInstance() {
@@ -43,6 +43,7 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 		
 		List<NoMatchInputEntity> result = new ArrayList<NoMatchInputEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("NoMatchInputDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -80,11 +81,7 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 			e.printStackTrace();
 		} finally {
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -114,8 +111,9 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getType()+"','"+entity.getThreshold()+"',"
 				   + (entity.getPrompt() ==null ? "NULL" : entity.getPrompt().getId())+","+entity.getNextForm()+","
 					+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId().getId()+"') ";
-		             
+		DbConnection db = new DbConnection("NoMatchInputDAO-save");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -129,8 +127,9 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 				   + "tag="+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
 				   + "versionid='"+entity.getVersionId().getId()+"' "
 				   + "WHERE id = '"+entity.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("NoMatchInputDAO-update");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -140,8 +139,9 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 		boolean result = true;
 		
 		String sql = "DELETE FROM flow.nomatchinput WHERE id = '"+entity.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("NoMatchInputDAO-delete");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}

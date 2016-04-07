@@ -80,7 +80,7 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 		boolean result = true;
 		String sql = "INSERT INTO flow.version (id,description,system_user) VALUES "+
 	                 "('"+entity.getId()+"','"+entity.getDescription()+"','"+entity.getSystem_user()+"') ";
-		DbConnection db = new DbConnection("AnnounceDAO-save");
+		DbConnection db = new DbConnection("VersionDAO-save");
 		result = db.ExecuteSql(sql);
 		db.finalize();
 		return result;

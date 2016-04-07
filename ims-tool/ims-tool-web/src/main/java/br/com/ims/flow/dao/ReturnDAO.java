@@ -13,9 +13,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 	private static ReturnDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private ReturnDAO() {
-		db =  new DbConnection("ReturnDAO");
+		//db =  new DbConnection("ReturnDAO");
 	}
 	
 	public static ReturnDAO getInstance() {
@@ -42,6 +42,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 		
 		List<ReturnEntity> result = new ArrayList<ReturnEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("ReturnDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -72,11 +73,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 			e.printStackTrace();
 		} finally {
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -101,7 +98,9 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 					 "VALUES ('"+_return.getId()+"','"+_return.getName()+"','"+_return.getDescription()+"',"
 					+(_return.getTag() == null ? "NULL" : _return.getTag().getId())+",'"+_return.getVersionId().getId()+"') ";
 		             
+		DbConnection db = new DbConnection("ReturnDAO-save");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -111,8 +110,9 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 		String sql = "UPDATE flow.return SET name='"+_return.getName()+"',description='"+_return.getDescription()+"',"
 				   + "tag="+(_return.getTag() ==  null ? "NULL" :_return.getTag().getId())+",versionid='"+_return.getVersionId().getId()+"' "+
 					 "WHERE id = '"+_return.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("ReturnDAO-update");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -121,8 +121,9 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 	public boolean delete(ReturnEntity _return) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.return WHERE id = '"+_return.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("ReturnDAO-delete");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}

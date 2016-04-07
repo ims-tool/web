@@ -18,9 +18,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class MenuDAO extends AbstractDAO<MenuEntity>{
 	private static MenuDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private MenuDAO() {
-		db =  new DbConnection("MenuDAO");
+		//db =  new DbConnection("MenuDAO");
 	}
 	
 	public static MenuDAO getInstance() {
@@ -52,6 +52,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		}
 		List<ChoiceEntity> result = new ArrayList<ChoiceEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("MenuDAO-getChoicesByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -87,11 +88,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -126,6 +123,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	}
 	List<MenuEntity> result = new ArrayList<MenuEntity>();
 	ResultSet rs = null;
+	DbConnection db = new DbConnection("MenuDAO-getByFilter");
 	try {
 		rs = db.ExecuteQuery(sql);
 		while(rs.next()) {
@@ -210,11 +208,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		e.printStackTrace();
 	} finally {
 		
-		try {
-			if(rs != null && !rs.isClosed())
-				rs.close();
-		} 
-		catch(Exception e) {};
+		db.finalize();
 	}
 	
 	return result;
@@ -250,7 +244,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 					 (menu.getFetchTimeOut() == null || menu.getFetchTimeOut().length() == 0 ? "NULL" : menu.getFetchTimeOut())+","+
 				     (menu.getTerminatingTimeOut() == null || menu.getTerminatingTimeOut().length() == 0 ? "NULL" : menu.getFetchTimeOut() )+","+
 					 (menu.getTerminatingCharacter() ==  null || menu.getTerminatingCharacter().length() == 0? "NULL" : "'"+menu.getTerminatingCharacter()+"'")+",'"+menu.getVersionId().getId()+"') ";
-		             
+		DbConnection db = new DbConnection("MenuDAO-save");             
 		result = db.ExecuteSql(sql);
 		if(result) {
 			if(menu.getChoices() != null && menu.getChoices().size() > 0) {
@@ -272,6 +266,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			}
 						
 		}
+		db.finalize();
 		return result;
 
 	}
@@ -291,7 +286,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				+ "terminatingcharacter = "+(menu.getTerminatingCharacter() == null || menu.getTerminatingCharacter().length()==0? "NULL" :  "'"+menu.getTerminatingCharacter()+"'")+","
 				+ "versionid = "+menu.getVersionId().getId()+" "
 				+ "WHERE id = "+menu.getId();
-		             
+		DbConnection db = new DbConnection("MenuDAO-update");            
 		result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.choice WHERE menu = '"+menu.getId()+"' ";
@@ -312,6 +307,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			}
 						
 		}
+		db.finalize();
 		return result;
 		
 		
@@ -322,12 +318,14 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	public boolean delete(MenuEntity menu) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.choice WHERE menu = '"+menu.getId()+"' ";
+		DbConnection db = new DbConnection("MenuDAO-delete");
 		result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.menu WHERE id = '"+menu.getId()+"' ";
 		             
 			result = db.ExecuteSql(sql);
 		}
+		db.finalize();
 		return result;
 		
 	}

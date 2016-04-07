@@ -11,10 +11,10 @@ import br.com.ims.flow.model.TagTypeEntity;
 
 @SuppressWarnings("serial")
 public class TagDAO extends AbstractDAO<TagEntity>{
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private static TagDAO instance = null;
 	private TagDAO() {
-		db = new DbConnection("TagDAO"); 			
+		//db = new DbConnection("TagDAO"); 			
 	}
 	
 	public static TagDAO getInstance() {
@@ -37,6 +37,7 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 		
 		List<TagEntity> result = new ArrayList<TagEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("TagDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -57,11 +58,7 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 			e.printStackTrace();
 		} finally {
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -82,8 +79,10 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 		String sql = "INSERT INTO flow.tag (id,tagtypeid,description,versionid) "+
 				 "VALUES ('"+tag.getId()+"','"+tag.getType().getId()+"','"+tag.getDescription()+"',"+tag.getVersionId().getId()+") ";
 	             
-	
-		return db.ExecuteSql(sql);
+		DbConnection db = new DbConnection("TagDAO-save");
+		boolean result = db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 		
 	}
 
@@ -94,8 +93,10 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 					 "WHERE id '"+entity.getId()+"' ";
 
 	             
-	
-		return db.ExecuteSql(sql);
+		DbConnection db = new DbConnection("TagDAO-update");
+		boolean result = db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 	}
 
 	@Override
@@ -104,8 +105,10 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 		String sql = "DELETE FROM flow.tag  WHERE id '"+entity.getId()+"' ";
 
             
-
-	return db.ExecuteSql(sql);
+		DbConnection db = new DbConnection("TagDAO-delete");
+		boolean result = db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 		
 	}
 

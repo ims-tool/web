@@ -9,9 +9,9 @@ import br.com.ims.flow.common.DbConnection;
 @SuppressWarnings("serial")
 public class SequenceDAO implements Serializable{
 	private static SequenceDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private SequenceDAO() {
-		db =  new DbConnection("SequenceDAO");		
+		//db =  new DbConnection("SequenceDAO");		
 	}
 	
 	public static SequenceDAO getInstance() {
@@ -24,6 +24,7 @@ public class SequenceDAO implements Serializable{
 	public String getNextVal(String sequenceName) {
 		ResultSet rs = null;
 		String result = "";
+		DbConnection db = new DbConnection("SequenceDAO-getNextVal");
 		try {
 			
 			rs = db.ExecuteQuery("select nextval('"+sequenceName+"')");
@@ -35,11 +36,7 @@ public class SequenceDAO implements Serializable{
 			e.printStackTrace();
 		} finally {
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 			
 		}
 		return result;

@@ -16,9 +16,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class OperationDAO extends AbstractDAO<OperationEntity>{
 	private static OperationDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private OperationDAO() {
-		db =  new DbConnection("OperationDAO");
+		//db =  new DbConnection("OperationDAO");
 	}
 	
 	public static OperationDAO getInstance() {
@@ -33,6 +33,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
                 "WHERE op.operationgroupid ='"+operationGroupId+"' ";
 		List<OperationParameterEntity> result = new ArrayList<OperationParameterEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("OperationDAO-getOperationParameters");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -47,11 +48,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -65,6 +62,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 	                 "ORDER BY og.ordernum ";
 		List<OperationGroupEntity> result = new ArrayList<OperationGroupEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("OperationDAO-getOperationGroups");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -91,11 +89,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -117,6 +111,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		}
 		List<OperationEntity> result = new ArrayList<OperationEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("OperationDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -153,11 +148,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 			e.printStackTrace();
 		} finally {
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -184,44 +175,49 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					 		+ entity.getNextForm()+","
 					 		+entity.getVersionId().getId()+")";
 				    
-		result = db.ExecuteSql(sql);
-		if(result) {
-			for(OperationGroupEntity og : entity.getListOperationGroup()) {
-				
-				
-				sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
-					   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId().getId()+"')";
-					   
-					   
-				result = result & db.ExecuteSql(sql);
-				if(!result) {
-					//rollback
-					sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
-					db.ExecuteSql(sql);
-					sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
-					db.ExecuteSql(sql);
-					return result;
-				} else {
-					for(OperationParameterEntity op : og.getListOperationParameters()) {
-						sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
-								   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId().getId()+"')";
-						result = result & db.ExecuteSql(sql);
-						if(!result) {
-							//rollback
-							sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
-							db.ExecuteSql(sql);
-							sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
-							db.ExecuteSql(sql);
-							sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
-							db.ExecuteSql(sql);
-							return result;
+		DbConnection db = new DbConnection("OperationDAO-save");
+		try{
+			result = db.ExecuteSql(sql);
+			if(result) {
+				for(OperationGroupEntity og : entity.getListOperationGroup()) {
+					
+					
+					sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
+						   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId().getId()+"')";
+						   
+						   
+					result = result & db.ExecuteSql(sql);
+					if(!result) {
+						//rollback
+						sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
+						db.ExecuteSql(sql);
+						sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
+						db.ExecuteSql(sql);
+						return result;
+					} else {
+						for(OperationParameterEntity op : og.getListOperationParameters()) {
+							sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
+									   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId().getId()+"')";
+							result = result & db.ExecuteSql(sql);
+							if(!result) {
+								//rollback
+								sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
+								db.ExecuteSql(sql);
+								sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
+								db.ExecuteSql(sql);
+								sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
+								db.ExecuteSql(sql);
+								return result;
+							}
 						}
-					}
-					
-					
-				}
-			}
 						
+						
+					}
+				}
+							
+			}
+		} finally {
+			db.finalize();
 		}
 		return result;
 
@@ -234,46 +230,50 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+",nextformid='"+entity.getNextForm()+"',"
 				   + "versionid  =  '"+entity.getVersionId().getId()+"' "
 				   + "WHERE id = "+entity.getId();
-		
-		result = db.ExecuteSql(sql);
-		if(result) {
-			sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
-			
+		DbConnection db = new DbConnection("OperationDAO-update");
+		try {
 			result = db.ExecuteSql(sql);
-			if(!result) {
-				return result;
-			}
-			sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";			
-			result = db.ExecuteSql(sql);
-			
-			if(!result) {
-				return result;
-			}
-			
-			for(OperationGroupEntity og : entity.getListOperationGroup()) {
+			if(result) {
+				sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
 				
-				
-				sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
-					   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId().getId()+"')";
-					   
-					   
-				result = result & db.ExecuteSql(sql);
-				if(!result) {					
+				result = db.ExecuteSql(sql);
+				if(!result) {
 					return result;
-				} else {
-					for(OperationParameterEntity op : og.getListOperationParameters()) {
-						sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
-								   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId().getId()+"')";
-						result = result & db.ExecuteSql(sql);
-						if(!result) {							
-							return result;
-						}
-					}
-					
-					
 				}
-			}
+				sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";			
+				result = db.ExecuteSql(sql);
+				
+				if(!result) {
+					return result;
+				}
+				
+				for(OperationGroupEntity og : entity.getListOperationGroup()) {
+					
+					
+					sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
+						   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId().getId()+"')";
+						   
+						   
+					result = result & db.ExecuteSql(sql);
+					if(!result) {					
+						return result;
+					} else {
+						for(OperationParameterEntity op : og.getListOperationParameters()) {
+							sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
+									   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId().getId()+"')";
+							result = result & db.ExecuteSql(sql);
+							if(!result) {							
+								return result;
+							}
+						}
 						
+						
+					}
+				}
+							
+			}
+		} finally {
+			db.finalize();
 		}
 		return result;
 		
@@ -283,15 +283,20 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 	public boolean delete(OperationEntity entity) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
-		result = db.ExecuteSql(sql);
-		if(!result)
-			return result;
-		sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
-		result = db.ExecuteSql(sql);
-		if(!result)
-			return result;
-		sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
-		result = db.ExecuteSql(sql);
+		DbConnection db = new DbConnection("OperationDAO-delete");
+		try {
+			result = db.ExecuteSql(sql);
+			if(!result)
+				return result;
+			sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
+			result = db.ExecuteSql(sql);
+			if(!result)
+				return result;
+			sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
+			result = db.ExecuteSql(sql);
+		} finally {
+			db.finalize();
+		}
 		return result;
 		
 		

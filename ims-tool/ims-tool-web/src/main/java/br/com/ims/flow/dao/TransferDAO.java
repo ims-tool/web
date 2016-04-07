@@ -17,9 +17,9 @@ import br.com.ims.flow.model.TransferRuleEntity;
 @SuppressWarnings("serial")
 public class TransferDAO extends AbstractDAO<TransferEntity>{
 	private static TransferDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private TransferDAO() {
-		db =  new DbConnection("TransferDAO");
+		//db =  new DbConnection("TransferDAO");
 	}
 	
 	public static TransferDAO getInstance() {
@@ -39,6 +39,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 	                 "ORDER BY tr.ordernum ";
 		List<TransferRuleEntity> result = new ArrayList<TransferRuleEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("TransferDAO-getTransferRules");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -78,11 +79,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -104,6 +101,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		}
 		List<TransferEntity> result = new ArrayList<TransferEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("TransferDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -138,11 +136,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 			e.printStackTrace();
 		} finally {
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -166,7 +160,8 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		String sql = "INSERT INTO flow.transfer (id,name,description,tag,versionid) "+
 					 "VALUES ('"+transfer.getId()+"','"+transfer.getName()+"','"+transfer.getDescription()+"',"+
 					 (transfer.getTag() ==  null ? "NULL" : transfer.getTag().getId())+",'"+transfer.getVersionId().getId()+"') ";
-		             
+
+		DbConnection db = new DbConnection("TransferDAO-save");	
 		result = db.ExecuteSql(sql);
 		if(result) {
 			for(TransferRuleEntity rule : transfer.getTransferRules()) {
@@ -189,6 +184,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 			}
 						
 		}
+		db.finalize();
 		return result;
 
 	}
@@ -201,6 +197,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 				+ "versionid = "+transfer.getVersionId().getId()+" "
 				+ "WHERE id = "+transfer.getId();
 		             
+		DbConnection db = new DbConnection("TransferDAO-update");
 		result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.transferrule WHERE transferid = '"+transfer.getId()+"' ";
@@ -222,6 +219,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 			}
 						
 		}
+		db.finalize();
 		return result;
 		
 		
@@ -231,12 +229,14 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 	public boolean delete(TransferEntity transfer) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.transferrule WHERE transferid = '"+transfer.getId()+"' ";
+		DbConnection db = new DbConnection("TransferDAO-delete");
 		result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.transfer WHERE id = '"+transfer.getId()+"' ";
 		             
 			result = db.ExecuteSql(sql);
 		}
+		db.finalize();
 		return result;
 		
 	}

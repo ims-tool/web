@@ -10,10 +10,10 @@ import br.com.ims.flow.model.OperationMapEntity;
 
 @SuppressWarnings("serial")
 public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private static OperationMapDAO instance = null;
 	private OperationMapDAO() {
-		db =  new DbConnection("OperationMapDAO"); 			
+		//db =  new DbConnection("OperationMapDAO"); 			
 	}
 	
 	public static OperationMapDAO getInstance() {
@@ -36,6 +36,7 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 	}
 	List<OperationMapEntity> result = new ArrayList<OperationMapEntity>();
 	ResultSet rs = null;
+	DbConnection db = new DbConnection("OperationMapDAO-getByFilter");
 	try {
 		rs = db.ExecuteQuery(sql);
 		while(rs.next()) {
@@ -55,11 +56,7 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 		e.printStackTrace();
 	} finally {
 		
-		try {
-			if(rs != null && !rs.isClosed())
-				rs.close();
-		} 
-		catch(Exception e) {};
+		db.finalize();
 	}
 	
 	return result;
@@ -96,7 +93,11 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 	public boolean save(OperationMapEntity entity) {
 		String sql = "INSERT INTO flow.operationmap (id,name,description,methodreference,log_active,versionid) "
 			    	+ "VALUES ("+entity.getId()+",'"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getMethodReference()+"','"+entity.getLogActive()+"','"+entity.getVersionId().getId()+"') ";
-		return db.ExecuteSql(sql);
+		boolean result = true;
+		DbConnection db = new DbConnection("OperationMapDAO-save");
+		result = db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 	}
 
 	@Override
@@ -105,7 +106,11 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 		String sql = "UPDATE flow.operationmap SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',methodreference='"+entity.getMethodReference()+"',log_active='"+entity.getLogActive()+"',versionid='"+entity.getVersionId().getId()+"' "
 			    	+ "WHERE id = '"+entity.getId()+"'  ";
 	
-		return db.ExecuteSql(sql);
+		boolean result = true;
+		DbConnection db = new DbConnection("OperationMapDAO-update");
+		result = db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 	}
 
 	@Override
@@ -113,7 +118,11 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 		// TODO Auto-generated method stub
 		String sql = "DELETE FROM flow.operationmap WHERE id = '"+entity.getId()+"'  ";
 		// TODO Auto-generated method stub
-		return db.ExecuteSql(sql);
+		boolean result = true;
+		DbConnection db = new DbConnection("OperationMapDAO-delete");
+		result = db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 		
 	}
 
