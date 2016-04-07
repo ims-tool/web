@@ -16,10 +16,10 @@ import br.com.ims.flow.model.TagTypeEntity;
 
 @SuppressWarnings("serial")
 public class ConditionDAO extends AbstractDAO<ConditionEntity> {
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private static ConditionDAO instance = null;
 	private ConditionDAO() {
-		db =  new DbConnection("ConditionDAO"); 			
+		//db =  new DbConnection("ConditionDAO"); 			
 	}
 	
 	public static ConditionDAO getInstance() {
@@ -35,6 +35,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
                "WHERE cp.conditiongroupid ='"+conditionGroupId+"' ";
 		List<ConditionParameterEntity> result = new ArrayList<ConditionParameterEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("ConditionDAO-getConditionParameters");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -49,11 +50,12 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;
@@ -74,6 +76,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
                     + "WHERE cv.conditiongroupid ='"+conditionGroupId+"' ";
 		List<ConditionValueEntity> result = new ArrayList<ConditionValueEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("ConditionDAO-getConditionValues");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -128,11 +131,13 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
+			db.finalize();
+			/*
 			try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;
@@ -147,6 +152,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
                 "ORDER BY cg.ordernum ";
 		List<ConditionGroupEntity> result = new ArrayList<ConditionGroupEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("ConditionDAO-getConditionGroups");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -176,11 +182,12 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;			
@@ -204,6 +211,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		}
 		List<ConditionEntity> result = new ArrayList<ConditionEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("ConditionDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -241,12 +249,12 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			
-			try {
+			db.finalize();
+		/*	try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;
@@ -283,37 +291,129 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"',"
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
 					 		+entity.getVersionId().getId()+")";
-				    
-		result = db.ExecuteSql(sql);
-		if(result) {
-			for(ConditionGroupEntity cg : entity.getListConditionGroup()) {
+		DbConnection db = new DbConnection("ConditionDAO-save");
+		try {
+			result = db.ExecuteSql(sql);
+			if(result) {
+				for(ConditionGroupEntity cg : entity.getListConditionGroup()) {
+					
+					
+					sql = "INSERT INTO flow.conditiongroup (id,conditionid,ordernum,conditionmapid,description, versionid) "+
+						   "VALUES ('"+cg.getId()+"','"+entity.getId()+"','"+cg.getOrderNum()+"','"+cg.getConditionMap().getId()+"','"+cg.getDescription()+"','"+entity.getVersionId().getId()+"')";
+						   
+						   
+					result = result & db.ExecuteSql(sql);
+					if(!result) {
+						//rollback
+						sql = "DELETE FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' ";
+						db.ExecuteSql(sql);
+						sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
+						db.ExecuteSql(sql);
+						return result;
+					} else {
+						for(ConditionParameterEntity cp : cg.getListConditionParameters()) {
+							sql = "INSERT INTO flow.conditionparameters (id,conditiongroupid,paramname,paramvalue,versionid) "+
+									   "VALUES ('"+cp.getId()+"','"+cg.getId()+"','"+cp.getParamName()+"','"+cp.getParamValue()+"','"+entity.getVersionId().getId()+"')";
+							result = result & db.ExecuteSql(sql);
+							if(!result) {
+								//rollback
+								sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
+								db.ExecuteSql(sql);
+								sql = "DELETE FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' ";
+								db.ExecuteSql(sql);
+								sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
+								db.ExecuteSql(sql);
+								return result;
+							}
+						}
+						for(ConditionValueEntity cv : cg.getListConditionValues()) {
+							sql = "INSERT INTO flow.conditionvalue (id,conditiongroupid,ordernum,operation,"
+									+ "value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,tagtrue,tagfalse,versionid) "
+									+ "VALUES ('"+cv.getId()+"','"+cg.getId()+"','"+cv.getOrderNum()+"','"+cv.getOperation()+"','"+cv.getValue1()+"',"
+									+ (cv.getValue2() == null || cv.getValue2().length() == 0? "NULL" : "'"+cv.getValue2()+"'")+","
+									+ (cv.getValue3() == null || cv.getValue3().length() == 0? "NULL" : "'"+cv.getValue3()+"'")+","
+									+ (cv.getValue4() == null || cv.getValue4().length() == 0? "NULL" : "'"+cv.getValue4()+"'")+","
+									+ (cv.getValue5() == null || cv.getValue5().length() == 0? "NULL" : "'"+cv.getValue5()+"'")+","
+									+ (cv.getValue6() == null || cv.getValue6().length() == 0? "NULL" : "'"+cv.getValue6()+"'")+","
+									+ (cv.getValue7() == null || cv.getValue7().length() == 0? "NULL" : "'"+cv.getValue7()+"'")+","
+									+ (cv.getValue8() == null || cv.getValue8().length() == 0? "NULL" : "'"+cv.getValue8()+"'")+","
+									+ (cv.getValue9() == null || cv.getValue9().length() == 0? "NULL" : "'"+cv.getValue9()+"'")+","
+									+ (cv.getValue10() == null || cv.getValue10().length() == 0? "NULL" : "'"+cv.getValue10()+"'")+","
+									+ (cv.getTagTrue() == null ? "NULL" : cv.getTagTrue().getId())+","
+									+ (cv.getTagFalse() == null ? "NULL" : cv.getTagFalse().getId())+",'"+entity.getVersionId().getId()+"') ";
+							result = result & db.ExecuteSql(sql);
+							if(!result) {
+								//rollback
+								sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
+								db.ExecuteSql(sql);
+								sql = "DELETE FROM flow.conditionvalue WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
+								db.ExecuteSql(sql);
+								sql = "DELETE FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' ";
+								db.ExecuteSql(sql);
+								sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
+								db.ExecuteSql(sql);
+								return result;
+							}
+						}
+						
+					}
+				}
+							
+			}
+		} finally {
+			db.finalize();
+			
+		}
+		return result;
+	}
+
+	@Override
+	public boolean update(ConditionEntity entity) {
+		boolean result = true;
+		String sql = "UPDATE flow.condition SET name = '"+entity.getName()+"',description = '"+entity.getDescription()+"',"
+				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+","
+				   + "versionid  =  '"+entity.getVersionId().getId()+"' "
+				   + "WHERE id = "+entity.getId();
+		DbConnection db = new DbConnection("ConditionDAO-update");
+		try {
+			result = db.ExecuteSql(sql);
+			if(result) {
+				sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
 				
-				
-				sql = "INSERT INTO flow.conditiongroup (id,conditionid,ordernum,conditionmapid,description, versionid) "+
-					   "VALUES ('"+cg.getId()+"','"+entity.getId()+"','"+cg.getOrderNum()+"','"+cg.getConditionMap().getId()+"','"+cg.getDescription()+"','"+entity.getVersionId().getId()+"')";
-					   
-					   
-				result = result & db.ExecuteSql(sql);
+				result = db.ExecuteSql(sql);
 				if(!result) {
-					//rollback
-					sql = "DELETE FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' ";
-					db.ExecuteSql(sql);
-					sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
-					db.ExecuteSql(sql);
 					return result;
-				} else {
+				}
+				sql = "DELETE FROM flow.conditionvalue WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
+				
+				result = db.ExecuteSql(sql);
+				if(!result) {
+					return result;
+				}
+				sql = "DELETE FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' ";			
+				result = db.ExecuteSql(sql);
+				
+				if(!result) {
+					return result;
+				}
+				
+				for(ConditionGroupEntity cg : entity.getListConditionGroup()) {
+					
+					sql = "INSERT INTO flow.conditiongroup (id,conditionid,ordernum,conditionmapid,description, versionid) "+
+							   "VALUES ('"+cg.getId()+"','"+entity.getId()+"','"+cg.getOrderNum()+"','"+cg.getConditionMap().getId()+"','"+cg.getDescription()+"','"+entity.getVersionId().getId()+"')";
+							   
+							   
+					result = result & db.ExecuteSql(sql);
+					
+					if(!result) {
+						return result;
+					}
+					
 					for(ConditionParameterEntity cp : cg.getListConditionParameters()) {
 						sql = "INSERT INTO flow.conditionparameters (id,conditiongroupid,paramname,paramvalue,versionid) "+
 								   "VALUES ('"+cp.getId()+"','"+cg.getId()+"','"+cp.getParamName()+"','"+cp.getParamValue()+"','"+entity.getVersionId().getId()+"')";
 						result = result & db.ExecuteSql(sql);
 						if(!result) {
-							//rollback
-							sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
-							db.ExecuteSql(sql);
-							sql = "DELETE FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' ";
-							db.ExecuteSql(sql);
-							sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
-							db.ExecuteSql(sql);
 							return result;
 						}
 					}
@@ -334,39 +434,25 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 								+ (cv.getTagFalse() == null ? "NULL" : cv.getTagFalse().getId())+",'"+entity.getVersionId().getId()+"') ";
 						result = result & db.ExecuteSql(sql);
 						if(!result) {
-							//rollback
-							sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
-							db.ExecuteSql(sql);
-							sql = "DELETE FROM flow.conditionvalue WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
-							db.ExecuteSql(sql);
-							sql = "DELETE FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' ";
-							db.ExecuteSql(sql);
-							sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
-							db.ExecuteSql(sql);
 							return result;
 						}
 					}
-					
 				}
+							
 			}
-						
+		} finally {
+			db.finalize();
 		}
 		return result;
+		
 	}
 
 	@Override
-	public boolean update(ConditionEntity entity) {
-		boolean result = true;
-		String sql = "UPDATE flow.condition SET name = '"+entity.getName()+"',description = '"+entity.getDescription()+"',"
-				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+","
-				   + "versionid  =  '"+entity.getVersionId().getId()+"' "
-				   + "WHERE id = "+entity.getId();
-		
-		result = db.ExecuteSql(sql);
-		if(result) {
-			sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
-			
-			result = db.ExecuteSql(sql);
+	public boolean delete(ConditionEntity entity) {
+		String sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
+		DbConnection db = new DbConnection("ConditionDAO-getConditionValues");
+		boolean result = db.ExecuteSql(sql);
+		try {
 			if(!result) {
 				return result;
 			}
@@ -382,76 +468,11 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 			if(!result) {
 				return result;
 			}
-			
-			for(ConditionGroupEntity cg : entity.getListConditionGroup()) {
-				
-				sql = "INSERT INTO flow.conditiongroup (id,conditionid,ordernum,conditionmapid,description, versionid) "+
-						   "VALUES ('"+cg.getId()+"','"+entity.getId()+"','"+cg.getOrderNum()+"','"+cg.getConditionMap().getId()+"','"+cg.getDescription()+"','"+entity.getVersionId().getId()+"')";
-						   
-						   
-				result = result & db.ExecuteSql(sql);
-				
-				if(!result) {
-					return result;
-				}
-				
-				for(ConditionParameterEntity cp : cg.getListConditionParameters()) {
-					sql = "INSERT INTO flow.conditionparameters (id,conditiongroupid,paramname,paramvalue,versionid) "+
-							   "VALUES ('"+cp.getId()+"','"+cg.getId()+"','"+cp.getParamName()+"','"+cp.getParamValue()+"','"+entity.getVersionId().getId()+"')";
-					result = result & db.ExecuteSql(sql);
-					if(!result) {
-						return result;
-					}
-				}
-				for(ConditionValueEntity cv : cg.getListConditionValues()) {
-					sql = "INSERT INTO flow.conditionvalue (id,conditiongroupid,ordernum,operation,"
-							+ "value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,tagtrue,tagfalse,versionid) "
-							+ "VALUES ('"+cv.getId()+"','"+cg.getId()+"','"+cv.getOrderNum()+"','"+cv.getOperation()+"','"+cv.getValue1()+"',"
-							+ (cv.getValue2() == null || cv.getValue2().length() == 0? "NULL" : "'"+cv.getValue2()+"'")+","
-							+ (cv.getValue3() == null || cv.getValue3().length() == 0? "NULL" : "'"+cv.getValue3()+"'")+","
-							+ (cv.getValue4() == null || cv.getValue4().length() == 0? "NULL" : "'"+cv.getValue4()+"'")+","
-							+ (cv.getValue5() == null || cv.getValue5().length() == 0? "NULL" : "'"+cv.getValue5()+"'")+","
-							+ (cv.getValue6() == null || cv.getValue6().length() == 0? "NULL" : "'"+cv.getValue6()+"'")+","
-							+ (cv.getValue7() == null || cv.getValue7().length() == 0? "NULL" : "'"+cv.getValue7()+"'")+","
-							+ (cv.getValue8() == null || cv.getValue8().length() == 0? "NULL" : "'"+cv.getValue8()+"'")+","
-							+ (cv.getValue9() == null || cv.getValue9().length() == 0? "NULL" : "'"+cv.getValue9()+"'")+","
-							+ (cv.getValue10() == null || cv.getValue10().length() == 0? "NULL" : "'"+cv.getValue10()+"'")+","
-							+ (cv.getTagTrue() == null ? "NULL" : cv.getTagTrue().getId())+","
-							+ (cv.getTagFalse() == null ? "NULL" : cv.getTagFalse().getId())+",'"+entity.getVersionId().getId()+"') ";
-					result = result & db.ExecuteSql(sql);
-					if(!result) {
-						return result;
-					}
-				}
-			}
-						
+			sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
+			result = db.ExecuteSql(sql);
+		}finally {
+			db.finalize();
 		}
-		return result;
-		
-	}
-
-	@Override
-	public boolean delete(ConditionEntity entity) {
-		String sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
-		
-		boolean result = db.ExecuteSql(sql);
-		if(!result) {
-			return result;
-		}
-		sql = "DELETE FROM flow.conditionvalue WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
-		
-		result = db.ExecuteSql(sql);
-		if(!result) {
-			return result;
-		}
-		sql = "DELETE FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' ";			
-		result = db.ExecuteSql(sql);
-		
-		if(!result) {
-			return result;
-		}
-		sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
-		result = db.ExecuteSql(sql);
 		return result;
 		
 	}

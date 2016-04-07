@@ -12,9 +12,9 @@ import br.com.ims.flow.model.VersionEntity;
 @SuppressWarnings("serial")
 public class VersionDAO extends AbstractDAO<VersionEntity> {
 	private static VersionDAO instance = null;
-	private static DbConnection db = null;
+	//private static DbConnection db = null;
 	private VersionDAO() {
-		db = new DbConnection("TransferDAO");			
+		//db = new DbConnection("TransferDAO");			
 	}
 	
 	public static VersionDAO getInstance() {
@@ -35,6 +35,7 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 		}
 		sql = sql.replace("<WHERE>", "");
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("VersionDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -50,12 +51,13 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} catch(Exception e){
 				
-			}
+			}*/
 		}
 		
 		return result;
@@ -78,7 +80,9 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 		boolean result = true;
 		String sql = "INSERT INTO flow.version (id,description,system_user) VALUES "+
 	                 "('"+entity.getId()+"','"+entity.getDescription()+"','"+entity.getSystem_user()+"') ";
+		DbConnection db = new DbConnection("AnnounceDAO-save");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 

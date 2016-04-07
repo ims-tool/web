@@ -10,10 +10,10 @@ import br.com.ims.flow.model.ConditionMapEntity;
 
 @SuppressWarnings("serial")
 public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private static ConditionMapDAO instance = null;
 	private ConditionMapDAO() {
-		db = new DbConnection("ConditionMapDAO"); 			
+		//db = new DbConnection("ConditionMapDAO"); 			
 	}
 	
 	public static ConditionMapDAO getInstance() {
@@ -34,6 +34,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		}
 		List<ConditionMapEntity> result = new ArrayList<ConditionMapEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("ConditionMapDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -53,12 +54,8 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
+			db.finalize();
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
 		}
 		
 		return result;
@@ -95,7 +92,11 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		
 		String sql = "INSERT INTO flow.conditionmap (id,name,description,type,methodreference,log_active,versionid) "
 				    + "VALUES ("+entity.getId()+",'"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getType()+"','"+entity.getMethodReference()+"','"+entity.getLogActive()+"','"+entity.getVersionId().getId()+"') ";
-		return db.ExecuteSql(sql);
+		boolean result = true;
+		DbConnection db = new DbConnection("ConditionMapDAO-save");
+		result =  db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 		
 	}
 
@@ -104,8 +105,11 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		// TODO Auto-generated method stub
 		String sql = "UPDATE flow.conditionmap SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',type = '"+entity.getType()+"',methodreference='"+entity.getMethodReference()+"',log_active='"+entity.getLogActive()+"' ,versionid='"+entity.getVersionId().getId()+"' "
    			    	+ "WHERE id = '"+entity.getId()+"'  ";
-		
-		return db.ExecuteSql(sql);
+		boolean result = true;
+		DbConnection db = new DbConnection("ConditionMapDAO-update");
+		result = db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 		
 	}
 
@@ -113,7 +117,11 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 	public boolean delete(ConditionMapEntity entity) {
 		String sql = "DELETE FROM flow.conditionmap WHERE id = '"+entity.getId()+"'  ";
 		// TODO Auto-generated method stub
-		return db.ExecuteSql(sql);
+		boolean result = true;
+		DbConnection db = new DbConnection("ConditionMapDAO-delete");
+		result = db.ExecuteSql(sql);
+		db.finalize();
+		return result;
 	}
 
 }

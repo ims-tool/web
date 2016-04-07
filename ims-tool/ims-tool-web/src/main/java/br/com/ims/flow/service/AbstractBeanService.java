@@ -1,8 +1,11 @@
 package br.com.ims.flow.service;
 
+import java.io.Serializable;
+
 import br.com.ims.flow.bean.AbstractBean;
 
-public abstract class AbstractBeanService <T extends AbstractBean> {
+@SuppressWarnings("serial")
+public abstract class AbstractBeanService <T extends AbstractBean> implements Serializable {
 	
 	protected T bean;
 	

@@ -13,9 +13,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	private static AnswerDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private AnswerDAO() {
-		db =  new DbConnection("AnswerDAO");
+		//db =  new DbConnection("AnswerDAO");
 	}
 	
 	public static AnswerDAO getInstance() {
@@ -41,6 +41,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		sql = sql.replace("<WHERE>", "");
 		List<AnswerEntity> result = new ArrayList<AnswerEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("AnswerDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -71,12 +72,12 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;
@@ -100,7 +101,9 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 					 "VALUES ('"+answer.getId()+"','"+answer.getName()+"','"+answer.getDescription()+"','"+answer.getNextForm()+"',"
 					 		+ (answer.getTag() == null ? "NULL" : answer.getTag().getId())+",'"+answer.getVersionId().getId()+"') ";
 		             
+		DbConnection db = new DbConnection("AnswerDAO-save");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -110,8 +113,9 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		String sql = "UPDATE flow.answer SET name='"+answer.getName()+"',description='"+answer.getDescription()+"',nextform='"+answer.getNextForm()+"',"
 				   + "tag="+(answer.getTag() == null ? "NULL" : answer.getTag().getId())+",versionid='"+answer.getVersionId().getId()+"' "+
 					 "WHERE id = '"+answer.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("AnswerDAO-update");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -120,8 +124,9 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	public boolean delete(AnswerEntity answer) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.answer WHERE id = '"+answer.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("AnswerDAO-delete");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}

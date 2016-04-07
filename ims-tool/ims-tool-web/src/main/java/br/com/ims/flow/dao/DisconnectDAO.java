@@ -13,9 +13,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 	private static DisconnectDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private DisconnectDAO() {
-		db =  new DbConnection("DisconnectDAO");
+		//db =  new DbConnection("DisconnectDAO");
 	}
 	
 	public static DisconnectDAO getInstance() {
@@ -42,6 +42,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		
 		List<DisconnectEntity> result = new ArrayList<DisconnectEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("DisconnectDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -71,12 +72,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -99,8 +95,9 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		String sql = "INSERT INTO flow.disconnect (id,name,description,tag,versionid) "+
 					 "VALUES ('"+disconnect.getId()+"','"+disconnect.getName()+"','"+disconnect.getDescription()+"',"
 					 		+ (disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",'"+disconnect.getVersionId().getId()+"') ";
-		             
+		DbConnection db = new DbConnection("DecisionDAO-save");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -110,8 +107,9 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		String sql = "UPDATE flow.disconnect SET name='"+disconnect.getName()+"',description='"+disconnect.getDescription()+"',"
 				   + "tag="+(disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",versionid='"+disconnect.getVersionId().getId()+"' "+
 					 "WHERE id = '"+disconnect.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("DecisionDAO-update");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -120,8 +118,9 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 	public boolean delete(DisconnectEntity disconnect) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.disconnect WHERE id = '"+disconnect.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("DecisionDAO-delete");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}

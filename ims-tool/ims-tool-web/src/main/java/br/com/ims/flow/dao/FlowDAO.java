@@ -13,9 +13,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class FlowDAO extends AbstractDAO<FlowEntity>{
 	private static FlowDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private FlowDAO() {
-		db =  new DbConnection("FlowDAO");
+		//db =  new DbConnection("FlowDAO");
 	}
 	
 	public static FlowDAO getInstance() {
@@ -41,6 +41,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 		sql = sql.replace("<WHERE>", "");
 		List<FlowEntity> result = new ArrayList<FlowEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("FlowDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -72,12 +73,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
 		}
 		
 		return result;
@@ -101,8 +97,9 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFlowName()+"',"+
 					 entity.getNextForm()+","+
 					 (entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId().getId()+"') ";
-		             
+		DbConnection db = new DbConnection("FlowDAO-save");            
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -113,8 +110,9 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 				   + "nextform='"+entity.getNextForm()+"',"
 				   + "tag="+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",versionid='"+entity.getVersionId().getId()+"' "+
 					 "WHERE id = '"+entity.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("FlowDAO-update");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -123,8 +121,9 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 	public boolean delete(FlowEntity entity) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.flow WHERE id = '"+entity.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("FlowDAO-delete");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}

@@ -18,9 +18,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	public static Logger log = Logger.getLogger(AnnounceDAO.class);
 	private static AnnounceDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private AnnounceDAO() {
-		db =  new DbConnection("AnnounceDAO");
+		//db =  new DbConnection("AnnounceDAO");
 	}
 	
 	public static AnnounceDAO getInstance() {
@@ -48,6 +48,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		
 		List<AnnounceEntity> result = new ArrayList<AnnounceEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("AnnounceDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -82,11 +83,12 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 			e.printStackTrace();
 		} finally {
 			
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;
@@ -113,8 +115,9 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		String sql = "INSERT INTO flow.announce (id,name,description,flushprompt,prompt,nextform,tag,versionid) "+
 					 "VALUES ('"+announce.getId()+"','"+announce.getName()+"','"+announce.getDescription()+"','"+announce.getFlushprompt()+"','"+announce.getPrompt().getId()+"',"+announce.getNextForm()+","
 					+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",'"+announce.getVersionId().getId()+"') ";
-		             
+		DbConnection db = new DbConnection("AnnounceDAO-save");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -128,8 +131,9 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 				   + "nextform='"+announce.getNextForm()+"',"
 				   + "tag="+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",versionid='"+announce.getVersionId().getId()+"' "+
 					 "WHERE id = '"+announce.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("AnnounceDAO-update");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -140,8 +144,9 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		log.info("delete()");
 		System.out.println("AnnounceDAO-delete()");
 		String sql = "DELETE FROM flow.announce WHERE id = '"+announce.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("AnnounceDAO-delete");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}

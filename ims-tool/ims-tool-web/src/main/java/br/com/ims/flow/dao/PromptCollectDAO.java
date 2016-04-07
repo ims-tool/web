@@ -19,9 +19,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	public static Logger log = Logger.getLogger(PromptCollectDAO.class);
 	private static PromptCollectDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private PromptCollectDAO() {
-		db =  new DbConnection("PromptCollectDAO");
+		//db =  new DbConnection("PromptCollectDAO");
 	}
 	
 	public static PromptCollectDAO getInstance() {
@@ -31,7 +31,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		return instance;
 	}
 	public List<PromptCollectEntity> getByFilter(String where) {
-		return getByFilter(where,false);
+		return this.getByFilter(where,false);
 	}
 	
 	public List<PromptCollectEntity> getByFilter(String where,boolean lazy) {
@@ -69,6 +69,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	}
 	List<PromptCollectEntity> result = new ArrayList<PromptCollectEntity>();
 	ResultSet rs = null;
+	DbConnection db = new DbConnection("PromptCollectDAO-getByFilter");
 	try {
 		rs = db.ExecuteQuery(sql);
 		while(rs.next()) {
@@ -169,18 +170,19 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		e.printStackTrace();
 	} finally {
 		
-		try {
+		db.finalize();
+		/*try {
 			if(rs != null && !rs.isClosed())
 				rs.close();
 		} 
-		catch(Exception e) {};
+		catch(Exception e) {};*/
 	}
 	
 	return result;
 	}
 	
 	public List<PromptCollectEntity> getAll() {
-		return this.getByFilter(null);		
+		return this.getByFilter(null,false);		
 		
 	}
 	public List<PromptCollectEntity> getAll(boolean lazy) {
@@ -216,8 +218,9 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 					+ (promptCollect.getTerminatingCharacter() == null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","
 					+ promptCollect.getNextForm()+","
 					+ (promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",'"+promptCollect.getVersionId().getId()+"') ";
-		             
+		DbConnection db = new DbConnection("PromptCollectDAO-save");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -241,8 +244,9 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		             "nextform='"+promptCollect.getNextForm()+"', "+
 				     "tag="+(promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",versionid='"+promptCollect.getVersionId().getId()+"' "+
 					 "WHERE id = '"+promptCollect.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("PromptCollectDAO-update");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -251,8 +255,9 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	public boolean delete(PromptCollectEntity promptCollect) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.promptcollect WHERE id = '"+promptCollect.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("PromptCollectDAO-delete");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}

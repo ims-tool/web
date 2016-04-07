@@ -1,5 +1,6 @@
 package br.com.ims.flow.common;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +12,8 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 
-public class DbConnection{
+@SuppressWarnings("serial")
+public class DbConnection implements Serializable{
 	public static Logger log = Logger.getLogger(DbConnection.class);
 	
 	InitialContext ctx = null;

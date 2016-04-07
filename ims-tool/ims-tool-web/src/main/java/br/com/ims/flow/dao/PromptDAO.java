@@ -18,9 +18,9 @@ import br.com.ims.flow.model.PromptEntity;
 public class PromptDAO extends AbstractDAO<PromptEntity> {
 	public static Logger log = Logger.getLogger(PromptDAO.class);
 	private static PromptDAO instance = null;
-	private DbConnection db = null;
+	//private DbConnection db = null;
 	private PromptDAO() {
-		db = new DbConnection("PromptDAO"); 			
+		//db = new DbConnection("PromptDAO"); 			
 	}
 	
 	public static PromptDAO getInstance() {
@@ -40,6 +40,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	                 "ORDER BY pa.ordernum";
 		List<PromptAudioEntity> result = new ArrayList<PromptAudioEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("PromptDAO");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -75,11 +76,12 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 			log.debug(sql);
 			
 		} finally {
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 			
 		}
 		
@@ -99,6 +101,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		sql = sql.replace("<WHERE>", "");
 		List<PromptEntity> result = new ArrayList<PromptEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("PromptDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -119,11 +122,12 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 			log.error(e.getMessage(), e);
 			log.debug(sql);
 		} finally {
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;
@@ -158,7 +162,8 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		System.out.println("PromptDAO-save()");
 		String sql = "INSERT INTO flow.prompt (id,\"name\",versionid) "+
 					 "VALUES ('"+prompt.getId()+"','"+prompt.getName()+"','"+prompt.getVersionId().getId()+"') ";
-		             
+		
+		DbConnection db = new DbConnection("PromptDAO-save");
 		result = db.ExecuteSql(sql);
 		if(result) {
 			for(PromptAudioEntity promptAudio : prompt.getAudios()) {
@@ -178,6 +183,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 			}
 						
 		}
+		db.finalize();
 		return result;
 	}
 
@@ -188,6 +194,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		System.out.println("PromptDAO-update()");
 		String sql = "UPDATE flow.prompt SET \"name\"='"+entity.getName()+"',versionid = "+entity.getVersionId().getId()+" "+
 					 "WHERE id="+entity.getId()+" ";
+		DbConnection db = new DbConnection("PromptDAO-update");
 		result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.promptaudio WHERE prompt = "+entity.getId();
@@ -204,6 +211,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 			}
 						
 		}
+		db.finalize();
 		return result;
 	}
 
@@ -213,12 +221,14 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		log.info("delete()");
 		System.out.println("PromptDAO-delete()");
 		String sql = "DELETE FROM flow.promptaudio WHERE prompt = '"+entity.getId()+"'";
+		DbConnection db = new DbConnection("PromptDAO-delete");
 		boolean result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.prompt WHERE id='"+entity.getId()+"' ";
 			             
 			result = result & db.ExecuteSql(sql);
 		}
+		db.finalize();
 		return result;
 		
 	}

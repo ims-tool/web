@@ -30,11 +30,11 @@ import br.com.ims.flow.model.TransferEntity;
 public class FormDAO extends AbstractDAO<FormEntity>{
 	
 	private static FormDAO instance = null;
-	private DbConnection db = null;
+	//private DbConnection db = null;
 	
 	private FormDAO() {
 		super();
-		db = new DbConnection("FlowDAO");
+		//db = new DbConnection("FormDAO");
 	}
 	
 	public static FormDAO getInstance() {
@@ -113,6 +113,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		sql = sql.replace("<WHERE>", "");
 		List<FormEntity> result = new ArrayList<FormEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("FormDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -159,12 +160,12 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;
@@ -321,7 +322,10 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 					   + "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFormType().getId()+"','"+((AbstractEntity)entity.getFormId()).getId()+"',"
 					   + (entity.getTag() == null ? "NULL" : entity.getTag().getId())+","+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId() )+","
 					   + "'"+entity.getPositionX()+"','"+entity.getPositionY()+"','"+entity.getVersionId().getId()+"')";
+		DbConnection db = new DbConnection("FormDAO-save");
 		result = db.ExecuteSql(sql);
+		db.finalize();
+		
 		return result;
 		
 	}
@@ -336,8 +340,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 					   + "condition="+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId())+","
 					   + "versionid='"+entity.getVersionId().getId()+"' "
 					   + "WHERE id = '"+entity.getId()+"' ";
+		DbConnection db = new DbConnection("FormDAO-update");
 		result = db.ExecuteSql(sql);
-		
+		db.finalize();
 		return result;
 	}
 
@@ -348,8 +353,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		boolean result = true;
 		
 		String sql = "DELETE flow.form WHERE id ='"+entity.getId()+"' ";
+		DbConnection db = new DbConnection("FormDAO-delete");
 		result = db.ExecuteSql(sql);
-		
+		db.finalize();
 		return result;
 	}
 

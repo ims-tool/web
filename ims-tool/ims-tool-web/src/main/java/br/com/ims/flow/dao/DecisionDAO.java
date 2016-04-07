@@ -16,9 +16,9 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	private static DecisionDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private DecisionDAO() {
-		db =  new DbConnection("DecisionDAO");
+		//db =  new DbConnection("DecisionDAO");
 	}
 	
 	public static DecisionDAO getInstance() {
@@ -54,6 +54,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		}
 		List<DecisionChanceEntity> result = new ArrayList<DecisionChanceEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("DecisionDAO-getChancesByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -88,11 +89,8 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
+		
 		}
 		
 		return result;
@@ -114,6 +112,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		}
 		List<DecisionEntity> result = new ArrayList<DecisionEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("DecisionDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -148,11 +147,8 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 			e.printStackTrace();
 		} finally {
 			
-			try {
-				if(rs != null && !rs.isClosed())
-					rs.close();
-			} 
-			catch(Exception e) {};
+			db.finalize();
+			
 		}
 		
 		return result;
@@ -178,7 +174,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
 					 		+entity.getVersionId().getId()+")";
 				    
-		             
+		DbConnection db = new DbConnection("DecisionDAO-save");             
 		result = db.ExecuteSql(sql);
 		if(result) {
 			for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
@@ -198,6 +194,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 			}
 						
 		}
+		db.finalize();
 		return result;
 
 	}
@@ -209,7 +206,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 				+ "tag = "+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+", "
 				+ "versionid = "+entity.getVersionId().getVersionId()+" "
 				+ "WHERE id = "+entity.getId();
-		
+		DbConnection db = new DbConnection("DecisionDAO-update");
 		result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
@@ -228,6 +225,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 			}
 						
 		}
+		db.finalize();
 		return result;
 		
 		
@@ -237,12 +235,14 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	public boolean delete(DecisionEntity entity) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
+		DbConnection db = new DbConnection("DecisionDAO-delete");
 		result = db.ExecuteSql(sql);
 		if(result) {
 			sql = "DELETE FROM flow.decision WHERE id = '"+entity.getId()+"' ";
 		             
 			result = db.ExecuteSql(sql);
 		}
+		db.finalize();
 		return result;
 		
 	}

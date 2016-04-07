@@ -11,9 +11,9 @@ import br.com.ims.flow.model.AudioEntity;
 @SuppressWarnings("serial")
 public class AudioDAO extends AbstractDAO<AudioEntity>{
 	private static AudioDAO instance = null;
-	private DbConnection db =  null;
+	//private DbConnection db =  null;
 	private AudioDAO() {
-		db =  new DbConnection("AudioDAO");
+		//db =  new DbConnection("AudioDAO");
 	}
 	
 	public static AudioDAO getInstance() {
@@ -34,6 +34,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		
 		List<AudioEntity> result = new ArrayList<AudioEntity>();
 		ResultSet rs = null;
+		DbConnection db = new DbConnection("AudioDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
@@ -51,12 +52,12 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			
-			try {
+			db.finalize();
+			/*try {
 				if(rs != null && !rs.isClosed())
 					rs.close();
 			} 
-			catch(Exception e) {};
+			catch(Exception e) {};*/
 		}
 		
 		return result;
@@ -85,8 +86,9 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		String sql = "INSERT INTO flow.audio (id,type,name,description,path,versionid) "+
 					 "VALUES ('"+audio.getId()+"','"+audio.getType()+"','"+audio.getName()+"','"+audio.getDescription()+"','"+audio.getPath()+"',"+audio.getVersionId().getId()+") ";
 		             
-		
+		DbConnection db = new DbConnection("AudioDAO-save");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 	}
 
@@ -96,8 +98,9 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		String sql = "UPDATE flow.audio SET type='"+audio.getType()+"',name='"+audio.getName()+"',description='"+audio.getDescription()+"',path='"+audio.getPath()+"',versionid='"+audio.getVersionId().getId()+"' "+
 					 "WHERE id = '"+audio.getId()+"' ";
 		             
-		
+		DbConnection db = new DbConnection("AudioDAO-update");
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
@@ -106,8 +109,9 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	public boolean delete(AudioEntity audio) {
 		boolean result = true;
 		String sql = "DELETE FROM flow.audio WHERE id = '"+audio.getId()+"' ";
-		             
+		DbConnection db = new DbConnection("AudioDAO-delete");             
 		result = db.ExecuteSql(sql);
+		db.finalize();
 		return result;
 		
 	}
