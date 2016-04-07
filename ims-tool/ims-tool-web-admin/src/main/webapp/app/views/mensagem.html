@@ -15,19 +15,19 @@
 						<div class="col-xs-6 col-md-4"></div>
 						<div class="col-xs-6 col-md-4">
 							<button class="btn btn-info" type="button" ng-click="showForm()"
-								ng-disabled="showButtonUser">
+								ng-disabled="showNewButton">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">
 									Novo</span>
 							</button>
 							<button class="btn btn-danger" type="button"
-								ng-click="cancelForm()" ng-hide="showUser">
+								ng-click="cancelForm()" ng-hide="showCancelButton">
 								<span class="glyphicon glyphicon-remove" aria-hidden="true">
 									Cancelar</span>
 							</button>
 						</div>
 					</div>
 
-					<div ng-hide="showUser" id="formNewUser">
+					<div ng-hide="showMessage" id="formMesage">
 
 						<div class="form-group">
 							<div class="col-md-4">
@@ -126,38 +126,28 @@
 								<th>DDD not in</th>
 								<th>Local</th>
 								<th>Ordem</th>
+								<th>Comando</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="message in messages | orderBy:'id'">
 								<td>{{message.id}}</td>
-								<td><a href="#" editable-text="message.name"
-									onaftersave="changeMessage(message)">{{ message.name ||
-										"empty"}}</a></td>
-								<td><a href="#" editable-text="message.description"
-									onaftersave="changeMessage(message)">{{ message.description
-										|| "empty"}}</a></td>
-								<td><a href="#" editable-text="message.flag"
-									onaftersave="changeMessage(message)">{{ message.flag ||
-										"empty"}}</a></td>
-								<td><a href="#" editable-text="message.datai"
-									onaftersave="changeMessage(message)">{{ message.datai ||
-										"empty"}}</a></td>
-								<td><a href="#" editable-text="message.dataf"
-									onaftersave="changeMessage(message)">{{ message.dataf ||
-										"empty"}}</a></td>
-								<td><a href="#" editable-text="message.ddd_in"
-									onaftersave="changeMessage(message)">{{ message.ddd_in ||
-										"empty"}}</a></td>
-								<td><a href="#" editable-text="message.ddd_not_in"
-									onaftersave="changeMessage(message)">{{ message.ddd_not_in
-										|| "empty"}}</a></td>
-								<td><a href="#" editable-text="message.spot"
-									onaftersave="changeMessage(message)">{{ message.spot ||
-										"empty"}}</a></td>
-								<td><a href="#" editable-text="message.msg_order"
-									onaftersave="changeMessage(message)">{{ message.msg_order
-										|| "empty"}}</a></td>
+								<td>{{ message.name ||"empty"}}</td>
+								<td>{{ message.description || "empty"}}</td>
+								<td>{{ message.flag || "empty"}}</td>
+								<td>{{ message.datai || "empty"}}</td>
+								<td>{{ message.dataf || "empty"}}</td>
+								<td>{{ message.ddd_in || "empty"}}</td>
+								<td>{{ message.ddd_not_in || "empty"}}</td>
+								<td>{{ message.spot || "empty"}}</td>
+								<td>{{ message.msg_order || "empty"}}</td>
+								<td> <button type="button" ng-click="editMessage($index)"
+											class="btn btn-info" data-toggle="tooltip"
+											data-placement="left" title="Editar mensagem">
+											<span class="glyphicon glyphicon-wrench" aria-hidden="true">
+											</span>
+										</button>
+								</td>		
 							</tr>
 						</tbody>
 					</table>
