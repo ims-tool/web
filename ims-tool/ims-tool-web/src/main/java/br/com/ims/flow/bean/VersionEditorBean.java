@@ -30,7 +30,8 @@ public class VersionEditorBean extends AbstractBean {
     	super.init();
     	this.version = new VersionEntity();
     	this.version.setId(Util.getVERSIONID());
-    	this.version.setSystem_user(System.getProperty("user.name"));
+    	//this.version.setSystem_user(System.getProperty("user.name"));
+    	this.version.setSystem_user(Util.getUserName());
     }
     
     

@@ -32,6 +32,49 @@ public class Util implements Serializable {
 		}
 		return Calendar.getInstance().getTime();
 	}
+	public static String getUserName() {
+		String result = System.getProperty("user.name");   
+		/*Class<?> c = null;
+	    Object   o = null;
+	    Method  method = null;  
+	    try{
+		    if(System.getProperty("os.name").toLowerCase().contains("windows")){
+	
+		    	c = Class.forName("com.sun.security.auth.module.NTSystem");
+		    	o = Class.forName("com.sun.security.auth.module.NTSystem").newInstance();
+	
+		    	method = c.getDeclaredMethod ("getName");
+	
+		    }
+	
+		    if(System.getProperty("os.name").toLowerCase().contains("linux")){
+	
+		    	c = Class.forName("com.sun.security.auth.module.UnixSystem");
+	
+		    	o = Class.forName("com.sun.security.auth.module.UnixSystem").newInstance();
+	
+		    	method = c.getDeclaredMethod ("getUsername");
+	
+		    }
+	
+		    if(System.getProperty("os.name").toLowerCase().contains("solaris")){
+	
+		    	c = Class.forName("com.sun.security.auth.module.SolarisSystem");
+	
+		    	o = Class.forName("com.sun.security.auth.module.SolarisSystem").newInstance();
+	
+		    	method = c.getDeclaredMethod ("getUsername");
+	
+		    }
+	
+		    if(c != null){
+		    	result = (String) method.invoke(o);
+		    }
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    }*/
+	    return result;
+	}
 	public static String dateFormat(java.util.Date date) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		return dateFormat.format(date);
