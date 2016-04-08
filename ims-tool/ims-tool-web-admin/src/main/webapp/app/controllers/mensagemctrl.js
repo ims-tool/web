@@ -37,6 +37,21 @@ app.controller(
 						$scope.showCancelButton = true;
 
 					};
+					
+					$scope.submit = function() {
+						
+				            var file = document.getElementById('upload').files[0];
+				            var reader = new FileReader();
+				            var rawData = new ArrayBuffer();            
+				            
+				            if(file != null){
+				            	console.log("Implementar um arquivo");
+				            	saveMessage($scope.message);
+				            }else{
+				            	saveMessage($scope.message);
+				            }
+
+					};
 
 
 				})
@@ -50,4 +65,16 @@ function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, p
 		contentType : "application/json",
 		dataType : 'json'
 	});
+}
+
+function saveMessage(message){
+	
+	$.ajax({
+		type : "POST",
+		data : JSON.stringify(message),
+		url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/message/update",
+		contentType : "application/json",
+		dataType : 'json'
+	});
+	
 }
