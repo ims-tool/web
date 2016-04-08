@@ -55,13 +55,19 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     	
     	
     	JSONObject jsonObj = new JSONObject(entity);
+    	Message message = new Message();
+    	message.setId(jsonObj.getInt("id"));
+    	message.setName(String.valueOf(jsonObj.getInt("id")));
+    	message.setDescription(jsonObj.getString("description"));
+    	message.setFlag(jsonObj.getString("flag"));
+    	message.setDatai(jsonObj.getString("datai"));
+    	message.setDataf(jsonObj.getString("dataf"));
+    	message.setDdd_in(jsonObj.getString("ddd_in"));
+    	message.setDdd_not_in(jsonObj.getString("ddd_not_in"));
+    	message.setSpot(jsonObj.getString("spot"));
+    	message.setMsg_order(jsonObj.getString("msg_order"));
     	
-    	ServiceHour serviceHour = new ServiceHour();
-    	serviceHour.setId((Integer) jsonObj.get("id"));
-    	serviceHour.setStarthour((String) jsonObj.get("starthour"));
-    	serviceHour.setStophour((String) jsonObj.get("stophour"));
-    	//serviceHour.setLastlogin((String) jsonObj.get("lastlogin"));
-    	ServiceHourCtrl.save(serviceHour);
+    	MessageCtrl.save(message);
     }
 
     @PUT
@@ -189,6 +195,29 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    @GET
+    @Path("/nextidMessage")
+    @Produces("application/json")
+    public String getNextidMessage() {
+    	String lista = MessageCtrl.getNexIdMessage();
+    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    	String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return json;
+        
     }
     
 }

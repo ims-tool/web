@@ -10,4 +10,13 @@ public class MessageCtrl {
 	public static List<Message> findAll(){
 		return MessageDao.findAll();
 	}
+
+	public static String getNexIdMessage() {
+		return MessageDao.getNexIdMessage();
+	}
+
+	public static void save(Message message) {
+		MessageDao.save(message);
+		
+	}
 }

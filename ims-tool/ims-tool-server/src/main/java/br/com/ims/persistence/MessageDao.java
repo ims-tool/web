@@ -1,11 +1,15 @@
 package br.com.ims.persistence;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.ParseConversionEvent;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.tags.ParamAware;
@@ -16,50 +20,14 @@ import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 import br.com.ims.tool.util.ConnectionDB;
 
-
 public class MessageDao {
-	
-private static Logger logger = Logger.getLogger(MessageDao.class);
-	
+
+	private static Logger logger = Logger.getLogger(MessageDao.class);
 
 	public static ServiceHour find(Integer id) {
-		
+
 		return null;
 	}
-
-
-	public static void save(ServiceHour entity) {
-		ServiceHour serviceHour = null;
-		ResultSet rs = null;
-		ConnectionDB conn = null;
-		PreparedStatement stm = null;
-		try {
-			conn = new ConnectionDB();
-			String query = "select id, weekday, type, changedate, starthour, stophour  from flow.Service_Hour where id="+entity.getId();
-			
-			rs = conn.ExecuteQuery(query);
-			
-			if (!rs.next()) {
-				serviceHour = new ServiceHour();
-				serviceHour.setId(rs.getInt(1));
-				serviceHour.setWeekday(rs.getInt(2));
-				serviceHour.setType(rs.getString(3));
-				serviceHour.setChangedate(rs.getDate(4));
-				serviceHour.setStarthour(rs.getString(5));
-				serviceHour.setStophour(rs.getString(6));
-				//não implementado pois não existe a necessidade de salvar um novo parametro.
-				query = "insert into flow.ServiceHour order by id";
-			}else{
-				query = "update flow.Service_Hour set stophour= '"+entity.getStophour()+"', starthour= '"+entity.getStarthour()+"', changedate = current_timestamp  where id="+entity.getId();
-				conn.ExecuteSql(query);
-			}
-		} catch (SQLException e) {
-			logger.error("Erro ao Recuperar parametros ", e);
-		} finally {
-			conn.finalize();
-		}
-	}
-
 
 	public static List<Message> findAll() {
 		List<Message> listMessage = new ArrayList<Message>();
@@ -71,9 +39,9 @@ private static Logger logger = Logger.getLogger(MessageDao.class);
 			conn = new ConnectionDB();
 			String query = "select m.id, m.name, m.description, m.flag, m.datai, m.dataf, m.ddd_in,"
 					+ " m.ddd_not_in, s.name spot, m.msg_order from flow.mensagem m, flow.spot s where m.spot = s.id ";
-			
+
 			rs = conn.ExecuteQuery(query);
-			
+
 			while (rs.next()) {
 				message = new Message();
 				message.setId(rs.getInt(1));
@@ -87,20 +55,158 @@ private static Logger logger = Logger.getLogger(MessageDao.class);
 				message.setDdd_not_in(rs.getString(8));
 				message.setSpot(rs.getString(9));
 				message.setMsg_order(rs.getString(10));
-				
+
 				listMessage.add(message);
-			
+
 			}
 		} catch (SQLException e) {
 			logger.error("Erro ao Recuperar mensagens ", e);
 		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			conn.finalize();
 		}
 		return listMessage;
 	}
 
+	public static String getNexIdMessage() {
+
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		PreparedStatement stm = null;
+		String nextIdMessage = "";
+		try {
+			conn = new ConnectionDB();
+			String query = "select max(m.id)+1 nextId from flow.mensagem m";
+
+			rs = conn.ExecuteQuery(query);
+
+			while (rs.next()) {
+				nextIdMessage = String.valueOf(rs.getInt(1));
+			}
+		} catch (SQLException e) {
+			logger.error("Erro ao recuperar next id", e);
+		} finally {
+			conn.finalize();
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return nextIdMessage;
+	}
+
+	public static void save(Message message) {
+
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		PreparedStatement stm = null;
+		Boolean isNewData = Boolean.FALSE;
+		try {
+			conn = new ConnectionDB();
+			String query = "select * from flow.mensagem m where id = " + message.getId();
+
+			rs = conn.ExecuteQuery(query);
+
+			if (rs.next()) {
+				isNewData = Boolean.TRUE;
+			}
+
+		} catch (SQLException e) {
+			logger.error("Erro ao Recuperar mensagens ", e);
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			conn.finalize();
+		}
+
+		// Nova mensagem
+		if (isNewData) {
+			
+			ResultSet rs2 = null;
+			PreparedStatement pstmt = null;
+			try {
+				conn = new ConnectionDB();
+				
+				
+				String query = "insert into flow.mensagem (id, name, description, flag, datai, dataf, ddd_in, ddd_not_in, spot, msg_order)"
+						+ " values (?,?,?,?,?,?,?,?,?,?)";
+
+				pstmt = conn.getPreparedStatement(query);
+				
+				pstmt.setInt(1,  message.getId());
+				pstmt.setString(2, message.getName());
+				pstmt.setString(3, message.getDescription());
+				pstmt.setString(4, message.getFlag());
+				pstmt.setTimestamp(4, formatDate(message.getDatai()));
+				pstmt.setTimestamp(5, formatDate(message.getDataf()));
+				pstmt.setString(6, message.getDdd_in());
+				pstmt.setString(7, message.getDdd_not_in());
+				pstmt.setInt(8,  Integer.getInteger(message.getSpot()));
+				pstmt.setString(9, message.getMsg_order());
+				
+				rs2 = conn.executeQuery(pstmt);
+
+				
+
+			} catch (SQLException e) {
+				logger.error("Erro ao Recuperar mensagens ", e);
+			} finally {
+				try {pstmt.close();} catch (SQLException e1) {}
+				try {rs2.close();} catch (SQLException e) {e.printStackTrace();}
+				conn.finalize();
+			}
+		} else {
+			ResultSet rs2 = null;
+			
+			try {
+				conn = new ConnectionDB();
+				String query = "select * from flow.mensagem m where id = " + message.getId();
+
+				rs2 = conn.ExecuteQuery(query);
 
 
-	
+				if (rs.next()) {
+					isNewData = Boolean.TRUE;
+				}
+
+			} catch (SQLException e) {
+				logger.error("Erro ao Recuperar mensagens ", e);
+			} finally {
+				try {
+					rs2.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				conn.finalize();
+			}
+		}
+
+	}
+
+	private static Timestamp formatDate(String datai) {
+		java.util.Date parse = null;
+		try{
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		    parse = dateFormat.parse(datai);
+		    
+		}catch(Exception e){//this generic but you can control another types of exception
+		 e.printStackTrace(); 
+		}
+		
+		return new Timestamp(parse.getTime());
+	}
 
 }
