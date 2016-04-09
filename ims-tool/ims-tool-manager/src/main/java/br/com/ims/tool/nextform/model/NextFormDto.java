@@ -22,6 +22,7 @@ public class NextFormDto implements Serializable {
 	private FlowDto flow;
 	private TransferDto transfer;
 	private DisconnectDto disconnect;
+	private ReturnDto return_;
 	
 	private String jsonContext;
 	
@@ -153,6 +154,14 @@ public class NextFormDto implements Serializable {
 
 	public void setNextFormDefault(long nextFormDefault) {
 		this.nextFormDefault = nextFormDefault;
+	}
+ 
+	public ReturnDto getReturn_() {
+		return return_;
+	}
+
+	public void setReturn_(ReturnDto return_) {
+		this.return_ = return_;
 	}
 
 	@Override

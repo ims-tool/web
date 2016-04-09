@@ -2,6 +2,7 @@ package br.com.ims.tool.nextform.util;
 
 public interface FormConstants {
 	
+	public static final long TYPE_ANSWER = 0L;
 	public static final long TYPE_ANNOUNCE = 1L;
 	public static final long TYPE_PROMPT_COLLECT = 2L;
 	public static final long TYPE_MENU = 3L;
@@ -11,6 +12,13 @@ public interface FormConstants {
 	public static final long TYPE_TRANSFER= 7L;
 	public static final long TYPE_DISCONNECT = 8L;
 	public static final long TYPE_FLOW_INTERNAL = 9L;
+	public static final long TYPE_NOMATCHINPUT= 12L;
+	public static final long TYPE_CHOICE = 13L;
+	public static final long TYPE_DECISIONCHANCE = 14L;
+	public static final long TYPE_RETURN = 15L;
+	public static final long TYPE_NOMATCH = 16L;
+	public static final long TYPE_NOINPUT = 17L;
+	
 	public static final long FORM_DEFAULT = 1667L;
 	
 	public static final String TYPE_TEXT = "TEXT";

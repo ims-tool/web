@@ -65,7 +65,7 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     	message.setDdd_in(jsonObj.getString("ddd_in"));
     	message.setDdd_not_in(jsonObj.getString("ddd_not_in"));
     	message.setSpot(jsonObj.getString("spot"));
-    	message.setMsg_order(jsonObj.getString("msg_order"));
+    	message.setMsg_order(String.valueOf(jsonObj.getInt("msg_order")));
     	
     	MessageCtrl.save(message);
     }

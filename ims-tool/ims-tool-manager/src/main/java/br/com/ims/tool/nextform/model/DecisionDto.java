@@ -10,7 +10,7 @@ public class DecisionDto implements Serializable {
 	private long id;
 	private String name;
 	private String description;
-	private Collection<DecisionGroupDto> listaDecisionGroup;
+	private Collection<DecisionChanceDto> listaDecisionChance;
 	
 	public long getId() {
 		return id;
@@ -30,17 +30,17 @@ public class DecisionDto implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Collection<DecisionGroupDto> getListaDecisionGroup() {
-		return listaDecisionGroup;
+	
+	public Collection<DecisionChanceDto> getListaDecisionChance() {
+		return listaDecisionChance;
 	}
-	public void setListaDecisionGroup(
-			Collection<DecisionGroupDto> listaDecisionGroup) {
-		this.listaDecisionGroup = listaDecisionGroup;
+	public void setListaDecisionChance(Collection<DecisionChanceDto> listaDecisionChance) {
+		this.listaDecisionChance = listaDecisionChance;
 	}
 	@Override
 	public String toString() {
 		return "DecisionDto [id=" + id + ", name=" + name + ", description="
-				+ description + ", listaDecisionGroup=" + listaDecisionGroup
+				+ description + ", listaDecisionGroup=" + listaDecisionChance
 				+ "]";
 	}
 	

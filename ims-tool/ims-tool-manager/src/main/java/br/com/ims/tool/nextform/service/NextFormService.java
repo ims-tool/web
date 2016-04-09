@@ -6,18 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.print.DocFlavor.READER;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import br.com.ims.tool.nextform.model.AnnounceDto;
+import br.com.ims.tool.nextform.model.AnswerDto;
 import br.com.ims.tool.nextform.model.AudioDto;
 import br.com.ims.tool.nextform.model.DecisionChanceDto;
 import br.com.ims.tool.nextform.model.DecisionDto;
-import br.com.ims.tool.nextform.model.DecisionGroupDto;
-import br.com.ims.tool.nextform.model.DecisionParametersDto;
 import br.com.ims.tool.nextform.model.DisconnectDto;
 import br.com.ims.tool.nextform.model.FlowDto;
 import br.com.ims.tool.nextform.model.MenuDto;
@@ -30,7 +27,7 @@ import br.com.ims.tool.nextform.model.PromptAudioDto;
 import br.com.ims.tool.nextform.model.PromptCollectDto;
 import br.com.ims.tool.nextform.model.PromptDto;
 import br.com.ims.tool.nextform.model.Request;
-import br.com.ims.tool.nextform.model.Response;
+import br.com.ims.tool.nextform.model.ReturnDto;
 import br.com.ims.tool.nextform.model.TransferDto;
 import br.com.ims.tool.nextform.model.TransferenciaIn;
 import br.com.ims.tool.nextform.model.TransferenciaOut;
@@ -193,7 +190,8 @@ public class NextFormService {
 				
 				transfer.setVdn(transferenciaOut.getVdn());
 				transfer.setPrompt(dao.getPromptByPromptName(transferenciaOut.getMsg(), jsonContext));
-				transfer.setUUI(UraUtils.gerarUUI(jsonContext));
+				transfer.setUUI(MethodInvocationUtils.getContextValue(jsonContext, MapValues.PARTNER));
+				//transfer.setUUI(UraUtils.gerarUUI(jsonContext));
 				nextForm.setTransfer(transfer);
 				
 				long tsId = LogUtils.getTrackServiceId();
@@ -224,6 +222,27 @@ public class NextFormService {
 				if (UraUtils.isNotNull(disconnect) && disconnect.getTag() > 0) {
 					LogUtils.createTrackTag(LogUtils.getTrackServiceId(), trackId, logId, disconnect.getTag());
 				}
+			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_ANSWER){
+				
+					AnswerDto answer = dao.getAnwserById(nextForm.getFormid(), jsonContext);
+					
+					if (UraUtils.isNotNull(answer)) {
+						if(answer.getTag() > 0) {
+							LogUtils.createTrackTag(LogUtils.getTrackServiceId(), trackId, logId, answer.getTag());
+						}
+						
+						nextForm = getNextFormByNextId(jsonContext, answer.getNextForm());
+					}					
+			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_RETURN){
+				
+				ReturnDto return_ = dao.getReturnById(nextForm.getFormid(), jsonContext);
+				
+				if (UraUtils.isNotNull(return_)) {
+					if(return_.getTag() > 0) {
+						LogUtils.createTrackTag(LogUtils.getTrackServiceId(), trackId, logId, return_.getTag());
+					}
+				}		
+				nextForm.setReturn_(return_);
 			}
 			
 		} catch (Exception e) {
@@ -295,8 +314,7 @@ public class NextFormService {
 	
 	
 	private NextFormDto processDecision(NextFormDto nextForm, long trackId, long logId) {
-		Long decisionGroupChild = null;
-		MethodInvocationVO serviceReturn = null;
+		
 		NextFormDao dao = new NextFormDao();
 
 		DecisionDto decision = null;
@@ -306,113 +324,29 @@ public class NextFormService {
 			
 		}
 		
-		for (DecisionGroupDto decisionGroup : decision.getListaDecisionGroup()) {
+		for (DecisionChanceDto decisionChance : decision.getListaDecisionChance()) {
 			
 			long trackServiceId = LogUtils.getTrackServiceId();
-			
-			if ((!UraUtils.isNotNull(decisionGroupChild)) || decisionGroupChild == decisionGroup.getId()) {
-
-				decisionGroupChild = null;
-				Map<String, String> map = null;
-				if (UraUtils.isNotNull(decisionGroup.getListaDecisionParameters()) && !decisionGroup.getListaDecisionParameters().isEmpty()) {
-					map = new HashMap<String, String>();
-					for (DecisionParametersDto decisionParameters : decisionGroup.getListaDecisionParameters()) {
-						map.put(decisionParameters.getParamName(), decisionParameters.getParamValue());
-					}
-				}
-				String param = null;
-				if (UraUtils.isNotNull(map)) {
-					param = map.toString();
-				}
+			boolean condition = true;
+			if(decisionChance.getCondition() > 0) {
 				try {
-					
-					MethodInvocation invocationService = new MethodInvocation();
-					if(decisionGroup.getDecisionMap().isInternalService()){
-						serviceReturn =  invocationService.invoke(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
-					}else{
-						serviceReturn = invocationService.invokeExternalService(nextForm.getJsonContexto(), decisionGroup.getDecisionMap().getMethodReference(), map, decisionGroup.getDecisionMap().getTimeout(), decisionGroup.getDecisionMap().isActive());
-					}
-					nextForm.setJsonContexto(serviceReturn.getJsonContext());
-					
-//					if (decisionGroup.getDecisionMap().getLogActive() > 0) {
-//						LogUtils.createTrackService(trackServiceId, trackId, decisionGroup.getId(), decisionGroup.getDecisionMap().getMethodReference(), serviceReturn.getValue(),param, serviceReturn.getErrorCode(), logId, serviceReturn.getTimeService());
-//					}
-					
+					condition = dao.validarCondition(nextForm.getJsonContexto(), decisionChance.getCondition());
 				} catch (Exception e) {
-					
-					LogUtils.createTrackService(trackServiceId, trackId, decisionGroup.getId(), decisionGroup.getDecisionMap().getMethodReference(), e.getMessage(),param, FormConstants.ERROR_GENERIC_EXCEPTION, logId, 0);
-					LogUtils.createLogDetail(FormConstants.ERRO, e.getMessage(), logId);
-					serviceReturn = MethodInvocationVO.getInstance(nextForm.getJsonContexto());
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 				
+			} 
+			if(condition) {
+				if (UraUtils.isNotNull(decisionChance) && decisionChance.getTag() > 0) {
+					LogUtils.createTrackTag(trackServiceId, trackId, logId, decisionChance.getTag());
 				}
-				
-				for (DecisionChanceDto decisionChance : decisionGroup.getListaDecisionChance()) {
-
-					if (UraUtils.isNotNull(decisionChance.getOperation())) {
-						if (processaOperacao(decisionChance.getOperation(), decisionGroup.getDecisionMap().getType(), serviceReturn.getValue(), decisionChance, serviceReturn.getJsonContext(), logId)) {
-							
-							if (UraUtils.isNotNull(decisionChance) && decisionChance.getTag() > 0) {
-								LogUtils.createTrackTag(trackServiceId, trackId, logId, decisionChance.getTag());
-							}
-							
-							if(decisionChance.getNextForm() == -1){
-								try {
-									String tempNextFormId = MethodInvocationUtils.getContextValue(serviceReturn.getJsonContext(), MapValues.TEMP_NEXTFORMID);
-									if(tempNextFormId == null)
-										tempNextFormId = "-1";
-									
-										return getNextFormByNextId(serviceReturn.getJsonContext(), Long.parseLong(tempNextFormId));
-								} catch (Exception e) {
-									LogUtils.createLogDetail(FormConstants.ERRO, e.getMessage(), logId);
-									continue;
-								}
-							}else if (decisionChance.getNextForm() > 0) {
-								try {
-									return getNextFormByNextId(serviceReturn.getJsonContext(), decisionChance.getNextForm());
-								} catch (Exception e) {
-									LogUtils.createLogDetail(FormConstants.ERRO, e.getMessage(), logId);
-									continue;
-								}
-							} else {
-								decisionGroupChild = decisionChance.getDecisionGroupChild();
-								break;
-							}
-						}
-					} else {
-						
-						if (UraUtils.isNotNull(decisionChance) && decisionChance.getTag() > 0) {
-							LogUtils.createTrackTag(trackServiceId, trackId, logId, decisionChance.getTag());
-						}
-						
-						if(decisionChance.getNextForm() == -1){
-							try {
-								String tempNextFormId = MethodInvocationUtils.getContextValue(serviceReturn.getJsonContext(), MapValues.TEMP_NEXTFORMID);
-								if(tempNextFormId != null)
-									return getNextFormByNextId(serviceReturn.getJsonContext(), Long.parseLong(tempNextFormId));
-								else
-									decisionGroupChild = decisionChance.getDecisionGroupChild();
-							} catch (Exception e) {
-								LogUtils.createLogDetail(FormConstants.ERRO, e.getMessage(), logId);
-								continue;
-							}
-						}else if (decisionChance.getNextForm() > 0) {
-							try {
-								return getNextFormByNextId(serviceReturn.getJsonContext(), decisionChance.getNextForm());
-							} catch (Exception e) {
-								LogUtils.createLogDetail(FormConstants.ERRO, e.getMessage().toString(), logId);
-								continue;
-							}
-						} else {
-							decisionGroupChild = decisionChance.getDecisionGroupChild();
-							break;
-						}
-					}
-				}
+				return getNextFormByNextId(nextForm.getJsonContexto(), decisionChance.getNextForm());
 			}
 
 		}
 		NextFormDto nextformdefault = null;
 		try {
-			nextformdefault = getNextFormByNextId(serviceReturn.getJsonContext(), FormConstants.FORM_DEFAULT);
+			nextformdefault = getNextFormByNextId(nextForm.getJsonContexto(), FormConstants.FORM_DEFAULT);
 		} catch (Exception e) {
 			LogUtils.createLogDetail(FormConstants.ERRO, e.getMessage(), logId);
 		}
@@ -420,70 +354,9 @@ public class NextFormService {
 	}
 	
 
-	private boolean processaOperacao(String operacao, String type,
-			String resultado, DecisionChanceDto decisionChance, String jsonContext, long logId) {
-		try {
-			if (FormConstants.TYPE_TEXT.equals(type)) {
-				return UraUtils.validateTypeText(operacao, resultado,
-						decisionChance.getValue1(), getValuesNotNull(decisionChance, jsonContext));
-			} else if (FormConstants.TYPE_NUMERIC.equals(type)) {
-				return UraUtils.validateTypeNumeric(
-						operacao, resultado, decisionChance.getValue1(),
-							decisionChance.getValue2(), getValuesNotNull(decisionChance, jsonContext));
-			} else if (FormConstants.TYPE_DATE.equals(type)) {
-				return UraUtils.validateTypeDate(
-						operacao, resultado, decisionChance.getValue1(),
-							decisionChance.getValue2(), getValuesNotNull(decisionChance, jsonContext));
-			}
-		} catch (Exception e) {
-			LogUtils.createLogDetail("processaOperacao.decisionChance", e.getMessage(), logId);
-			return false;
-		}
-		return false;
-
-	}
 	
 	
-	private Collection<String> getValuesNotNull(DecisionChanceDto decisionChance, String jsonContext)  {
-		Collection<String> lista = new ArrayList<String>();
-		
-		try {
-
-			if (UraUtils.isNotNull(decisionChance.getValue1())) {
-				lista.add(decisionChance.getValue1());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue2())) {
-				lista.add(decisionChance.getValue2());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue3())) {
-				lista.add(decisionChance.getValue3());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue4())) {
-				lista.add(decisionChance.getValue4());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue5())) {
-				lista.add(decisionChance.getValue5());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue6())) {
-				lista.add(decisionChance.getValue6());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue7())) {
-				lista.add(decisionChance.getValue7());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue8())) {
-				lista.add(decisionChance.getValue8());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue9())) {
-				lista.add(decisionChance.getValue9());
-			}
-			if (UraUtils.isNotNull(decisionChance.getValue10())) {
-				lista.add(decisionChance.getValue10());
-			}
-		} catch (Exception e) {
-			LogUtils.createLogDetail("getValuesNotNull.decisionChance", e.getMessage(), Long.parseLong(MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID)));
-		}
-		return lista;
-		
-	}
+	
+	
 
 }
