@@ -36,8 +36,16 @@ public class LogDao {
 			stm = conn.prepareStatement(query);
 			stm.setLong(1, log.getId());
 			stm.setString(2, log.getUcid());
-			stm.setLong(3, validNumber(log.getDnis()));
-			stm.setLong(4, validNumber(log.getAni()));
+			try {
+				stm.setLong(3, validNumber(log.getDnis()));
+			} catch (Exception e) {
+				stm.setLong(3, 0L);
+			}
+			try {
+				stm.setLong(4, validNumber(log.getAni()));
+			} catch (Exception e) {
+				stm.setLong(4, 0L);
+			}
 			stm.setString(5, log.getInstance());
 			stm.setString(6, log.getDocumento());
 			stm.setString(7, log.getContext());
@@ -45,8 +53,6 @@ public class LogDao {
 			stm.setString(9, log.getCidade());
 			stm.setString(10, log.getUf());
 			stm.setString(11, log.getVdn());
-
-			
 
 			stm.executeUpdate();
 
