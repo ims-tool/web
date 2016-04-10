@@ -3,6 +3,7 @@ package br.com.ims.tool.nextform.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
@@ -29,10 +30,9 @@ import br.com.ims.tool.nextform.model.PromptDto;
 import br.com.ims.tool.nextform.model.Request;
 import br.com.ims.tool.nextform.model.ReturnDto;
 import br.com.ims.tool.nextform.model.TransferDto;
-import br.com.ims.tool.nextform.model.TransferenciaIn;
-import br.com.ims.tool.nextform.model.TransferenciaOut;
+import br.com.ims.tool.nextform.model.TransferRuleDto;
 import br.com.ims.tool.nextform.persistence.NextFormDao;
-import br.com.ims.tool.nextform.persistence.TransferenciaDao;
+import br.com.ims.tool.nextform.persistence.TransferDao;
 import br.com.ims.tool.nextform.util.FormConstants;
 import br.com.ims.tool.nextform.util.LogUtils;
 import br.com.ims.tool.nextform.util.MapValues;
@@ -156,40 +156,24 @@ public class NextFormService {
 				
 			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_TRANSFER) {
 				
-				
-								
-				TransferenciaDao transferenciaDAO = new TransferenciaDao();
-				
-				
+			
 				TransferDto transfer = dao.getTransferById(nextForm.getFormid());
-				
-				TransferenciaIn transferenciaIn = new TransferenciaIn();
-				transferenciaIn.setPontoLog(String.valueOf(transfer.getTransferRuleId()));
-				
-				StringBuffer parametros = new StringBuffer();
-			 	UraUtils.concatenaParametros("ANI", MethodInvocationUtils.getContextValue(jsonContext, MapValues.ANI), parametros);
-				UraUtils.concatenaParametros("INSTANCIA", MethodInvocationUtils.getContextValue(jsonContext, MapValues.INSTANCE), parametros);
-				UraUtils.concatenaParametros("DNIS", MethodInvocationUtils.getContextValue(jsonContext, MapValues.DNIS), parametros);
-				UraUtils.concatenaParametros("DOCUMENTO", MethodInvocationUtils.getContextValue(jsonContext, MapValues.DOCUMENT), parametros);
-				UraUtils.concatenaParametros("PERFIL", MethodInvocationUtils.getContextValue(jsonContext, MapValues.PERFIL), parametros);
-				UraUtils.concatenaParametros("URA", MethodInvocationUtils.getContextValue(jsonContext, MapValues.URA), parametros);
-				
-				transferenciaIn.setParametros(parametros.toString());
-				TransferenciaOut transferenciaOut = null;
-				long errorCode = FormConstants.NO_ERROR;
-				
-				try {
-					transferenciaOut = transferenciaDAO.getTransferencia(transferenciaIn);
-				} catch (Exception e) {
-					errorCode = FormConstants.ERROR_REMOTE_EXCEPTION;
+				TransferRuleDto rule = processTransfer(transfer.getId(),jsonContext);
+				int errorCode = 0;
+				if(rule != null) {
+					
+					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.VDN, rule.getNumber(), true);
+					nextForm.setJsonContexto(jsonContext);
+					
+					transfer.setVdn(rule.getNumber());
+					transfer.setTag(rule.getTag());
+					transfer.setPrompt(null);
+					if(rule.getPrompt() >  0) {
+						transfer.setPrompt(dao.getPromptById(rule.getPrompt(), jsonContext));
+					}
+				} else {
+					errorCode = -1;
 				}
-				
-				
-				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.VDN, transferenciaOut.getVdn(), true);
-				nextForm.setJsonContexto(jsonContext);
-				
-				transfer.setVdn(transferenciaOut.getVdn());
-				transfer.setPrompt(dao.getPromptByPromptName(transferenciaOut.getMsg(), jsonContext));
 				transfer.setUUI(MethodInvocationUtils.getContextValue(jsonContext, MapValues.PARTNER));
 				//transfer.setUUI(UraUtils.gerarUUI(jsonContext));
 				nextForm.setTransfer(transfer);
@@ -197,7 +181,7 @@ public class NextFormService {
 				long tsId = LogUtils.getTrackServiceId();
 				
 				LogUtils.createTrackService(tsId, trackId, 1, "Transferência VDN",
-						transferenciaOut.getVdn(), String.valueOf(transfer.getTransferRuleId()), errorCode, logId, 0);
+						rule.getNumber(), String.valueOf(transfer.getTransferRuleId()), errorCode, logId, 0);
 				
 				LogUtils.finalizaLog(MethodInvocationUtils.getContextValue(
 						jsonContext, MapValues.LOGID), jsonContext, FormConstants.TRANSFER_STATUS);
@@ -250,6 +234,33 @@ public class NextFormService {
 		}
 		nextForm.setJsonContexto(jsonContext);
 		return nextForm;
+	}
+	
+
+	private TransferRuleDto processTransfer(long transferId, String jsonContexto) throws Exception {
+		NextFormDao dao = new NextFormDao();
+		TransferDao transferDao = new TransferDao();
+		
+		List<TransferRuleDto> listTransferRule = transferDao.getListTransferRule(transferId);
+		
+		
+		for (TransferRuleDto rule : listTransferRule) {
+			
+			boolean condition = true;
+			if(rule.getCondition() > 0) {
+				try {
+					condition = dao.validarCondition(jsonContexto, rule.getCondition());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 				
+			} 
+			if(condition) {
+				return rule;
+			}
+
+		}
+		return null;
 	}
 	
 	private NextFormDto processOperation(NextFormDto nextForm, long trackId, long logId) throws Exception {

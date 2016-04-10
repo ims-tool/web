@@ -1,6 +1,5 @@
 package br.com.ims.tool.nextform.persistence;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -701,6 +700,30 @@ public class NextFormDao {
 
 	}
 
+	public PromptDto getPromptById(long promptId, String jsonContext) throws Exception {
+		PromptDto prompt = null;
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		try {
+			conn = new ConnectionDB();
+			String query = " SELECT ID, NAME  FROM FLOW.PROMPT WHERE ID = " + promptId;
+
+			rs = conn.ExecuteQuery(query);
+			if (rs.next()) {
+				prompt = new PromptDto();
+				prompt.setId(rs.getLong(1));
+				prompt.setName(rs.getString(2));
+				prompt.setListaPromptAudio(getListPromptAudioByPromptId(prompt.getId(), jsonContext));
+
+			}
+		} catch (SQLException e) {
+			logger.error("Erro ao Recuperar o Prompt de ID: " + promptId, e);
+			throw new Exception("Erro ao Recuperar o Prompt de ID: " + promptId, e);
+		} finally {
+			conn.finalize();
+		}
+		return prompt;
+	}
 	public PromptDto getPromptByPromptName(String name, String jsonContext) throws Exception {
 		PromptDto prompt = null;
 		ResultSet rs = null;
