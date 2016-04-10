@@ -1,5 +1,7 @@
 package br.com.ims.facade;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -14,7 +16,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.json.JSONObject;
+
+import br.com.ims.control.MessageCtrl;
+import br.com.ims.control.RouterCtrl;
+import br.com.ims.tool.entity.Message;
 import br.com.ims.tool.entity.Router;
+import br.com.ims.tool.entity.RouterIvr;
 
 /**
  *
@@ -36,6 +44,36 @@ public class RouterFacadeREST extends AbstractFacade<Router> {
     public void create(Router entity) {
         super.create(entity);
     }
+    
+    
+    @POST
+    @Path("/getIvr")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public RouterIvr getIvr(String entity) {
+    	
+    	JSONObject jsonObj = new JSONObject(entity);
+    	String ani = jsonObj.getString("ani");
+    	String ucid = jsonObj.getString("ucid");
+    	String dnis = jsonObj.getString("dnis");
+    	String uui = jsonObj.getString("uui");
+    	RouterIvr router = new RouterIvr();
+    	
+    	router = RouterCtrl.getIvr(dnis);
+    	
+    	router.setContext(router.getContext().replace("<UCID>", ucid));
+    	router.setContext(router.getContext().replace("<ANI>", ani));
+    	router.setContext(router.getContext().replace("<UUI>", uui));
+    	router.setContext(router.getContext().replace("<DNIS>", dnis));
+    	try {
+    		router.setContext(router.getContext().replace("<STARTDATE>", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+		return router;
+    }
+    
 
     @PUT
     @Path("{id}")
@@ -82,5 +120,4 @@ public class RouterFacadeREST extends AbstractFacade<Router> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
 }

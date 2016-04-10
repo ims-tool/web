@@ -15,6 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -105,31 +106,6 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 		}
     	return json;
     }
-
-    @GET
-    @Path("find/{type}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String findServiceHour(@PathParam("type") String type) {
-    	
-    	List<ServiceHour> listServiceHour = ServiceHourCtrl.findAll(type);
-    	
-    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    	String json = "";
-		try {
-			json = ow.writeValueAsString(listServiceHour);
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return json;
-    	
-    }
     
     @GET
     @Path("findType/{user}")
@@ -159,6 +135,29 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     @Produces("application/json")
     public String findListMessage() {
     	List<Message> lista = MessageCtrl.findAll();
+    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    	String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return json;
+        
+    }
+    
+    @GET
+    @Path("findSpot")
+    @Produces("application/json")
+    public String findSpotList() {
+    	List<String> lista = MessageCtrl.findSpotList();
     	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     	String json = "";
 		try {

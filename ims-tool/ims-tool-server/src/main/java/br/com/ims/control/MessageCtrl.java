@@ -19,4 +19,8 @@ public class MessageCtrl {
 		MessageDao.save(message);
 		
 	}
+
+	public static List<String> findSpotList() {
+		return MessageDao.findSpotList();
+	}
 }
