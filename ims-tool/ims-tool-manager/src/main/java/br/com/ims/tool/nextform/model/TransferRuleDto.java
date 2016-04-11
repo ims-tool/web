@@ -7,68 +7,106 @@ public class TransferRuleDto implements Serializable {
 	private static final long serialVersionUID = -414740474138231349L;
 	
 	private long id;
-	private String name;
-	private String description;
-	private long transferRuleId;
+	private int order;
+	private long transferId;
+	private long condition;
+	private long prompt;
+	private String number;
 	private long tag;
 	
-	private PromptDto prompt;
-	private String vdn;
-	private String UUI;
+	
 	
 	public long getId() {
 		return id;
 	}
+
+
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+
+
+
+
+	public int getOrder() {
+		return order;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+
+
+	public void setOrder(int order) {
+		this.order = order;
 	}
-	public String getDescription() {
-		return description;
+
+
+
+	public long getTransferId() {
+		return transferId;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+
+
+
+	public void setTransferId(long transferId) {
+		this.transferId = transferId;
 	}
-	public long getTransferRuleId() {
-		return transferRuleId;
+
+
+
+	public long getCondition() {
+		return condition;
 	}
-	public void setTransferRuleId(long transferRuleId) {
-		this.transferRuleId = transferRuleId;
+
+
+
+	public void setCondition(long condition) {
+		this.condition = condition;
 	}
+
+
+
+	
+	public long getPrompt() {
+		return prompt;
+	}
+
+
+
+	public void setPrompt(long prompt) {
+		this.prompt = prompt;
+	}
+
+
+
+	public String getNumber() {
+		return number;
+	}
+
+
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+
+
 	public long getTag() {
 		return tag;
 	}
+
+
+
 	public void setTag(long tag) {
 		this.tag = tag;
 	}
-	public PromptDto getPrompt() {
-		return prompt;
-	}
-	public void setPrompt(PromptDto prompt) {
-		this.prompt = prompt;
-	}
-	public String getVdn() {
-		return vdn;
-	}
-	public void setVdn(String vdn) {
-		this.vdn = vdn;
-	}
-	public String getUUI() {
-		return UUI;
-	}
-	public void setUUI(String uUI) {
-		UUI = uUI;
-	}
+
+
+
 	@Override
 	public String toString() {
-		return "TransferDto [id=" + id + ", name=" + name + ", description=" + description 
-				+ ", transferRuleId=" + transferRuleId + ", tag=" + tag + ", prompt=" + prompt 
-				+ ", vdn=" + vdn + ", UUI=" + UUI + "]";
+		return "TransferRuleDto [id=" + id + ", order=" + order + ", transferId=" + transferId 
+				+ ", condition=" + condition + ", prompt=" +prompt 
+				+ ", number=" + number +  "]";
 	}
 
 }
