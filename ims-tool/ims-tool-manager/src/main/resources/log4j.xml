@@ -4,7 +4,7 @@
 <log4j:configuration debug="true">
 
 	<appender name="LogFile" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="c:///Cesar///ivr_manager.log" />
+		<param name="file" value="c:///ims///ivr_manager.log" />
 		<param name="datePattern" value="'.'yyyy-MM-dd" />
 		<param name="append" value="true" />
 		<param name="encoding" value="UTF-8" />

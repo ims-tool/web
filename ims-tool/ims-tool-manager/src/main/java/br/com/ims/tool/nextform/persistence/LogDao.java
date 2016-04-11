@@ -140,7 +140,7 @@ public class LogDao {
 			stm.setString(2, logDetail.getParamName());
 			stm.setString(3, logDetail.getParamValue());
 
-			stm.executeQuery();
+			conn.executeInsert(stm);
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir LogDetail ", e);
@@ -293,7 +293,7 @@ public class LogDao {
 			stm.setLong(9, track.getLogId());
 			stm.setDouble(10, track.getTime_exec());
 
-			stm.executeQuery();
+			conn.executeInsert(stm);
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir TRACKSERVICE ", e);

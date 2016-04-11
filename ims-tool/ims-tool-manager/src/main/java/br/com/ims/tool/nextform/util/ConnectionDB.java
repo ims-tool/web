@@ -101,5 +101,19 @@ public class ConnectionDB {
 		}
 		return rs;
 	}
+	
+	public void executeInsert(PreparedStatement pst) {
+		rs = null;
+		try {
+			pst.executeQuery();
+
+		} catch (SQLException e) {
+		} finally {
+			try {
+				pst.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
 
 }

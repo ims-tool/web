@@ -88,8 +88,8 @@ public class LogUtils {
 			
 			track.setId(trackId);
 			track.setLogId(logId);
-			track.setFormId(nextForm.getId());
-			track.setTagId(nextForm.getTag());
+			try {track.setFormId(nextForm.getId());} catch (Exception e) {}
+			try {track.setTagId(nextForm.getTag());} catch (Exception e) {}
 			
 			obtemLogDao().inserirTrack(track);
 			
@@ -97,7 +97,7 @@ public class LogUtils {
 				createTrackTag(getTrackServiceId(), trackId, logId, nextForm.getTag());
 			}
 			
-		} catch (Exception e) {e.printStackTrace();}
+		} catch (Exception e) {}
 		
 	}
 	

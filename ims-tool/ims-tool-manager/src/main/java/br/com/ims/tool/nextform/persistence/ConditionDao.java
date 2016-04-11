@@ -35,6 +35,7 @@ public class ConditionDao {
 							" AND CD.ID = CG.CONDITIONID "+
 							" AND CG.CONDITIONMAPID = CM.ID "+
 							" ORDER BY CG.ORDERNUM ASC ";
+			
 
 			rs = conn.ExecuteQuery(query);
 			

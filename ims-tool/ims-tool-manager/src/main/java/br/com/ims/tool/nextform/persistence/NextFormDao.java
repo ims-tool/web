@@ -437,10 +437,10 @@ public class NextFormDao {
 
 				DecisionChanceDto chance = new DecisionChanceDto();
 				chance.setId(rs.getLong(4));
-				chance.setCondition(rs.getLong(5));
+				chance.setCondition(rs.getLong(7));
 				chance.setOrder(rs.getLong(6));
-				chance.setNextForm(rs.getLong(7));
-				chance.setTag(rs.getLong(8));
+				chance.setNextForm(rs.getLong(8));
+				chance.setTag(rs.getLong(9));
 				listaDecisionChance.add(chance);
 				
 			}
@@ -765,8 +765,7 @@ public class NextFormDao {
 
 				Map<String, String> map = null;
 
-				if (UraUtils.isNotNull(conditionGroup.getListaConditionParameters())
-						&& !conditionGroup.getListaConditionParameters().isEmpty()) {
+				if (UraUtils.isNotNull(conditionGroup.getListaConditionParameters()) && !conditionGroup.getListaConditionParameters().isEmpty()) {
 					map = new HashMap<String, String>();
 					for (ConditionParametersDto conditionParameters : conditionGroup.getListaConditionParameters()) {
 						map.put(conditionParameters.getParamName(), conditionParameters.getParamValue());
@@ -785,23 +784,17 @@ public class NextFormDao {
 				}
 				long trackServiceId = LogUtils.getTrackServiceId();
 				if (conditionGroup.getConditionMap().getLogActive() > 0) {
-					LogUtils.createTrackService(trackServiceId, trackId, conditionGroup.getId(),
-							conditionGroup.getConditionMap().getMethodReference(), serviceReturn.getValue(), param,
-							serviceReturn.getErrorCode(),
-							Long.parseLong(MethodInvocationUtils.getContextValue(context, MapValues.LOGID)),
-							serviceReturn.getTimeService());
+					LogUtils.createTrackService(trackServiceId, trackId, conditionGroup.getId(),conditionGroup.getConditionMap().getMethodReference(), serviceReturn.getValue(), param, serviceReturn.getErrorCode(), Long.parseLong(MethodInvocationUtils.getContextValue(context, MapValues.LOGID)), serviceReturn.getTimeService());
 				}
 				for (ConditionValueDto conditionValue : conditionGroup.getListaConditionValue()) {
 
 					if (UraUtils.isNotNull(conditionValue.getOperation())) {
 
-						if (processaOperacao(conditionValue.getOperation(), conditionGroup.getConditionMap().getType(),
-								serviceReturn.getValue(), conditionValue)) {
+						System.out.println("teste");
+						if (processaOperacao(conditionValue.getOperation(), conditionGroup.getConditionMap().getType(), serviceReturn.getValue(), conditionValue)) {
 
 							if (conditionValue.getTagTrue() > 0) {
-								LogUtils.createTrackTag(trackServiceId, trackId,
-										Long.valueOf(MethodInvocationUtils.getContextValue(context, MapValues.LOGID)),
-										conditionValue.getTagTrue());
+								LogUtils.createTrackTag(trackServiceId, trackId,Long.valueOf(MethodInvocationUtils.getContextValue(context, MapValues.LOGID)), conditionValue.getTagTrue());
 							}
 							return true;
 

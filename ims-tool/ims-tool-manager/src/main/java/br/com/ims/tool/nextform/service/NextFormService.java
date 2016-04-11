@@ -332,7 +332,6 @@ public class NextFormService {
 		try {
 			decision = dao.getDecisionById(nextForm.getFormid());
 		} catch (Exception e) {
-			
 		}
 		
 		for (DecisionChanceDto decisionChance : decision.getListaDecisionChance()) {
@@ -343,7 +342,6 @@ public class NextFormService {
 				try {
 					condition = dao.validarCondition(nextForm.getJsonContexto(), decisionChance.getCondition());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} 				
 			} 

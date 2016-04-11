@@ -53,7 +53,6 @@ public class DecisionChanceDto implements Serializable {
 	public void setNextForm(long nextForm) {
 		this.nextForm = nextForm;
 	}
-	
 	@Override
 	public String toString() {
 		return "DecisionChoiceDto [id=" + id + ", decisionId="
