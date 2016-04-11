@@ -421,7 +421,7 @@ public class NextFormDao {
 
 			String query = "SELECT d.id,d.name ,d.description, dc.id,dc.decisionid,dc.ordernum,dc.condition,dc.nextformid,dc.tag "
 					+ "FROM flow.decision d " + "INNER JOIN flow.decisionchance dc ON dc.decisionid = d.id "
-					+ "WHERE d.id = " + decisionId + " ORDER BU dc.ordernum ";
+					+ "WHERE d.id = " + decisionId + " ORDER By dc.ordernum ";
 
 			rs = conn.ExecuteQuery(query);
 

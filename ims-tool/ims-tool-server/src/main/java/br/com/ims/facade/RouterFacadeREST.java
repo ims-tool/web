@@ -60,15 +60,25 @@ public class RouterFacadeREST extends AbstractFacade<Router> {
     	RouterIvr router = new RouterIvr();
     	
     	router = RouterCtrl.getIvr(dnis);
-    	
-    	router.setContext(router.getContext().replace("<UCID>", ucid));
-    	router.setContext(router.getContext().replace("<ANI>", ani));
-    	router.setContext(router.getContext().replace("<UUI>", uui));
-    	router.setContext(router.getContext().replace("<DNIS>", dnis));
+    	try {
+    		router.setContext(router.getContext().replace("<UCID>", ucid));
+		} catch (Exception e) {
+		}
+    	try {
+    		router.setContext(router.getContext().replace("<ANI>", ani));
+		} catch (Exception e) {
+		}
+    	try {
+    		router.setContext(router.getContext().replace("<UUI>", uui));
+		} catch (Exception e) {
+		}
+    	try {
+    		router.setContext(router.getContext().replace("<DNIS>", dnis));
+		} catch (Exception e) {
+		}
     	try {
     		router.setContext(router.getContext().replace("<STARTDATE>", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date())));
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
     	
 		return router;
