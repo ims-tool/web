@@ -406,7 +406,7 @@ public class LogDao {
 					"from " +
 					"( " +
 					"Select L.ID, L.INSTANCE,  L.STARTDATE,L.STOPDATE, " +
-					"T.ROWDATE, T.FORMID, IVR_OWNER.GETFORM(T.FORMID),T.TAGID " +
+					"T.ROWDATE, T.FORMID, FLOW.GETFORM(T.FORMID),T.TAGID " +
 					", f.name, f.formtype " +
 					"from ivr_owner.log l " +
 					"join ivr_owner.TRACK t on t.logid=l.id AND T.ROWDATE BETWEEN L.STARTDATE AND L.STOPDATE " +
