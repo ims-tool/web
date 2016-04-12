@@ -114,7 +114,21 @@ public class ConnectionDB {
 		return rs;
 	}
 	
-	public ResultSet ExecuteQueryUpdate(String sql) throws SQLException {
+	public void executeQueryUpdate(PreparedStatement pst) {
+		rs = null;
+		try {
+			pst.executeQuery();
+
+		} catch (SQLException e) {
+		} finally {
+			try {
+				pst.close();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	
+	public void ExecuteQueryUpdate(String sql) throws SQLException {
 		rs = null;
 		stmt = null;
 		try {
@@ -124,7 +138,6 @@ public class ConnectionDB {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return rs;
 	}
 
 }

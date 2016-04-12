@@ -14,6 +14,7 @@ import javax.xml.bind.ParseConversionEvent;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.tags.ParamAware;
 
+import antlr.StringUtils;
 import br.com.ims.tool.entity.Message;
 import br.com.ims.tool.entity.MessageType;
 import br.com.ims.tool.entity.ServiceHour;
@@ -38,7 +39,7 @@ public class MessageDao {
 		try {
 			conn = new ConnectionDB();
 			String query = "select m.id, m.name, m.description, m.flag, m.datai, m.dataf, m.ddd_in,"
-					+ " m.ddd_not_in, s.name spot, m.msg_order from flow.mensagem m, flow.spot s where m.spot = s.id ";
+					+ " m.ddd_not_in, m.spot spot, m.msg_order from flow.mensagem m";
 
 			rs = conn.ExecuteQuery(query);
 
@@ -153,7 +154,11 @@ public class MessageDao {
 				pstmt.setString(7, message.getDdd_in());
 				pstmt.setString(8, message.getDdd_not_in());
 				pstmt.setString(9, message.getSpot());
-				pstmt.setInt(10, Integer.getInteger(message.getMsg_order()));
+				if(org.apache.commons.lang3.StringUtils.isNotBlank(message.getMsg_order())){
+					pstmt.setInt(10, Integer.getInteger(message.getMsg_order()));
+				}else{
+					pstmt.setInt(10, 999);
+				}
 
 				rs2 = conn.executeQuery(pstmt);
 
@@ -171,11 +176,10 @@ public class MessageDao {
 				conn.finalize();
 			}
 		} else {
-			ResultSet rs2 = null;
 			PreparedStatement pstmt = null;
 			try {
 				conn = new ConnectionDB();
-				String query = "update flow.mensagem  set name = ?, description = ?, flag = ?, datai = ?, dataf = ?, ddd_in = ?,  ddd_not_in = ?,  msg_order = ? where id = ?";
+				String query = "update flow.mensagem  set name = ?, description = ?, flag = ?, datai = ?, dataf = ?, ddd_in = ?,  ddd_not_in = ?, spot = ?, msg_order = ? where id = ?";
 				
 				pstmt = conn.getPreparedStatement(query);
 
@@ -186,21 +190,20 @@ public class MessageDao {
 				pstmt.setTimestamp(5, formatDate(message.getDataf()));
 				pstmt.setString(6, message.getDdd_in());
 				pstmt.setString(7, message.getDdd_not_in());
-				pstmt.setInt(8, Integer.getInteger(message.getMsg_order()));
-				pstmt.setInt(9, message.getId());
+				pstmt.setString(8, message.getSpot());
+				if(org.apache.commons.lang3.StringUtils.isNotBlank(message.getMsg_order())){
+					pstmt.setInt(9, Integer.valueOf(message.getMsg_order()));
+				}else{
+					pstmt.setInt(9, 999);
+				}
+				pstmt.setInt(10, message.getId());
 
-				rs2 = conn.executeQuery(pstmt);
-				
-
+				conn.executeQueryUpdate(pstmt);
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Erro ao Recuperar mensagens ", e);
 			} finally {
-				try {
-					rs2.close();
-				} catch (SQLException e) {
-				}
 				conn.finalize();
 			}
 		}
@@ -230,7 +233,7 @@ public class MessageDao {
 		PreparedStatement stm = null;
 		try {
 			conn = new ConnectionDB();
-			String query = "select description from flow.spot order by description";
+			String query = "select NAME from flow.spot order by name";
 
 			rs = conn.ExecuteQuery(query);
 

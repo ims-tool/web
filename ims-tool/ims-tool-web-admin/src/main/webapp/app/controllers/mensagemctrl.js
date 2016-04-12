@@ -1,9 +1,7 @@
-app.controller(
-				'MensagemCtrl',
-				function($rootScope, $location, $scope, $http, $mdDialog,
-						$mdMedia) {
+app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $mdDialog, $mdMedia) {
 					
 					checkAccess('webmensagem');
+					
 
 					$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 					$rootScope.activetab = $location.path();
@@ -12,6 +10,17 @@ app.controller(
 					$scope.showCancelButton = true;
 					$scope.showNewButton = false;
 					$scope.showMessage = true;
+					
+					$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/message/findSpotList').success(function(data1) {
+						
+						$scope.data = {
+							    repeatSelect: null,
+							    availableOptions: data1,
+						};
+					});
+					
+					$scope.example1model = []; 
+					$scope.example1data = [ {id: 1, label: "David"}, {id: 2, label: "Jhon"}, {id: 3, label: "Danny"}];
 					
 					$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/findAll').success(function(data1) {
 								$scope.messages = data1;
@@ -25,7 +34,7 @@ app.controller(
 						$scope.showMessage = false;
 						$scope.showNewButton = true;
 						$scope.showCancelButton = false;
-						setLog(1, 'add login web admin', 'ims-tool-web-admin', data.login, 0, data.id);
+						
 
 					};
 					
@@ -43,13 +52,33 @@ app.controller(
 				            var file = document.getElementById('upload').files[0];
 				            var reader = new FileReader();
 				            var rawData = new ArrayBuffer();            
+				            var serverRelativeUrlToFolder = 'http://'+window.location.hostname+':8080/ims-tool-server/rest/message/upload';
 				            
 				            if(file != null){
-				            	console.log("Implementar um arquivo");
-				            	saveMessage($scope.message);
+				            	
+				            	$.ajax({
+				            		type : "POST",
+				            		data : file,
+				            		url : serverRelativeUrlToFolder,
+				            		cache: false,
+				            		headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
+					            	contentType: false,
+					            	processData: false,
+					            	success : function (){
+					            		saveMessage($scope.message);
+					            	}
+				            	});
+				            	
 				            }else{
 				            	saveMessage($scope.message);
 				            }
+				            
+				            $scope.message = [];
+				            
+							$scope.showCancelButton = true;
+							$scope.showNewButton = false;
+							$scope.showMessage = true;
+				            alert('Mensagem gravada com sucesso!');
 
 					};
 
@@ -68,6 +97,8 @@ function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, p
 }
 
 function saveMessage(message){
+	
+	 
 	
 	$.ajax({
 		type : "POST",
