@@ -12,6 +12,7 @@ import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.MenuEntity;
 import br.com.ims.flow.model.PromptCollectEntity;
 
+@SuppressWarnings("serial")
 public class FormService extends AbstractEntityService<FormEntity> {
 
 	@Override

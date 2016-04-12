@@ -6,6 +6,7 @@ import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
+@SuppressWarnings("serial")
 public class TagTypeService extends AbstractEntityService<TagTypeEntity>{
 	
 	public List<TagTypeEntity> getAll() {

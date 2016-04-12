@@ -5,6 +5,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.OperationMapEditorBean;
 
+@SuppressWarnings("serial")
 public class OperationMapEditorService extends AbstractBeanService<OperationMapEditorBean>{
 	public OperationMapEditorService() {
 		ELContext elContext = FacesContext.getCurrentInstance().getELContext();

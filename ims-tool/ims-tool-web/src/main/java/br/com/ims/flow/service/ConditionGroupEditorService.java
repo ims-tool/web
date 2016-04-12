@@ -5,6 +5,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.ConditionGroupEditorBean;
 
+@SuppressWarnings("serial")
 public class ConditionGroupEditorService extends AbstractBeanService<ConditionGroupEditorBean>{
 	public ConditionGroupEditorService() {
 		ELContext elContext = FacesContext.getCurrentInstance().getELContext();

@@ -10,6 +10,7 @@ import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.model.TransferEntity;
 import br.com.ims.flow.model.TransferRuleEntity;
 
+@SuppressWarnings("serial")
 public class PromptService extends AbstractEntityService<PromptEntity>{
 	
 	public List<PromptEntity> getAll() {

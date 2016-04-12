@@ -8,6 +8,7 @@ import br.com.ims.flow.model.OperationEntity;
 import br.com.ims.flow.model.OperationGroupEntity;
 import br.com.ims.flow.model.OperationMapEntity;
 
+@SuppressWarnings("serial")
 public class OperationMapService extends AbstractEntityService<OperationMapEntity>{
 	
 	public List<OperationMapEntity> getAll() {

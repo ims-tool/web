@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.TransferEntity;
 
+@SuppressWarnings("serial")
 public class TransferService extends AbstractEntityService <TransferEntity>{
 	
 	public List<TransferEntity> getAll() {

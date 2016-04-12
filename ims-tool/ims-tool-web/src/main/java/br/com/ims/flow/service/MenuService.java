@@ -6,6 +6,7 @@ import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.MenuEntity;
 
+@SuppressWarnings("serial")
 public class MenuService extends AbstractEntityService <MenuEntity>{
 	
 	public List<MenuEntity> getAll() {

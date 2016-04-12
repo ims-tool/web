@@ -37,6 +37,7 @@ import br.com.ims.flow.model.PromptCollectEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.VersionEntity;
 
+@SuppressWarnings("serial")
 public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 	
 	public IvrEditorService() {

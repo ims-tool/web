@@ -26,7 +26,7 @@ public class DbConnection implements Serializable{
 	public DbConnection(String database) {
 		
 		try {
-			System.out.println("Constructing:"+database);
+			//System.out.println("Constructing:"+database);
 			ctx = new InitialContext();
 			ds = (DataSource)ctx.lookup("java:/comp/env/jdbc/flow");
 			conn = ds.getConnection();
@@ -39,7 +39,7 @@ public class DbConnection implements Serializable{
 	}
 
 	public void finalize() {
-		System.out.println("finalizing");
+		//System.out.println("finalizing");
 		try {rs.close();} catch(Exception e) {}
 		try {stmt.close();} catch(Exception e) {}
 		try {ctx.close();} catch(Exception e) {}

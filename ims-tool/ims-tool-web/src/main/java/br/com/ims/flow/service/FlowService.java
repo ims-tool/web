@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.FlowEntity;
 
+@SuppressWarnings("serial")
 public class FlowService extends AbstractEntityService <FlowEntity>{
 	
 	public List<FlowEntity> getAll() {

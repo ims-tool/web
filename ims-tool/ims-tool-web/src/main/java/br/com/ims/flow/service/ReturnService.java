@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.ReturnEntity;
 
+@SuppressWarnings("serial")
 public class ReturnService extends AbstractEntityService <ReturnEntity>{
 	
 	public List<ReturnEntity> getAll() {

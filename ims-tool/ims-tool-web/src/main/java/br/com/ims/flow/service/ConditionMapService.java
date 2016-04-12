@@ -9,6 +9,7 @@ import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.ConditionGroupEntity;
 import br.com.ims.flow.model.ConditionMapEntity;
 
+@SuppressWarnings("serial")
 public class ConditionMapService extends AbstractEntityService<ConditionMapEntity>{
 	
 	public List<ConditionMapEntity> getAll() {

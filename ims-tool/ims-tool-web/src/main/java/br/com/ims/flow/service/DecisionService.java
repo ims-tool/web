@@ -6,6 +6,7 @@ import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.DecisionChanceEntity;
 import br.com.ims.flow.model.DecisionEntity;
 
+@SuppressWarnings("serial")
 public class DecisionService extends AbstractEntityService<DecisionEntity>{
 	
 	public List<DecisionEntity> getAll() {

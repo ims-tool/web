@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.TagEditorBean;
 
+@SuppressWarnings("serial")
 public class TagEditorService extends AbstractBeanService<TagEditorBean> {
 	
 	

@@ -8,6 +8,7 @@ import br.com.ims.flow.model.MenuEntity;
 import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.PromptCollectEntity;
 
+@SuppressWarnings("serial")
 public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntity>{
 	
 	public List<NoMatchInputEntity> getAll() {

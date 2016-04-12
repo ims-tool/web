@@ -5,6 +5,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.GrammarEditorBean;
 
+@SuppressWarnings("serial")
 public class GrammarEditorService extends AbstractBeanService<GrammarEditorBean>{
 	
 	public GrammarEditorService() {

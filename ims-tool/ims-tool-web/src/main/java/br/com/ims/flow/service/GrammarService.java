@@ -7,6 +7,7 @@ import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.GrammarEntity;
 import br.com.ims.flow.model.PromptCollectEntity;
 
+@SuppressWarnings("serial")
 public class GrammarService extends AbstractEntityService<GrammarEntity>{
 	
 	public List<GrammarEntity> getAll() {

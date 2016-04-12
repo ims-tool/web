@@ -8,6 +8,7 @@ import br.com.ims.flow.model.AudioEntity;
 import br.com.ims.flow.model.PromptAudioEntity;
 import br.com.ims.flow.model.PromptEntity;
 
+@SuppressWarnings("serial")
 public class AudioService extends AbstractEntityService <AudioEntity>{
 	
 	public List<AudioEntity> getAll() {

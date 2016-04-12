@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.DisconnectEntity;
 
+@SuppressWarnings("serial")
 public class DisconnectService extends AbstractEntityService <DisconnectEntity>{
 	
 	public List<DisconnectEntity> getAll() {

@@ -5,6 +5,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.ConditionEditorBean;
 
+@SuppressWarnings("serial")
 public class ConditionEditorService extends AbstractBeanService<ConditionEditorBean>{
 	public ConditionEditorService() {
 		ELContext elContext = FacesContext.getCurrentInstance().getELContext();

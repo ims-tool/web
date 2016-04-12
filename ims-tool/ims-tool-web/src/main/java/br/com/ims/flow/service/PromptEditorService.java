@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.PromptEditorBean;
 
+@SuppressWarnings("serial")
 public class PromptEditorService extends AbstractBeanService<PromptEditorBean>{
 	
 	

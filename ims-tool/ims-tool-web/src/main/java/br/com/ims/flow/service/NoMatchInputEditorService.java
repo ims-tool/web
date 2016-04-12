@@ -5,6 +5,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.NoMatchInputEditorBean;
 
+@SuppressWarnings("serial")
 public class NoMatchInputEditorService extends AbstractBeanService<NoMatchInputEditorBean>{
 	
 	public NoMatchInputEditorService() {

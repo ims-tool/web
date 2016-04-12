@@ -5,6 +5,7 @@ import java.util.List;
 import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.PromptCollectEntity;
 
+@SuppressWarnings("serial")
 public class PromptCollectService extends AbstractEntityService <PromptCollectEntity>{
 	
 	public List<PromptCollectEntity> getAll() {

@@ -11,6 +11,7 @@ import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.model.VersionEntity;
 
+@SuppressWarnings("serial")
 public class VersionService extends AbstractEntityService<VersionEntity>{
 	
 	public List<VersionEntity> getAll() {

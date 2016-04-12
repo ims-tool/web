@@ -5,6 +5,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.OperationGroupEditorBean;
 
+@SuppressWarnings("serial")
 public class OperationGroupEditorService extends AbstractBeanService<OperationGroupEditorBean>{
 	public OperationGroupEditorService() {
 		ELContext elContext = FacesContext.getCurrentInstance().getELContext();

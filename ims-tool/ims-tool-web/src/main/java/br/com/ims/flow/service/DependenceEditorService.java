@@ -5,6 +5,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.DependenceEditorBean;
 
+@SuppressWarnings("serial")
 public class DependenceEditorService extends AbstractBeanService<DependenceEditorBean>{
 	public DependenceEditorService() {
 		ELContext elContext = FacesContext.getCurrentInstance().getELContext();

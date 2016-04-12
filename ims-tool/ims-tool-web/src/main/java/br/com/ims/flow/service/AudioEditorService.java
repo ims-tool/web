@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 
 import br.com.ims.flow.bean.AudioEditorBean;
 
+@SuppressWarnings("serial")
 public class AudioEditorService extends AbstractBeanService<AudioEditorBean> {
 	
 	
