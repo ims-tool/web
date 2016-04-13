@@ -15,7 +15,8 @@
 						<div class="col-xs-6 col-md-3"></div>
 						<div class="col-xs-6 col-md-3"></div>
 						<div class="col-xs-6 col-md-3">
-							<button class="btn btn-info" type="button" ng-click="showForm()" ng-disabled="showNewButton">
+							<button class="btn btn-info" type="button" ng-click="showForm()"
+								ng-disabled="showNewButton">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true">Novo</span>
 							</button>
 							<button class="btn btn-danger" type="button"
@@ -68,37 +69,33 @@
 							</div>
 							<div class="col-md-3">
 								<label for="Description">DDD in</label> <input
-									class="form-control" id="ddd_in"
-									placeholder="DDD in"
+									class="form-control" id="ddd_in" placeholder="DDD in"
 									ng-model="message.ddd_in" />
 							</div>
 							<div class="col-md-3">
 								<label for="Description">DDD not in</label> <input
-									class="form-control" id="ddd_not_in"
-									placeholder="DDD not in"
+									class="form-control" id="ddd_not_in" placeholder="DDD not in"
 									ng-model="message.ddd_not_in" />
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="col-md-3">
 								<label for="spot">Local</label> 
-								<input
-									class="form-control" id="spot"
-									placeholder="Local de vocalização"
-									ng-model="message.spot" />
+								<select ng-model="message.spot" class="form-control">
+									<option ng-repeat="option in data.availableOptions" value="{{option}}">{{option}}</option>
+								</select> 
 							</div>
 							<div class="col-md-3">
-								<label for="order">Ordem</label> <input
-									class="form-control" id="order"
-									placeholder="Ordem de vocalização"
+								<label for="order">Ordem</label> <input class="form-control"
+									id="order" placeholder="Ordem de vocalização"
 									ng-model="message.msg_order" />
 							</div>
 							<div class="col-md-6">
-								<label for="Description">Upload audio</label> <input
-									type="file" class="form-control" id="upload"
-									placeholder="Inserir upload de audio"/>
+								<label for="Description">Upload audio</label> <input type="file"
+									class="form-control" id="upload"
+									placeholder="Inserir upload de audio" />
 							</div>
-							
+
 						</div>
 						<div class="form-group">
 							<div class="col-md-12">
@@ -110,7 +107,7 @@
 
 
 					</div>
-	<br> <br>
+					<br> <br>
 
 					<table class="table table-striped table-hover">
 						<thead>
@@ -140,13 +137,14 @@
 								<td>{{ message.ddd_not_in || "empty"}}</td>
 								<td>{{ message.spot || "empty"}}</td>
 								<td>{{ message.msg_order || "empty"}}</td>
-								<td> <button type="button" ng-click="editMessage($index)"
-											class="btn btn-info" data-toggle="tooltip"
-											data-placement="left" title="Editar mensagem">
-											<span class="glyphicon glyphicon-wrench" aria-hidden="true">
-											</span>
-										</button>
-								</td>		
+								<td>
+									<button type="button" ng-click="editMessage($index)"
+										class="btn btn-info" data-toggle="tooltip"
+										data-placement="left" title="Editar mensagem">
+										<span class="glyphicon glyphicon-wrench" aria-hidden="true">
+										</span>
+									</button>
+								</td>
 							</tr>
 						</tbody>
 					</table>

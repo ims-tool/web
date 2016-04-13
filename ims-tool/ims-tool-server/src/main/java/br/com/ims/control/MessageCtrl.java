@@ -23,4 +23,6 @@ public class MessageCtrl {
 	public static List<String> findSpotList() {
 		return MessageDao.findSpotList();
 	}
+
+
 }

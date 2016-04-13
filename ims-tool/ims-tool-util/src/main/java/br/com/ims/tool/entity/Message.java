@@ -37,6 +37,7 @@ public class Message implements Serializable {
     private String ddd_not_in;
     private String spot;
     private String msg_order;
+    
 	public Integer getId() {
 		return id;
 	}

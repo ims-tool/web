@@ -28,6 +28,14 @@ import br.com.ims.tool.entity.Message;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.ws.rs.core.Response;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+
 /**
  *
  * @author Cesar
@@ -58,7 +66,7 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     	JSONObject jsonObj = new JSONObject(entity);
     	Message message = new Message();
     	message.setId(jsonObj.getInt("id"));
-    	message.setName(String.valueOf(jsonObj.getInt("id")));
+    	message.setName(jsonObj.getString("name"));
     	message.setDescription(jsonObj.getString("description"));
     	message.setFlag(jsonObj.getString("flag"));
     	message.setDatai(jsonObj.getString("datai"));
@@ -66,7 +74,7 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     	message.setDdd_in(jsonObj.getString("ddd_in"));
     	message.setDdd_not_in(jsonObj.getString("ddd_not_in"));
     	message.setSpot(jsonObj.getString("spot"));
-    	message.setMsg_order(String.valueOf(jsonObj.getInt("msg_order")));
+    	message.setMsg_order(jsonObj.getString("msg_order"));
     	
     	MessageCtrl.save(message);
     }
@@ -218,5 +226,63 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
     	return json;
         
     }
+    
+    @GET
+    @Path("findSpotList")
+    @Produces("application/json")
+    public String getSpot() {
+    	List<String> lista = MessageCtrl.findSpotList();
+    	ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    	String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return json;
+    }
+    
+    @POST
+	@Path("/upload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response uploadFile(
+			@FormDataParam("file") InputStream fileInputStream,
+			@FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
+
+		String filePath = "c://cesar/audio/"	+ contentDispositionHeader.getFileName();
+
+		// save the file to the server
+		saveFile(fileInputStream, filePath);
+
+		String output = "File saved to server location : " + filePath;
+
+		return Response.status(200).entity(output).build();
+
+	}
+
+	// save uploaded file to a defined location on the server
+	private void saveFile(InputStream uploadedInputStream, String serverLocation) {
+		try {
+			OutputStream outpuStream = new FileOutputStream(new File(serverLocation));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+
+			outpuStream = new FileOutputStream(new File(serverLocation));
+			while ((read = uploadedInputStream.read(bytes)) != -1) {
+				outpuStream.write(bytes, 0, read);
+			}
+			outpuStream.flush();
+			outpuStream.close();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+    
     
 }
