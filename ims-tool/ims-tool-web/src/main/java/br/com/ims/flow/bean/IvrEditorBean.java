@@ -47,7 +47,6 @@ public class IvrEditorBean extends AbstractBean {
 	private FormTypeService formTypeService = new FormTypeService(); 
 	private DefaultDiagramModel model;
 	private List<FormTypeEntity> formTypes;
-	private List<FormEntity> listForm;
 	
 	private LogicalFlow logicalFlow;
 	
@@ -111,7 +110,6 @@ public class IvrEditorBean extends AbstractBean {
         
         this.logicalFlow = new LogicalFlow();        
         this.formTypeService = new FormTypeService();         
-        this.listForm = new ArrayList<FormEntity>();
         this.editing = new MyBoolean(false);
         
         
@@ -119,7 +117,7 @@ public class IvrEditorBean extends AbstractBean {
         Tab tab = new Tab();
         tab.setTitle("New Flow");
         
-        this.tabFlowList.add(new TabItemFlow(tab, 0,model,logicalFlow,listForm,editing));
+        this.tabFlowList.add(new TabItemFlow(tab, 0,model,logicalFlow,editing));
 		
         this.tabFlowView = new TabView();
         this.tabFlowView.setActiveIndex(0);
@@ -220,7 +218,6 @@ public class IvrEditorBean extends AbstractBean {
         	if(event.getTab().getId().equals(tab.getTab().getId())) {
         		this.model = tab.getModel();
 	        	this.logicalFlow = tab.getLogicalFlow();
-	        	this.listForm = tab.getListForm();
 	        	this.editing = tab.getEditing();
         	}
         }
@@ -294,10 +291,15 @@ public class IvrEditorBean extends AbstractBean {
 	public DefaultDiagramModel getModel() {
         return model;
     }
-    
+   
 
 	public List<FormEntity> getListForm() {
-		return listForm;
+		List<FormEntity> result = new ArrayList<FormEntity>();
+		for(Node node : logicalFlow.getListNode()) {
+			result.add(node.getForm());
+		}
+		
+		return result;
 	}
 	
 
@@ -401,8 +403,6 @@ public class IvrEditorBean extends AbstractBean {
 		formEntityElement.setDescription(formType.getDescription());
 		formEntityElement.setName(formType.getName()+"_"+formEntityElement.getId());
 		formEntityElement.setFormType(formType);
-		
-		listForm.add(formEntityElement);
 		
 		Element element = new Element(formEntityElement);
 		
@@ -523,7 +523,8 @@ public class IvrEditorBean extends AbstractBean {
             return;
 		}
 		String nameFlow = "";
-		for(FormEntity form : this.listForm) {
+		for(Node node : this.logicalFlow.getListNode()) {
+			FormEntity form = node.getForm();
 			if(form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
 				nameFlow = form.getName(); 
 			}
@@ -643,13 +644,6 @@ public class IvrEditorBean extends AbstractBean {
 				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement(),true);
 			}
 			
-			for(int index = 0; index < this.listForm.size(); index++) {
-				FormEntity entity = this.listForm.get(index);
-				if(entity.getId().equals(this.form.getId())) {
-					this.listForm.remove(index);
-					break;
-				}
-			}
 			
 		}
 	}
@@ -683,7 +677,6 @@ public class IvrEditorBean extends AbstractBean {
 		for(TabItemFlow tab : this.tabFlowList) {
 			if(tab.getTabIndex() == index) {
 				this.model = tab.getModel();
-				this.listForm = tab.getListForm();
 				this.editing = tab.getEditing();
 				this.logicalFlow = tab.getLogicalFlow();
 				this.tabFlowView.setActiveIndex(index);
@@ -703,7 +696,6 @@ public class IvrEditorBean extends AbstractBean {
         model.setDefaultConnector(connector);
         
         LogicalFlow logicalFlow = new LogicalFlow();        
-        List<FormEntity> listForm = new ArrayList<FormEntity>();
         MyBoolean editing = new MyBoolean(false);
         
         Tab tab = new Tab();
@@ -711,7 +703,7 @@ public class IvrEditorBean extends AbstractBean {
         tab.setClosable(true);
         
         int index = this.tabFlowList.size();
-        this.tabFlowList.add(new TabItemFlow(tab, index,model,logicalFlow,listForm,editing));
+        this.tabFlowList.add(new TabItemFlow(tab, index,model,logicalFlow,editing));
 		
         this.tabFlowView.setActiveIndex(index);
         this.tabFlowView.getChildren().add(tab);

@@ -129,6 +129,11 @@ public class FormService extends AbstractEntityService<FormEntity> {
 		return DAOFactory.getInstance().getFormDAO().updateObj(object);
 		
 	}
+	public boolean deleteObj(FormEntity object) {
+		
+		return DAOFactory.getInstance().getFormDAO().deleteObj(object);
+		
+	}
 
 	@Override
 	public boolean delete(FormEntity object) {

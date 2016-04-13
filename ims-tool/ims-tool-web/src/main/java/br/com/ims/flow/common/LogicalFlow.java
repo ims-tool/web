@@ -31,6 +31,7 @@ public class LogicalFlow implements Serializable{
 	
 	private List<Node> listNode = new ArrayList<Node>();
 	private List<Node> listFirstNode = new ArrayList<Node>();
+	private List<Node> listDeletedNode = new ArrayList<Node>();
 
 	public List<Node> getListNode() {
 		return listNode;
@@ -40,6 +41,15 @@ public class LogicalFlow implements Serializable{
 		this.listNode = listNode;
 	}
 	
+	
+	public List<Node> getListDeletedNode() {
+		return listDeletedNode;
+	}
+
+	public void setListDeletedNode(List<Node> listDeletedNode) {
+		this.listDeletedNode = listDeletedNode;
+	}
+
 	public Node getNode(Element element) {
 		for(Node node : listNode) {
 			if(node.getElement().getId().equals(element.getId())) {
@@ -76,6 +86,7 @@ public class LogicalFlow implements Serializable{
 		
 		listNode.remove(node);
 		listFirstNode.remove(node);
+		listDeletedNode.add(node);
 	}
 	public void delNode(FormEntity form,boolean allNode) {
 		Node node = getNode(form);
@@ -84,6 +95,7 @@ public class LogicalFlow implements Serializable{
 		
 		listNode.remove(node);
 		listFirstNode.remove(node);
+		listDeletedNode.add(node);
 	}
 	
 	public void connect(Element source,Element target, Connection connection) {
@@ -124,6 +136,14 @@ public class LogicalFlow implements Serializable{
 				}
 			}
 		}
+		nodeSource.setConnection(null);
+		nodeSource.getForm().setNextForm(null);
+		nodeSource.getForm().setTag(null);
+		((FormEntity)nodeSource.getElement().getData()).setTag(null);
+		((FormEntity)nodeSource.getElement().getData()).setNextForm(null);
+		Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();		
+	    ((AbstractFormEntity)formId).setNextForm(null);
+	    ((AbstractFormEntity)formId).setTag(null);
 	}
 			
 	public void disconnect(Element source, boolean allNodes) {
@@ -158,10 +178,12 @@ public class LogicalFlow implements Serializable{
 					listFirstNode.add(target);
 				}
 			}
-			nodeSource.cleanTarget();
 		}
 		nodeSource.setConnection(null);
+		nodeSource.getForm().setNextForm(null);
+		nodeSource.getForm().setTag(null);
 		((FormEntity)nodeSource.getElement().getData()).setTag(null);
+		((FormEntity)nodeSource.getElement().getData()).setNextForm(null);
 		Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();		
 	    ((AbstractFormEntity)formId).setNextForm(null);
 	    ((AbstractFormEntity)formId).setTag(null);
@@ -185,6 +207,21 @@ public class LogicalFlow implements Serializable{
 			form.setFormError(false);
 			form.setErrorDescription("");
 			
+			
+			if(form.getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+				boolean foundTarget = false;
+				for(Node nodeTarget : node.getListTarget()) {
+					if(!(nodeTarget.getForm().getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOINPUT) ||
+							nodeTarget.getForm().getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCH))) {
+						foundTarget = true;
+					}
+				}
+				if(!foundTarget) {
+					form.setFormError(true);
+					form.setErrorDescription("Output is mandatory");
+					continue;
+				}
+			}
 			
 			FormEntity aux = ServicesFactory.getInstance().getFormService().getByName(form.getName(),true);
 

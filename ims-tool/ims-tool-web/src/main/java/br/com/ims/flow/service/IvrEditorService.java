@@ -236,16 +236,12 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		 * Preciso salvar todos os forms pra manter a posição X e Y na tela
     		 */
     		if(ServicesFactory.getInstance().getFormService().get(form.getId(),true) == null) {
-    			result = ServicesFactory.getInstance().getFormService().save(form);
-				if(!result) {
-					return result;
-				}
+    			result = result & ServicesFactory.getInstance().getFormService().save(form);
+				
     		} else {
     			exists = true;
-    			result = ServicesFactory.getInstance().getFormService().update(form);
-    			if(!result) {
-					return result;
-				}
+    			result = result & ServicesFactory.getInstance().getFormService().update(form);
+    			
     			
     		}
     		/**
@@ -315,20 +311,22 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		if(entry.getKey().equals("INSERT")) {
     			List<FormEntity> list = entry.getValue();
     			for(FormEntity form : list) {
-    				result = ServicesFactory.getInstance().getFormService().saveObj(form);
-    				if(!result) {
-    					return result;
-    				}
+    				result = result & ServicesFactory.getInstance().getFormService().saveObj(form);
+    				
     			}
     		} else {
     			List<FormEntity> list = entry.getValue();
     			for(FormEntity form : list) {
-    				result = ServicesFactory.getInstance().getFormService().updateObj(form);
-    				if(!result) {
-    					return result;
-    				}
+    				result = result & ServicesFactory.getInstance().getFormService().updateObj(form);
+    				
     			}
     		}
+    	}
+    	for(Node node : logicalFlow.getListDeletedNode()) {
+    		result = result & ServicesFactory.getInstance().getFormService().deleteObj(node.getForm());			
+    	}
+    	for(Node node : logicalFlow.getListDeletedNode()) {
+    		result = result & ServicesFactory.getInstance().getFormService().delete(node.getForm());			
     	}
     	return result;
 		
