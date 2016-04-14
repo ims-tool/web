@@ -443,7 +443,7 @@ function createElementManager(top){
 	var url;
 	
 	//LOCAL
-	var urlJson = 'http://localhost:7001/ims-tool-operator-web/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
+	var urlJson = 'http://vmdwin062:8080/ims-tool-operator-web/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
 
 	//QA3
 //	var urlJson = 'http://<TBD>/ims-tool-operator-web/rest/interaction/get/'+localStorage.getItem('context')+'/'+localStorage.getItem('formId');
@@ -544,15 +544,7 @@ function getNextFormAnnonce(nextFormId){
 
 
 // jQuery for page scrolling feature - requires jQuery Easing plugin
-$(function() {
-    $('.page-scroll a').bind('click', function(event) {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: $($anchor.attr('href')).offset().top
-        }, 1500, 'easeInOutExpo');
-        event.preventDefault();
-    });
-});
+
 
 // Floating label headings for the contact form
 $(function() {

@@ -53,10 +53,10 @@ public class RouterFacadeREST extends AbstractFacade<Router> {
     public RouterIvr getIvr(String entity) {
     	
     	JSONObject jsonObj = new JSONObject(entity);
-    	String ani = jsonObj.getString("ani");
-    	String ucid = jsonObj.getString("ucid");
-    	String dnis = jsonObj.getString("dnis");
-    	String uui = jsonObj.getString("uui");
+    	String ani =  jsonObj.getJSONObject("call").getString("ani");
+    	String ucid = jsonObj.getJSONObject("call").getString("ucid");
+    	String dnis = jsonObj.getJSONObject("call").getString("dnis");
+    	String uui = jsonObj.getJSONObject("call").getString("uui");
     	RouterIvr router = new RouterIvr();
     	
     	router = RouterCtrl.getIvr(dnis);

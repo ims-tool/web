@@ -253,7 +253,13 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 			@FormDataParam("file") InputStream fileInputStream,
 			@FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
 
-		String filePath = "c://cesar/audio/"	+ contentDispositionHeader.getFileName();
+    	String filePath = "";
+    	System.out.println("TEste");
+    	try {
+    		filePath = "c://cesar/audio/"	+ contentDispositionHeader.getFileName();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// save the file to the server
 		saveFile(fileInputStream, filePath);

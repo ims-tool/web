@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+
+import org.json.JSONObject;
 
 import br.com.ims.tool.nextform.model.AnnounceDto;
 import br.com.ims.tool.nextform.model.AnswerDto;
@@ -48,9 +51,12 @@ public class NextFormService {
 
 	@POST
 	@Produces({ "application/json" })
-	public NextFormDto getNextFormId(Request request) {
-		String jsonContext = request.getContext();
-		NextFormDto nextForm = getNextFormByNextId(jsonContext, request.getNextId());
+	@Consumes("application/json")
+	public NextFormDto getNextFormId(String entity) {
+		
+		JSONObject jsonObj = new JSONObject(entity);
+		String jsonContext = jsonObj.getString("context");
+		NextFormDto nextForm = getNextFormByNextId(jsonContext, jsonObj.getLong("nextFormId"));
 		return nextForm;
 	}
 

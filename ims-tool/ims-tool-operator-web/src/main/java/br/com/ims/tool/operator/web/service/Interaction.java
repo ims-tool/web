@@ -67,7 +67,7 @@ public class Interaction {
 
 				Client client = Client.create();
 
-		        WebResource webResource = client.resource("http://localhost:7001/ims-tool-manager/nextform/nextformid");
+		        WebResource webResource = client.resource("http://vmdwin062:8080/ims-tool-manager/nextform/nextformid");
 
 		        JSONObject object = new JSONObject();
 		        object.put("context", context);
