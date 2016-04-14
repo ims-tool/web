@@ -52,29 +52,8 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 				            var file = document.getElementById('upload').files[0];
 				            var reader = new FileReader();
 				            var rawData = new ArrayBuffer();            
-				            var serverRelativeUrlToFolder = 'http://'+window.location.hostname+':8080/ims-tool-server/rest/message/upload';
-				            
-				            if(file != null){
-				            	
-				            	$.ajax({
-				            		type : "POST",
-				            		data : file,
-				            		url : serverRelativeUrlToFolder,
-				            		cache: false,
-				            		headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
-					            	contentType: false,
-					            	processData: false,
-					            	success : function (){
-					            		saveMessage($scope.message);
-					            	}
-				            	});
-				            	
-				            }else{
-				            	saveMessage($scope.message);
-				            }
-				            
+				            saveMessage($scope.message);
 				            $scope.message = [];
-				            
 							$scope.showCancelButton = true;
 							$scope.showNewButton = false;
 							$scope.showMessage = true;
@@ -108,4 +87,14 @@ function saveMessage(message){
 		dataType : 'json'
 	});
 	
+}
+
+function setFileName(){
+	
+	var nome = document.getElementById("id").value;
+	console.log(nome);
+	
+	document.getElementById("fileName").value =  nome;
+	
+	document.getElementById("fileName").setAttribute("hidden", "true");
 }
