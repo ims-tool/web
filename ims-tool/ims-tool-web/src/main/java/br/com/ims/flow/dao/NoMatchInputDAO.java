@@ -27,8 +27,11 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 		return instance;
 	}
 	public List<NoMatchInputEntity> getByFilter(String where) {
+		return getByFilter(where,false);
+	}
+	public List<NoMatchInputEntity> getByFilter(String where,boolean lazy) {
 
-		String sql = "SELECT n.id n_id,n.name n_name,n.type n_type,n.threshold n_threshold,n.prompt n_prompt,n.nextform n_nextform, "+
+		String sql = "SELECT n.id n_id,n.name n_name,n.type n_type,n.threshold n_threshold,n.prompt n_prompt,n.nextform n_nextform, n.versionid n_versionid,"+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.nomatchinput n "+
@@ -60,8 +63,10 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 					tag.setType(tagType);
 				}
 				PromptEntity prompt = null;
-				if(rs.getString("n_prompt") != null && rs.getString("n_prompt").length() >0) {
-					prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("n_prompt"));
+				if(!lazy) {
+					if(rs.getString("n_prompt") != null && rs.getString("n_prompt").length() >0) {
+						prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("n_prompt"));
+					}
 				}
 				
 				
@@ -73,6 +78,7 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 				ni.setNextForm(rs.getString("n_nextform"));
 				ni.setTag(tag);
 				ni.setPrompt(prompt);
+				ni.setVersionId(rs.getString("n_versionid"));
 				
 				result.add(ni);
 			}
@@ -88,10 +94,21 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 	}
 	public List<NoMatchInputEntity> getAll() {
 		
-		return this.getByFilter(null);		
+		return this.getByFilter(null,false);		
+	}
+	public List<NoMatchInputEntity> getAll(boolean lazy) {
+		
+		return this.getByFilter(null,lazy);		
 	}
 	public NoMatchInputEntity get(String id) {
 		List<NoMatchInputEntity> result = this.getByFilter("WHERE n.id = '"+id+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
+	public NoMatchInputEntity get(String id,boolean lazy) {
+		List<NoMatchInputEntity> result = this.getByFilter("WHERE n.id = '"+id+"'",lazy);
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -110,7 +127,7 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 		String sql = "INSERT INTO flow.nomatchinput (id,name,type,threshold,prompt,nextform,tag,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getType()+"','"+entity.getThreshold()+"',"
 				   + (entity.getPrompt() ==null ? "NULL" : entity.getPrompt().getId())+","+entity.getNextForm()+","
-					+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId().getId()+"') ";
+					+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId()+"') ";
 		DbConnection db = new DbConnection("NoMatchInputDAO-save");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
@@ -125,7 +142,7 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 				   + "prompt="+(entity.getPrompt() == null ? "NULL" : entity.getPrompt().getId())+","
 				   + "nextform='"+entity.getNextForm()+"',"
 				   + "tag="+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
-				   + "versionid='"+entity.getVersionId().getId()+"' "
+				   + "versionid='"+entity.getVersionId()+"' "
 				   + "WHERE id = '"+entity.getId()+"' ";
 		DbConnection db = new DbConnection("NoMatchInputDAO-update");             
 		result = db.ExecuteSql(sql);

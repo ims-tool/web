@@ -6,7 +6,7 @@ import java.io.Serializable;
 public abstract class AbstractEntity implements Serializable{
 	
 	protected String id;
-	private VersionEntity versionId;
+	private String versionId;
 	
 	
 	public AbstractEntity() {
@@ -23,14 +23,17 @@ public abstract class AbstractEntity implements Serializable{
 	}
 
 
-	public VersionEntity getVersionId() {
+	public String getVersionId() {
 		return versionId;
 	}
 
 
-	public void setVersionId(VersionEntity versionId) {
+	public void setVersionId(String versionId) {
 		this.versionId = versionId;
 	}
+
+
+	
 	
 	
 	

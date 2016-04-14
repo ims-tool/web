@@ -27,7 +27,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 	
 	public List<ReturnEntity> getByFilter(String where) {
 		
-		String sql = "SELECT r.id r_id,r.name r_name,r.description r_description, "+
+		String sql = "SELECT r.id r_id,r.name r_name,r.description r_description,r.versionid r_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.return r "+
@@ -65,6 +65,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 				return_.setName(rs.getString("r_name"));
 				return_.setDescription(rs.getString("r_description"));
 				return_.setTag(tag);
+				return_.setVersionId(rs.getString("r_versionid"));
 				
 				result.add(return_);
 			}
@@ -96,7 +97,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 		
 		String sql = "INSERT INTO flow.return (id,name,description,tag,versionid) "+
 					 "VALUES ('"+_return.getId()+"','"+_return.getName()+"','"+_return.getDescription()+"',"
-					+(_return.getTag() == null ? "NULL" : _return.getTag().getId())+",'"+_return.getVersionId().getId()+"') ";
+					+(_return.getTag() == null ? "NULL" : _return.getTag().getId())+",'"+_return.getVersionId()+"') ";
 		             
 		DbConnection db = new DbConnection("ReturnDAO-save");
 		result = db.ExecuteSql(sql);
@@ -108,7 +109,7 @@ public class ReturnDAO extends AbstractDAO<ReturnEntity>{
 	public boolean update(ReturnEntity _return) {
 		boolean result = true;
 		String sql = "UPDATE flow.return SET name='"+_return.getName()+"',description='"+_return.getDescription()+"',"
-				   + "tag="+(_return.getTag() ==  null ? "NULL" :_return.getTag().getId())+",versionid='"+_return.getVersionId().getId()+"' "+
+				   + "tag="+(_return.getTag() ==  null ? "NULL" :_return.getTag().getId())+",versionid='"+_return.getVersionId()+"' "+
 					 "WHERE id = '"+_return.getId()+"' ";
 		DbConnection db = new DbConnection("ReturnDAO-update");             
 		result = db.ExecuteSql(sql);

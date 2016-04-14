@@ -45,7 +45,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 				audio.setDescription(rs.getString("description"));
 				audio.setPath(rs.getString("path"));
 				audio.setProperty(rs.getString("property"));
-				audio.setVersionId(null);
+				audio.setVersionId(rs.getString("versionid"));
 				result.add(audio);
 			}
 		} catch (SQLException e) {
@@ -84,7 +84,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	public boolean save(AudioEntity audio) {
 		boolean result = true;
 		String sql = "INSERT INTO flow.audio (id,type,name,description,path,versionid) "+
-					 "VALUES ('"+audio.getId()+"','"+audio.getType()+"','"+audio.getName()+"','"+audio.getDescription()+"','"+audio.getPath()+"',"+audio.getVersionId().getId()+") ";
+					 "VALUES ('"+audio.getId()+"','"+audio.getType()+"','"+audio.getName()+"','"+audio.getDescription()+"','"+audio.getPath()+"',"+audio.getVersionId()+") ";
 		             
 		DbConnection db = new DbConnection("AudioDAO-save");
 		result = db.ExecuteSql(sql);
@@ -95,7 +95,7 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	@Override
 	public boolean update(AudioEntity audio) {
 		boolean result = true;
-		String sql = "UPDATE flow.audio SET type='"+audio.getType()+"',name='"+audio.getName()+"',description='"+audio.getDescription()+"',path='"+audio.getPath()+"',versionid='"+audio.getVersionId().getId()+"' "+
+		String sql = "UPDATE flow.audio SET type='"+audio.getType()+"',name='"+audio.getName()+"',description='"+audio.getDescription()+"',path='"+audio.getPath()+"',versionid='"+audio.getVersionId()+"' "+
 					 "WHERE id = '"+audio.getId()+"' ";
 		             
 		DbConnection db = new DbConnection("AudioDAO-update");

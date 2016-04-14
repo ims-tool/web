@@ -23,7 +23,7 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 	}
 	public List<GrammarEntity> getByFilter(String where) {
 		
-		String sql = "SELECT id,name,description,type,sizemax,sizemin "+
+		String sql = "SELECT id,name,description,type,sizemax,sizemin,versionid "+
 			     	 "FROM flow.grammar <WHERE> ORDER BY name";
 		if(where != null && where.length() > 0) {
 			sql = sql.replace("<WHERE>", where);
@@ -43,6 +43,7 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 				grammar.setType(rs.getString("type"));
 				grammar.setSizeMax(rs.getInt("sizemax"));
 				grammar.setSizeMin(rs.getInt("sizemin"));
+				grammar.setVersionId(rs.getString("versionid"));
 				result.add(grammar);
 			}
 		} catch (SQLException e) {
@@ -77,7 +78,7 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 	public boolean save(GrammarEntity entity) {
 		boolean result = true;
 		String sql = "INSERT INTO flow.grammar (id,name,description,type,sizemax,sizemin,versionid) "+
-					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getType()+"','"+entity.getSizeMax()+"','"+entity.getSizeMin()+"',"+entity.getVersionId().getId()+") ";
+					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getType()+"','"+entity.getSizeMax()+"','"+entity.getSizeMin()+"',"+entity.getVersionId()+") ";
 		             
 		DbConnection db = new DbConnection("GrammarDAO-save");
 		result = db.ExecuteSql(sql);
@@ -88,7 +89,7 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 	@Override
 	public boolean update(GrammarEntity entity) {
 		boolean result = true;
-		String sql = "UPDATE flow.grammar SET name='"+entity.getName()+"',description='"+entity.getDescription()+"',type='"+entity.getType()+"',sizemax='"+entity.getSizeMax()+"',sizemin='"+entity.getSizeMin()+"',versionid='"+entity.getVersionId().getId()+"' "+
+		String sql = "UPDATE flow.grammar SET name='"+entity.getName()+"',description='"+entity.getDescription()+"',type='"+entity.getType()+"',sizemax='"+entity.getSizeMax()+"',sizemin='"+entity.getSizeMin()+"',versionid='"+entity.getVersionId()+"' "+
 					 "WHERE id ='"+entity.getId()+"' ";
 		DbConnection db = new DbConnection("GrammarDAO-update");            
 		result = db.ExecuteSql(sql);

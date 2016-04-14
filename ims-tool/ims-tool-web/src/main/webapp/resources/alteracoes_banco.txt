@@ -17,6 +17,12 @@ ALTER TABLE flow.form ADD COLUMN "positionx" character varying(10);
 
 ALTER TABLE flow.form ADD COLUMN "positiony" character varying(10);
 
+ALTER TABLE flow.form ADD COLUMN "flowname" character varying(100);
+
+CREATE INDEX ix_form_flowname ON flow.form (flowname);
+
+CREATE INDEX ix_form_versionid ON flow.form (versionid);
+
 --Criar sequences
 
 create sequence flow.seq_uid;

@@ -32,7 +32,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	private List<PromptAudioEntity> getPromptAudio(String idPrompt) {
 		log.info("getPromptAudio("+idPrompt+")");
 		System.out.println("PromptDAO-getPromptAudio("+idPrompt+")");
-		String sql = "SELECT pa.prompt pa_prompt,pa.ordernum pa_ordernum,pa.condition pa_condition, "+
+		String sql = "SELECT pa.prompt pa_prompt,pa.ordernum pa_ordernum,pa.condition pa_condition,pa.versionid pa_versionid, "+
 				     "a.id a_id,a.type a_type,a.name a_name,a.description a_description, a.path a_path,a.property a_property "+	                 
 	                 "FROM flow.promptaudio pa "+
 	                 "INNER JOIN flow.audio a ON pa.audio = a.id "+
@@ -65,6 +65,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 				promptAudio.setAudio(audio);
 				promptAudio.setCondition(condition);
 				promptAudio.setVersionId(null);
+				promptAudio.setVersionId(rs.getString("pc_versionid"));
 				
 				
 				result.add(promptAudio);
@@ -161,7 +162,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		log.info("save()");
 		System.out.println("PromptDAO-save()");
 		String sql = "INSERT INTO flow.prompt (id,\"name\",versionid) "+
-					 "VALUES ('"+prompt.getId()+"','"+prompt.getName()+"','"+prompt.getVersionId().getId()+"') ";
+					 "VALUES ('"+prompt.getId()+"','"+prompt.getName()+"','"+prompt.getVersionId()+"') ";
 		
 		DbConnection db = new DbConnection("PromptDAO-save");
 		result = db.ExecuteSql(sql);
@@ -170,7 +171,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 				sql = "INSERT INTO flow.promptaudio (prompt,audio,ordernum,condition,versionid) "+
 					   "VALUES ('"+prompt.getId()+"','"+promptAudio.getAudio().getId()+"',"+promptAudio.getOrderNum()+","+
 						(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+","+
-						prompt.getVersionId().getId()+") ";
+						prompt.getVersionId()+") ";
 				result = result & db.ExecuteSql(sql);
 				if(!result) {
 					//rollback
@@ -192,7 +193,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		boolean result = true;
 		log.info("update()");
 		System.out.println("PromptDAO-update()");
-		String sql = "UPDATE flow.prompt SET \"name\"='"+entity.getName()+"',versionid = "+entity.getVersionId().getId()+" "+
+		String sql = "UPDATE flow.prompt SET \"name\"='"+entity.getName()+"',versionid = "+entity.getVersionId()+" "+
 					 "WHERE id="+entity.getId()+" ";
 		DbConnection db = new DbConnection("PromptDAO-update");
 		result = db.ExecuteSql(sql);
@@ -202,7 +203,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 			if(result) {
 				for(PromptAudioEntity promptAudio : entity.getAudios()) {
 					sql = "INSERT INTO flow.promptaudio (prompt,audio,ordernum,condition,versionid) "+
-						   "VALUES ('"+entity.getId()+"','"+promptAudio.getAudio().getId()+"',"+promptAudio.getOrderNum()+","+(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+","+entity.getVersionId().getId()+") ";
+						   "VALUES ('"+entity.getId()+"','"+promptAudio.getAudio().getId()+"',"+promptAudio.getOrderNum()+","+(promptAudio.getCondition() == null ? "NULL" : "'"+promptAudio.getCondition().getId()+"'")+","+entity.getVersionId()+") ";
 					result = result & db.ExecuteSql(sql);
 					if(!result) {
 						break;

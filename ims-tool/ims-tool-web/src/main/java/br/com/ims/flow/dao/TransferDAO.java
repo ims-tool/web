@@ -29,7 +29,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		return instance;
 	}
 	private List<TransferRuleEntity> getTransferRules(String transferId) {
-		String sql = "SELECT tr.id tr_id,tr.ordernum tr_ordernum,tr.transferid tr_transferid,tr.condition tr_condition,tr.prompt tr_prompt,tr.number tr_number, "+
+		String sql = "SELECT tr.id tr_id,tr.ordernum tr_ordernum,tr.transferid tr_transferid,tr.condition tr_condition,tr.prompt tr_prompt,tr.number tr_number,tr.versionid tr_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.transferrule tr "+
@@ -72,7 +72,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 				transferRule.setPrompt(prompt);
 				transferRule.setTag(tag);
 				transferRule.setNumber(rs.getString("tr_number"));
-				
+				transferRule.setVersionId(rs.getString("tr_versionid"));
 				result.add(transferRule);
 			}
 		} catch (SQLException e) {
@@ -159,7 +159,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		boolean result = true;
 		String sql = "INSERT INTO flow.transfer (id,name,description,tag,versionid) "+
 					 "VALUES ('"+transfer.getId()+"','"+transfer.getName()+"','"+transfer.getDescription()+"',"+
-					 (transfer.getTag() ==  null ? "NULL" : transfer.getTag().getId())+",'"+transfer.getVersionId().getId()+"') ";
+					 (transfer.getTag() ==  null ? "NULL" : transfer.getTag().getId())+",'"+transfer.getVersionId()+"') ";
 
 		DbConnection db = new DbConnection("TransferDAO-save");	
 		result = db.ExecuteSql(sql);
@@ -170,7 +170,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 					  + (rule.getCondition() == null ? "NULL" : rule.getCondition().getId())+","
 					  + (rule.getTag() == null ? "NULL" : rule.getTag().getId())+","
 					  + (rule.getPrompt() == null ? "NULL" : rule.getPrompt().getId())+","
-					  + "'"+rule.getNumber()+"','"+transfer.getVersionId().getId()+"')";
+					  + "'"+rule.getNumber()+"','"+transfer.getVersionId()+"')";
 					
 				result = result & db.ExecuteSql(sql);
 				if(!result) {
@@ -194,7 +194,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.transfer SET name = '"+transfer.getName()+"',description='"+transfer.getDescription()+"',"
 				+ "tag = "+(transfer.getTag() == null ? "NULL" : transfer.getTag().getId())+","
-				+ "versionid = "+transfer.getVersionId().getId()+" "
+				+ "versionid = "+transfer.getVersionId()+" "
 				+ "WHERE id = "+transfer.getId();
 		             
 		DbConnection db = new DbConnection("TransferDAO-update");
@@ -209,7 +209,7 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 							  + (rule.getCondition() == null ? "NULL" : rule.getCondition().getId())+","
 							  + (rule.getTag() == null ? "NULL" : rule.getTag().getId())+","
 							  + (rule.getPrompt() == null ? "NULL" : rule.getPrompt().getId())+","
-							  + "'"+rule.getNumber()+"','"+transfer.getVersionId().getId()+"')";
+							  + "'"+rule.getNumber()+"','"+transfer.getVersionId()+"')";
 							
 						result = result & db.ExecuteSql(sql);
 						if(!result) {

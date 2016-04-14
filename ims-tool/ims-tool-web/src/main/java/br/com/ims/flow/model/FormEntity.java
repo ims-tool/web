@@ -10,9 +10,9 @@ public class FormEntity extends AbstractFormEntity{
 	private Object formId;
 	private ConditionEntity condition;
 	private FormEntity nextFormDefault;
-	private VersionEntity versionId;
 	private String positionX;
 	private String positionY;
+	private String flowName;
 	private boolean clone;
 	
 	
@@ -108,13 +108,7 @@ public class FormEntity extends AbstractFormEntity{
 		this.nextFormDefault = nextFormDefault;
 	}
 
-	public VersionEntity getVersionId() {
-		return versionId;
-	}
 
-	public void setVersionId(VersionEntity versionId) {
-		this.versionId = versionId;
-	}
 	public String getImagePath() {
 		String imagePath = "";
 		if(this.formError) {
@@ -164,6 +158,15 @@ public class FormEntity extends AbstractFormEntity{
 	public void setPositionY(String positionY) {
 		this.positionY = positionY;
 	}
+
+	public String getFlowName() {
+		return flowName;
+	}
+
+	public void setFlowName(String flowName) {
+		this.flowName = flowName;
+	}
+	
 	
 	
 

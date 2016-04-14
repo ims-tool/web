@@ -28,7 +28,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		return instance;
 	}
 	private List<OperationParameterEntity> getOperationParameters(String operationGroupId) {
-		String sql = "SELECT op.id op_id,op.operationgroupid op_operationgroupid,op.paramname op_paramname,op.paramvalue op_paramvalue "+
+		String sql = "SELECT op.id op_id,op.operationgroupid op_operationgroupid,op.paramname op_paramname,op.paramvalue op_paramvalue, op.versionid op_versionid "+
 				 "FROM flow.operationparameters op "+
                 "WHERE op.operationgroupid ='"+operationGroupId+"' ";
 		List<OperationParameterEntity> result = new ArrayList<OperationParameterEntity>();
@@ -42,6 +42,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				op.setOperationGroupId(rs.getString("op_operationgroupid"));
 				op.setParamName(rs.getString("op_paramname"));
 				op.setParamValue(rs.getString("op_paramvalue"));
+				op.setVersionId(rs.getString("op_versionid"));
 				result.add(op);
 			}
 		} catch (SQLException e) {
@@ -54,7 +55,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		return result;
 	}
 	private List<OperationGroupEntity> getOperationGroups(String operationId) {
-		String sql = "SELECT og.id og_id,og.operationid og_operationid,og.ordernum og_ordernum,og.description og_description, "+
+		String sql = "SELECT og.id og_id,og.operationid og_operationid,og.ordernum og_ordernum,og.description og_description, og.versionid og_versionid ,"+
 					 "om.id om_id, om.name om_name,om.description om_description, om.methodreference om_methodreference, om.log_active om_log_active "+
 					 "FROM flow.operationgroup og "+
 	                 "INNER JOIN flow.operationmap om ON og.operationmapid = om.id "+ 
@@ -82,6 +83,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				og.setDescription(rs.getString("og_description"));
 				og.setOperationMap(operationMap);
 				og.setListOperationParameters(op);
+				og.setVersionId(rs.getString("og_versionid"));
 								
 				result.add(og);
 			}
@@ -96,7 +98,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 	}
 	
 	public List<OperationEntity> getByFilter(String where) {
-		String sql = "SELECT o.id o_id,o.name o_name,o.description o_description,o.nextformid o_nextformid, "+
+		String sql = "SELECT o.id o_id,o.name o_name,o.description o_description,o.nextformid o_nextformid,o.versionid o_versionid, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 				 "FROM flow.operation o "+
@@ -139,6 +141,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				operation.setNextForm(rs.getString("o_nextformid"));
 				operation.setListOperationGroup(groups);
 				operation.setTag(tag);	
+				operation.setVersionId(rs.getString("o_versionid"));
 				 
 				
 				result.add(operation);
@@ -173,7 +176,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"',"
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
 					 		+ entity.getNextForm()+","
-					 		+entity.getVersionId().getId()+")";
+					 		+entity.getVersionId()+")";
 				    
 		DbConnection db = new DbConnection("OperationDAO-save");
 		try{
@@ -183,7 +186,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					
 					
 					sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
-						   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId().getId()+"')";
+						   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId()+"')";
 						   
 						   
 					result = result & db.ExecuteSql(sql);
@@ -197,7 +200,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					} else {
 						for(OperationParameterEntity op : og.getListOperationParameters()) {
 							sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
-									   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId().getId()+"')";
+									   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId()+"')";
 							result = result & db.ExecuteSql(sql);
 							if(!result) {
 								//rollback
@@ -228,7 +231,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.operation SET name = '"+entity.getName()+"',description = '"+entity.getDescription()+"',"
 				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+",nextformid='"+entity.getNextForm()+"',"
-				   + "versionid  =  '"+entity.getVersionId().getId()+"' "
+				   + "versionid  =  '"+entity.getVersionId()+"' "
 				   + "WHERE id = "+entity.getId();
 		DbConnection db = new DbConnection("OperationDAO-update");
 		try {
@@ -251,7 +254,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					
 					
 					sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
-						   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId().getId()+"')";
+						   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId()+"')";
 						   
 						   
 					result = result & db.ExecuteSql(sql);
@@ -260,7 +263,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					} else {
 						for(OperationParameterEntity op : og.getListOperationParameters()) {
 							sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
-									   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId().getId()+"')";
+									   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId()+"')";
 							result = result & db.ExecuteSql(sql);
 							if(!result) {							
 								return result;

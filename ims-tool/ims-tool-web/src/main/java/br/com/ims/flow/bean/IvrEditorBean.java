@@ -247,7 +247,13 @@ public class IvrEditorBean extends AbstractBean {
                         	
     }
     private void loadFlow() {
-    	ServicesFactory.getInstance().getIvrEditorService().loadFlow(null,this.flowId);
+    	try {
+    		ServicesFactory.getInstance().getIvrEditorService().loadFlow(null,this.flowId);
+    	} catch(Exception e ) {
+    		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "IVR Editor",e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+    	}
     	this.flowId = "";
     	
     }

@@ -27,7 +27,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 	
 	public List<DisconnectEntity> getByFilter(String where) {
 		
-		String sql = "SELECT d.id d_id,d.name d_name,d.description d_description, "+
+		String sql = "SELECT d.id d_id,d.name d_name,d.description d_description,d.versionid d_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.disconnect d "+
@@ -65,6 +65,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 				disconnect.setName(rs.getString("d_name"));
 				disconnect.setDescription(rs.getString("d_description"));
 				disconnect.setTag(tag);
+				disconnect.setVersionId(rs.getString("d_versionid"));
 				
 				result.add(disconnect);
 			}
@@ -94,7 +95,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		
 		String sql = "INSERT INTO flow.disconnect (id,name,description,tag,versionid) "+
 					 "VALUES ('"+disconnect.getId()+"','"+disconnect.getName()+"','"+disconnect.getDescription()+"',"
-					 		+ (disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",'"+disconnect.getVersionId().getId()+"') ";
+					 		+ (disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",'"+disconnect.getVersionId()+"') ";
 		DbConnection db = new DbConnection("DecisionDAO-save");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
@@ -105,7 +106,7 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 	public boolean update(DisconnectEntity disconnect) {
 		boolean result = true;
 		String sql = "UPDATE flow.disconnect SET name='"+disconnect.getName()+"',description='"+disconnect.getDescription()+"',"
-				   + "tag="+(disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",versionid='"+disconnect.getVersionId().getId()+"' "+
+				   + "tag="+(disconnect.getTag() == null ? "NULL" : disconnect.getTag().getId())+",versionid='"+disconnect.getVersionId()+"' "+
 					 "WHERE id = '"+disconnect.getId()+"' ";
 		DbConnection db = new DbConnection("DecisionDAO-update");
 		result = db.ExecuteSql(sql);

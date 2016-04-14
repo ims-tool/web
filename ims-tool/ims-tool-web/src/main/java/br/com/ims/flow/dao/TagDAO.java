@@ -25,7 +25,7 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 	}
 
 	public List<TagEntity> getByFilter(String where) {
-		String sql = "SELECT t.id t_id, t.description t_description, "+ 
+		String sql = "SELECT t.id t_id, t.description t_description, t.versionid t_versionid,"+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	
 					 "FROM flow.tag t "+
 					 "INNER JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
@@ -50,6 +50,7 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 				tag.setId(rs.getString("t_id"));
 				tag.setDescription(rs.getString("t_description"));
 				tag.setType(tagType);
+				tag.setVersionId(rs.getString("t_versionid"));
 				
 				result.add(tag);
 			}
@@ -77,7 +78,7 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 	}
 	public boolean save(TagEntity tag) {
 		String sql = "INSERT INTO flow.tag (id,tagtypeid,description,versionid) "+
-				 "VALUES ('"+tag.getId()+"','"+tag.getType().getId()+"','"+tag.getDescription()+"',"+tag.getVersionId().getId()+") ";
+				 "VALUES ('"+tag.getId()+"','"+tag.getType().getId()+"','"+tag.getDescription()+"',"+tag.getVersionId()+") ";
 	             
 		DbConnection db = new DbConnection("TagDAO-save");
 		boolean result = db.ExecuteSql(sql);
@@ -89,7 +90,7 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 	@Override
 	public boolean update(TagEntity entity) {
 		// TODO Auto-generated method stub
-		String sql = "UPDATE flow.tag SET typetypeid='"+entity.getType().getId()+"',description='"+entity.getDescription()+"',versionid='"+entity.getVersionId().getId()+"' "+
+		String sql = "UPDATE flow.tag SET typetypeid='"+entity.getType().getId()+"',description='"+entity.getDescription()+"',versionid='"+entity.getVersionId()+"' "+
 					 "WHERE id '"+entity.getId()+"' ";
 
 	             

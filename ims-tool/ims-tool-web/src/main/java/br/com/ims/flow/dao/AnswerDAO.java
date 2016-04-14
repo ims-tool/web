@@ -27,7 +27,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	
 	public List<AnswerEntity> getByFilter(String where) {
 		
-		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.nextform a_nextform, "+
+		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.nextform a_nextform,a.versionid a_versionid "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.answer a "+
@@ -65,6 +65,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 				answer.setDescription(rs.getString("a_description"));
 				answer.setNextForm(rs.getString("a_nextform"));
 				answer.setTag(tag);
+				answer.setVersionId(rs.getString("a_versionid"));
 				
 				result.add(answer);
 			}
@@ -99,7 +100,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		
 		String sql = "INSERT INTO flow.answer (id,name,description,nextform,tag,versionid) "+
 					 "VALUES ('"+answer.getId()+"','"+answer.getName()+"','"+answer.getDescription()+"','"+answer.getNextForm()+"',"
-					 		+ (answer.getTag() == null ? "NULL" : answer.getTag().getId())+",'"+answer.getVersionId().getId()+"') ";
+					 		+ (answer.getTag() == null ? "NULL" : answer.getTag().getId())+",'"+answer.getVersionId()+"') ";
 		             
 		DbConnection db = new DbConnection("AnswerDAO-save");
 		result = db.ExecuteSql(sql);
@@ -111,7 +112,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	public boolean update(AnswerEntity answer) {
 		boolean result = true;
 		String sql = "UPDATE flow.answer SET name='"+answer.getName()+"',description='"+answer.getDescription()+"',nextform='"+answer.getNextForm()+"',"
-				   + "tag="+(answer.getTag() == null ? "NULL" : answer.getTag().getId())+",versionid='"+answer.getVersionId().getId()+"' "+
+				   + "tag="+(answer.getTag() == null ? "NULL" : answer.getTag().getId())+",versionid='"+answer.getVersionId()+"' "+
 					 "WHERE id = '"+answer.getId()+"' ";
 		DbConnection db = new DbConnection("AnswerDAO-update");             
 		result = db.ExecuteSql(sql);

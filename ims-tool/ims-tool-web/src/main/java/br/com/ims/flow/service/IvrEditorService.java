@@ -229,8 +229,8 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     	for(Node node : logicalFlow.getListNode()) {
     		
     		FormEntity form = node.getForm();
-    		form.setVersionId(version);
-    		((AbstractFormEntity)form.getFormId()).setVersionId(version);
+    		form.setVersionId(version.getId());
+    		((AbstractFormEntity)form.getFormId()).setVersionId(version.getId());
     		boolean exists = false;
     		/**
     		 * Preciso salvar todos os forms pra manter a posição X e Y na tela
@@ -346,7 +346,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 		this.connect(source, element);
 		return element;
     }
-    public void loadFlow(Element source, String formId) {
+    public void loadFlow(Element source, String formId) throws Exception {
     	
     	Node node = bean.getLogicalFlow().getNode(formId);    	
     	if(node != null) {
@@ -354,82 +354,86 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		return;
     	}
     	FormEntity form = ServicesFactory.getInstance().getFormService().get(formId);
-    	Element element = createElement(source,form);
-		form.setNextForm(((AbstractFormEntity)form.getFormId()).getNextForm());
-		if(form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
-			this.bean.updateTabFlowName(form.getName());
-    		
-    	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
-			PromptCollectEntity pc = (PromptCollectEntity)form.getFormId();
-			
-			FormEntity noInput = this.getFormNoMatchInput(pc.getId()+pc.getNoInput().getId(),
-														  Constants.FORM_TYPE_NOINPUT,
-														  pc.getNoInput_NextForm(),
-														  form,
-														  pc.getNoInput());
-			FormEntity noMatch = this.getFormNoMatchInput(pc.getId()+pc.getNoMatch().getId(),
-														  Constants.FORM_TYPE_NOMATCH,
-														  pc.getNoMatch_NextForm(),
-														  form,
-														  pc.getNoMatch());
-			
-			
-			Element elementNoInput = createElement(element,noInput);
-			Element elementNoMatch = createElement(element,noMatch);
-			
-			if(noInput.getNextForm() != null) {
-				loadFlow(elementNoInput, noInput.getNextForm());
-			}
-			if(noMatch.getNextForm() != null) {
-				loadFlow(elementNoMatch, noMatch.getNextForm());
-			}
-			
-    	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
-			
-			MenuEntity menu = (MenuEntity)form.getFormId();
-			
-			FormEntity noInput = this.getFormNoMatchInput(menu.getId()+menu.getNoInput().getId(),
-					  Constants.FORM_TYPE_NOINPUT,
-					  menu.getNoInput_NextForm(),
-					  form,
-					  menu.getNoInput());
-			FormEntity noMatch = this.getFormNoMatchInput(menu.getId()+menu.getNoMatch().getId(),
-								  Constants.FORM_TYPE_NOMATCH,
-								  menu.getNoMatch_NextForm(),
-								  form,
-								  menu.getNoMatch());
-			Element elementNoInput = createElement(element,noInput);
-			Element elementNoMatch = createElement(element,noMatch);
-			
-			if(noInput.getNextForm() != null) {
-				loadFlow(elementNoInput, noInput.getNextForm());
-			}
-			if(noMatch.getNextForm() != null) {
-				loadFlow(elementNoMatch, noMatch.getNextForm());
-			}
-			if(menu.getChoices() != null && menu.getChoices().size() > 0) {
-				for(ChoiceEntity choice : menu.getChoices()) {
-					FormEntity formChoice = this.getFormChoice(choice);
-					Element elementForm = createElement(element,formChoice);
-					if(formChoice.getNextForm() != null) {
-						loadFlow(elementForm, formChoice.getNextForm());
+    	try {
+	    	Element element = createElement(source,form);
+			form.setNextForm(((AbstractFormEntity)form.getFormId()).getNextForm());
+			if(form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
+				this.bean.updateTabFlowName(form.getName());
+	    		
+	    	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+				PromptCollectEntity pc = (PromptCollectEntity)form.getFormId();
+				
+				FormEntity noInput = this.getFormNoMatchInput(pc.getId()+pc.getNoInput().getId(),
+															  Constants.FORM_TYPE_NOINPUT,
+															  pc.getNoInput_NextForm(),
+															  form,
+															  pc.getNoInput());
+				FormEntity noMatch = this.getFormNoMatchInput(pc.getId()+pc.getNoMatch().getId(),
+															  Constants.FORM_TYPE_NOMATCH,
+															  pc.getNoMatch_NextForm(),
+															  form,
+															  pc.getNoMatch());
+				
+				
+				Element elementNoInput = createElement(element,noInput);
+				Element elementNoMatch = createElement(element,noMatch);
+				
+				if(noInput.getNextForm() != null) {
+					loadFlow(elementNoInput, noInput.getNextForm());
+				}
+				if(noMatch.getNextForm() != null) {
+					loadFlow(elementNoMatch, noMatch.getNextForm());
+				}
+				
+	    	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
+				
+				MenuEntity menu = (MenuEntity)form.getFormId();
+				
+				FormEntity noInput = this.getFormNoMatchInput(menu.getId()+menu.getNoInput().getId(),
+						  Constants.FORM_TYPE_NOINPUT,
+						  menu.getNoInput_NextForm(),
+						  form,
+						  menu.getNoInput());
+				FormEntity noMatch = this.getFormNoMatchInput(menu.getId()+menu.getNoMatch().getId(),
+									  Constants.FORM_TYPE_NOMATCH,
+									  menu.getNoMatch_NextForm(),
+									  form,
+									  menu.getNoMatch());
+				Element elementNoInput = createElement(element,noInput);
+				Element elementNoMatch = createElement(element,noMatch);
+				
+				if(noInput.getNextForm() != null) {
+					loadFlow(elementNoInput, noInput.getNextForm());
+				}
+				if(noMatch.getNextForm() != null) {
+					loadFlow(elementNoMatch, noMatch.getNextForm());
+				}
+				if(menu.getChoices() != null && menu.getChoices().size() > 0) {
+					for(ChoiceEntity choice : menu.getChoices()) {
+						FormEntity formChoice = this.getFormChoice(choice);
+						Element elementForm = createElement(element,formChoice);
+						if(formChoice.getNextForm() != null) {
+							loadFlow(elementForm, formChoice.getNextForm());
+						}
+						
 					}
-					
+				}
+			} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
+				DecisionEntity decision = (DecisionEntity)form.getFormId();
+				for(DecisionChanceEntity chance : decision.getListDecisionChance()) {
+					FormEntity formChance = this.getFormDecisionChance(chance);
+					Element elementForm = createElement(element,formChance);
+					if(formChance.getNextForm() != null) {
+						loadFlow(elementForm, formChance.getNextForm());
+					}
 				}
 			}
-		} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
-			DecisionEntity decision = (DecisionEntity)form.getFormId();
-			for(DecisionChanceEntity chance : decision.getListDecisionChance()) {
-				FormEntity formChance = this.getFormDecisionChance(chance);
-				Element elementForm = createElement(element,formChance);
-				if(formChance.getNextForm() != null) {
-					loadFlow(elementForm, formChance.getNextForm());
-				}
+			if(form.getNextForm() != null) {
+				loadFlow(element, form.getNextForm());
 			}
-		}
-		if(form.getNextForm() != null) {
-			loadFlow(element, form.getNextForm());
-		}
+    	} catch(Exception e) {
+    		throw new Exception("Error on load Node: "+(form == null ? formId : form.getName()),e);
+    	}
    
 		
     }

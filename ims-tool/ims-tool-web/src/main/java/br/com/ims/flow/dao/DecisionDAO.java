@@ -39,7 +39,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	}
 	
 	private List<DecisionChanceEntity> getChancesByFilter(String where) {
-		String sql = "SELECT dc.id dc_id,dc.decisionid dc_decisionid,dc.ordernum dc_ordernum,dc.condition dc_condition,dc.nextformid dc_nextformid, "+
+		String sql = "SELECT dc.id dc_id,dc.decisionid dc_decisionid,dc.ordernum dc_ordernum,dc.condition dc_condition,dc.nextformid dc_nextformid,dc.versionid dc_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.decisionchance dc "+
@@ -82,6 +82,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 				chance.setCondition(condition); 
 				chance.setNextForm(rs.getString("dc_nextformid"));
 				chance.setTag(tag);
+				chance.setVersionId(rs.getString("dc_versionid"));
 								
 				result.add(chance);
 			}
@@ -97,7 +98,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	}
 	
 	public List<DecisionEntity> getByFilter(String where) {
-		String sql = "SELECT d.id d_id,d.name d_name,d.description d_description, "+
+		String sql = "SELECT d.id d_id,d.name d_name,d.description d_description,d.versionid d_versionid, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 				 "FROM flow.decision d "+
@@ -139,6 +140,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 				decision.setDescription(rs.getString("d_description"));
 				decision.setListDecisionChance(chances);
 				decision.setTag(tag);	
+				decision.setVersionId(rs.getString("d_versionid"));
 				
 				result.add(decision);
 			}
@@ -172,7 +174,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		String sql = "INSERT INTO flow.decision (id,name,description,tag,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"',"
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
-					 		+entity.getVersionId().getId()+")";
+					 		+entity.getVersionId()+")";
 				    
 		DbConnection db = new DbConnection("DecisionDAO-save");             
 		result = db.ExecuteSql(sql);
@@ -181,7 +183,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 				sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
 					   "VALUES ('"+chance.getId()+"','"+entity.getId()+"','"+chance.getOrderNum()+"',"+
 					   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+chance.getNextForm()+","+
-					   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId().getId()+") ";
+					   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId()+") ";
 				result = result & db.ExecuteSql(sql);
 				if(!result) {
 					//rollback
@@ -204,7 +206,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.decision SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',"
 				+ "tag = "+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+", "
-				+ "versionid = "+entity.getVersionId().getVersionId()+" "
+				+ "versionid = "+entity.getVersionId()+" "
 				+ "WHERE id = "+entity.getId();
 		DbConnection db = new DbConnection("DecisionDAO-update");
 		result = db.ExecuteSql(sql);
@@ -216,7 +218,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 					sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
 							   "VALUES ('"+chance.getId()+"','"+entity.getId()+"','"+chance.getOrderNum()+"',"+
 							   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+chance.getNextForm()+","+
-							   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId().getId()+") ";
+							   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId()+") ";
 						result = result & db.ExecuteSql(sql);
 						if(!result) {					
 							break;

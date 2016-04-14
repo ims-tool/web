@@ -37,7 +37,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		return null;
 	}
 	private List<ChoiceEntity> getChoicesByFilter(String where) {
-		String sql = "SELECT c.id c_id,c.name c_name,c.menu c_menu,c.dtmf c_dtmf,c.nextform c_nextform,c.condition c_condition, "+					
+		String sql = "SELECT c.id c_id,c.name c_name,c.menu c_menu,c.dtmf c_dtmf,c.nextform c_nextform,c.condition c_condition,c.versionid c_versionid, "+					
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.choice c "+
@@ -81,6 +81,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				choice.setNextForm(rs.getString("c_nextform"));
 				choice.setTag(tag);
 				choice.setCondition(condition);
+				choice.setVersionId(rs.getString("c_versionid"));
 				
 				result.add(choice);
 			}
@@ -98,7 +99,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	}
 	
 	public List<MenuEntity> getByFilter(String where,boolean lazy) {
-		String sql = "SELECT m.id m_id,m.name m_name,m.description m_description,m.prompt m_prompt,m.fetchtimeout m_fetchtimeout, "+
+		String sql = "SELECT m.id m_id,m.name m_name,m.description m_description,m.prompt m_prompt,m.fetchtimeout m_fetchtimeout,m.versionid m_versionid, "+
 				 "m.terminatingtimeout m_terminatingtimeout, m.terminatingcharacter m_terminatingcharacter, "+
 				 "m.noinput_nextform m_noinput_nextform,m.nomatch_nextform m_nomatch_nextform, "+
 				 "ni.id ni_id,ni.name ni_name, ni.type ni_type,ni.threshold ni_threshold, ni.prompt ni_prompt, ni.nextform ni_nextform, "+
@@ -200,6 +201,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			menu.setNoMatch_NextForm(rs.getString("m_nomatch_nextform"));
 			menu.setNoInput_Tag(tag_ni);
 			menu.setNoMatch_Tag(tag_nm);
+			menu.setVersionId(rs.getString("m_versionid"));
 				
 			result.add(menu);
 		}
@@ -243,7 +245,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 					 (menu.getNoMatch_Tag() == null ? "NULL" : menu.getNoMatch_Tag().getId())+","+
 					 (menu.getFetchTimeOut() == null || menu.getFetchTimeOut().length() == 0 ? "NULL" : menu.getFetchTimeOut())+","+
 				     (menu.getTerminatingTimeOut() == null || menu.getTerminatingTimeOut().length() == 0 ? "NULL" : menu.getFetchTimeOut() )+","+
-					 (menu.getTerminatingCharacter() ==  null || menu.getTerminatingCharacter().length() == 0? "NULL" : "'"+menu.getTerminatingCharacter()+"'")+",'"+menu.getVersionId().getId()+"') ";
+					 (menu.getTerminatingCharacter() ==  null || menu.getTerminatingCharacter().length() == 0? "NULL" : "'"+menu.getTerminatingCharacter()+"'")+",'"+menu.getVersionId()+"') ";
 		DbConnection db = new DbConnection("MenuDAO-save");             
 		result = db.ExecuteSql(sql);
 		if(result) {
@@ -252,7 +254,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 					sql = "INSERT INTO flow.choice (id,name,menu,dtmf,nextform,condition,tag,versionid) "+
 						   "VALUES ('"+choice.getId()+"','"+choice.getName()+"','"+menu.getId()+"','"+choice.getDtmf()+"','"+choice.getNextForm()+"',"+
 							(choice.getCondition() == null ? "NULL" : "'"+choice.getCondition().getId()+"'")+","+
-						   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+menu.getVersionId().getId()+") ";
+						   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+menu.getVersionId()+") ";
 					result = result & db.ExecuteSql(sql);
 					if(!result) {
 						//rollback
@@ -284,7 +286,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				+ "fetchtimeout = "+(menu.getFetchTimeOut() == null || menu.getFetchTimeOut().length() == 0? "NULL" : menu.getFetchTimeOut())+","
 				+ "terminatingtimeout = "+(menu.getTerminatingTimeOut() == null || menu.getTerminatingTimeOut().length() == 0? "NULL" : menu.getTerminatingTimeOut())+","
 				+ "terminatingcharacter = "+(menu.getTerminatingCharacter() == null || menu.getTerminatingCharacter().length()==0? "NULL" :  "'"+menu.getTerminatingCharacter()+"'")+","
-				+ "versionid = "+menu.getVersionId().getId()+" "
+				+ "versionid = "+menu.getVersionId()+" "
 				+ "WHERE id = "+menu.getId();
 		DbConnection db = new DbConnection("MenuDAO-update");            
 		result = db.ExecuteSql(sql);
@@ -297,7 +299,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 						sql = "INSERT INTO flow.choice (id,name,menu,dtmf,nextform,condition,tag,versionid) "+
 							   "VALUES ('"+choice.getId()+"','"+choice.getName()+"','"+menu.getId()+"','"+choice.getDtmf()+"','"+choice.getNextForm()+"',"+
 								(choice.getCondition() == null ? "NULL" : "'"+choice.getCondition().getId()+"'")+","+
-							   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+menu.getVersionId().getId()+") ";
+							   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+menu.getVersionId()+") ";
 						result = result & db.ExecuteSql(sql);
 						if(!result) {
 							break;

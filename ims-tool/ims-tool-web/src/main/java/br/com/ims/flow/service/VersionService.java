@@ -7,6 +7,7 @@ import br.com.ims.flow.factory.DAOFactory;
 import br.com.ims.flow.model.AudioEntity;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.FormEntity;
+import br.com.ims.flow.model.GrammarEntity;
 import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.PromptEntity;
 import br.com.ims.flow.model.VersionEntity;
@@ -40,16 +41,16 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll(true);
 		for(FormEntity form :  forms) {
 			
-			if(form.getVersionId() != null && form.getVersionId().getId().equals(id)) {
+			if(form.getVersionId() != null && form.getVersionId().equals(id)) {
 				return true;
 				
 			}
 			
 		}
-		List<NoMatchInputEntity> noMatchInputs = DAOFactory.getInstance().getNoMatchInputDAO().getAll();
+		List<NoMatchInputEntity> noMatchInputs = DAOFactory.getInstance().getNoMatchInputDAO().getAll(true);
 		for(NoMatchInputEntity ni :  noMatchInputs) {
 			
-			if(ni.getVersionId() != null && ni.getVersionId().getId().equals(id)) {
+			if(ni.getVersionId() != null && ni.getVersionId().equals(id)) {
 				return true;
 				
 			}
@@ -58,7 +59,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 		List<ConditionEntity> conditions = DAOFactory.getInstance().getConditionDAO().getAll();
 		for(ConditionEntity condition :  conditions) {
 			
-			if(condition.getVersionId() != null && condition.getVersionId().getId().equals(id)) {
+			if(condition.getVersionId() != null && condition.getVersionId().equals(id)) {
 				return true;
 				
 			}
@@ -67,7 +68,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll(true);
 		for(PromptEntity prompt :  prompts) {
 			
-			if(prompt.getVersionId() != null && prompt.getVersionId().getId().equals(id)) {
+			if(prompt.getVersionId() != null && prompt.getVersionId().equals(id)) {
 				return true;
 				
 			}
@@ -76,7 +77,16 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 		List<AudioEntity> audios = DAOFactory.getInstance().getAudioDAO().getAll();
 		for(AudioEntity audio :  audios) {
 			
-			if(audio.getVersionId() != null && audio.getVersionId().getId().equals(id)) {
+			if(audio.getVersionId() != null && audio.getVersionId().equals(id)) {
+				return true;
+				
+			}
+			
+		}
+		List<GrammarEntity> grammars = DAOFactory.getInstance().getGrammarDAO().getAll();
+		for(GrammarEntity grammar :  grammars) {
+			
+			if(grammar.getVersionId() != null && grammar.getVersionId().equals(id)) {
 				return true;
 				
 			}
@@ -105,7 +115,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 		List<FormEntity> forms = DAOFactory.getInstance().getFormDAO().getAll(true);
 		for(FormEntity form :  forms) {
 			
-			if(form.getVersionId() != null && form.getVersionId().getId().equals(id)) {
+			if(form.getVersionId() != null && form.getVersionId().equals(id)) {
 				String [] obj = {form.getFormType().getName(),form.getName()};
 				result.add(obj);
 				
@@ -115,17 +125,17 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 		List<NoMatchInputEntity> noMatchInputs = DAOFactory.getInstance().getNoMatchInputDAO().getAll();
 		for(NoMatchInputEntity ni :  noMatchInputs) {
 			
-			if(ni.getVersionId() != null && ni.getVersionId().getId().equals(id)) {
+			if(ni.getVersionId() != null && ni.getVersionId().equals(id)) {
 				String [] obj = {"NoMatchInput - "+ni.getType(),ni.getName()};
 				result.add(obj);
 				
 			}
 			
 		}
-		List<ConditionEntity> conditions = DAOFactory.getInstance().getConditionDAO().getAll();
+		List<ConditionEntity> conditions = DAOFactory.getInstance().getConditionDAO().getAll(true);
 		for(ConditionEntity condition :  conditions) {
 			
-			if(condition.getVersionId() != null && condition.getVersionId().getId().equals(id)) {
+			if(condition.getVersionId() != null && condition.getVersionId().equals(id)) {
 				String [] obj = {"Condition",condition.getName()};
 				result.add(obj);
 				
@@ -135,7 +145,7 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll(true);
 		for(PromptEntity prompt :  prompts) {
 			
-			if(prompt.getVersionId() != null && prompt.getVersionId().getId().equals(id)) {
+			if(prompt.getVersionId() != null && prompt.getVersionId().equals(id)) {
 				String [] obj = {"Prompt",prompt.getName()};
 				result.add(obj);
 				
@@ -145,8 +155,18 @@ public class VersionService extends AbstractEntityService<VersionEntity>{
 		List<AudioEntity> audios = DAOFactory.getInstance().getAudioDAO().getAll();
 		for(AudioEntity audio :  audios) {
 			
-			if(audio.getVersionId() != null && audio.getVersionId().getId().equals(id)) {
+			if(audio.getVersionId() != null && audio.getVersionId().equals(id)) {
 				String [] obj = {"Audio",audio.getName()};
+				result.add(obj);
+				
+			}
+			
+		}
+		List<GrammarEntity> grammars = DAOFactory.getInstance().getGrammarDAO().getAll();
+		for(GrammarEntity grammar :  grammars) {
+			
+			if(grammar.getVersionId() != null && grammar.getVersionId().equals(id)) {
+				String [] obj = {"Grammar",grammar.getName()};
 				result.add(obj);
 				
 			}

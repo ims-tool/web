@@ -30,7 +30,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	}
 	
 	private List<ConditionParameterEntity> getConditionParameters(String conditionGroupId) {
-		String sql = "SELECT cp.id cp_id,cp.conditiongroupid cp_conditiongroupid,cp.paramname cp_paramname,cp.paramvalue cp_paramvalue "+
+		String sql = "SELECT cp.id cp_id,cp.conditiongroupid cp_conditiongroupid,cp.paramname cp_paramname,cp.paramvalue cp_paramvalue, cp.versionid cp_versionid "+
 				 "FROM flow.conditionparameters cp "+
                "WHERE cp.conditiongroupid ='"+conditionGroupId+"' ";
 		List<ConditionParameterEntity> result = new ArrayList<ConditionParameterEntity>();
@@ -44,6 +44,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 				cp.setConditionGroupId(rs.getString("cp_conditiongroupid"));
 				cp.setParamName(rs.getString("cp_paramname"));
 				cp.setParamValue(rs.getString("cp_paramvalue"));
+				cp.setVersionId(rs.getString("cp_versionid"));
 				result.add(cp);
 			}
 		} catch (SQLException e) {
@@ -61,7 +62,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		return result;
 	}
 	private List<ConditionValueEntity> getConditionValues(String conditionGroupId) {
-		String sql = "SELECT cv.id cv_id,cv.conditiongroupid cv_conditiongroupid,cv.ordernum cv_ordernum,cv.operation cv_operation,"
+		String sql = "SELECT cv.id cv_id,cv.conditiongroupid cv_conditiongroupid,cv.ordernum cv_ordernum,cv.operation cv_operation,cv.versionid cv_versionid, "
 				    + "cv.value1 cv_value1, cv.value2 cv_value2,cv.value3 cv_value3,cv.value4 cv_value4,cv.value5 cv_value5,"
 				    + "cv.value6 cv_value6, cv.value7 cv_value7,cv.value8 cv_value8,cv.value9 cv_value9,cv.value10 cv_value10,"
 				    + "tr.id tr_id, tr.description tr_description, "
@@ -123,6 +124,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 				cv.setValue10(rs.getString("cv_value10"));
 				cv.setTagTrue(tagTrue);
 				cv.setTagFalse(tagFalse);
+				cv.setVersionId(rs.getString("cv_versionid"));
 				
 				
 				result.add(cv);
@@ -144,7 +146,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	}
 	
 	private List<ConditionGroupEntity> getConditionGroups(String conditionId) {
-		String sql = "SELECT cg.id cg_id,cg.conditionid cg_conditionid,cg.ordernum cg_ordernum,cg.description cg_description, "+
+		String sql = "SELECT cg.id cg_id,cg.conditionid cg_conditionid,cg.ordernum cg_ordernum,cg.description cg_description,cg.versionid cg_versionid, "+
 				 "cm.id cm_id, cm.name cm_name,cm.description cm_description, cm.type cm_type, cm.methodreference cm_methodreference, cm.log_active cm_log_active "+
 				 "FROM flow.conditiongroup cg "+
                 "INNER JOIN flow.conditionmap cm ON cg.conditionmapid = cm.id "+ 
@@ -175,7 +177,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 				cg.setConditionMap(conditionMap);
 				cg.setListConditionParameters(cp);
 				cg.setListConditionValues(cv);
-								
+				cg.setVersionId(rs.getString("cg_versionid"));
 				result.add(cg);
 			}
 		} catch (SQLException e) {
@@ -196,7 +198,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		return this.getByFilter(where, false);
 	}
 	public List<ConditionEntity> getByFilter(String where,boolean lazy) {
-		String sql = "SELECT c.id c_id,c.name c_name,c.description c_description, "+
+		String sql = "SELECT c.id c_id,c.name c_name,c.description c_description,c.versionid c_versionid, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 				 "FROM flow.condition c "+
@@ -241,7 +243,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 				condition.setDescription(rs.getString("c_description"));
 				condition.setListConditionGroup(groups);
 				condition.setTag(tag);	
-				 
+				condition.setVersionId(rs.getString("c_versionid")); 
 				
 				result.add(condition);
 			}
@@ -290,7 +292,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		String sql = "INSERT INTO flow.condition (id,name,description,tag,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"',"
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
-					 		+entity.getVersionId().getId()+")";
+					 		+entity.getVersionId()+")";
 		DbConnection db = new DbConnection("ConditionDAO-save");
 		try {
 			result = db.ExecuteSql(sql);
@@ -299,7 +301,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 					
 					
 					sql = "INSERT INTO flow.conditiongroup (id,conditionid,ordernum,conditionmapid,description, versionid) "+
-						   "VALUES ('"+cg.getId()+"','"+entity.getId()+"','"+cg.getOrderNum()+"','"+cg.getConditionMap().getId()+"','"+cg.getDescription()+"','"+entity.getVersionId().getId()+"')";
+						   "VALUES ('"+cg.getId()+"','"+entity.getId()+"','"+cg.getOrderNum()+"','"+cg.getConditionMap().getId()+"','"+cg.getDescription()+"','"+entity.getVersionId()+"')";
 						   
 						   
 					result = result & db.ExecuteSql(sql);
@@ -313,7 +315,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 					} else {
 						for(ConditionParameterEntity cp : cg.getListConditionParameters()) {
 							sql = "INSERT INTO flow.conditionparameters (id,conditiongroupid,paramname,paramvalue,versionid) "+
-									   "VALUES ('"+cp.getId()+"','"+cg.getId()+"','"+cp.getParamName()+"','"+cp.getParamValue()+"','"+entity.getVersionId().getId()+"')";
+									   "VALUES ('"+cp.getId()+"','"+cg.getId()+"','"+cp.getParamName()+"','"+cp.getParamValue()+"','"+entity.getVersionId()+"')";
 							result = result & db.ExecuteSql(sql);
 							if(!result) {
 								//rollback
@@ -340,7 +342,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 									+ (cv.getValue9() == null || cv.getValue9().length() == 0? "NULL" : "'"+cv.getValue9()+"'")+","
 									+ (cv.getValue10() == null || cv.getValue10().length() == 0? "NULL" : "'"+cv.getValue10()+"'")+","
 									+ (cv.getTagTrue() == null ? "NULL" : cv.getTagTrue().getId())+","
-									+ (cv.getTagFalse() == null ? "NULL" : cv.getTagFalse().getId())+",'"+entity.getVersionId().getId()+"') ";
+									+ (cv.getTagFalse() == null ? "NULL" : cv.getTagFalse().getId())+",'"+entity.getVersionId()+"') ";
 							result = result & db.ExecuteSql(sql);
 							if(!result) {
 								//rollback
@@ -372,7 +374,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		boolean result = true;
 		String sql = "UPDATE flow.condition SET name = '"+entity.getName()+"',description = '"+entity.getDescription()+"',"
 				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+","
-				   + "versionid  =  '"+entity.getVersionId().getId()+"' "
+				   + "versionid  =  '"+entity.getVersionId()+"' "
 				   + "WHERE id = "+entity.getId();
 		DbConnection db = new DbConnection("ConditionDAO-update");
 		try {
@@ -400,7 +402,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 				for(ConditionGroupEntity cg : entity.getListConditionGroup()) {
 					
 					sql = "INSERT INTO flow.conditiongroup (id,conditionid,ordernum,conditionmapid,description, versionid) "+
-							   "VALUES ('"+cg.getId()+"','"+entity.getId()+"','"+cg.getOrderNum()+"','"+cg.getConditionMap().getId()+"','"+cg.getDescription()+"','"+entity.getVersionId().getId()+"')";
+							   "VALUES ('"+cg.getId()+"','"+entity.getId()+"','"+cg.getOrderNum()+"','"+cg.getConditionMap().getId()+"','"+cg.getDescription()+"','"+entity.getVersionId()+"')";
 							   
 							   
 					result = result & db.ExecuteSql(sql);
@@ -411,7 +413,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 					
 					for(ConditionParameterEntity cp : cg.getListConditionParameters()) {
 						sql = "INSERT INTO flow.conditionparameters (id,conditiongroupid,paramname,paramvalue,versionid) "+
-								   "VALUES ('"+cp.getId()+"','"+cg.getId()+"','"+cp.getParamName()+"','"+cp.getParamValue()+"','"+entity.getVersionId().getId()+"')";
+								   "VALUES ('"+cp.getId()+"','"+cg.getId()+"','"+cp.getParamName()+"','"+cp.getParamValue()+"','"+entity.getVersionId()+"')";
 						result = result & db.ExecuteSql(sql);
 						if(!result) {
 							return result;
@@ -431,7 +433,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 								+ (cv.getValue9() == null || cv.getValue9().length() == 0? "NULL" : "'"+cv.getValue9()+"'")+","
 								+ (cv.getValue10() == null || cv.getValue10().length() == 0? "NULL" : "'"+cv.getValue10()+"'")+","
 								+ (cv.getTagTrue() == null ? "NULL" : cv.getTagTrue().getId())+","
-								+ (cv.getTagFalse() == null ? "NULL" : cv.getTagFalse().getId())+",'"+entity.getVersionId().getId()+"') ";
+								+ (cv.getTagFalse() == null ? "NULL" : cv.getTagFalse().getId())+",'"+entity.getVersionId()+"') ";
 						result = result & db.ExecuteSql(sql);
 						if(!result) {
 							return result;

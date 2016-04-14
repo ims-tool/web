@@ -15,7 +15,10 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 		
 		return DAOFactory.getInstance().getNoMatchInputDAO().getAll();
 	}
-	
+	public List<NoMatchInputEntity> getAll(boolean lazy) {
+		
+		return DAOFactory.getInstance().getNoMatchInputDAO().getAll(lazy);
+	}
 	
 	public List<NoMatchInputEntity> getNoMatchAll() {		
 	
@@ -43,6 +46,10 @@ public class NoMatchInputService extends AbstractEntityService<NoMatchInputEntit
 	public NoMatchInputEntity get(String id) {
 		
 		return DAOFactory.getInstance().getNoMatchInputDAO().get(id);
+	}
+	public NoMatchInputEntity get(String id,boolean lazy) {
+		
+		return DAOFactory.getInstance().getNoMatchInputDAO().get(id,lazy);
 	}
 	public NoMatchInputEntity getByName(String name) {
 		

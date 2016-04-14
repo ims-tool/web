@@ -98,7 +98,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 	
 	public List<FormEntity> getByFilter(String where, boolean lazy) {
 
-		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.formtype f_formtype, f.formid f_formid, f.condition f_condition, f.positionx f_positionx, f.positiony f_positiony,"+ 
+		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.formtype f_formtype, f.formid f_formid, f.condition f_condition, f.positionx f_positionx, f.positiony f_positiony,f.versionid f_versionid,f.flowname f_flowname, "+ 
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.form f "+
@@ -151,7 +151,8 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 				form.setTag(tag);
 				form.setPositionX(rs.getString("f_positionx"));
 				form.setPositionY(rs.getString("f_positiony"));
-
+				form.setVersionId(rs.getString("f_versionid"));
+				form.setFlowName(rs.getString("f_flowname"));
 				result.add(form);
 				
 			
@@ -318,10 +319,10 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		// TODO Auto-generated method stub
 		
 		boolean result = true;
-		String sql = "INSERT INTO flow.form (id,name,description,formtype,formid,tag,condition,positionx,positiony,versionid) "
+		String sql = "INSERT INTO flow.form (id,name,description,formtype,formid,tag,condition,positionx,positiony,flowname,versionid) "
 					   + "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFormType().getId()+"','"+((AbstractEntity)entity.getFormId()).getId()+"',"
 					   + (entity.getTag() == null ? "NULL" : entity.getTag().getId())+","+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId() )+","
-					   + "'"+entity.getPositionX()+"','"+entity.getPositionY()+"','"+entity.getVersionId().getId()+"')";
+					   + "'"+entity.getPositionX()+"','"+entity.getPositionY()+"','"+entity.getFlowName()+"','"+entity.getVersionId()+"')";
 		DbConnection db = new DbConnection("FormDAO-save");
 		result = db.ExecuteSql(sql);
 		db.finalize();
@@ -338,7 +339,8 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 					   + "positionx='"+entity.getPositionX()+"',positiony='"+entity.getPositionY()+"',"					   
 					   + "tag="+(entity.getTag() == null ? "NULL" :  entity.getTag().getId())+","
 					   + "condition="+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId())+","
-					   + "versionid='"+entity.getVersionId().getId()+"' "
+					   + "flowname='"+entity.getFlowName()+"' "
+					   + "versionid='"+entity.getVersionId()+"' "
 					   + "WHERE id = '"+entity.getId()+"' ";
 		DbConnection db = new DbConnection("FormDAO-update");
 		result = db.ExecuteSql(sql);

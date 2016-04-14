@@ -23,7 +23,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		return instance;
 	}
 	public List<ConditionMapEntity> getByFilter(String where) {
-		String sql = "SELECT cm.id cm_id, cm.name cm_name,cm.description cm_description, cm.type cm_type, cm.methodreference cm_methodreference, cm.log_active cm_log_active "
+		String sql = "SELECT cm.id cm_id, cm.name cm_name,cm.description cm_description, cm.type cm_type, cm.methodreference cm_methodreference, cm.log_active cm_log_active, cm.versionid cm_versionid "
 				    + "FROM flow.conditionmap cm "
 				    + "<WHERE> "
 				    + "ORDER BY cm.name";
@@ -46,7 +46,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 				conditionMap.setType(rs.getString("cm_type"));
 				conditionMap.setMethodReference(rs.getString("cm_methodreference"));
 				conditionMap.setLogActive(rs.getInt("cm_log_active"));	
-				 
+				conditionMap.setVersionId(rs.getString("cm_versionid")); 
 				
 				result.add(conditionMap);
 			}
@@ -91,7 +91,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 	public boolean save(ConditionMapEntity entity) {
 		
 		String sql = "INSERT INTO flow.conditionmap (id,name,description,type,methodreference,log_active,versionid) "
-				    + "VALUES ("+entity.getId()+",'"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getType()+"','"+entity.getMethodReference()+"','"+entity.getLogActive()+"','"+entity.getVersionId().getId()+"') ";
+				    + "VALUES ("+entity.getId()+",'"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getType()+"','"+entity.getMethodReference()+"','"+entity.getLogActive()+"','"+entity.getVersionId()+"') ";
 		boolean result = true;
 		DbConnection db = new DbConnection("ConditionMapDAO-save");
 		result =  db.ExecuteSql(sql);
@@ -103,7 +103,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 	@Override
 	public boolean update(ConditionMapEntity entity) {
 		// TODO Auto-generated method stub
-		String sql = "UPDATE flow.conditionmap SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',type = '"+entity.getType()+"',methodreference='"+entity.getMethodReference()+"',log_active='"+entity.getLogActive()+"' ,versionid='"+entity.getVersionId().getId()+"' "
+		String sql = "UPDATE flow.conditionmap SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',type = '"+entity.getType()+"',methodreference='"+entity.getMethodReference()+"',log_active='"+entity.getLogActive()+"' ,versionid='"+entity.getVersionId()+"' "
    			    	+ "WHERE id = '"+entity.getId()+"'  ";
 		boolean result = true;
 		DbConnection db = new DbConnection("ConditionMapDAO-update");

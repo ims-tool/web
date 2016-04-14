@@ -25,7 +25,7 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 
 	public List<OperationMapEntity> getByFilter(String where) {
 
-		String sql = "SELECT om.id om_id, om.name om_name,om.description om_description, om.methodreference om_methodreference, om.log_active om_log_active "
+		String sql = "SELECT om.id om_id, om.name om_name,om.description om_description, om.methodreference om_methodreference, om.log_active om_log_active,om.versionid om_versionid "
 			    + "FROM flow.operationmap om "
 			    + "<WHERE> "
 			    + "ORDER BY om.name";
@@ -47,7 +47,7 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 			operationMap.setDescription(rs.getString("om_description"));
 			operationMap.setMethodReference(rs.getString("om_methodreference"));
 			operationMap.setLogActive(rs.getInt("om_log_active"));	
-			 
+			operationMap.setVersionId(rs.getString("om_versionid")); 
 			
 			result.add(operationMap);
 		}
@@ -92,7 +92,7 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 	
 	public boolean save(OperationMapEntity entity) {
 		String sql = "INSERT INTO flow.operationmap (id,name,description,methodreference,log_active,versionid) "
-			    	+ "VALUES ("+entity.getId()+",'"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getMethodReference()+"','"+entity.getLogActive()+"','"+entity.getVersionId().getId()+"') ";
+			    	+ "VALUES ("+entity.getId()+",'"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getMethodReference()+"','"+entity.getLogActive()+"','"+entity.getVersionId()+"') ";
 		boolean result = true;
 		DbConnection db = new DbConnection("OperationMapDAO-save");
 		result = db.ExecuteSql(sql);
@@ -103,7 +103,7 @@ public class OperationMapDAO extends AbstractDAO<OperationMapEntity> {
 	@Override
 	public boolean update(OperationMapEntity entity) {
 		// TODO Auto-generated method stub
-		String sql = "UPDATE flow.operationmap SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',methodreference='"+entity.getMethodReference()+"',log_active='"+entity.getLogActive()+"',versionid='"+entity.getVersionId().getId()+"' "
+		String sql = "UPDATE flow.operationmap SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',methodreference='"+entity.getMethodReference()+"',log_active='"+entity.getLogActive()+"',versionid='"+entity.getVersionId()+"' "
 			    	+ "WHERE id = '"+entity.getId()+"'  ";
 	
 		boolean result = true;

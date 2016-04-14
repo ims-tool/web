@@ -38,7 +38,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		log.info("getByFilter("+where+","+lazy+")");
 		System.out.println("PromptCollectDAO-getByFilter("+where+","+lazy+")");
 		
-		String sql = "SELECT pc.id pc_id,pc.name pc_name,pc.description pc_description,pc.flushprompt pc_flushprompt,pc.prompt pc_prompt,"+
+		String sql = "SELECT pc.id pc_id,pc.name pc_name,pc.description pc_description,pc.flushprompt pc_flushprompt,pc.prompt pc_prompt,pc.versionid pc_versionid,"+
 				 "pc.fetchtimeout pc_fetchtimeout, pc.interdigittimeout pc_interdigittimeout, pc.terminatingcharacter pc_terminatingcharacter, "+
 				 "pc.nextform pc_nextform, pc.noinput_nextform pc_noinput_nextform,pc.nomatch_nextform pc_nomatch_nextform, "+
 				 "g.id g_id, g.name g_name,g.description g_description,g.type g_type,g.sizemax g_sizemax,g.sizemin g_sizemin, "+
@@ -161,6 +161,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			promptCollect.setNoMatch_NextForm(rs.getString("pc_nomatch_nextform"));
 			promptCollect.setNoInput_Tag(tag_ni);
 			promptCollect.setNoMatch_Tag(tag_nm);
+			promptCollect.setVersionId(rs.getString("pc_versionid"));
 			
 		
 			result.add(promptCollect);
@@ -217,7 +218,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 					+ (promptCollect.getTerminatingTimeout() ==  null || promptCollect.getTerminatingTimeout().length() == 0 ? "NULL" : promptCollect.getTerminatingTimeout())+","
 					+ (promptCollect.getTerminatingCharacter() == null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","
 					+ promptCollect.getNextForm()+","
-					+ (promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",'"+promptCollect.getVersionId().getId()+"') ";
+					+ (promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",'"+promptCollect.getVersionId()+"') ";
 		DbConnection db = new DbConnection("PromptCollectDAO-save");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
@@ -242,7 +243,7 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 				     "terminatingtimeout="+(promptCollect.getTerminatingTimeout() == null || promptCollect.getTerminatingTimeout().length() == 0 ? "NULL" : promptCollect.getTerminatingTimeout())+", "+
 		             "terminatingcharacter="+(promptCollect.getTerminatingCharacter()== null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","+
 		             "nextform='"+promptCollect.getNextForm()+"', "+
-				     "tag="+(promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",versionid='"+promptCollect.getVersionId().getId()+"' "+
+				     "tag="+(promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",versionid='"+promptCollect.getVersionId()+"' "+
 					 "WHERE id = '"+promptCollect.getId()+"' ";
 		DbConnection db = new DbConnection("PromptCollectDAO-update");             
 		result = db.ExecuteSql(sql);

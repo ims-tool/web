@@ -27,7 +27,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 	
 	public List<FlowEntity> getByFilter(String where) {
 		
-		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.flowname f_flowname,f.nextform f_nextform, "+
+		String sql = "SELECT f.id f_id,f.name f_name,f.description f_description,f.flowname f_flowname,f.nextform f_nextform,f.versionid f_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.flow f "+
@@ -66,6 +66,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 				flow.setFlowName(rs.getString("f_flowname"));
 				flow.setNextForm(rs.getString("f_nextform"));
 				flow.setTag(tag);
+				flow.setVersionId(rs.getString("f_versionid"));
 				
 				result.add(flow);
 			}
@@ -96,7 +97,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 		String sql = "INSERT INTO flow.flow (id,name,description,flowname,nextform,tag,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFlowName()+"',"+
 					 entity.getNextForm()+","+
-					 (entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId().getId()+"') ";
+					 (entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId()+"') ";
 		DbConnection db = new DbConnection("FlowDAO-save");            
 		result = db.ExecuteSql(sql);
 		db.finalize();
@@ -108,7 +109,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.flow SET name='"+entity.getName()+"',description='"+entity.getDescription()+"',flowname='"+entity.getFlowName()+"',"
 				   + "nextform='"+entity.getNextForm()+"',"
-				   + "tag="+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",versionid='"+entity.getVersionId().getId()+"' "+
+				   + "tag="+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",versionid='"+entity.getVersionId()+"' "+
 					 "WHERE id = '"+entity.getId()+"' ";
 		DbConnection db = new DbConnection("FlowDAO-update");
 		result = db.ExecuteSql(sql);

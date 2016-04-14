@@ -33,7 +33,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	public List<AnnounceEntity> getByFilter(String where) {
 		log.info("getByFilter("+where+")");
 		System.out.println("AnnounceDAO-getByFilter("+where+")");
-		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.flushprompt a_flushprompt,a.prompt a_prompt,a.nextform a_nextform, "+
+		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.flushprompt a_flushprompt,a.prompt a_prompt,a.nextform a_nextform, a.versionid a_versionid,"+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.announce a "+
@@ -74,6 +74,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 				announce.setFlushprompt(rs.getInt("a_flushprompt"));
 				announce.setNextForm(rs.getString("a_nextform"));
 				announce.setPrompt(prompt);
+				announce.setVersionId(rs.getString("a_versionid"));
 				announce.setTag(tag);
 				
 				result.add(announce);
@@ -114,7 +115,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		
 		String sql = "INSERT INTO flow.announce (id,name,description,flushprompt,prompt,nextform,tag,versionid) "+
 					 "VALUES ('"+announce.getId()+"','"+announce.getName()+"','"+announce.getDescription()+"','"+announce.getFlushprompt()+"','"+announce.getPrompt().getId()+"',"+announce.getNextForm()+","
-					+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",'"+announce.getVersionId().getId()+"') ";
+					+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",'"+announce.getVersionId()+"') ";
 		DbConnection db = new DbConnection("AnnounceDAO-save");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
@@ -129,7 +130,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		String sql = "UPDATE flow.announce SET name='"+announce.getName()+"',description='"+announce.getDescription()+"',"
 				   + "flushprompt='"+announce.getFlushprompt()+"',prompt='"+announce.getPrompt().getId()+"',"
 				   + "nextform='"+announce.getNextForm()+"',"
-				   + "tag="+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",versionid='"+announce.getVersionId().getId()+"' "+
+				   + "tag="+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",versionid='"+announce.getVersionId()+"' "+
 					 "WHERE id = '"+announce.getId()+"' ";
 		DbConnection db = new DbConnection("AnnounceDAO-update");             
 		result = db.ExecuteSql(sql);
