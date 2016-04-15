@@ -33,7 +33,7 @@
 						<div class="form-group">
 							<div class="col-md-4">
 								<label for="aid">ID</label> <input class="form-control" id="id"
-									ng-model="message.id" ng-required="true" disabled />
+									ng-model="message.id" ng-required="true" disabled  />
 							</div>
 							<div class="col-md-4">
 								<label for="nome">Nome</label> <input class="form-control"
@@ -91,7 +91,7 @@
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="order">Ordem</label> <input type="number"
+								<label for="order">Ordem</label> <input 
 									class="form-control" id="order"
 									placeholder="Ordem de vocalização" ng-model="message.msg_order" />
 							</div>
@@ -128,10 +128,11 @@
 								<th>Local</th>
 								<th>Ordem</th>
 								<th>Comando</th>
+								<th>Audio</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="message in messages | orderBy:'id'">
+							<tr ng-repeat="message in messages">
 								<td>{{message.id}}</td>
 								<td>{{ message.name ||"empty"}}</td>
 								<td>{{ message.description || "empty"}}</td>
@@ -149,10 +150,13 @@
 										<span class="glyphicon glyphicon-wrench" aria-hidden="true">
 										</span>
 									</button> 
-									<audio controls>
+									
+								</td>
+								<td>
+								<audio controls>
 										<source src="" type="audio/wav">
 									</audio>
-								</td>
+									</td>
 							</tr>
 						</tbody>
 					</table>

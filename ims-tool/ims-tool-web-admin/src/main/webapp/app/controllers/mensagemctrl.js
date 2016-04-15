@@ -30,12 +30,13 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 					$scope.editMessage = function(index) {
 
 						var data = $scope.messages[index];
+						$scope.message = {};
 						$scope.message = data;
+						console.log($scope.message); 
 						$scope.showMessage = false;
 						$scope.showNewButton = true;
 						$scope.showCancelButton = false;
 						
-
 					};
 					$scope.showForm = function() {
 						$scope.message = {};
