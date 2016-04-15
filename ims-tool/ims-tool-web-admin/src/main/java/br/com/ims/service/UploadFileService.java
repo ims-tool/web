@@ -28,6 +28,11 @@ public class UploadFileService {
 
 		// save it
 		writeToFile(uploadedInputStream, uploadedFileLocation);
+		try {
+			uploadedInputStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -47,8 +52,8 @@ public class UploadFileService {
 			}
 			out.flush();
 			out.close();
+			uploadedInputStream.close();
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
 

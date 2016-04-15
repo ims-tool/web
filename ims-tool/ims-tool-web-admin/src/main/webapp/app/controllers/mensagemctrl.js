@@ -6,7 +6,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 					$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 					$rootScope.activetab = $location.path();
 					$scope.messages = [];
-					$scope.message = [];
+					$scope.message = {};
 					$scope.showCancelButton = true;
 					$scope.showNewButton = false;
 					$scope.showMessage = true;
@@ -37,10 +37,19 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 						
 
 					};
+					$scope.showForm = function() {
+						$scope.message = {};
+						$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/nextidMessage').success(function(data1) {
+							$scope.message.id = data1;
+						});
+						$scope.showMessage = false;
+						$scope.showNewButton = true;
+						$scope.showCancelButton = false;
+					}
 					
 					$scope.cancelForm = function() {
 					
-						$scope.message = [];
+						$scope.message = {};
 						$scope.showMessage = true;
 						$scope.showNewButton = false;
 						$scope.showCancelButton = true;
@@ -53,7 +62,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 				            var reader = new FileReader();
 				            var rawData = new ArrayBuffer();            
 				            saveMessage($scope.message);
-				            $scope.message = [];
+				            $scope.message = {};
 							$scope.showCancelButton = true;
 							$scope.showNewButton = false;
 							$scope.showMessage = true;
@@ -77,7 +86,7 @@ function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, p
 
 function saveMessage(message){
 	
-	 
+	console.log(message);
 	
 	$.ajax({
 		type : "POST",
@@ -92,9 +101,30 @@ function saveMessage(message){
 function setFileName(){
 	
 	var nome = document.getElementById("id").value;
-	console.log(nome);
 	
 	document.getElementById("fileName").value =  nome;
 	
 	document.getElementById("fileName").setAttribute("hidden", "true");
 }
+
+$(function() {
+    $.mask.definitions['~'] = "[+-]";
+    $("#date").mask("99/99/9999",{placeholder:"mm/dd/yyyy",completed:function(){alert("completed!");}});
+    $(".phone").mask("(999) 999-9999");
+    $("#phoneExt").mask("(999) 999-9999? x99999");
+    $("#iphone").mask("+33 999 999 999");
+    $("#tin").mask("99-9999999");
+    $("#ssn").mask("999-99-9999");
+    $("#product").mask("a*-999-a999", { placeholder: " " });
+    $("#eyescript").mask("~9.99 ~9.99 999");
+    $("#po").mask("PO: aaa-999-***");
+    $("#pct").mask("99%");
+    $("#phoneAutoclearFalse").mask("(999) 999-9999", { autoclear: false, completed:function(){alert("completed autoclear!");} });
+    $("#phoneExtAutoclearFalse").mask("(999) 999-9999? x99999", { autoclear: false });
+
+    $("input").blur(function() {
+        $("#info").html("Unmasked value: " + $(this).mask());
+    }).dblclick(function() {
+        $(this).unmask();
+    });
+});
