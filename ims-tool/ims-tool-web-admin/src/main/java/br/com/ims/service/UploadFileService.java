@@ -34,32 +34,33 @@ public class UploadFileService {
 				e.printStackTrace();
 			}
 		}else{
-			System.out.println("Nao tem arquivo para salvar");
+			
 		}
-		
-
-
 	}
 
 	// save uploaded file to new location
-	private void writeToFile(InputStream uploadedInputStream,
-			String uploadedFileLocation) {
-
+	private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) {
+		OutputStream out = null;
 		try {
-			OutputStream out = new FileOutputStream(new File(
-					uploadedFileLocation));
+			out = new FileOutputStream(new File(uploadedFileLocation));
 			int read = 0;
 			byte[] bytes = new byte[1024];
 
-			out = new FileOutputStream(new File(uploadedFileLocation));
 			while ((read = uploadedInputStream.read(bytes)) != -1) {
 				out.write(bytes, 0, read);
 			}
-			out.flush();
-			out.close();
-			uploadedInputStream.close();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
