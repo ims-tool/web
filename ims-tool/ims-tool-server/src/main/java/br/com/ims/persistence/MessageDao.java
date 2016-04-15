@@ -106,6 +106,7 @@ public class MessageDao {
 
 	public static void save(Message message) {
 
+
 		ResultSet rs = null;
 		ConnectionDB conn = null;
 		PreparedStatement stm = null;
@@ -135,15 +136,15 @@ public class MessageDao {
 		// Nova mensagem
 		if (isNewData) {
 
-			ResultSet rs2 = null;
 			PreparedStatement pstmt = null;
+			ConnectionDB conn2 = null;
 			try {
-				conn = new ConnectionDB();
+				conn2 = new ConnectionDB();
 
 				String query = "insert into flow.mensagem (id, name, description, flag, datai, dataf, ddd_in, ddd_not_in, spot, msg_order)"
 						+ " values (?,?,?,?,?,?,?,?,?,?)";
 
-				pstmt = conn.getPreparedStatement(query);
+				pstmt = conn2.getPreparedStatement(query);
 
 				pstmt.setInt(1, message.getId());
 				pstmt.setString(2, message.getName());
@@ -155,25 +156,22 @@ public class MessageDao {
 				pstmt.setString(8, message.getDdd_not_in());
 				pstmt.setString(9, message.getSpot());
 				if(org.apache.commons.lang3.StringUtils.isNotBlank(message.getMsg_order())){
-					pstmt.setInt(10, Integer.getInteger(message.getMsg_order()));
+					pstmt.setInt(10, Integer.valueOf(message.getMsg_order()));
 				}else{
 					pstmt.setInt(10, 999);
 				}
 
-				rs2 = conn.executeQuery(pstmt);
+				conn2.executeQueryUpdate(pstmt);
 
-			} catch (SQLException e) {
+			} catch (Exception e) {
+				e.printStackTrace();
 				logger.error("Erro ao Recuperar mensagens ", e);
 			} finally {
 				try {
 					pstmt.close();
 				} catch (SQLException e1) {
 				}
-				try {
-					rs2.close();
-				} catch (SQLException e) {
-				}
-				conn.finalize();
+				conn2.finalize();
 			}
 		} else {
 			PreparedStatement pstmt = null;
@@ -213,8 +211,13 @@ public class MessageDao {
 	private static Timestamp formatDate(String datai) {
 		java.util.Date parse = null;
 		try {
-			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-			parse = dateFormat.parse(datai);
+			if(datai.contains("/")){
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				parse = dateFormat.parse(datai);
+			}else{
+				SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyyHHmm");
+				parse = dateFormat.parse(datai);
+			}
 
 		} catch (Exception e) {// this generic but you can control another types
 								// of exception

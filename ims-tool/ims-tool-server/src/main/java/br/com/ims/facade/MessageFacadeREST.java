@@ -79,17 +79,17 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 		try {
 			message.setFlag(jsonObj.getString("flag"));
 		} catch (Exception e) {
-			message.setFlag("");
+			message.setFlag("I");
 		}
 		try {
 			message.setDatai(jsonObj.getString("datai"));
 		} catch (Exception e) {
-			message.setDatai("");
+			message.setDatai("010120000000");
 		}
 		try {
 			message.setDataf(jsonObj.getString("dataf"));
 		} catch (Exception e) {
-			message.setDataf("");
+			message.setDataf("010120000000");
 		}
 		try {
 			message.setDdd_in(jsonObj.getString("ddd_in"));
@@ -107,9 +107,10 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 			message.setSpot("");
 		}
 		try {
-			message.setMsg_order(jsonObj.getString("msg_order"));
+			Integer i = jsonObj.getInt("msg_order");
+			message.setMsg_order(i.toString());
 		} catch (Exception e) {
-			message.setMsg_order("");
+			message.setMsg_order("999");
 		}
 
 		MessageCtrl.save(message);
@@ -288,7 +289,6 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 			@FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
 
 		String filePath = "";
-		System.out.println("TEste");
 		try {
 			filePath = "c://cesar/audio/" + contentDispositionHeader.getFileName();
 		} catch (Exception e) {

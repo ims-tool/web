@@ -62,13 +62,19 @@
 								<label for="Description">Data Inicial</label> <input
 									class="form-control" id="datai"
 									placeholder="Data inicial DD/MM/AAAA HH24:mm"
-									ng-model="message.datai" />
+									ng-model="message.datai"
+									ui-mask="99/99/9999 99:99"
+									ui-mask-placeholder 
+									ui-mask-placeholder-char="_" />
 							</div>
 							<div class="col-md-3">
 								<label for="Description">Data Final</label> <input
 									class="form-control" id="dataf"
 									placeholder="Data final DD/MM/AAAA HH24:mm"
-									ng-model="message.dataf" />
+									ng-model="message.dataf" 
+									ui-mask="99/99/9999 99:99"
+									ui-mask-placeholder 
+									ui-mask-placeholder-char="_"/>
 							</div>
 							<div class="col-md-3">
 								<label for="Description">DDD in</label> <input
@@ -90,7 +96,7 @@
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="order">Ordem</label> <input class="form-control"
+								<label for="order">Ordem</label> <input type="number" class="form-control"
 									id="order" placeholder="Ordem de vocalização"
 									ng-model="message.msg_order" />
 							</div>

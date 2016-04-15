@@ -11,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.StringUtils;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
@@ -23,16 +24,20 @@ public class UploadFileService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public void uploadFile(@FormDataParam("fileName") final String fileName, @FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		
-		
-		String uploadedFileLocation = "C://Cesar/"+ fileName+".wav";
-
-		// save it
-		writeToFile(uploadedInputStream, uploadedFileLocation);
-		try {
-			uploadedInputStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(StringUtils.isNotBlank(fileDetail.getFileName())){
+			String uploadedFileLocation = "C://Cesar/"+ fileName+".wav";
+			writeToFile(uploadedInputStream, uploadedFileLocation);
+			// save it
+			try {
+				uploadedInputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			System.out.println("Nao tem arquivo para salvar");
 		}
+		
+
 
 	}
 
