@@ -99,7 +99,8 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		boolean result = true;
 		
 		String sql = "INSERT INTO flow.answer (id,name,description,nextform,tag,versionid) "+
-					 "VALUES ('"+answer.getId()+"','"+answer.getName()+"','"+answer.getDescription()+"','"+answer.getNextForm()+"',"
+					 "VALUES ('"+answer.getId()+"','"+answer.getName()+"','"+answer.getDescription()+"',"
+					 		+(answer.getNextForm() ==  null || answer.getNextForm().length() == 0 ? "NULL" : answer.getNextForm())+","
 					 		+ (answer.getTag() == null ? "NULL" : answer.getTag().getId())+",'"+answer.getVersionId()+"') ";
 		             
 		DbConnection db = new DbConnection("AnswerDAO-save");
@@ -111,8 +112,9 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	@Override
 	public boolean update(AnswerEntity answer) {
 		boolean result = true;
-		String sql = "UPDATE flow.answer SET name='"+answer.getName()+"',description='"+answer.getDescription()+"',nextform='"+answer.getNextForm()+"',"
-				   + "tag="+(answer.getTag() == null ? "NULL" : answer.getTag().getId())+",versionid='"+answer.getVersionId()+"' "+
+		String sql = "UPDATE flow.answer SET name='"+answer.getName()+"',description='"+answer.getDescription()+"',"
+					+ "nextform="+(answer.getNextForm() == null || answer.getNextForm().length() == 0 ? "NULL" : answer.getNextForm())+","
+					+ "tag="+(answer.getTag() == null ? "NULL" : answer.getTag().getId())+",versionid='"+answer.getVersionId()+"' "+
 					 "WHERE id = '"+answer.getId()+"' ";
 		DbConnection db = new DbConnection("AnswerDAO-update");             
 		result = db.ExecuteSql(sql);

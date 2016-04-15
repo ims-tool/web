@@ -105,7 +105,7 @@ public class AudioEditorBean extends AbstractBean {
 			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
 			return false;
 		}
-		this.audio.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		this.audio.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
 		return true;
 	}
 	public void newAudio(ActionEvent event) {

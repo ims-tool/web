@@ -180,7 +180,7 @@ public class ConditionEditorBean extends AbstractBean {
 			return false;
 		}
 		this.condition.setListConditionGroup(this.conditionGroups);
-		this.condition.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		this.condition.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
 		return true;
 	}
 	

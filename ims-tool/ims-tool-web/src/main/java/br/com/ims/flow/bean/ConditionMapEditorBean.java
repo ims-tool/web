@@ -128,7 +128,7 @@ public class ConditionMapEditorBean extends AbstractBean {
 			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
 			return false;
 		}
-		this.conditionMap.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		this.conditionMap.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
 		return true;
 	}
 

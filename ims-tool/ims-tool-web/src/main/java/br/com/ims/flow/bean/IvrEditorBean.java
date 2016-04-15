@@ -529,24 +529,47 @@ public class IvrEditorBean extends AbstractBean {
             return;
 		}
 		String nameFlow = "";
+		boolean foundNodeAnswer = false;
+		boolean foundErrors = false;
 		for(Node node : this.logicalFlow.getListNode()) {
 			FormEntity form = node.getForm();
 			if(form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
 				nameFlow = form.getName(); 
+				foundNodeAnswer = true;
 			}
-			if(form.isFormError()) {
-				
-		    	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You cannot save. There are Elements with error.",
-		                "IVR Editor");
-				 
-				FacesContext.getCurrentInstance().addMessage(null, msg);
-				return;
-			}			
+			foundErrors = foundErrors | form.isFormError();
+						
 		}
-		this.editing.setBooleanValue(false);
-		if(ServicesFactory.getInstance().getIvrEditorService().save(this.logicalFlow,this.version)) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flow ("+nameFlow+") saved successfully!",
+		if(!foundNodeAnswer) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "You cannot save. Node Answer is missing.",
 	                "IVR Editor");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
+		if(form.isFormError()) {
+			
+	    	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You cannot save. There are Elements with error.",
+	                "IVR Editor");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
+		
+		this.editing.setBooleanValue(false);
+		if(ServicesFactory.getInstance().getIvrEditorService().save(this.logicalFlow,nameFlow,this.version)) {
+			
+			FacesMessage msg = null;
+			if(foundErrors) {
+				msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Flow ("+nameFlow+") was saved successfully, but there are Elements with error.",
+		                "IVR Editor");
+				
+				
+			} else {
+				
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Flow ("+nameFlow+") was saved successfully!",
+		                "IVR Editor");
+			}
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		} else {

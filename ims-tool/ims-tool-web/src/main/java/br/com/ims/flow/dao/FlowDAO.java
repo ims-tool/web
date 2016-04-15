@@ -96,7 +96,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 		
 		String sql = "INSERT INTO flow.flow (id,name,description,flowname,nextform,tag,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getFlowName()+"',"+
-					 entity.getNextForm()+","+
+					 (entity.getNextForm() == null || entity.getNextForm().length() == 0 ? "NULL" : entity.getNextForm())+","+
 					 (entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId()+"') ";
 		DbConnection db = new DbConnection("FlowDAO-save");            
 		result = db.ExecuteSql(sql);
@@ -108,7 +108,7 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 	public boolean update(FlowEntity entity) {
 		boolean result = true;
 		String sql = "UPDATE flow.flow SET name='"+entity.getName()+"',description='"+entity.getDescription()+"',flowname='"+entity.getFlowName()+"',"
-				   + "nextform='"+entity.getNextForm()+"',"
+				   + "nextform="+(entity.getNextForm() == null || entity.getNextForm().length() == 0 ? "NULL" : entity.getNextForm())+","
 				   + "tag="+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",versionid='"+entity.getVersionId()+"' "+
 					 "WHERE id = '"+entity.getId()+"' ";
 		DbConnection db = new DbConnection("FlowDAO-update");

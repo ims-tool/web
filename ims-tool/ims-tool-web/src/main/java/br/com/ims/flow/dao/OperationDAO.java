@@ -58,7 +58,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		String sql = "SELECT og.id og_id,og.operationid og_operationid,og.ordernum og_ordernum,og.description og_description, og.versionid og_versionid ,"+
 					 "om.id om_id, om.name om_name,om.description om_description, om.methodreference om_methodreference, om.log_active om_log_active "+
 					 "FROM flow.operationgroup og "+
-	                 "INNER JOIN flow.operationmap om ON og.operationmapid = om.id "+ 
+	                 "LEFT JOIN flow.operationmap om ON og.operationmapid = om.id "+ 
 	                 "WHERE og.operationid ='"+operationId+"' "+
 	                 "ORDER BY og.ordernum ";
 		List<OperationGroupEntity> result = new ArrayList<OperationGroupEntity>();
@@ -68,11 +68,14 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
 				OperationMapEntity operationMap = new OperationMapEntity();
-				operationMap.setId(rs.getString("om_id"));
-				operationMap.setName(rs.getString("om_name"));
-				operationMap.setDescription(rs.getString("om_description"));
-				operationMap.setMethodReference(rs.getString("om_methodreference"));
-				operationMap.setLogActive(rs.getInt("om_log_active"));
+				if(rs.getString("om_id") != null && rs.getString("om_id").length() >0) {
+					operationMap = new OperationMapEntity();
+					operationMap.setId(rs.getString("om_id"));
+					operationMap.setName(rs.getString("om_name"));
+					operationMap.setDescription(rs.getString("om_description"));
+					operationMap.setMethodReference(rs.getString("om_methodreference"));
+					operationMap.setLogActive(rs.getInt("om_log_active"));
+				}
 				
 				List<OperationParameterEntity> op = this.getOperationParameters(rs.getString("og_id"));
 				
@@ -175,46 +178,52 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		String sql = "INSERT INTO flow.operation (id,name,description,tag,nextformid,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"',"
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
-					 		+ entity.getNextForm()+","
+					 		+(entity.getNextForm() == null || entity.getNextForm().length() == 0 ? "NULL" : entity.getNextForm())+","
 					 		+entity.getVersionId()+")";
 				    
 		DbConnection db = new DbConnection("OperationDAO-save");
 		try{
 			result = db.ExecuteSql(sql);
 			if(result) {
-				for(OperationGroupEntity og : entity.getListOperationGroup()) {
-					
-					
-					sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
-						   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId()+"')";
-						   
-						   
-					result = result & db.ExecuteSql(sql);
-					if(!result) {
-						//rollback
-						sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
-						db.ExecuteSql(sql);
-						sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
-						db.ExecuteSql(sql);
-						return result;
-					} else {
-						for(OperationParameterEntity op : og.getListOperationParameters()) {
-							sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
-									   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId()+"')";
-							result = result & db.ExecuteSql(sql);
-							if(!result) {
-								//rollback
-								sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
-								db.ExecuteSql(sql);
-								sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
-								db.ExecuteSql(sql);
-								sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
-								db.ExecuteSql(sql);
-								return result;
+				if(entity.getListOperationGroup() != null && entity.getListOperationGroup().size() > 0){
+					for(OperationGroupEntity og : entity.getListOperationGroup()) {
+						
+						
+						sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
+							   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"',"
+							   + (og.getOperationMap() == null ? "NULL" : og.getOperationMap().getId())+","
+							   + "'"+og.getDescription()+"','"+entity.getVersionId()+"')";
+							   
+							   
+						result = result & db.ExecuteSql(sql);
+						if(!result) {
+							//rollback
+							sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
+							db.ExecuteSql(sql);
+							sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
+							db.ExecuteSql(sql);
+							return result;
+						} else {
+							if(og.getListOperationParameters() != null && og.getListOperationParameters().size() > 0) {
+								for(OperationParameterEntity op : og.getListOperationParameters()) {
+									sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
+											   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId()+"')";
+									result = result & db.ExecuteSql(sql);
+									if(!result) {
+										//rollback
+										sql = "DELETE FROM flow.operationparameters WHERE operationgroupid in (SELECT id FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' )  ";
+										db.ExecuteSql(sql);
+										sql = "DELETE FROM flow.operationgroup WHERE operationid = '"+entity.getId()+"' ";
+										db.ExecuteSql(sql);
+										sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
+										db.ExecuteSql(sql);
+										return result;
+									}
+								}
 							}
+							
+							
 						}
-						
-						
 					}
 				}
 							
@@ -230,7 +239,8 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 	public boolean update(OperationEntity entity) {
 		boolean result = true;
 		String sql = "UPDATE flow.operation SET name = '"+entity.getName()+"',description = '"+entity.getDescription()+"',"
-				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+",nextformid='"+entity.getNextForm()+"',"
+				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+","
+				   + "nextformid="+(entity.getNextForm() == null || entity.getNextForm().length() == 0 ? "NULL" : entity.getNextForm())+"',"
 				   + "versionid  =  '"+entity.getVersionId()+"' "
 				   + "WHERE id = "+entity.getId();
 		DbConnection db = new DbConnection("OperationDAO-update");
@@ -249,28 +259,32 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				if(!result) {
 					return result;
 				}
-				
-				for(OperationGroupEntity og : entity.getListOperationGroup()) {
-					
-					
-					sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
-						   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"','"+og.getOperationMap().getId()+"','"+og.getDescription()+"','"+entity.getVersionId()+"')";
-						   
-						   
-					result = result & db.ExecuteSql(sql);
-					if(!result) {					
-						return result;
-					} else {
-						for(OperationParameterEntity op : og.getListOperationParameters()) {
-							sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
-									   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId()+"')";
-							result = result & db.ExecuteSql(sql);
-							if(!result) {							
-								return result;
+				if(entity.getListOperationGroup() != null && entity.getListOperationGroup().size() > 0) {
+					for(OperationGroupEntity og : entity.getListOperationGroup()) {
+						
+						
+						sql = "INSERT INTO flow.operationgroup (id,operationid,ordernum,operationmapid,description, versionid) "+
+							   "VALUES ('"+og.getId()+"','"+entity.getId()+"','"+og.getOrderNum()+"',"
+							   		+ (og.getOperationMap() == null ? "NULL" : og.getOperationMap().getId())+",'"+og.getDescription()+"','"+entity.getVersionId()+"')";
+							   
+							   
+						result = result & db.ExecuteSql(sql);
+						if(!result) {					
+							return result;
+						} else {
+							if(og.getListOperationParameters() != null && og.getListOperationParameters().size() > 0) {
+								for(OperationParameterEntity op : og.getListOperationParameters()) {
+									sql = "INSERT INTO flow.operationparameters (id,operationgroupid,paramname,paramvalue,versionid) "+
+											   "VALUES ('"+op.getId()+"','"+og.getId()+"','"+op.getParamName()+"','"+op.getParamValue()+"','"+entity.getVersionId()+"')";
+									result = result & db.ExecuteSql(sql);
+									if(!result) {							
+										return result;
+									}
+								}
 							}
+							
+							
 						}
-						
-						
 					}
 				}
 							

@@ -51,9 +51,9 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 				 "t_nm.id t_nm_id, t_nm.description t_nm_description, "+ 
 				 "tt_nm.id tt_nm_id, tt_nm.name tt_nm_name,tt_nm.description tt_nm_description "+
 				 "FROM flow.promptcollect pc "+
-				 "INNER JOIN flow.grammar g ON pc.grammar = g.id "+
-				 "INNER JOIN flow.nomatchinput ni ON ni.id = pc.noinput "+
-				 "INNER JOIN flow.nomatchinput nm ON nm.id = pc.nomatch "+
+				 "LEFT JOIN flow.grammar g ON pc.grammar = g.id "+
+				 "LEFT JOIN flow.nomatchinput ni ON ni.id = pc.noinput "+
+				 "LEFT JOIN flow.nomatchinput nm ON nm.id = pc.nomatch "+
 				 "LEFT JOIN flow.tag t ON pc.tag = t.id "+ 
 				 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
 				 "LEFT JOIN flow.tag t_ni ON pc.noinput_tag = t_ni.id "+ 
@@ -115,34 +115,44 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 			PromptEntity prompt_nm = null;
 			
 			if(!lazy) {
-				prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("pc_prompt"));
+				if(rs.getString("pc_prompt") != null && rs.getString("pc_prompt").length() > 0) {
+					prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("pc_prompt"));
+				}
 				if(rs.getString("ni_prompt") != null && rs.getString("ni_prompt").length() > 0)
 					prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
 				if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0) 
 					prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
 			}
+			GrammarEntity grammar = null;
+			if(rs.getString("g_id") != null && rs.getString("g_id").length() >0) {
+				grammar = new GrammarEntity();
+				grammar.setId(rs.getString("g_id"));
+				grammar.setName(rs.getString("g_name"));
+				grammar.setDescription(rs.getString("g_description"));
+				grammar.setType(rs.getString("g_type"));
+				grammar.setSizeMax(rs.getInt("g_sizemax"));
+				grammar.setSizeMax(rs.getInt("g_sizemin"));
+			}
 			
-			GrammarEntity grammar = new GrammarEntity();
-			grammar.setId(rs.getString("g_id"));
-			grammar.setName(rs.getString("g_name"));
-			grammar.setDescription(rs.getString("g_description"));
-			grammar.setType(rs.getString("g_type"));
-			grammar.setSizeMax(rs.getInt("g_sizemax"));
-			grammar.setSizeMax(rs.getInt("g_sizemin"));
+			NoMatchInputEntity noInput = null;
+			if(rs.getString("ni_id") != null && rs.getString("ni_id").length() >0) {
+				noInput = new NoMatchInputEntity();
+				noInput.setId(rs.getString("ni_id"));
+				noInput.setName(rs.getString("ni_name"));
+				noInput.setType(rs.getString("ni_type"));
+				noInput.setThreshold(rs.getInt("ni_threshold"));
+				noInput.setPrompt(prompt_ni);
+			}
 			
-			NoMatchInputEntity noInput = new NoMatchInputEntity();
-			noInput.setId(rs.getString("ni_id"));
-			noInput.setName(rs.getString("ni_name"));
-			noInput.setType(rs.getString("ni_type"));
-			noInput.setThreshold(rs.getInt("ni_threshold"));
-			noInput.setPrompt(prompt_ni);
-			
-			NoMatchInputEntity noMatch = new NoMatchInputEntity();
-			noMatch.setId(rs.getString("nm_id"));
-			noMatch.setName(rs.getString("nm_name"));
-			noMatch.setType(rs.getString("nm_type"));
-			noMatch.setThreshold(rs.getInt("nm_threshold"));
-			noMatch.setPrompt(prompt_nm);
+			NoMatchInputEntity noMatch = null;
+			if(rs.getString("nm_id") != null && rs.getString("nm_id").length() > 0){
+				noMatch = new NoMatchInputEntity();
+				noMatch.setId(rs.getString("nm_id"));
+				noMatch.setName(rs.getString("nm_name"));
+				noMatch.setType(rs.getString("nm_type"));
+				noMatch.setThreshold(rs.getInt("nm_threshold"));
+				noMatch.setPrompt(prompt_nm);
+			}
 			
 			PromptCollectEntity promptCollect = new PromptCollectEntity();
 			promptCollect.setId(rs.getString("pc_id"));
@@ -205,19 +215,19 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 					+ "noinput_tag,nomatch_tag,fetchtimeout,interdigittimeout,terminatingtimeout,terminatingcharacter,nextform,tag,versionid) "+
 					 "VALUES ('"+promptCollect.getId()+"','"+promptCollect.getName()+"',"
 					+ "'"+promptCollect.getDescription()+"','"+promptCollect.getFlushprompt()+"',"
-					+ "'"+promptCollect.getPrompt().getId()+"',"
-					+ "'"+promptCollect.getGrammar().getId()+"',"
-					+ "'"+promptCollect.getNoInput().getId()+"',"
-					+ "'"+promptCollect.getNoMatch().getId()+"',"
-					+ "'"+promptCollect.getNoInput_NextForm()+"',"
-					+ "'"+promptCollect.getNoMatch_NextForm()+"',"
+					+ (promptCollect.getPrompt() == null ? "NULL" : promptCollect.getPrompt().getId())+","
+					+ (promptCollect.getGrammar() == null ? "NULL" : promptCollect.getGrammar().getId())+","
+					+ (promptCollect.getNoInput() == null ? "NULL" : promptCollect.getNoInput().getId())+","
+					+ (promptCollect.getNoMatch() == null ? "NULL" : promptCollect.getNoMatch().getId())+","
+					+ (promptCollect.getNoInput_NextForm() == null || promptCollect.getNoInput_NextForm().length() == 0 ? "NULL" : promptCollect.getNoInput_NextForm() )+","
+					+ (promptCollect.getNoMatch_NextForm() == null || promptCollect.getNoMatch_NextForm().length() == 0 ? "NULL" : promptCollect.getNoMatch_NextForm() )+","
 					+ (promptCollect.getNoInput_Tag() == null ? "NULL" : promptCollect.getNoInput_Tag().getId() )+","
 					+ (promptCollect.getNoMatch_Tag() == null ? "NULL" : promptCollect.getNoMatch_Tag().getId() )+","
 					+ (promptCollect.getFetchTimeout() == null || promptCollect.getFetchTimeout().length() == 0? "NULL" : promptCollect.getFetchTimeout() )+","
 					+ (promptCollect.getInterDigitTimeout() == null ||  promptCollect.getInterDigitTimeout().length() == 0 ? "NULL" : promptCollect.getInterDigitTimeout())+","
 					+ (promptCollect.getTerminatingTimeout() ==  null || promptCollect.getTerminatingTimeout().length() == 0 ? "NULL" : promptCollect.getTerminatingTimeout())+","
 					+ (promptCollect.getTerminatingCharacter() == null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","
-					+ promptCollect.getNextForm()+","
+					+ (promptCollect.getNextForm() == null || promptCollect.getNextForm().length() == 0 ? "NULL" : promptCollect.getNextForm())+","
 					+ (promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",'"+promptCollect.getVersionId()+"') ";
 		DbConnection db = new DbConnection("PromptCollectDAO-save");             
 		result = db.ExecuteSql(sql);
@@ -230,19 +240,19 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.promptcollect SET name = '"+promptCollect.getName()+"', "+
 		             "description = '"+promptCollect.getDescription()+"',flushprompt = "+promptCollect.getFlushprompt()+", "+
-				     "prompt= '"+promptCollect.getPrompt().getId()+"',"+
-				     "grammar= '"+promptCollect.getGrammar().getId()+"',"+
-				     "noinput='"+promptCollect.getNoInput().getId()+"', "+
-		             "nomatch='"+promptCollect.getNoMatch().getId()+"',"+
-				     "noinput_nextform='"+promptCollect.getNoInput_NextForm()+"',"+
-				     "nomatch_nextform='"+promptCollect.getNoMatch_NextForm()+"',"+
+				     "prompt= "+(promptCollect.getPrompt() == null ? "NULL" :  promptCollect.getPrompt().getId())+","+
+				     "grammar= "+(promptCollect.getGrammar() == null ? "NULL" : promptCollect.getGrammar().getId())+","+
+				     "noinput="+(promptCollect.getNoInput() == null ? "NULL" : promptCollect.getNoInput().getId())+", "+
+		             "nomatch="+(promptCollect.getNoMatch() == null ? "NULL" : promptCollect.getNoMatch().getId())+","+
+				     "noinput_nextform="+(promptCollect.getNoInput_NextForm() == null || promptCollect.getNoInput_NextForm().length() == 0 ? "NULL" : promptCollect.getNoInput_NextForm())+","+
+				     "nomatch_nextform="+(promptCollect.getNoMatch_NextForm() == null || promptCollect.getNoMatch_NextForm().length() == 0 ? "NULL" : promptCollect.getNoMatch_NextForm())+","+
 				     "noinput_tag="+(promptCollect.getNoInput_Tag() == null ? "NULL" : promptCollect.getNoInput_Tag().getId())+","+
 				     "nomatch_tag="+(promptCollect.getNoMatch_Tag() == null ? "NULL" : promptCollect.getNoMatch_Tag().getId())+","+
 		             "fetchtimeout="+(promptCollect.getFetchTimeout() == null || promptCollect.getFetchTimeout().length() == 0 ? "NULL" : promptCollect.getFetchTimeout())+", "+
 				     "interdigittimeout="+(promptCollect.getInterDigitTimeout() == null || promptCollect.getInterDigitTimeout().length() == 0 ? "NULL" : promptCollect.getInterDigitTimeout())+","+
 				     "terminatingtimeout="+(promptCollect.getTerminatingTimeout() == null || promptCollect.getTerminatingTimeout().length() == 0 ? "NULL" : promptCollect.getTerminatingTimeout())+", "+
 		             "terminatingcharacter="+(promptCollect.getTerminatingCharacter()== null || promptCollect.getTerminatingCharacter().length() == 0 ? "NULL" : promptCollect.getTerminatingCharacter())+","+
-		             "nextform='"+promptCollect.getNextForm()+"', "+
+		             "nextform="+(promptCollect.getNextForm() == null || promptCollect.getNextForm().length() == 0 ? "NULL" : promptCollect.getNextForm())+", "+
 				     "tag="+(promptCollect.getTag() == null ? "NULL" : promptCollect.getTag().getId())+",versionid='"+promptCollect.getVersionId()+"' "+
 					 "WHERE id = '"+promptCollect.getId()+"' ";
 		DbConnection db = new DbConnection("PromptCollectDAO-update");             

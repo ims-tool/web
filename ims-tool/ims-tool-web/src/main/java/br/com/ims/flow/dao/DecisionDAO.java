@@ -179,19 +179,24 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		DbConnection db = new DbConnection("DecisionDAO-save");             
 		result = db.ExecuteSql(sql);
 		if(result) {
-			for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
-				sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
-					   "VALUES ('"+chance.getId()+"','"+entity.getId()+"','"+chance.getOrderNum()+"',"+
-					   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+chance.getNextForm()+","+
-					   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId()+") ";
-				result = result & db.ExecuteSql(sql);
-				if(!result) {
-					//rollback
-					sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
-					db.ExecuteSql(sql);
-					sql = "DELETE FROM flow.decision WHERE id = '"+entity.getId()+"' ";
-					db.ExecuteSql(sql);
-					break;
+			if(entity.getListDecisionChance() != null && entity.getListDecisionChance().size() >0 ) {
+				
+				
+				for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
+					sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
+						   "VALUES ('"+chance.getId()+"','"+entity.getId()+"','"+chance.getOrderNum()+"',"+
+						   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+
+						   (chance.getNextForm() == null || chance.getNextForm().length() == 0 ? "NULL" : chance.getNextForm())+","+
+						   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId()+") ";
+					result = result & db.ExecuteSql(sql);
+					if(!result) {
+						//rollback
+						sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
+						db.ExecuteSql(sql);
+						sql = "DELETE FROM flow.decision WHERE id = '"+entity.getId()+"' ";
+						db.ExecuteSql(sql);
+						break;
+					}
 				}
 			}
 						
@@ -214,15 +219,18 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 			sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
 			result = db.ExecuteSql(sql);
 			if(result) {
-				for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
-					sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
-							   "VALUES ('"+chance.getId()+"','"+entity.getId()+"','"+chance.getOrderNum()+"',"+
-							   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+chance.getNextForm()+","+
-							   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId()+") ";
-						result = result & db.ExecuteSql(sql);
-						if(!result) {					
-							break;
-						}
+				if(entity.getListDecisionChance() != null && entity.getListDecisionChance().size() > 0 ) {
+					for(DecisionChanceEntity chance : entity.getListDecisionChance()) {
+						sql = "INSERT INTO flow.decisionchance (id,decisionid,ordernum,condition,nextformid,tag,versionid) "+
+								   "VALUES ('"+chance.getId()+"','"+entity.getId()+"','"+chance.getOrderNum()+"',"+
+								   (chance.getCondition() == null ? "NULL" : chance.getCondition().getId())+","+
+								   (chance.getNextForm() == null || chance.getNextForm().length() == 0 ? "NULL" : chance.getNextForm())+","+
+								   (chance.getTag() == null ? "NULL" : chance.getTag().getId())+","+entity.getVersionId()+") ";
+							result = result & db.ExecuteSql(sql);
+							if(!result) {					
+								break;
+							}
+					}
 				}
 			}
 						

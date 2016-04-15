@@ -126,7 +126,7 @@ public class GrammarEditorBean extends AbstractBean {
 			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
 			return false;
 		}
-		this.grammar.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		this.grammar.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
 		return true;
 	}
 	

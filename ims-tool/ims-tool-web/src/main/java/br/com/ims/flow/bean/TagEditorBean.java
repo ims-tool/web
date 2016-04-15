@@ -126,7 +126,7 @@ public class TagEditorBean extends AbstractBean {
 			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
 			return false;
 		}
-		this.tag.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		this.tag.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
 		return true;
 	}
 	

@@ -287,7 +287,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 		if(this.promptId != null && this.promptId.length() > 0) {
 			this.noMatchInput.setPrompt(ServicesFactory.getInstance().getPromptService().get(this.promptId));
 		}
-		this.noMatchInput.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion());
+		this.noMatchInput.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
 		return true;
 		
 	}

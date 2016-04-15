@@ -223,13 +223,14 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     	this.bean.getLogicalFlow().alingMenuChoices(element);
     	
     }
-    public boolean save(LogicalFlow logicalFlow, VersionEntity version) {
+    public boolean save(LogicalFlow logicalFlow, String flowName, VersionEntity version) {
     	boolean result = true;
     	Map<String,List<FormEntity>> map = new HashMap<String,List<FormEntity>>();
     	for(Node node : logicalFlow.getListNode()) {
     		
     		FormEntity form = node.getForm();
     		form.setVersionId(version.getId());
+    		form.setFlowName(flowName);
     		((AbstractFormEntity)form.getFormId()).setVersionId(version.getId());
     		boolean exists = false;
     		/**
@@ -250,29 +251,33 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		if(form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT))  {
     			PromptCollectEntity pc = (PromptCollectEntity)form.getFormId();
     			
-    			for(Node aux : node.getListTarget()) {
-    				AbstractFormEntity abs = (AbstractFormEntity)aux.getForm().getFormId();
-    				if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {    					
-    					pc.setNoInput_NextForm(abs.getNextForm());
-    					pc.setNoInput_Tag(abs.getTag());
-    				} else if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
-    					pc.setNoMatch_NextForm(abs.getNextForm());
-    					pc.setNoMatch_Tag(abs.getTag());
-    				}
+    			if(node.getListTarget() != null) {
+	    			for(Node aux : node.getListTarget()) {
+	    				AbstractFormEntity abs = (AbstractFormEntity)aux.getForm().getFormId();
+	    				if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {    					
+	    					pc.setNoInput_NextForm(abs.getNextForm());
+	    					pc.setNoInput_Tag(abs.getTag());
+	    				} else if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
+	    					pc.setNoMatch_NextForm(abs.getNextForm());
+	    					pc.setNoMatch_Tag(abs.getTag());
+	    				}
+	    			}
     			}
     		}
     		if(form.getFormType().getName().equals(Constants.FORM_TYPE_MENU))  {
     			MenuEntity menu = (MenuEntity)form.getFormId();
     			
-    			for(Node aux : node.getListTarget()) {
-    				AbstractFormEntity abs = (AbstractFormEntity)aux.getForm().getFormId();
-    				if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
-    					menu.setNoInput_NextForm(abs.getNextForm());
-    					menu.setNoInput_Tag(abs.getTag());
-    				} else if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
-    					menu.setNoMatch_NextForm(abs.getNextForm());
-    					menu.setNoMatch_Tag(abs.getTag());
-    				}
+    			if(node.getListTarget() != null) {
+	    			for(Node aux : node.getListTarget()) {
+	    				AbstractFormEntity abs = (AbstractFormEntity)aux.getForm().getFormId();
+	    				if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
+	    					menu.setNoInput_NextForm(abs.getNextForm());
+	    					menu.setNoInput_Tag(abs.getTag());
+	    				} else if(aux.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
+	    					menu.setNoMatch_NextForm(abs.getNextForm());
+	    					menu.setNoMatch_Tag(abs.getTag());
+	    				}
+	    			}
     			}
     		}
     		/******************************************/
