@@ -9,9 +9,12 @@
 	<ui:composition
 		template="/pages/template/formTemplate.xhtml">
 
+		
 		<ui:param name="bean" value="#{transferEditorView}" />
 		
-		<ui:define name="newContent">	
+		<ui:define name="newContent">
+				
+				
 				<h:outputLabel id="label_transfer_rule" for="panel_transfer_rule" value="Rule:"  />
 				
 				<p:panelGrid id="panel_transfer_rule" cellpadding="5" >

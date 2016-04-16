@@ -249,12 +249,14 @@ public class IvrEditorBean extends AbstractBean {
     private void loadFlow() {
     	try {
     		ServicesFactory.getInstance().getIvrEditorService().loadFlow(null,this.flowId);
+    		this.flowId = "";
     	} catch(Exception e ) {
+    		this.logicalFlow.validateNodes();
     		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "IVR Editor",e.getMessage());
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-			return;
-    	}
-    	this.flowId = "";
+			FacesContext.getCurrentInstance().addMessage(null, msg);			
+    	} 
+    	this.logicalFlow.validateNodes();
+    	
     	
     }
     public void closeTabFlow() {
@@ -673,7 +675,7 @@ public class IvrEditorBean extends AbstractBean {
 				ServicesFactory.getInstance().getIvrEditorService().deleteForm(node.getElement(),true);
 			}
 			
-			
+			logicalFlow.validateNodes();
 		}
 	}
 	

@@ -65,7 +65,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 				promptAudio.setAudio(audio);
 				promptAudio.setCondition(condition);
 				promptAudio.setVersionId(null);
-				promptAudio.setVersionId(rs.getString("pc_versionid"));
+				promptAudio.setVersionId(rs.getString("pa_versionid"));
 				
 				
 				result.add(promptAudio);
@@ -95,7 +95,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		
 		log.info("getByFilter("+where+")");
 		System.out.println("PromptDAO-getByFilter("+where+")");
-		String sql = "SELECT p.id p_id,p.name p_name FROM flow.prompt p <WHERE> ORDER BY p.name";
+		String sql = "SELECT p.id p_id,p.name p_name, p.versionid p_versionid FROM flow.prompt p <WHERE> ORDER BY p.name";
 		if(where != null && where.length() > 0) {
 			sql = sql.replace("<WHERE>", where);
 		}
@@ -114,7 +114,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 					promptAudioList.addAll(getPromptAudio(rs.getString("p_id")));
 				}
 				prompt.setAudios(promptAudioList);
-				prompt.setVersionId(null);
+				prompt.setVersionId(rs.getString("p_versionid"));
 				result.add(prompt);
 			}
 		} catch (SQLException e) {

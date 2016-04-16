@@ -339,7 +339,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 					   + "positionx='"+entity.getPositionX()+"',positiony='"+entity.getPositionY()+"',"					   
 					   + "tag="+(entity.getTag() == null ? "NULL" :  entity.getTag().getId())+","
 					   + "condition="+(entity.getCondition() == null ? "NULL" : entity.getCondition().getId())+","
-					   + "flowname='"+entity.getFlowName()+"' "
+					   + "flowname='"+entity.getFlowName()+"', "
 					   + "versionid='"+entity.getVersionId()+"' "
 					   + "WHERE id = '"+entity.getId()+"' ";
 		DbConnection db = new DbConnection("FormDAO-update");
@@ -354,7 +354,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		
 		boolean result = true;
 		
-		String sql = "DELETE flow.form WHERE id ='"+entity.getId()+"' ";
+		String sql = "DELETE FROM flow.form WHERE id ='"+entity.getId()+"' ";
 		DbConnection db = new DbConnection("FormDAO-delete");
 		result = db.ExecuteSql(sql);
 		db.finalize();

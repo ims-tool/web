@@ -226,6 +226,22 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     public boolean save(LogicalFlow logicalFlow, String flowName, VersionEntity version) {
     	boolean result = true;
     	Map<String,List<FormEntity>> map = new HashMap<String,List<FormEntity>>();
+    	
+    	/**
+    	 * Caso tenho algum noinput,nomatch,choice ou decisionchance para deletar, 
+    	 * antes irei fazer um update no nome para não dar erro de chave, no final do codigo será excluído
+    	 */
+    	for(Node node : logicalFlow.getListDeletedNode()) {
+    		if(node.getForm().getFormType().equals(Constants.FORM_TYPE_NOINPUT) || 
+    				node.getForm().getFormType().equals(Constants.FORM_TYPE_NOMATCH) ||
+    				node.getForm().getFormType().equals(Constants.FORM_TYPE_DECISION_CHANCE) ||
+    				node.getForm().getFormType().equals(Constants.FORM_TYPE_CHOICE)) {
+    			node.getForm().setName(node.getForm().getName()+"_"+node.getForm().getId());
+    			result = result & ServicesFactory.getInstance().getFormService().update(node.getForm());
+    		}
+    					
+    	}
+    	/**********************************/
     	for(Node node : logicalFlow.getListNode()) {
     		
     		FormEntity form = node.getForm();
@@ -233,6 +249,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		form.setFlowName(flowName);
     		((AbstractFormEntity)form.getFormId()).setVersionId(version.getId());
     		boolean exists = false;
+    		
     		/**
     		 * Preciso salvar todos os forms pra manter a posição X e Y na tela
     		 */
@@ -327,12 +344,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			}
     		}
     	}
-    	for(Node node : logicalFlow.getListDeletedNode()) {
-    		result = result & ServicesFactory.getInstance().getFormService().deleteObj(node.getForm());			
-    	}
-    	for(Node node : logicalFlow.getListDeletedNode()) {
-    		result = result & ServicesFactory.getInstance().getFormService().delete(node.getForm());			
-    	}
+    	
     	return result;
 		
     }
@@ -367,57 +379,74 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 	    		
 	    	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
 				PromptCollectEntity pc = (PromptCollectEntity)form.getFormId();
+				FormEntity noInput = null;
+				FormEntity noMatch = null;
 				
-				FormEntity noInput = this.getFormNoMatchInput(pc.getId()+pc.getNoInput().getId(),
-															  Constants.FORM_TYPE_NOINPUT,
-															  pc.getNoInput_NextForm(),
-															  form,
-															  pc.getNoInput());
-				FormEntity noMatch = this.getFormNoMatchInput(pc.getId()+pc.getNoMatch().getId(),
-															  Constants.FORM_TYPE_NOMATCH,
-															  pc.getNoMatch_NextForm(),
-															  form,
-															  pc.getNoMatch());
-				
-				
-				Element elementNoInput = createElement(element,noInput);
-				Element elementNoMatch = createElement(element,noMatch);
-				
-				if(noInput.getNextForm() != null) {
-					loadFlow(elementNoInput, noInput.getNextForm());
+				if(pc.getNoInput() != null) {
+					noInput = this.getFormNoMatchInput(pc.getId()+pc.getNoInput().getId(),
+													  Constants.FORM_TYPE_NOINPUT,
+													  pc.getNoInput_NextForm(),
+													  form,
+													  pc.getNoInput());
 				}
-				if(noMatch.getNextForm() != null) {
-					loadFlow(elementNoMatch, noMatch.getNextForm());
+				if(pc.getNoMatch() != null){
+					noMatch = this.getFormNoMatchInput(pc.getId()+pc.getNoMatch().getId(),
+													  Constants.FORM_TYPE_NOMATCH,
+													  pc.getNoMatch_NextForm(),
+													  form,
+				
+													  pc.getNoMatch());
+				}	
+				if(noInput != null) {
+					Element elementNoInput = createElement(element,noInput);
+					if(noInput.getNextForm() != null && noInput.getNextForm().length() > 0) {
+						loadFlow(elementNoInput, noInput.getNextForm());
+					}
+				}
+				if(noMatch != null) {
+					Element elementNoMatch = createElement(element,noMatch);
+					if(noMatch.getNextForm() != null && noMatch.getNextForm().length() > 0) {
+						loadFlow(elementNoMatch, noMatch.getNextForm());
+					}
 				}
 				
 	    	} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
 				
 				MenuEntity menu = (MenuEntity)form.getFormId();
-				
-				FormEntity noInput = this.getFormNoMatchInput(menu.getId()+menu.getNoInput().getId(),
-						  Constants.FORM_TYPE_NOINPUT,
-						  menu.getNoInput_NextForm(),
-						  form,
-						  menu.getNoInput());
-				FormEntity noMatch = this.getFormNoMatchInput(menu.getId()+menu.getNoMatch().getId(),
-									  Constants.FORM_TYPE_NOMATCH,
-									  menu.getNoMatch_NextForm(),
-									  form,
-									  menu.getNoMatch());
-				Element elementNoInput = createElement(element,noInput);
-				Element elementNoMatch = createElement(element,noMatch);
-				
-				if(noInput.getNextForm() != null) {
-					loadFlow(elementNoInput, noInput.getNextForm());
+				FormEntity noInput = null;
+				FormEntity noMatch = null;
+				if(menu.getNoInput() != null) {		
+					noInput = this.getFormNoMatchInput(menu.getId()+menu.getNoInput().getId(),
+							  Constants.FORM_TYPE_NOINPUT,
+							  menu.getNoInput_NextForm(),
+							  form,
+							  menu.getNoInput());
 				}
-				if(noMatch.getNextForm() != null) {
-					loadFlow(elementNoMatch, noMatch.getNextForm());
+				if(menu.getNoMatch() != null) {
+					noMatch = this.getFormNoMatchInput(menu.getId()+menu.getNoMatch().getId(),
+							  Constants.FORM_TYPE_NOMATCH,
+							  menu.getNoMatch_NextForm(),
+							  form,
+							  menu.getNoMatch());
+				}
+				if(noInput != null) {
+					Element elementNoInput = createElement(element,noInput);
+					if(noInput.getNextForm() != null && noInput.getNextForm().length() > 0) {
+						loadFlow(elementNoInput, noInput.getNextForm());
+					}
+				}
+				
+				if(noMatch != null) {
+					Element elementNoMatch = createElement(element,noMatch);
+					if(noMatch.getNextForm() != null && noMatch.getNextForm().length() > 0) {
+						loadFlow(elementNoMatch, noMatch.getNextForm());
+					}
 				}
 				if(menu.getChoices() != null && menu.getChoices().size() > 0) {
 					for(ChoiceEntity choice : menu.getChoices()) {
 						FormEntity formChoice = this.getFormChoice(choice);
 						Element elementForm = createElement(element,formChoice);
-						if(formChoice.getNextForm() != null) {
+						if(formChoice.getNextForm() != null && formChoice.getNextForm().length() > 0) {
 							loadFlow(elementForm, formChoice.getNextForm());
 						}
 						
@@ -425,19 +454,27 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 				}
 			} else if(form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
 				DecisionEntity decision = (DecisionEntity)form.getFormId();
-				for(DecisionChanceEntity chance : decision.getListDecisionChance()) {
-					FormEntity formChance = this.getFormDecisionChance(chance);
-					Element elementForm = createElement(element,formChance);
-					if(formChance.getNextForm() != null) {
-						loadFlow(elementForm, formChance.getNextForm());
+				if(decision.getListDecisionChance() != null && decision.getListDecisionChance().size() > 0) {
+					for(DecisionChanceEntity chance : decision.getListDecisionChance()) {
+						FormEntity formChance = this.getFormDecisionChance(chance);
+						if(formChance != null) {
+							Element elementForm = createElement(element,formChance);
+							if(formChance.getNextForm() != null && formChance.getNextForm().length() > 0) {
+								loadFlow(elementForm, formChance.getNextForm());
+							}
+						}
 					}
 				}
 			}
-			if(form.getNextForm() != null) {
+			if(form.getNextForm() != null && form.getNextForm().length() > 0) {
 				loadFlow(element, form.getNextForm());
 			}
     	} catch(Exception e) {
-    		throw new Exception("Error on load Node: "+(form == null ? formId : form.getName()),e);
+    		if(e.getMessage() != null && e.getMessage().indexOf("Error on load Node: ") > -1) {
+    			throw e;
+    		} else {
+    			throw new Exception("Error on load Node: "+(form == null ? formId : form.getName()),e);
+    		}
     	}
    
 		

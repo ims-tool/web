@@ -27,7 +27,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	
 	public List<AnswerEntity> getByFilter(String where) {
 		
-		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.nextform a_nextform,a.versionid a_versionid "+
+		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.nextform a_nextform,a.versionid a_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
 					 "FROM flow.answer a "+

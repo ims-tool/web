@@ -19,10 +19,6 @@ ALTER TABLE flow.form ADD COLUMN "positiony" character varying(10);
 
 ALTER TABLE flow.form ADD COLUMN "flowname" character varying(100);
 
-CREATE INDEX ix_form_flowname ON flow.form (flowname);
-
-CREATE INDEX ix_form_versionid ON flow.form (versionid);
-
 --Criar sequences
 
 create sequence flow.seq_uid;
@@ -54,6 +50,8 @@ alter table flow.audiovar alter column audioid type numeric;
 alter table flow.condition alter column id type numeric;
 alter table flow.condition alter column "name" type character varying(30);
 alter table flow.condition alter column description type character varying(256);
+
+CREATE INDEX ix_nomatchinput_versionid ON flow.nomatchinput (versionid);
 
 alter table flow.conditiongroup alter column id type numeric;
 alter table flow.conditiongroup alter column conditionid type numeric;
@@ -116,6 +114,8 @@ alter table flow.nomatchinput alter column "type" type character varying(7);
 alter table flow.nomatchinput alter column prompt type numeric;
 alter table flow.nomatchinput alter column nextform type numeric;
 alter table flow.nomatchinput alter column "name" type character varying(30);
+CREATE INDEX ix_nomatchinput_versionid ON flow.nomatchinput (versionid);
+
 
 alter table flow.promptcollect alter column id type numeric;
 alter table flow.promptcollect alter column grammar type numeric;
@@ -259,5 +259,42 @@ CREATE TABLE flow.transferrule
       	REFERENCES flow.transfer (id) MATCH SIMPLE
       	ON UPDATE NO ACTION ON DELETE NO ACTION
 );
+
+------------------------------------------
+--- criar indices
+--------------------------------------------
+CREATE INDEX ix_form_flowname ON flow.form (flowname);
+
+CREATE INDEX ix_form_versionid ON flow.form (versionid);
+
+CREATE INDEX ix_nomatchinput_versionid ON flow.nomatchinput (versionid);
+
+CREATE INDEX ix_annouce_versionid ON flow.announce (versionid);
+CREATE INDEX ix_answer_versionid ON flow.answer (versionid);
+CREATE INDEX ix_audio_versionid ON flow.audio (versionid);
+CREATE INDEX ix_choice_versionid ON flow.choice (versionid);
+CREATE INDEX ix_condition_versionid ON flow.condition (versionid);
+CREATE INDEX ix_conditiongroup_versionid ON flow.conditiongroup (versionid);
+CREATE INDEX ix_conditionmap_versionid ON flow.conditionmap (versionid);
+CREATE INDEX ix_conditionparameters_versionid ON flow.conditionparameters (versionid);
+CREATE INDEX ix_conditionvalue_versionid ON flow.conditionvalue (versionid);
+CREATE INDEX ix_decision_versionid ON flow.decision (versionid);
+CREATE INDEX ix_decisionchance_versionid ON flow.decisionchance (versionid);
+CREATE INDEX ix_disconnect_versionid ON flow.disconnect (versionid);
+CREATE INDEX ix_flow_versionid ON flow.flow (versionid);
+CREATE INDEX ix_grammar_versionid ON flow.grammar (versionid);
+CREATE INDEX ix_menu_versionid ON flow.menu (versionid);
+CREATE INDEX ix_operation_versionid ON flow.operation (versionid);
+CREATE INDEX ix_operationgroup_versionid ON flow.operationgroup (versionid);
+CREATE INDEX ix_operationmap_versionid ON flow.operationmap (versionid);
+CREATE INDEX ix_operationparameters_versionid ON flow.operationparameters (versionid);
+CREATE INDEX ix_prompt_versionid ON flow.prompt (versionid);
+CREATE INDEX ix_promptaudio_versionid ON flow.promptaudio (versionid);
+CREATE INDEX ix_promptcollect_versionid ON flow.promptcollect (versionid);
+CREATE INDEX ix_return_versionid ON flow.return (versionid);
+CREATE INDEX ix_transfer_versionid ON flow.transfer (versionid);
+CREATE INDEX ix_transferrule_versionid ON flow.transferrule (versionid);
+
+
 
 
