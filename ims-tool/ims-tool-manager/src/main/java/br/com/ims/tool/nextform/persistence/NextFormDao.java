@@ -220,7 +220,11 @@ public class NextFormDao {
 					audio.setType(rs.getString(5));
 					audio.setName(rs.getString(6));
 					audio.setDescription(rs.getString(7));
-					audio.setPath(rs.getString(8));
+					String path = MethodInvocationUtils.getContextValue(jsonContext, MapValues.AUDIO_PATH)+ "/" +rs.getString(8) + "/";
+					path = path.replace("///", "/");
+					path = path.replace("//", "/");
+					path = path.replace(":/", "://");
+					audio.setPath(path);
 
 					if (UraConstants.VAR.equalsIgnoreCase(audio.getType())) {
 						audio.setListAudioVar(getListAudioVarByAudioId(audio.getId()));
