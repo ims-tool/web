@@ -276,6 +276,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
 			result = ServicesFactory.getInstance().getFlowService().delete((FlowEntity)obj);
 		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_OPERATION)) {
+			result = ServicesFactory.getInstance().getOperationService().delete((OperationEntity)obj);
+		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
 			result = ServicesFactory.getInstance().getTransferService().delete((TransferEntity)obj);
 		}
@@ -307,6 +310,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
 			result = ServicesFactory.getInstance().getFlowService().update((FlowEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_OPERATION)) {
+			result = ServicesFactory.getInstance().getOperationService().update((OperationEntity)obj);
 		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
 			result = ServicesFactory.getInstance().getTransferService().update((TransferEntity)obj);

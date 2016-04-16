@@ -136,6 +136,7 @@ public class LogicalFlow implements Serializable{
 				}
 			}
 		}
+		nodeSource.remTarget(nodeTarget);
 		nodeSource.setConnection(null);
 		nodeSource.getForm().setNextForm(null);
 		nodeSource.getForm().setTag(null);

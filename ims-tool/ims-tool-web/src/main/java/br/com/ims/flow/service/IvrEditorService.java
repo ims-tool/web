@@ -232,10 +232,10 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     	 * antes irei fazer um update no nome para não dar erro de chave, no final do codigo será excluído
     	 */
     	for(Node node : logicalFlow.getListDeletedNode()) {
-    		if(node.getForm().getFormType().equals(Constants.FORM_TYPE_NOINPUT) || 
-    				node.getForm().getFormType().equals(Constants.FORM_TYPE_NOMATCH) ||
-    				node.getForm().getFormType().equals(Constants.FORM_TYPE_DECISION_CHANCE) ||
-    				node.getForm().getFormType().equals(Constants.FORM_TYPE_CHOICE)) {
+    		if(node.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT) || 
+    				node.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH) ||
+    				node.getForm().getFormType().getName().equals(Constants.FORM_TYPE_DECISION_CHANCE) ||
+    				node.getForm().getFormType().getName().equals(Constants.FORM_TYPE_CHOICE)) {
     			node.getForm().setName(node.getForm().getName()+"_"+node.getForm().getId());
     			result = result & ServicesFactory.getInstance().getFormService().update(node.getForm());
     		}
@@ -344,7 +344,14 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			}
     		}
     	}
-    	
+    	for(Node node : logicalFlow.getListDeletedNode()) {
+    		result = result & ServicesFactory.getInstance().getFormService().deleteObj(node.getForm());
+    					
+    	}
+    	for(Node node : logicalFlow.getListDeletedNode()) {
+    		result = result & ServicesFactory.getInstance().getFormService().delete(node.getForm());
+    					
+    	}
     	return result;
 		
     }
