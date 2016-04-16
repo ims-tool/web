@@ -130,8 +130,7 @@ app
 						$scope.user.pw2 = data.password;
 						$scope.showUser = false;
 						$scope.showButtonUser = true;
-						setLog(1, 'add login web admin', 'ims-tool-web-admin',
-								data.login, 0, data.id);
+						setLog(1, 'add login web admin', 'ims-tool-web-admin', data.login, 0, data.id);
 
 					};
 					$scope.showConfirm = function(ev) {

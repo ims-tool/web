@@ -57,6 +57,16 @@
 							<button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
 							<span><a href="#">Need help?</a></span>
 						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-lg"
+								placeholder="Senha" ng-model="user.password" required>
+								<span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password necessário</span>
+						</div>
+						<div class="form-group">
+							<input type="password" class="form-control input-lg"
+								placeholder="Senha" ng-model="user.password" required>
+								<span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password necessário</span>
+						</div>
 					</form>
 				</div>
 				<div class="modal-footer">

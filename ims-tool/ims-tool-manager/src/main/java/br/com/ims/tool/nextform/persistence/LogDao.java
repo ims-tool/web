@@ -95,7 +95,7 @@ public class LogDao {
 			conn = new ConnectionDB();
 
 			String query = " UPDATE FLOW.LOG SET STOPDATE = localtimestamp, FINALSTATUS = ?, CONTEXT = ?," +
-					   "  DDD = ?, CIDADE = ?, UF = ?, VDN = ?, " +
+					   "  DDD = ?, VDN = ?, " +
 					   " INSTANCE = ?, ANI = ? " +	
 					   " WHERE ID = ? ";
 
@@ -104,10 +104,8 @@ public class LogDao {
 			stm.setString(1, status);
 			stm.setString(2, contexto);
 			stm.setString(3, ddd);
-			stm.setString(4, MethodInvocationUtils.getContextValue(contexto, MapValues.CIDADE));
-			stm.setString(5, MethodInvocationUtils.getContextValue(contexto, MapValues.UF));
 			stm.setString(6, MethodInvocationUtils.getContextValue(contexto, MapValues.VDN));
-			stm.setString(7, instancia);
+			stm.setString(7, MethodInvocationUtils.getContextValue(contexto, MapValues.ANI));
 			stm.setLong(8, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.ANI)));
 			
 			stm.setLong(9, Long.valueOf(logId));
