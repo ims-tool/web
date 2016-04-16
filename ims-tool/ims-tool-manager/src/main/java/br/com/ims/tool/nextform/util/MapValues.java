@@ -14,7 +14,7 @@ public interface MapValues extends Serializable {
 	public static final String PROMPT_COLLECT = "_PromptCollect";
 	public static final String MENU_OPTION = "_Menu";
 	public static final String CONTADOR_TENTATIVAS = "CONTADOR_TENTATIVAS";
-	
+	public static final String AUDIO_PATH = "parameters.audio_path";
 	public static final String TP_LOJA = "customer.loja";
 	
 	

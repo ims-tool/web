@@ -14,6 +14,9 @@ import javax.xml.bind.ParseConversionEvent;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.tags.ParamAware;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import br.com.ims.tool.entity.Message;
 import br.com.ims.tool.entity.MessageType;
 import br.com.ims.tool.entity.RouterIvr;
@@ -30,17 +33,30 @@ public class RouterDao {
 		RouterIvr router = new RouterIvr();
 		ResultSet rs = null;
 		ConnectionDB conn = null;
-		PreparedStatement stm = null;
+		JsonParser parser = new JsonParser();
+		JsonObject context = null;
 		try {
 			conn = new ConnectionDB();
 			String query = "select r.context, f.id from flow.router r, flow.form f where f.name = formname and r.dnis = '"+dnis+"'";
 
 			rs = conn.ExecuteQuery(query);
 
-			while (rs.next()) {
-				router.setContext(rs.getString(1));
+			if(rs.next()) {
+				context = parser.parse(rs.getString(1)).getAsJsonObject();
 				router.setNextFormId(rs.getLong(2));
+				
+				rs.close();
+				query = "select value from flow.parameters r where UPPER(r.name) = 'AUDIO_PATH'";
+				rs = conn.ExecuteQuery(query);
+				context.add("parameters", new JsonObject());
+				
+				if(rs.next()){
+					context.getAsJsonObject("parameters").addProperty("audio_path", rs.getString(1));
+				}else{
+					context.getAsJsonObject("parameters").addProperty("audio_path", "http://ims-server/_audios/"); 
+				}
 			}
+			router.setContext(context.toString());
 		} catch (SQLException e) {
 			logger.error("Erro ao router ", e);
 		} finally {
@@ -52,6 +68,8 @@ public class RouterDao {
 			}
 			conn.finalize();
 		}
+		
+	
 		return router;
 	}
 
