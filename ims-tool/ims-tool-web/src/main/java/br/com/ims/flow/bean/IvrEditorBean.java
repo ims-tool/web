@@ -248,7 +248,8 @@ public class IvrEditorBean extends AbstractBean {
     }
     private void loadFlow() {
     	try {
-    		ServicesFactory.getInstance().getIvrEditorService().loadFlow(null,this.flowId);
+    		//ServicesFactory.getInstance().getIvrEditorService().loadFlow(null,this.flowId);
+    		ServicesFactory.getInstance().getIvrEditorService().loadFlow(this.flowId);
     		this.flowId = "";
     	} catch(Exception e ) {
     		this.logicalFlow.validateNodes();
@@ -544,14 +545,6 @@ public class IvrEditorBean extends AbstractBean {
 		}
 		if(!foundNodeAnswer) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "You cannot save. Node Answer is missing.",
-	                "IVR Editor");
-			 
-			FacesContext.getCurrentInstance().addMessage(null, msg);
-			return;
-		}
-		if(form.isFormError()) {
-			
-	    	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You cannot save. There are Elements with error.",
 	                "IVR Editor");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);

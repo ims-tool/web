@@ -123,13 +123,13 @@ alter table flow.promptcollect alter column prompt type numeric;
 alter table flow.promptcollect alter column noinput type numeric;
 alter table flow.promptcollect alter column nomatch type numeric;
 alter table flow.promptcollect alter column nextform type numeric;
-alter table flow.promptcollect ADD COLUMN noinput_nextform numeric NOT NULL;
-alter table flow.promptcollect ADD COLUMN nomatch_nextform numeric NOT NULL;
+alter table flow.promptcollect ADD COLUMN noinput_nextform numeric;
+alter table flow.promptcollect ADD COLUMN nomatch_nextform numeric;
 alter table flow.promptcollect ADD COLUMN noinput_tag integer;
 alter table flow.promptcollect ADD COLUMN nomatch_tag integer;
 
-alter table flow.menu ADD COLUMN noinput_nextform numeric NOT NULL;
-alter table flow.menu ADD COLUMN nomatch_nextform numeric NOT NULL;
+alter table flow.menu ADD COLUMN noinput_nextform numeric;
+alter table flow.menu ADD COLUMN nomatch_nextform numeric;
 alter table flow.menu ADD COLUMN noinput_tag integer;
 alter table flow.menu ADD COLUMN nomatch_tag integer;
 
