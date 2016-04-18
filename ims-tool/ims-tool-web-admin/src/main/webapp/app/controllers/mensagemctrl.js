@@ -1,6 +1,8 @@
-app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $mdDialog, $mdMedia) {
+app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $mdDialog, $mdMedia, $sce) {
 					
 					checkAccess('webmensagem');
+					
+					
 					
 
 					$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
@@ -23,9 +25,14 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 					$scope.example1data = [ {id: 1, label: "David"}, {id: 2, label: "Jhon"}, {id: 3, label: "Danny"}];
 					
 					$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/findAll').success(function(data1) {
+								
 								$scope.messages = data1;
 							});
 					
+					
+					  $scope.trustSrc = function(src) {
+						    return $sce.trustAsResourceUrl(src);
+						  }
 					
 					$scope.editMessage = function(index) {
 
@@ -107,4 +114,10 @@ function setFileName(){
 	
 	document.getElementById("fileName").setAttribute("hidden", "true");
 }
+
+app.filter("trustUrl", ['$sce', function ($sce) {
+	return function (recordingUrl) {
+        return $sce.trustAsResourceUrl(recordingUrl);
+    };
+}]);
 

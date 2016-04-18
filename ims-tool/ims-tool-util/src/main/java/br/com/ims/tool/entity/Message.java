@@ -37,6 +37,7 @@ public class Message implements Serializable {
     private String ddd_not_in;
     private String spot;
     private String msg_order;
+    private String path;
     
 	public Integer getId() {
 		return id;
@@ -103,5 +104,12 @@ public class Message implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
     
 }

@@ -56,7 +56,8 @@ public class MessageDao {
 				message.setDdd_not_in(rs.getString(8));
 				message.setSpot(rs.getString(9));
 				message.setMsg_order(rs.getString(10));
-
+				message.setPath("http://vmtwin108:8080/_audios/msg/"+message.getId().toString()+".wav");
+				message.setPath(message.getPath().trim());
 				listMessage.add(message);
 
 			}

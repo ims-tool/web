@@ -9,8 +9,7 @@
 			<h1>Mensagem</h1>
 
 			<div ng-controller="MensagemCtrl" ng-submit="submit()">
-				<form role="form" action="rest/file/upload" method="post"
-					enctype="multipart/form-data">
+				<form role="form" action="rest/file/upload" method="post" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-xs-6 col-md-3"></div>
 						<div class="col-xs-6 col-md-3"></div>
@@ -153,10 +152,9 @@
 									
 								</td>
 								<td>
-								<audio controls>
-										<source src="" type="audio/wav">
-									</audio>
-									</td>
+								
+									<audio ng-src='{{trustSrc(message.path)}}' audioplayer controls></audio>
+								</td>
 							</tr>
 						</tbody>
 					</table>
