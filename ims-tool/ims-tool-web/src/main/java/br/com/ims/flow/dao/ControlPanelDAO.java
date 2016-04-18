@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.ControlPanelEntity;
 
 @SuppressWarnings("serial")
@@ -80,7 +81,7 @@ public class ControlPanelDAO extends AbstractDAO<ControlPanelEntity> {
 	}
 	
 	public ControlPanelEntity getByMethod(String method) {
-		List<ControlPanelEntity> result = this.getByFilter("WHERE lower(cm.methodname) = '"+method.toLowerCase()+"'");
+		List<ControlPanelEntity> result = this.getByFilter("WHERE lower(cp.methodname) = '"+method.toLowerCase()+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -91,7 +92,7 @@ public class ControlPanelDAO extends AbstractDAO<ControlPanelEntity> {
 		
 		String sql = "INSERT INTO flow.controlpanel (id,methodname,description,owner,referencedby,status,loginid,startdate,"
 				    + "versionid,timeout,internalservice) "
-				    + "VALUES ("+entity.getId()+",'"+entity.getMethodname()+"','"+entity.getDescription()+"','"+entity.getOwner()+"','"
+				    + "VALUES ("+Util.getUID()+",'"+entity.getMethodname()+"','"+entity.getDescription()+"','"+entity.getOwner()+"','"
 				    + entity.getReferencedBy()+"','"+entity.getStatus()+"','"+entity.getLoginid()+"',"
 				    + "to_date('"+entity.getStartdate()+"','DD/MM/YYYY HH24:MI:SS'),'"+entity.getVersionId()+"','"+entity.getTimeout()+"',"
 				    + entity.getInternalService()+") ";

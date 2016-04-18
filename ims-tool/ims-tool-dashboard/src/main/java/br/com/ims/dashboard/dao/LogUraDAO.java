@@ -1,14 +1,13 @@
 package br.com.ims.dashboard.dao;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import br.com.ims.dashboard.model.LogUraModel;
-import br.com.ims.dashboard.util.OracleConn;
+import br.com.ims.dashboard.util.DbConnection;
 
 
 public class LogUraDAO {
@@ -25,7 +24,8 @@ public class LogUraDAO {
 		List<LogUraModel> retorno = new ArrayList<LogUraModel>();
 		ResultSet rs = null;
 		String sql = "";
-		OracleConn oracle = null;
+		//OracleConn oracle = null;
+		DbConnection db = null;
 		
 		sql = "SELECT /* +rule */  * "+
 			"FROM "+
@@ -39,27 +39,27 @@ public class LogUraDAO {
 			"	, L.PERFIL "+
 			"	,L.PROTOCOLID \"SS PROT. INICIAL\" "+
 			"	,L.PROTOCOLNUMBER \"PROTOCOLO NUMBER\" "+
-			"	,'' \"ARMÁRIO\" "+
+			"	,'' \"ARMARIO\" "+
 			"	,l.cidade CIDADE "+
 			"	,l.uf ESTADO "+
 			"	, to_char(l.startdate,'dd/mm/yyyy hh24:mi:ss') \"Data Inicial\", to_char(l.stopdate,'dd/mm/yyyy hh24:mi:ss') \"Data Final\" "+
-			"	, l.dnis \"Nº CHAMADO\" "+
+			"	, l.dnis \"NCHAMADO\" "+
 			"	, l.finalstatus FINALIZACAO "+
 			"	, TS.RESULT_CALL  \"VDN TRANSFERIDO\" "+
 			"	, L.Context CONTEXTO "+
-			"	from log l "+
-			"	join form f on  (upper(f.name) = upper('"+dnis+"') OR upper('"+dnis+"') ='TODOS') "+
-			"	join track t "+
+			"	from flow.log l "+
+			"	join flow.form f on  (upper(f.name) = upper('"+dnis+"') OR upper('"+dnis+"') ='TODOS') "+
+			"	join flow.track t "+
 			"	     on t.rowdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+15/1440 "+
 			"	    and t.logid=l.id and t.formid=f.id "+
-			"	JOIN trackservice ts  "+
+			"	JOIN flow.trackservice ts  "+
 			"	   ON ts.rowdate BETWEEN l.startdate-1/1440 AND l.startdate+15/1440 "+ 
-			"	   and ts.logid=l.id and TS.TRACKID=T.ID  and ts.method_service = 'Transferência VDN' "+
+			"	   and ts.logid=l.id and TS.TRACKID=T.ID  and ts.method_service = 'Transferï¿½ncia VDN' "+
 			"	where l.startdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+59/86400 "+
 			"	AND ('"+dnis+"' = l.DNIS OR '"+dnis+"' = 'TODOS') "+
 			"	AND ( L.ANI LIKE '%"+telefone+"%'  OR l.instance LIKE '%"+telefone+"%'  OR upper('"+telefone+"')='TODOS') "+ 
 			"	and (L.ID IN (SELECT TT1.LOGID  "+
-			"	       FROM tracktag tt1  "+
+			"	       FROM flow.tracktag tt1  "+
 			"	       WHERE TT1.ROWDATE BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS')-1/1440 AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+15/1440 "+                                     
 			"	             and tt1.tagid in("+tags+") "+
 			"	             ) OR "+tags+"=0) "+
@@ -73,17 +73,17 @@ public class LogUraDAO {
 			"	, L.PERFIL "+
 			"	,L.PROTOCOLID \"SS PROT. INICIAL\" "+
 			"	,L.PROTOCOLNUMBER \"PROTOCOLO NUMBER\" "+
-			"	,'' \"ARMÁRIO\" "+
+			"	,'' \"ARMARIO\" "+
 			"	,L.CIDADE CIDADE "+
 			"	,L.UF ESTADO "+
 			"	, to_char(l.startdate,'dd/mm/yyyy hh24:mi:ss') \"Data Inicial\", to_char(l.stopdate,'dd/mm/yyyy hh24:mi:ss') \"Data Final\" "+
-			"	, l.dnis \"Nº CHAMADO\" "+
+			"	, l.dnis \"NCHAMADO\" "+
 			"	, l.finalstatus FINALIZACAO "+
 			"	, '' "+
 			"	, L.Context CONTEXTO "+
-			"	from log l "+
-			"	join form f on  (upper(f.name) = upper('"+formulario+"') OR upper('"+formulario+"') ='TODOS') "+
-			"	join track t  "+
+			"	from flow.log l "+
+			"	join flow.form f on  (upper(f.name) = upper('"+formulario+"') OR upper('"+formulario+"') ='TODOS') "+
+			"	join flow.track t  "+
 			"	     on t.rowdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+15/1440 "+
 			"	     and t.logid=l.id and t.formid=f.id  "+
 			"	where l.startdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+59/86400 "+
@@ -101,8 +101,9 @@ public class LogUraDAO {
 			"	order by 1 "; 
 		
 		try {
-			oracle = new OracleConn("IVR_OWNER");
-			rs = oracle.ExecuteQuery(sql);
+			//oracle = new OracleConn("IVR_OWNER");
+			db = new DbConnection("");
+			rs = db.ExecuteQuery(sql);
 			
 			while (rs.next()) {
 				LogUraModel log = new LogUraModel();
@@ -114,12 +115,12 @@ public class LogUraDAO {
 				log.setPerfil(rs.getString("PERFIL"));
 				log.setProtocolo_inicial(rs.getString("SS PROT. INICIAL"));
 				log.setProtocolo_numero(rs.getString("PROTOCOLO NUMBER"));
-				log.setArmario(rs.getString("ARMÁRIO"));
+				log.setArmario(rs.getString("ARMARIO"));
 				log.setCidade(rs.getString("CIDADE"));
 				log.setEstado(rs.getString("ESTADO"));
 				log.setData_inicial(rs.getString("Data Inicial"));
 				log.setData_final(rs.getString("Data Final"));
-				log.setNumero_chamado(rs.getString("Nº CHAMADO"));
+				log.setNumero_chamado(rs.getString("NCHAMADO"));
 				log.setFinalizacao(rs.getString("FINALIZACAO"));
 				log.setVdn_transferido(rs.getString("VDN TRANSFERIDO"));
 				log.setContexto(rs.getString("CONTEXTO"));
@@ -132,8 +133,8 @@ public class LogUraDAO {
 			return null;
 
 		} finally {
-			try {rs.close();} catch (SQLException e) {e.printStackTrace();}
-			oracle.finalize();
+			
+			db.finalize();
 
 		}
 		

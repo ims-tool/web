@@ -43,6 +43,7 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 				cp = new ControlPanelEntity();
 				cp.setMethodname(entity.getMethodReference());
 				cp.setInternalService("true");
+				cp.setStatus("true");
 				cp.setVersionId(entity.getVersionId());
 				cp.setLoginid(Util.getUserName());
 				cp.setStartdate(sdf.format(Calendar.getInstance().getTime()));
@@ -84,6 +85,7 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 				cp = new ControlPanelEntity();
 				cp.setMethodname(entity.getMethodReference());
 				cp.setInternalService("true");
+				cp.setStatus("true");
 				cp.setVersionId(entity.getVersionId());
 				cp.setLoginid(Util.getUserName());
 				cp.setStartdate(sdf.format(Calendar.getInstance().getTime()));
