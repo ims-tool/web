@@ -298,6 +298,6 @@ CREATE INDEX ix_return_versionid ON flow.return (versionid);
 CREATE INDEX ix_transfer_versionid ON flow.transfer (versionid);
 CREATE INDEX ix_transferrule_versionid ON flow.transferrule (versionid);
 
-
+CREATE INDEX ix_controlpanel_methodname ON flow.controlpanel (methodname);
 
 

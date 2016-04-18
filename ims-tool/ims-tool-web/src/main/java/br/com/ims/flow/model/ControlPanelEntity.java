@@ -9,9 +9,10 @@ public class ControlPanelEntity extends AbstractEntity {
 	private String referencedBy;
 	private String status;
 	private String loginid;
-	private java.util.Date startdate;
+	private String startdate;
 	private String versionId;
 	private int timeout;
+	private String internalService;
 	
 	public String getMethodname() {
 		return methodname;
@@ -49,10 +50,12 @@ public class ControlPanelEntity extends AbstractEntity {
 	public void setLoginid(String loginid) {
 		this.loginid = loginid;
 	}
-	public java.util.Date getStartdate() {
+	
+	
+	public String getStartdate() {
 		return startdate;
 	}
-	public void setStartdate(java.util.Date startdate) {
+	public void setStartdate(String startdate) {
 		this.startdate = startdate;
 	}
 	public String getVersionId() {
@@ -66,6 +69,12 @@ public class ControlPanelEntity extends AbstractEntity {
 	}
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
+	}
+	public String getInternalService() {
+		return internalService;
+	}
+	public void setInternalService(String internalService) {
+		this.internalService = internalService;
 	}
 	
 		

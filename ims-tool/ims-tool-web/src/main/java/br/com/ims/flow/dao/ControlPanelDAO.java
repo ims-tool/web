@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ims.flow.common.DbConnection;
-import br.com.ims.flow.model.ConditionMapEntity;
 import br.com.ims.flow.model.ControlPanelEntity;
 
 @SuppressWarnings("serial")
@@ -34,23 +33,27 @@ public class ControlPanelDAO extends AbstractDAO<ControlPanelEntity> {
 		} else {
 			sql = sql.replace("<WHERE>", "");
 		}
-		List<ConditionMapEntity> result = new ArrayList<ConditionMapEntity>();
+		List<ControlPanelEntity> result = new ArrayList<ControlPanelEntity>();
 		ResultSet rs = null;
-		DbConnection db = new DbConnection("ConditionMapDAO-getByFilter");
+		DbConnection db = new DbConnection("ControlPanelDAO-getByFilter");
 		try {
 			rs = db.ExecuteQuery(sql);
 			while(rs.next()) {
 				
-				ConditionMapEntity conditionMap = new ConditionMapEntity();
-				conditionMap.setId(rs.getString("cm_id"));
-				conditionMap.setName(rs.getString("cm_name"));
-				conditionMap.setDescription(rs.getString("cm_description"));
-				conditionMap.setType(rs.getString("cm_type"));
-				conditionMap.setMethodReference(rs.getString("cm_methodreference"));
-				conditionMap.setLogActive(rs.getInt("cm_log_active"));	
-				conditionMap.setVersionId(rs.getString("cm_versionid")); 
+				ControlPanelEntity controlPanel = new ControlPanelEntity();
+				controlPanel.setId(rs.getString("cp_id"));
+				controlPanel.setMethodname(rs.getString("cp_methodname"));
+				controlPanel.setDescription(rs.getString("cp_description"));
+				controlPanel.setOwner(rs.getString("cp_owner"));
+				controlPanel.setReferencedBy(rs.getString("cp_referencedby"));
+				controlPanel.setStatus(rs.getString("cp_status"));
+				controlPanel.setLoginid(rs.getString("cp_loginid"));
+				controlPanel.setStartdate(rs.getString("cp_startdate"));
+				controlPanel.setVersionId(rs.getString("versionid"));
+				controlPanel.setTimeout(rs.getInt("cp_timeout"));
 				
-				result.add(conditionMap);
+					
+				result.add(controlPanel);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -69,21 +72,15 @@ public class ControlPanelDAO extends AbstractDAO<ControlPanelEntity> {
 		
 	}
 	public ControlPanelEntity get(String id) {
-		List<ConditionMapEntity> result = this.getByFilter("WHERE cm.id = '"+id+"'");
+		List<ControlPanelEntity> result = this.getByFilter("WHERE cp.id = '"+id+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}
 		return null;
 	}
-	public ConditionMapEntity getByName(String name) {
-		List<ConditionMapEntity> result = this.getByFilter("WHERE lower(cm.name) = '"+name.toLowerCase()+"'");
-		if(result.size() > 0) {
-			return result.get(0);
-		}
-		return null;
-	}
-	public ControlPanelEntity getByMethodReference(String method) {
-		List<ConditionMapEntity> result = this.getByFilter("WHERE lower(cm.methodreference) = '"+method.toLowerCase()+"'");
+	
+	public ControlPanelEntity getByMethod(String method) {
+		List<ControlPanelEntity> result = this.getByFilter("WHERE lower(cm.methodname) = '"+method.toLowerCase()+"'");
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -92,10 +89,14 @@ public class ControlPanelDAO extends AbstractDAO<ControlPanelEntity> {
 	
 	public boolean save(ControlPanelEntity entity) {
 		
-		String sql = "INSERT INTO flow.conditionmap (id,name,description,type,methodreference,log_active,versionid) "
-				    + "VALUES ("+entity.getId()+",'"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getType()+"','"+entity.getMethodReference()+"','"+entity.getLogActive()+"','"+entity.getVersionId()+"') ";
+		String sql = "INSERT INTO flow.controlpanel (id,methodname,description,owner,referencedby,status,loginid,startdate,"
+				    + "versionid,timeout,internalservice) "
+				    + "VALUES ("+entity.getId()+",'"+entity.getMethodname()+"','"+entity.getDescription()+"','"+entity.getOwner()+"','"
+				    + entity.getReferencedBy()+"','"+entity.getStatus()+"','"+entity.getLoginid()+"',"
+				    + "to_date('"+entity.getStartdate()+"','DD/MM/YYYY HH24:MI:SS'),'"+entity.getVersionId()+"','"+entity.getTimeout()+"',"
+				    + entity.getInternalService()+") ";
 		boolean result = true;
-		DbConnection db = new DbConnection("ConditionMapDAO-save");
+		DbConnection db = new DbConnection("ControlPanelDAO-save");
 		result =  db.ExecuteSql(sql);
 		db.finalize();
 		return result;
@@ -105,10 +106,13 @@ public class ControlPanelDAO extends AbstractDAO<ControlPanelEntity> {
 	@Override
 	public boolean update(ControlPanelEntity entity) {
 		// TODO Auto-generated method stub
-		String sql = "UPDATE flow.conditionmap SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',type = '"+entity.getType()+"',methodreference='"+entity.getMethodReference()+"',log_active='"+entity.getLogActive()+"' ,versionid='"+entity.getVersionId()+"' "
+		String sql = "UPDATE flow.controlpanel SET methodname = '"+entity.getMethodname()+"',description='"+entity.getDescription()+"',"
+					+ "owner = '"+entity.getOwner()+"',referencedby='"+entity.getReferencedBy()+"',status='"+entity.getStatus()+"' ,"
+					+ "loginid='"+entity.getLoginid()+"',startdate=to_date('"+entity.getStartdate()+"','DD/MM/YYYY HH24:MI:SS'), "
+					+ "versionid='"+entity.getVersionId()+"',timeout='"+entity.getTimeout()+"',internalservice='"+entity.getInternalService()+"' "
    			    	+ "WHERE id = '"+entity.getId()+"'  ";
 		boolean result = true;
-		DbConnection db = new DbConnection("ConditionMapDAO-update");
+		DbConnection db = new DbConnection("ControlPanelDAO-update");
 		result = db.ExecuteSql(sql);
 		db.finalize();
 		return result;
@@ -117,10 +121,10 @@ public class ControlPanelDAO extends AbstractDAO<ControlPanelEntity> {
 
 	@Override
 	public boolean delete(ControlPanelEntity entity) {
-		String sql = "DELETE FROM flow.conditionmap WHERE id = '"+entity.getId()+"'  ";
+		String sql = "DELETE FROM flow.controlpanel WHERE id = '"+entity.getId()+"'  ";
 		// TODO Auto-generated method stub
 		boolean result = true;
-		DbConnection db = new DbConnection("ConditionMapDAO-delete");
+		DbConnection db = new DbConnection("ControlPanelDAO-delete");
 		result = db.ExecuteSql(sql);
 		db.finalize();
 		return result;
