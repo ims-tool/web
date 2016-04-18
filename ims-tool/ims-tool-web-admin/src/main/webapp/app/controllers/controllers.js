@@ -110,6 +110,7 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 	var user;
 
 	$scope.getLogin = function(user) {
+		
 		user.system = '1';
 		
 		jQuery.ajax({
@@ -125,14 +126,50 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    	if(data.result !== 'OK'){
 		    		alert("Login inválido");
 		    	}else{
-		    		localStorage.setItem("login", user.login);
-		    		localStorage.setItem("artifact", JSON.stringify(data.artifact));
+		    
+		    		if(!user.password){
+		    			sessionStorage.setItem("newLogin", user.login);
+		    			window.location.href = '/ims-tool-web-admin/newLogin.html';
+		    		}else{
+		    			localStorage.setItem("login", user.login);
+		    			localStorage.setItem("artifact", JSON.stringify(data.artifact));
+		    			setLog(4, 'login web admin', 'ims-tool-web-admin', 'nc', 0, 0)
+		    			window.location.href = '../ims-tool-web-admin/';
+		    		}
 		    		
-		    		setLog(4, 'login web admin', 'ims-tool-web-admin', 'nc', 0, 0)
-		    		window.location.href = '../ims-tool-web-admin/';
 		    	}
 		    }
 		    });
+	};
+});
+
+appLogin.controller('NewLoginCtrl', function($rootScope, $location, $scope, $http){
+	
+	var user;
+	
+	$scope.user = {login: sessionStorage.getItem("newLogin"), id:-2};
+
+	$scope.setNewPassword = function(user) {
+		
+		if ($scope.user.pw1 === $scope.user.pw2){
+			var data = $scope.user;
+			$.ajax({
+				type : "POST",
+				data : JSON.stringify(data),
+				url : 'http://' + window.location.hostname + ":8080/ims-tool-server/rest/access/update",
+				contentType : "application/json",
+				dataType : 'json',
+				'success': function(data){
+					window.location.href = '/ims-tool-web-admin/login.html';
+					setLog(1, 'cadastrou nova senha', 'ims-tool-web-admin', $scope.user.login , 0, 0)
+				}
+			})
+			
+		}else{
+			alert("Senhas não conferem, por gentileza alterar.");
+		}
+		
+		
 	};
 });
 

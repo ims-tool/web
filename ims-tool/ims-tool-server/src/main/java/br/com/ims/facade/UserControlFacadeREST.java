@@ -93,13 +93,29 @@ public class UserControlFacadeREST extends AbstractFacade<ServiceHour> {
     	
     	if((Integer) jsonObj.get("id") > 0){
     		user.setId((Integer) jsonObj.get("id"));
-    	}else{
-    		user.setId(-1);
+    	}else {
+    		if ((Integer) jsonObj.get("id") == -2){
+    			user.setId(-2);
+    		}else{
+    			user.setId(-1);
+    		}
     	}
-    	user.setName((String) jsonObj.get("name"));
-    	user.setEmail((String) jsonObj.get("email"));
-    	user.setLogin((String) jsonObj.get("login"));
-    	user.setPassword((String) jsonObj.get("pw1"));
+    	try {
+    		user.setName((String) jsonObj.get("name"));
+		} catch (Exception e) {
+		}
+    	try {
+    		user.setEmail((String) jsonObj.get("email"));
+		} catch (Exception e) {
+		}
+    	try {
+    		user.setLogin((String) jsonObj.get("login"));
+		} catch (Exception e) {
+		}
+    	try {
+    		user.setPassword((String) jsonObj.get("pw1"));
+		} catch (Exception e) {
+		}
     	
     	
     	UserControlCtrl.save(user);

@@ -1,3 +1,4 @@
+
 app
 		.controller(
 				'AccessCtrl',
@@ -92,6 +93,27 @@ app
 									'ims-tool-web-admin', data.login, 0,
 									data.id);
 							$scope.users.splice(index, 1);
+						}
+					};
+					
+					$scope.resetPassword = function(index) {
+
+						var data = $scope.users[index];
+
+						var box = confirm("Deseja realmente realizar o reset de senha do usuário "+data.login+"?");
+						if (box === true) {
+							data.pw1 = "";
+
+							$.ajax({
+										type : "POST",
+										data : JSON.stringify(data),
+										url : 'http://'
+												+ window.location.hostname
+												+ ":8080/ims-tool-server/rest/access/update",
+										contentType : "application/json",
+										dataType : 'json'
+									})
+							setLog(2, 'add login web admin', 'ims-tool-web-admin', data.login, 0, data.id);
 						}
 					};
 
