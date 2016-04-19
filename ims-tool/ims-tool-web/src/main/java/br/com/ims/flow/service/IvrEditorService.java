@@ -364,7 +364,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 		element.setY(form.getPositionY());
 		
 		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(form.getFormType(), element);
-		bean.getModel().addElement(element);
+		bean.getModel().addElement(element);	
 		bean.getLogicalFlow().addNode(element);
 		
 		this.connect(source, element);
@@ -671,6 +671,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		if(form.getFormType().getName().equals(Constants.FORM_TYPE_CHOICE)) {
     			if(form.getFormId() != null) {
 	    			if(((ChoiceEntity)form.getFormId()).getId().equals(choice.getId())) {
+	    				form.setFormId(choice);
 	    				String imgPath = form.getFormType().getImagePathSuccess();
 	    				form.getFormType().setImagePathSuccess(imgPath.replace("<NUMBER>", choice.getDtmf().equals("*") ? "x" : choice.getDtmf()  ));
 	    				
@@ -705,6 +706,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		if(form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION_CHANCE)) {
     			if(form.getFormId() != null) {
 	    			if(((DecisionChanceEntity)form.getFormId()).getId().equals(decisionChance.getId())) {
+	    				form.setFormId(decisionChance);
 	    				return node;
 	    			}
     			}
