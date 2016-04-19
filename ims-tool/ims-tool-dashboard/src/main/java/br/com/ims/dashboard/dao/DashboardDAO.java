@@ -33,9 +33,9 @@ public class DashboardDAO {
 			  "	      CASE WHEN TS.TIME_EXEC >= C.TIMEOUT THEN 1 ELSE 0 END TIMEOUT "+
 			  "	      from flow.trackservice ts "+
 			  "	      JOIN flow.CONTROLPANEL C ON C.METHODNAME=TS.METHOD_SERVICE "+
-			  "	      where ts.rowdate BETWEEN sysdate-1/24 and sysdate "+
-			  "	  ) GROUP BY  method_service "+   
-			  "	) ";
+			  "	      where ts.rowdate BETWEEN now()-interval '1 hour' and now() "+
+			  "	  ) A GROUP BY  method_service "+   
+			  "	) A ";
 
 		try {
 			db = new DbConnection("");
@@ -72,7 +72,7 @@ public class DashboardDAO {
 			  "COUNT(1) QTDE, "+
 			  "SUM(CASE WHEN FINALSTATUS = 'R' THEN 1 ELSE 0 END) QTDE_RET, "+ 
 			  "ROUND(100*(SUM(CASE WHEN FINALSTATUS = 'R' THEN 1 ELSE 0 END) /COUNT(1)),2) PORCENTAGEM "+
-			  "FROM FLOW.LOG WHERE STARTDATE BETWEEN SYSDATE -1/24 AND SYSDATE "+
+			  "FROM FLOW.LOG WHERE STARTDATE BETWEEN now()-interval '1 hour' AND now() "+
 			  "GROUP BY SUBSTR(TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI'),1,15) "+
 			  "ORDER BY TO_DATE(SUBSTR(TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI'),1,15)||'0','DD/MM/YYYY HH24:MI')";
 
@@ -113,7 +113,7 @@ public class DashboardDAO {
 
 		sql = "SELECT TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI') DIA, "+ 
 			  "COUNT(1) VOLUME "+
-			  "FROM FLOW.LOG WHERE STARTDATE BETWEEN SYSDATE -1/24 AND SYSDATE "+
+			  "FROM FLOW.LOG WHERE STARTDATE BETWEEN now()-interval '1 hour' AND now() "+
 			  "GROUP BY TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI') "+
 			  "ORDER BY TO_DATE(TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI'),'DD/MM/YYYY HH24:MI') "; 
 
@@ -149,8 +149,8 @@ public class DashboardDAO {
 
 		sql = "select r.description ,count(1) volume "+ 
 			  "from flow.router r,flow.log l "+
-			  "where l.STARTDATE BETWEEN SYSDATE-1/24 AND SYSDATE "+
-			  "and l.dnis = r.dnis "+
+			  "where l.STARTDATE BETWEEN now()-interval '1 hour' AND now() "+
+			  "and l.dnis = CAST( r.dnis  AS text )  "+
 			  "group by r.description "+
 			  "order by count(1) desc "; 
 

@@ -47,7 +47,7 @@
                         <div class="panel-body" id="panelFiltros">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <form role="form" action="/ims-dashboard/Report" method="post" id="seachLogForm">						                
+                                    <form role="form" action="/ims-tool-dashboard/Report" method="post" id="seachLogForm">						                
                                         <input type="hidden" name="menu" id="menu" value="report"/>
                                         <input type="hidden" name="submenu" id="submenu" value="logura"/>
                                         <input type="hidden" name="action" id="action" value="consultar"/>
@@ -178,7 +178,7 @@
 				                            <c:forEach var="log" items="${logList}">
 				                                <tr >
 				                                    <td>
-				                                        <a href="/ims-dashboard/Report?menu=report&amp;submenu=trackdetail&amp;action=consultar&amp;logid=${log.logId}">${log.logId}</a>
+				                                        <a href="/ims-tool-dashboard/Report?menu=report&amp;submenu=trackdetail&amp;action=consultar&amp;logid=${log.logId}">${log.logId}</a>
 				                                    </td>                                    
 				                                    <td>${log.ucid}</td>
 													<td>${log.chamador}</td>

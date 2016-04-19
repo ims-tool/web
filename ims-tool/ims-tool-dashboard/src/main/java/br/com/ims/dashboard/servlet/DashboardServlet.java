@@ -160,9 +160,11 @@ public class DashboardServlet extends HttpServlet {
 	private String formatarStringWebService(HashMap<String, String> webService) {
 		String lista = "[[\"WebServices\", \"Porcentagem\"]";
 		
-		
-		lista = lista + ",[\"OK\", "+webService.get("OK").toString()+"]";
-		lista = lista + ",[\"NOK\", "+webService.get("NOK").toString()+"]";
+		if(webService.containsKey("OK") && webService.get("OK") != null) {
+			
+			lista = lista + ",[\"OK\", "+webService.get("OK").toString()+"]";
+			lista = lista + ",[\"NOK\", "+webService.get("NOK").toString()+"]";
+		}
 		
 		lista = lista + "]";
 		

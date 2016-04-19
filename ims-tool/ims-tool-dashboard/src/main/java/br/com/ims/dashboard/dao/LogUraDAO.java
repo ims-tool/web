@@ -38,7 +38,7 @@ public class LogUraDAO {
 			"	,l.document DOCUMENTO "+
 			"	, L.PERFIL "+
 			"	,L.PROTOCOLID \"SS PROT. INICIAL\" "+
-			"	,L.PROTOCOLNUMBER \"PROTOCOLO NUMBER\" "+
+			"	,L.PROTOCOLINTEGER \"PROTOCOLO NUMBER\" "+
 			"	,'' \"ARMARIO\" "+
 			"	,l.cidade CIDADE "+
 			"	,l.uf ESTADO "+
@@ -50,17 +50,17 @@ public class LogUraDAO {
 			"	from flow.log l "+
 			"	join flow.form f on  (upper(f.name) = upper('"+dnis+"') OR upper('"+dnis+"') ='TODOS') "+
 			"	join flow.track t "+
-			"	     on t.rowdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+15/1440 "+
+			"	     on t.rowdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+
 			"	    and t.logid=l.id and t.formid=f.id "+
 			"	JOIN flow.trackservice ts  "+
-			"	   ON ts.rowdate BETWEEN l.startdate-1/1440 AND l.startdate+15/1440 "+ 
+			"	   ON ts.rowdate BETWEEN l.startdate-interval '1 minute' AND l.startdate+interval '15 minute' "+ 
 			"	   and ts.logid=l.id and TS.TRACKID=T.ID  and ts.method_service = 'Transfer�ncia VDN' "+
-			"	where l.startdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+59/86400 "+
+			"	where l.startdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '59 seconds' "+
 			"	AND ('"+dnis+"' = l.DNIS OR '"+dnis+"' = 'TODOS') "+
 			"	AND ( L.ANI LIKE '%"+telefone+"%'  OR l.instance LIKE '%"+telefone+"%'  OR upper('"+telefone+"')='TODOS') "+ 
 			"	and (L.ID IN (SELECT TT1.LOGID  "+
 			"	       FROM flow.tracktag tt1  "+
-			"	       WHERE TT1.ROWDATE BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS')-1/1440 AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+15/1440 "+                                     
+			"	       WHERE TT1.ROWDATE BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS')-interval '1 minute' AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+                                     
 			"	             and tt1.tagid in("+tags+") "+
 			"	             ) OR "+tags+"=0) "+
 			"	union all "+
@@ -72,7 +72,7 @@ public class LogUraDAO {
 			"	,l.document DOCUMENTO "+
 			"	, L.PERFIL "+
 			"	,L.PROTOCOLID \"SS PROT. INICIAL\" "+
-			"	,L.PROTOCOLNUMBER \"PROTOCOLO NUMBER\" "+
+			"	,L.PROTOCOLINTEGER \"PROTOCOLO NUMBER\" "+
 			"	,'' \"ARMARIO\" "+
 			"	,L.CIDADE CIDADE "+
 			"	,L.UF ESTADO "+
@@ -84,15 +84,15 @@ public class LogUraDAO {
 			"	from flow.log l "+
 			"	join flow.form f on  (upper(f.name) = upper('"+formulario+"') OR upper('"+formulario+"') ='TODOS') "+
 			"	join flow.track t  "+
-			"	     on t.rowdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+15/1440 "+
+			"	     on t.rowdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+
 			"	     and t.logid=l.id and t.formid=f.id  "+
-			"	where l.startdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+59/86400 "+
+			"	where l.startdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '59 seconds' "+
 			"	AND ('"+dnis+"' = l.DNIS OR '"+dnis+"' = 'TODOS') "+
 			"	AND ( L.ANI LIKE '%"+telefone+"%'  OR l.instance LIKE '%"+telefone+"%'  OR upper('"+telefone+"')='TODOS')  "+
 			"	AND (l.finalstatus<>'T' or l.finalstatus is null) "+
 			"	and (L.ID IN (SELECT TT1.LOGID  "+
-			"	       FROM tracktag tt1  "+
-			"	       WHERE TT1.ROWDATE BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS')-1/1440 AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+15/1440 "+                                     
+			"	       FROM flow.tracktag tt1  "+
+			"	       WHERE TT1.ROWDATE BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS')-interval '1 minute' AND TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+                                     
 			"	             and tt1.tagid in("+tags+")   "+
 			"	             ) OR "+tags+"=0) "+ 			
 			"	) X "+

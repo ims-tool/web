@@ -74,14 +74,14 @@ public class ReportServlet extends HttpServlet {
 					/**
 					 * Recuperar filtros
 					 */
-					String datahoraI = request.getParameter("datahoraI") == null ? formatDateTime.format(Calendar.getInstance().getTime()) :  request.getParameter("datahoraI").toString();
-					String datahoraF = request.getParameter("datahoraF") == null ? formatDateTime.format(Calendar.getInstance().getTime()) :  request.getParameter("datahoraF").toString();
-					String telefone = request.getParameter("telefone") == null ? "TODOS" :  request.getParameter("telefone").toString(); 
-					String dnis = request.getParameter("dnis") == null ? "TODOS" :  request.getParameter("dnis").toString(); 
-					String formulario = request.getParameter("formulario") == null ? "TODOS" :  request.getParameter("formulario").toString(); 
-					String finalizacao = request.getParameter("finalizacao") == null ? "TODOS" :  request.getParameter("finalizacao").toString(); 
-					String tags = request.getParameter("tags") == null ? "0" :  request.getParameter("tags").toString(); 
-					String vdn = request.getParameter("vdn") == null ? "TODOS" :  request.getParameter("vdn").toString();
+					String datahoraI = request.getParameter("datahoraI") == null || request.getParameter("datahoraI").length() == 0 ? formatDateTime.format(Calendar.getInstance().getTime()) :  request.getParameter("datahoraI").toString();
+					String datahoraF = request.getParameter("datahoraF") == null || request.getParameter("datahoraF").length() == 0 ? formatDateTime.format(Calendar.getInstance().getTime()) :  request.getParameter("datahoraF").toString();
+					String telefone = request.getParameter("telefone") == null || request.getParameter("telefone").length() == 0 ? "TODOS" :  request.getParameter("telefone").toString(); 
+					String dnis = request.getParameter("dnis") == null || request.getParameter("dnis").length() == 0 ? "TODOS" :  request.getParameter("dnis").toString(); 
+					String formulario = request.getParameter("formulario") == null || request.getParameter("formulario").length() == 0 ? "TODOS" :  request.getParameter("formulario").toString(); 
+					String finalizacao = request.getParameter("finalizacao") == null || request.getParameter("finalizacao").length() == 0 ? "TODOS" :  request.getParameter("finalizacao").toString(); 
+					String tags = request.getParameter("tags") == null || request.getParameter("tags").length() == 0 ? "0" :  request.getParameter("tags").toString(); 
+					String vdn = request.getParameter("vdn") == null || request.getParameter("vdn").length() == 0 ? "TODOS" :  request.getParameter("vdn").toString();
 					
 					request.setAttribute("datahoraI", datahoraI);
 					request.setAttribute("datahoraF", datahoraF);
@@ -101,10 +101,10 @@ public class ReportServlet extends HttpServlet {
 					/**
 					 * Recuperar filtros
 					 */
-					String datahoraI = request.getParameter("datahoraI") == null ? formatDateTime.format(Calendar.getInstance().getTime()) :  request.getParameter("datahoraI").toString();
-					String datahoraF = request.getParameter("datahoraF") == null ? formatDateTime.format(Calendar.getInstance().getTime()) :  request.getParameter("datahoraF").toString();
-					String limite_timeout = request.getParameter("limite_timeout") == null ? "0" :  request.getParameter("limite_timeout").toString(); 
-					String num_chamadas_minima = request.getParameter("num_chamadas_minima") == null ? "0" :  request.getParameter("num_chamadas_minima").toString(); 
+					String datahoraI = request.getParameter("datahoraI") == null || request.getParameter("datahoraI").length() == 0 ? formatDateTime.format(Calendar.getInstance().getTime()) :  request.getParameter("datahoraI").toString();
+					String datahoraF = request.getParameter("datahoraF") == null || request.getParameter("datahoraF").length() == 0 ? formatDateTime.format(Calendar.getInstance().getTime()) :  request.getParameter("datahoraF").toString();
+					String limite_timeout = request.getParameter("limite_timeout") == null || request.getParameter("limite_timeout").length() == 0 ? "0" :  request.getParameter("limite_timeout").toString(); 
+					String num_chamadas_minima = request.getParameter("num_chamadas_minima") == null || request.getParameter("num_chamadas_minima").length() == 0 ? "0" :  request.getParameter("num_chamadas_minima").toString(); 
 					
 					request.setAttribute("datahoraI", datahoraI);
 					request.setAttribute("datahoraF", datahoraF);
