@@ -87,7 +87,7 @@ app.controller('FlagCtrl',function($rootScope, $location, $scope, $http) {
 										contentType : "application/json",
 										dataType : 'json'
 									});
-							setLog(1, 'flag admin', 'ims-tool-web-admin', parameter.value, 1 ,parameter.id);
+							setLog(1, 'update flag', 'webflag', parameter.value, 1 ,parameter.id);
 						}
 					};
 				});

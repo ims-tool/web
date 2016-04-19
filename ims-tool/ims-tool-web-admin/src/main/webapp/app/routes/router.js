@@ -77,6 +77,14 @@
 			      }
 		      
 		   })
+		   .state('report', {
+			   url : '/report',
+			   templateUrl: 'app/views/report.html',
+			   data: {
+			        requireLogin: true
+			      }
+		      
+		   })
 		   ;
 			 
 		   		    

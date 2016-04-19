@@ -36,8 +36,8 @@
 <script src="/ims-tool-web-admin/app/controllers/controllers.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/accessctrl.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/mensagemctrl.js"></script>
+<script src="/ims-tool-web-admin/app/controllers/reportctrl.js"></script>
 <script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
-
 <script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
 <script src="/ims-tool-web-admin/js/highlight.js"></script>
@@ -47,7 +47,7 @@
 <body>
 
 	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container-fluid">
+		<div class="container-fluid span12">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed"
 					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
@@ -71,7 +71,7 @@
  </br>
  </br>
 
-	<div ng-controller="tabCtrl">
+	<div ng-controller="tabCtrl" class="span12" >
 	<ul class="nav nav-tabs">
 		<li id ='home' ui-class="{active: activetab == '/'}"><a ui-sref="welcome" >Home</a></li>
 		<li id ='webflag' ui-class="{active: activetab == '/flag'}" ><a  ui-sref="flag">Flag</a></li>
@@ -79,10 +79,11 @@
 		<li id ='webhour' ui-class="{active: activetab == '/hour'}"><a  ui-sref="hour">Horário</a></li>
 		<li id ='webaccess' ui-class="{active: activetab == '/access'}"><a  ui-sref="access">Acesso</a></li>
 		<li id ='webmensagem' ui-class="{active: activetab == '/mensagem'}"><a  ui-sref="mensagem">Mensagem URA</a></li>
+		<li id ='webreport' ui-class="{active: activetab == '/report'}"><a  ui-sref="report">Relatório</a></li>
 	</ul>
 	</div>
-
-	<div ui-view></div>
-
+	<div class="row-fluid">
+  		<div class="span12" ui-view></div>
+	</div>
 </body>
 </html>
