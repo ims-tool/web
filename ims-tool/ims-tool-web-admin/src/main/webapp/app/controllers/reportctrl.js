@@ -4,6 +4,7 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 
 					$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 					$rootScope.activetab = $location.path();
+					
 
 
 				})
