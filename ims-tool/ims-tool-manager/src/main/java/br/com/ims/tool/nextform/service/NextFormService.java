@@ -30,7 +30,6 @@ import br.com.ims.tool.nextform.model.OperationParametersDto;
 import br.com.ims.tool.nextform.model.PromptAudioDto;
 import br.com.ims.tool.nextform.model.PromptCollectDto;
 import br.com.ims.tool.nextform.model.PromptDto;
-import br.com.ims.tool.nextform.model.Request;
 import br.com.ims.tool.nextform.model.ReturnDto;
 import br.com.ims.tool.nextform.model.TransferDto;
 import br.com.ims.tool.nextform.model.TransferRuleDto;

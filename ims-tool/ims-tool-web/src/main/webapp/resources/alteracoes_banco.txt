@@ -32,42 +32,36 @@ create sequence flow.seq_version start with 1000;
 create index ix_conditionmap_method on flow.conditionmap(methodreference)
 
 -- alterar colunas
-alter table flow.form alter column id type bigint;
-alter table flow.form alter column formid type bigint;
-alter table flow.form alter column condition type bigint;
-
-alter table flow.prompt alter column id type bigint;
-
 alter table flow.announce alter column id type bigint;
 alter table flow.announce alter column prompt type bigint;
 alter table flow.announce alter column nextform type bigint;
 
-alter table flow.audio alter column id type bigint;
+alter table flow.promptaudio alter column prompt type bigint;
+alter table flow.promptaudio alter column audio type bigint;
+alter table flow.promptaudio alter column condition type bigint;
+
+alter table flow.promptcollect alter column id type bigint;
+alter table flow.promptcollect alter column grammar type bigint;
+alter table flow.promptcollect alter column prompt type bigint;
+alter table flow.promptcollect alter column noinput type bigint;
+alter table flow.promptcollect alter column nomatch type bigint;
+alter table flow.promptcollect alter column nextform type bigint;
+alter table flow.promptcollect ADD COLUMN noinput_nextform bigint;
+alter table flow.promptcollect ADD COLUMN nomatch_nextform bigint;
+alter table flow.promptcollect ADD COLUMN noinput_tag integer;
+alter table flow.promptcollect ADD COLUMN nomatch_tag integer;
+
+alter table flow.prompt alter column id type bigint;
 
 alter table flow.audiovar alter column id type bigint;
 alter table flow.audiovar alter column audioid type bigint;
 
-alter table flow.condition alter column id type bigint;
-alter table flow.condition alter column "name" type character varying(30);
-alter table flow.condition alter column description type character varying(256);
+alter table flow.audio alter column id type bigint;
 
-CREATE INDEX ix_nomatchinput_versionid ON flow.nomatchinput (versionid);
-
-alter table flow.conditiongroup alter column id type bigint;
-alter table flow.conditiongroup alter column conditionid type bigint;
-alter table flow.conditiongroup alter column conditionmapid type bigint;
-alter table flow.conditiongroup alter column description type character varying(100);
-
-alter table flow.conditionmap alter column id type bigint USING to_number(id,'99999999');
-alter table flow.conditionmap ALTER COLUMN "name" TYPE character varying(30);
-alter table flow.conditionmap ALTER COLUMN description TYPE character varying(2000);
-alter table flow.conditionmap ALTER COLUMN "type" TYPE character varying(10);
-alter table flow.conditionmap ALTER COLUMN methodreference TYPE character varying(100);
-
-alter table flow.conditionparameters alter column id type bigint;
-alter table flow.conditionparameters alter column conditiongroupid type bigint;
-alter table flow.conditionparameters alter column paramname type character varying(50);
-alter table flow.conditionparameters alter column paramvalue type character varying(500);
+alter table flow.choice alter column id type bigint;
+alter table flow.choice alter column menu type bigint;
+alter table flow.choice alter column nextform type bigint;
+alter table flow.choice alter column condition type bigint;
 
 alter table flow.conditionvalue alter column id type bigint;
 alter table flow.conditionvalue alter column conditiongroupid type bigint;
@@ -83,10 +77,31 @@ alter table flow.conditionvalue alter column value8 type character varying(50);
 alter table flow.conditionvalue alter column value9 type character varying(50);
 alter table flow.conditionvalue alter column value10 type character varying(50);
 
-alter table flow.choice alter column id type bigint;
-alter table flow.choice alter column menu type bigint;
-alter table flow.choice alter column nextform type bigint;
-alter table flow.choice alter column condition type bigint;
+alter table flow.conditionparameters alter column id type bigint;
+alter table flow.conditionparameters alter column conditiongroupid type bigint;
+alter table flow.conditionparameters alter column paramname type character varying(50);
+alter table flow.conditionparameters alter column paramvalue type character varying(500);
+
+
+alter table flow.conditiongroup alter column id type bigint;
+alter table flow.conditiongroup alter column conditionid type bigint;
+alter table flow.conditiongroup alter column conditionmapid type bigint;
+alter table flow.conditiongroup alter column description type character varying(100);
+
+alter table flow.condition alter column id type bigint;
+alter table flow.condition alter column "name" type character varying(30);
+alter table flow.condition alter column description type character varying(256);
+
+CREATE INDEX ix_nomatchinput_versionid ON flow.nomatchinput (versionid);
+
+
+alter table flow.conditionmap alter column id type bigint USING to_number(id,'99999999');
+alter table flow.conditionmap ALTER COLUMN "name" TYPE character varying(30);
+alter table flow.conditionmap ALTER COLUMN description TYPE character varying(2000);
+alter table flow.conditionmap ALTER COLUMN "type" TYPE character varying(10);
+alter table flow.conditionmap ALTER COLUMN methodreference TYPE character varying(100);
+
+
 
 alter table flow.decision alter column id type bigint;
 alter table flow.decision alter column "name" type character varying(50);
@@ -99,15 +114,7 @@ alter table flow.flow alter column "name" type character varying(30);
 alter table flow.flow alter column flowname type character varying(100);
 alter table flow.flow alter column nextform type bigint;
 
-alter table flow.form ALTER COLUMN "name" TYPE character varying(100);
-alter table flow.form alter column id type bigint;
-alter table flow.form alter column formid type bigint;
-alter table flow.form alter column condition type bigint;
-alter table flow.form alter column nextformdefault type bigint;
-alter table flow.form alter column nextformdefault type bigint;
-
 alter table flow.grammar alter column id type bigint;
-
 
 alter table flow.nomatchinput alter column id type bigint;
 alter table flow.nomatchinput alter column "type" type character varying(7);
@@ -116,22 +123,21 @@ alter table flow.nomatchinput alter column nextform type bigint;
 alter table flow.nomatchinput alter column "name" type character varying(30);
 CREATE INDEX ix_nomatchinput_versionid ON flow.nomatchinput (versionid);
 
-
-alter table flow.promptcollect alter column id type bigint;
-alter table flow.promptcollect alter column grammar type bigint;
-alter table flow.promptcollect alter column prompt type bigint;
-alter table flow.promptcollect alter column noinput type bigint;
-alter table flow.promptcollect alter column nomatch type bigint;
-alter table flow.promptcollect alter column nextform type bigint;
-alter table flow.promptcollect ADD COLUMN noinput_nextform bigint;
-alter table flow.promptcollect ADD COLUMN nomatch_nextform bigint;
-alter table flow.promptcollect ADD COLUMN noinput_tag integer;
-alter table flow.promptcollect ADD COLUMN nomatch_tag integer;
-
 alter table flow.menu ADD COLUMN noinput_nextform bigint;
 alter table flow.menu ADD COLUMN nomatch_nextform bigint;
 alter table flow.menu ADD COLUMN noinput_tag integer;
 alter table flow.menu ADD COLUMN nomatch_tag integer;
+
+alter table flow.operationparameters alter column id type bigint;
+alter table flow.operationparameters alter column operationgroupid type bigint;
+alter table flow.operationparameters alter column paramname type character varying(50);
+alter table flow.operationparameters alter column paramvalue type character varying(500);
+
+alter table flow.operationgroup alter column id type bigint;
+alter table flow.operationgroup alter column operationid type bigint;
+alter table flow.operationgroup alter column operationmapid type bigint;
+alter table flow.operationgroup alter column description type character varying(200);
+
 
 
 alter table flow.operation alter column id type bigint;
@@ -144,19 +150,6 @@ alter table flow.operationmap alter column "name" type character varying(30);
 alter table flow.operationmap alter column description type character varying(2000);
 alter table flow.operationmap alter column methodreference type character varying(100);
 
-alter table flow.operationgroup alter column id type bigint;
-alter table flow.operationgroup alter column operationid type bigint;
-alter table flow.operationgroup alter column operationmapid type bigint;
-alter table flow.operationgroup alter column description type character varying(200);
-
-alter table flow.operationparameters alter column id type bigint;
-alter table flow.operationparameters alter column operationgroupid type bigint;
-alter table flow.operationparameters alter column paramname type character varying(50);
-alter table flow.operationparameters alter column paramvalue type character varying(500);
-
-alter table flow.promptaudio alter column prompt type bigint;
-alter table flow.promptaudio alter column audio type bigint;
-alter table flow.promptaudio alter column condition type bigint;
 alter table flow.transfer alter column id type bigint;
 alter table flow.transfer alter column "name" type character varying(30);
 alter table flow.transfer alter column description type character varying(256);
@@ -166,6 +159,22 @@ alter table flow.controlpanel alter column versionid type bigint;
 
 alter table flow.log alter column dnis type character varying(30);
 alter table flow.log alter column ani type character varying(30);
+
+
+
+alter table flow.form ALTER COLUMN "name" TYPE character varying(100);
+alter table flow.form alter column id type bigint;
+alter table flow.form alter column formid type bigint;
+alter table flow.form alter column condition type bigint;
+alter table flow.form alter column nextformdefault type bigint;
+alter table flow.form alter column nextformdefault type bigint;
+
+alter table flow.router alter column description type character varying(255);
+alter table flow.router alter column formname type character varying(30);
+alter table flow.router alter column context type character varying(4000);
+alter table flow.router alter column versionid type bigint;
+
+alter table flow.trackservice add column TIME_EXEC integer;
 
 -- inserir registros na tabela formtype
 

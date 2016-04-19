@@ -47,7 +47,7 @@ public class WsVolumeDAO {
 				"		, TS.TIME_EXEC "+
 				"		from flow.trackservice ts "+
 				"		JOIN flow.CONTROLPANEL C ON C.METHODNAME=TS.METHOD_SERVICE "+
-				"		where ts.rowdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND  TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS') "+
+				"		where ts.rowdate BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND  TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS') "+
 				"	) A "+
 				"	GROUP BY  ID, METHOD_SERVICE "+
 				") A "+

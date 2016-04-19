@@ -28,7 +28,7 @@ public class TrackDetailDAO {
 		//OracleConn oracle = null;
 		DbConnection db = null;
 		
-		sql = "select flow.context from log where id = "+logId;
+		sql = "select context from flow.log where id = "+logId;
 		
 		try {
 			//oracle = new OracleConn("IVR_OWNER");
@@ -150,14 +150,16 @@ public class TrackDetailDAO {
 		
 		List<TrackDetailModel> retorno = new ArrayList<TrackDetailModel>();
 		ResultSet rs = null;
-		String sql = "select f.id formid, f.name formName, t.id trackid, to_char(t.rowdate,'dd/mm/yyyy hh24:mi:ss') rowdate, to_char(l.startdate,'dd/mm/yyyy hh24:mi:ss') startdate, to_char(l.stopdate,'dd/mm/yyyy hh24:mi:ss') stopdate, t.tagid, f.description, ft.name formtypename, ft.id formtypeid "+
-					 "from flow.log l "+
-					 "join flow.track t on t.logid = l.id and t.rowdate between l.startdate and l.stopdate "+
-					 "join flow.form f on f.id = t.formid "+
-					 "join flow.formtype ft on ft.id = f.formtype "+
-					 "where l.id = "+logId+" "+ 
-					 "and t.log_type is null "+
-					 "order by t.rowdate ";
+		String sql = "select f.id formid, f.name formName, t.id trackid, to_char(t.rowdate,'dd/mm/yyyy hh24:mi:ss') rowdate, to_char(l.startdate,'dd/mm/yyyy hh24:mi:ss') startdate, to_char(l.stopdate,'dd/mm/yyyy hh24:mi:ss') stopdate, t.tagid, f.description, ft.name formtypename, ft.id formtypeid,tag.description tag_description,tt.name tag_type "+ 
+					 "from flow.log l "+ 
+					 "join flow.track t on t.logid = l.id and t.rowdate between l.startdate and l.stopdate "+ 
+					 "left join flow.tag on tag.id = t.tagid "+ 
+					 "left join flow.tagtype tt on tt.id = tag.tagtypeid "+ 
+					 "left join flow.form f on f.id = t.formid "+ 
+					 "left join flow.formtype ft on ft.id = f.formtype "+ 
+					 "where l.id = "+logId+" "+
+					 "and t.log_type is null "+ 
+					 "order by t.rowdate";
 		//OracleConn oracle = null;
 		DbConnection db = null;
 		
@@ -243,14 +245,14 @@ public class TrackDetailDAO {
 		          "		ts.result_call result_call, ts.errorcodeid, ts.groupid groupid,ts.rowdate rowdate "+
 		          "		from  flow.trackservice ts "+
 		          "		where "+
-		          "		ts.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
+		          "		ts.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		          "		ts.trackid = "+trackId+" "+
 		          "		UNION ALL "+
 		          "		select tg.id id, 'TAG' method_service, '' parameters_in, '' description, "+
 		          "		TO_CHAR(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
 		          "		from flow.tracktag tg "+
 		          "		where "+
-		          "		tg.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
+		          "		tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		          "		tg.trackid = "+trackId+" "+ 
 		          ") tr "+
 		          "	order by rowdate";
@@ -264,13 +266,13 @@ public class TrackDetailDAO {
 		              "         ts.result_call result_call, ts.errorcodeid, ts.groupid groupid,ts.rowdate rowdate "+
 		              " 	    from flow.trackservice ts "+
 		              "		    where "+
-		              "		    ts.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
+		              "		    ts.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		              "	        ts.trackid = "+trackId+" "+
 		              "		    UNION ALL "+
 		              "		    select tg.id id, 'TAG' method_service, '' parameters_in, "+
 		              "         to_char(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
 		              "		    from flow.tracktag tg "+
-		              "		    where tg.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
+		              "		    where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		              "		    tg.trackid = "+trackId+" "+
 		              "		) "+
 		              ") tr "+
@@ -285,13 +287,13 @@ public class TrackDetailDAO {
 					  "			select ts.id id, ts.method_service, ts.parameters_in parameters_in, "+
                       "			ts.result_call result_call, ts.errorcodeid, ts.groupid groupid,ts.rowdate rowdate "+
                       "			from flow.trackservice ts "+
-                      "			where ts.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
+                      "			where ts.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
                       "			and ts.trackid = "+trackId+" "+
                       "			UNION ALL "+
                       "			select tg.id id, 'TAG' method_service, '' parameters_in, "+
                       " 		to_char(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
                       "			from flow.tracktag tg "+
-                      "			where tg.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
+                      "			where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
                       "			and tg.trackid = "+trackId+" "+
                       "		) "+
                       ") tr "+
@@ -304,13 +306,13 @@ public class TrackDetailDAO {
 					  "		select ts.id id, ts.method_service, ts.parameters_in parameters_in, "+
 					  "		ts.result_call result_call, ts.errorcodeid, ts.groupid groupid,ts.rowdate rowdate "+
 					  "		from  flow.trackservice ts "+
-					  "		where ts.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
+					  "		where ts.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
 					  "		and ts.trackid = "+trackId+" "+ 
 					  "		UNION ALL "+
 					  "		select tg.id id, 'TAG' method_service, '' parameters_in, "+
 					  "		TO_CHAR(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
 					  "		from flow.tracktag tg "+
-					  "		where tg.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
+					  "		where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
 					  "		and tg.trackid = "+trackId+" "+
 					  ") tr "+
 					  "order by rowdate";
