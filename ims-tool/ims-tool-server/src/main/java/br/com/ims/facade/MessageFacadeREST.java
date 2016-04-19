@@ -283,44 +283,15 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 	}
 
 	@POST
-	@Path("/upload")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response uploadFile(@FormDataParam("file") InputStream fileInputStream,
-			@FormDataParam("file") FormDataContentDisposition contentDispositionHeader) {
+	@Path("/remove")
+	@Consumes("application/json")
+	public void remove(String entity) {
 
-		String filePath = "";
-		try {
-			filePath = "c://cesar/audio/" + contentDispositionHeader.getFileName();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		JSONObject jsonObj = new JSONObject(entity);
+		Message message = new Message();
+		message.setId(jsonObj.getInt("id"));
 
-		// save the file to the server
-		saveFile(fileInputStream, filePath);
-
-		String output = "File saved to server location : " + filePath;
-
-		return Response.status(200).entity(output).build();
-
-	}
-
-	// save uploaded file to a defined location on the server
-	private void saveFile(InputStream uploadedInputStream, String serverLocation) {
-		try {
-			OutputStream outpuStream = new FileOutputStream(new File(serverLocation));
-			int read = 0;
-			byte[] bytes = new byte[1024];
-
-			outpuStream = new FileOutputStream(new File(serverLocation));
-			while ((read = uploadedInputStream.read(bytes)) != -1) {
-				outpuStream.write(bytes, 0, read);
-			}
-			outpuStream.flush();
-			outpuStream.close();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
+		MessageCtrl.remove(message.getId());
 	}
 
 }

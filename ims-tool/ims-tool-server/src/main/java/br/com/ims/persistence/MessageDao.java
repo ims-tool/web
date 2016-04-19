@@ -36,10 +36,11 @@ public class MessageDao {
 		ResultSet rs = null;
 		ConnectionDB conn = null;
 		PreparedStatement stm = null;
+		String path = getPath();
 		try {
 			conn = new ConnectionDB();
 			String query = "select m.id, m.name, m.description, m.flag, m.datai, m.dataf, m.ddd_in,"
-					+ " m.ddd_not_in, m.spot spot, m.msg_order from flow.mensagem m";
+					+ " m.ddd_not_in, m.spot spot, m.msg_order from flow.mensagem m order by m.id";
 
 			rs = conn.ExecuteQuery(query);
 
@@ -56,7 +57,7 @@ public class MessageDao {
 				message.setDdd_not_in(rs.getString(8));
 				message.setSpot(rs.getString(9));
 				message.setMsg_order(rs.getString(10));
-				message.setPath("http://vmtwin108:8080/_audios/msg/"+message.getId().toString()+".wav");
+				message.setPath(path + message.getId().toString()+".wav");
 				message.setPath(message.getPath().trim());
 				listMessage.add(message);
 
@@ -74,6 +75,8 @@ public class MessageDao {
 		}
 		return listMessage;
 	}
+
+	
 
 	public static String getNexIdMessage() {
 
@@ -258,6 +261,48 @@ public class MessageDao {
 			conn.finalize();
 		}
 		return spotList;
+	}
+
+	public static void remove(Integer id) {
+		
+		ConnectionDB conn = null;
+		PreparedStatement stm = null;
+		try {
+			conn = new ConnectionDB();
+			String query = "delete from flow.mensagem where id="+id;
+
+			conn.ExecuteQueryUpdate(query);
+
+		} catch (SQLException e) {
+			logger.error("Erro deletar mensagem", e);
+		} finally {
+			conn.finalize();
+		}
+		
+	}
+	
+	private static String getPath() {
+		ResultSet rs = null;
+		ConnectionDB conn = null;
+		PreparedStatement stm = null;
+		String path = "http://localhost:8080/_audios/msg/";
+		try {
+			conn = new ConnectionDB();
+			String query = "select value from flow.parameters where name like '%path_msg%'";
+
+			rs = conn.ExecuteQuery(query);
+			
+			if(rs.next()){
+				path = rs.getString(1);
+			}
+
+		} catch (SQLException e) {
+			logger.error("Erro deletar mensagem", e);
+		} finally {
+			try {rs.close();} catch (SQLException e) {}
+			conn.finalize();
+		}
+		return path;
 	}
 
 }

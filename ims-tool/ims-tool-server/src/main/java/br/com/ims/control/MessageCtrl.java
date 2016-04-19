@@ -24,5 +24,9 @@ public class MessageCtrl {
 		return MessageDao.findSpotList();
 	}
 
+	public static void remove(Integer id) {
+		MessageDao.remove(id);
+	}
+
 
 }
