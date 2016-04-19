@@ -116,26 +116,29 @@
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th>Id</th>
 								<th>Nome</th>
 								<th>Descrição</th>
-								<th>Flag</th>
+								<th class="col-md-1">Flag</th>
 								<th>Data Início</th>
 								<th>Data Fim</th>
 								<th>DDD in</th>
 								<th>DDD not in</th>
 								<th>Local</th>
 								<th>Ordem</th>
-								<th>Comando</th>
+								<th class="col-md-1">Comando</th>
 								<th>Audio</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="message in messages">
-								<td>{{message.id}}</td>
 								<td>{{ message.name ||"empty"}}</td>
 								<td>{{ message.description || "empty"}}</td>
-								<td>{{ message.flag || "empty"}}</td>
+								
+								<td>
+									<select ng-model="message.flag" class="form-control" ng-change = "changeFlag($index)">
+									<option value="A">Ativo</option>
+									<option value="I">Inativo</option>
+								</td>
 								<td>{{ message.datai || "empty"}}</td>
 								<td>{{ message.dataf || "empty"}}</td>
 								<td>{{ message.ddd_in || "empty"}}</td>
@@ -149,11 +152,18 @@
 										<span class="glyphicon glyphicon-wrench" aria-hidden="true">
 										</span>
 									</button> 
-									
+									<button type="button" ng-click="removeMessage($index)"
+											class="btn btn-danger" data-toggle="tooltip"
+											data-placement="left" title="Excluir usuário">
+											<span class="glyphicon glyphicon-trash" aria-hidden="true">
+											</span>
+										</button>
 								</td>
 								<td>
-								
-									<audio ng-src='{{trustSrc(message.path)}}' audioplayer controls></audio>
+									<audio width=10%  controls>
+										  <source ng-src='{{trustSrc(message.path)}}' type="audio/wav">
+										
+									</audio>
 								</td>
 							</tr>
 						</tbody>

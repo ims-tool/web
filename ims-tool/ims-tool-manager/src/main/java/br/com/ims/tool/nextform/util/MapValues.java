@@ -16,6 +16,7 @@ public interface MapValues extends Serializable {
 	public static final String CONTADOR_TENTATIVAS = "CONTADOR_TENTATIVAS";
 	public static final String AUDIO_PATH = "parameters.audio_path";
 	public static final String TP_LOJA = "customer.loja";
+	public static final String CLASSIFICACAO_TRANSF = "customer.transfer";
 	
 	
 	//Mensagens URA
