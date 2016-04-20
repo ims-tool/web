@@ -67,8 +67,21 @@ public class Controlpanel implements Serializable {
     private Integer versionid;
     @Column(name = "timeout")
     private Integer timeout;
+    private String datetime;
 
-    public Controlpanel() {
+    public String getDatetime() {
+		return datetime;
+	}
+
+	public void setDatetime(String datetime) {
+		this.datetime = datetime;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Controlpanel() {
     }
 
     public Controlpanel(Integer id) {
