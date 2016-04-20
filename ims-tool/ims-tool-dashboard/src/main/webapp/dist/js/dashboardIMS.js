@@ -153,6 +153,10 @@ function drawChartLineVolumeLigacaoMinuto() {
  
 }
 
+function AddZero(num) {
+    return (num >= 0 && num < 10) ? "0" + num : num + "";
+}
+
 
 //Volume de ligação por minuto
 function drawChartLineVolumeLigacaoUra() {
@@ -170,27 +174,18 @@ function drawChartLineVolumeLigacaoUra() {
          
          if (selectedItem) {
            
-           var dnis = tabela.getValue(selectedItem.row, 0);
+           var flowName = tabela.getValue(selectedItem.row, 0);
            
-           alert(dnis);
            
            var today = new Date();
-           var dd = today.getDate();
-           var mm = today.getMonth()+1; //January is 0!
-           var yyyy = today.getFullYear();
-
-           if(dd<10) {
-               dd='0'+dd
-           } 
-
-           if(mm<10) {
-               mm='0'+mm
-           } 
-
-           today = mm+'/'+dd+'/'+yyyy;
-           alert(today);
+           var dataHoraF = AddZero(today.getDate())+"/"+AddZero(today.getMonth())+"/"+AddZero(today.getFullYear())
+                           +" "+AddZero(today.getHours())+":"+AddZero(today.getMinutes())+":59";
+           today.setHours(today.getHours()-1);
+           var dataHoraI = AddZero(today.getDate())+"/"+AddZero(today.getMonth())+"/"+AddZero(today.getFullYear())
+				           +" "+AddZero(today.getHours())+":"+AddZero(today.getMinutes())+":59";
+		   
            var url = "/ims-tool-dashboard/Report?menu=report&submenu=logura&action=consultar&datahoraI="+dataHoraI+
-                     "&datahoraF="+dataHoraF+"&finalizacao=R";
+                     "&datahoraF="+dataHoraF+"&flowName="+flowName;
            window.open(url);
          }
 		

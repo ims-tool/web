@@ -152,7 +152,7 @@ public class DashboardDAO {
 			  "where l.STARTDATE BETWEEN now()-interval '1 hour' AND now() "+
 			  "and l.dnis = CAST( r.dnis  AS text )  "+
 			  "group by r.description "+
-			  "order by count(1) desc "; 
+			  "order by 2 desc "; 
 
 		try {
 			//oracle = new OracleConn("IVR_OWNER");

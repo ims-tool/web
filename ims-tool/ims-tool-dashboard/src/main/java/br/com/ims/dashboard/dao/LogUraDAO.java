@@ -15,7 +15,31 @@ public class LogUraDAO {
 	
 	Logger log = Logger.getLogger(LogUraDAO.class);
 
-	
+	public String getDnisByName(String name) {
+		String result = "";
+		log.debug("[LogUra] - " + "getDnisByName("+name+") "); 
+		ResultSet rs = null;
+		//OracleConn oracle = null;
+		DbConnection db = null;
+		
+		String sql = "SELECT dnis FROM flow.router WHERE formname ='"+name+"' ";
+		try {
+			//oracle = new OracleConn("IVR_OWNER");
+			db = new DbConnection("");
+			rs = db.ExecuteQuery(sql);
+			if(rs.next()) {
+				result = rs.getString("dnis");
+			}
+		} catch (Exception e) {
+			log.error("[getDnisByName] -" + e.getMessage(),e);
+		} finally {
+			
+			db.finalize();
+
+		}
+		
+		return result;
+	}
 	
 	public List<LogUraModel> getLogUra(String datahoraI, String datahoraF,String telefone, String dnis, String formulario,String finalizacao, String tags, String vdn ) {
 		
@@ -38,7 +62,7 @@ public class LogUraDAO {
 			"	,l.document DOCUMENTO "+
 			"	, L.PERFIL "+
 			"	,L.PROTOCOLID \"SS PROT. INICIAL\" "+
-			"	,L.PROTOCOLINTEGER \"PROTOCOLO NUMBER\" "+
+			"	,L.PROTOCOLNUMBER \"PROTOCOLO NUMBER\" "+
 			"	,'' \"ARMARIO\" "+
 			"	,l.cidade CIDADE "+
 			"	,l.uf ESTADO "+
@@ -72,7 +96,7 @@ public class LogUraDAO {
 			"	,l.document DOCUMENTO "+
 			"	, L.PERFIL "+
 			"	,L.PROTOCOLID \"SS PROT. INICIAL\" "+
-			"	,L.PROTOCOLINTEGER \"PROTOCOLO NUMBER\" "+
+			"	,L.PROTOCOLNUMBER \"PROTOCOLO NUMBER\" "+
 			"	,'' \"ARMARIO\" "+
 			"	,L.CIDADE CIDADE "+
 			"	,L.UF ESTADO "+

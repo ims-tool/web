@@ -159,12 +159,11 @@ public class DashboardServlet extends HttpServlet {
 	
 	private String formatarStringWebService(HashMap<String, String> webService) {
 		String lista = "[[\"WebServices\", \"Porcentagem\"]";
-		
-		if(webService.containsKey("OK") && webService.get("OK") != null) {
-			
+		if(webService != null && webService.containsKey("OK") && webService.get("OK") != null) {
 			lista = lista + ",[\"OK\", "+webService.get("OK").toString()+"]";
 			lista = lista + ",[\"NOK\", "+webService.get("NOK").toString()+"]";
 		}
+		
 		
 		lista = lista + "]";
 		
@@ -173,8 +172,10 @@ public class DashboardServlet extends HttpServlet {
 	private String formatarStringRetencao(HashMap<Integer, Retencao> listRetencao) {
 		String lista = "[[\"Data\", \"Porcentagem\", \"Media\"]";
 		
-		for (int i = 0; i < listRetencao.size(); i++) {
-			lista = lista + ",[\""+listRetencao.get(i).getData()+"\", "+listRetencao.get(i).getPorcentagem()+", 30]";
+		if(listRetencao != null) {
+			for (int i = 0; i < listRetencao.size(); i++) {
+				lista = lista + ",[\""+listRetencao.get(i).getData()+"\", "+listRetencao.get(i).getPorcentagem()+", 30]";
+			}
 		}
 		lista = lista + "]";
 
@@ -184,8 +185,10 @@ public class DashboardServlet extends HttpServlet {
 	private String formatarStringVolumeLigacaoMinuto(HashMap<String, Integer> volumeMinuto) {
 		String lista = "[[\"Minuto\", \"Volume\"]";
 		
-		for(java.util.Map.Entry<String, Integer> entry : volumeMinuto.entrySet() ){
-			lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+		if(volumeMinuto != null) {
+			for(java.util.Map.Entry<String, Integer> entry : volumeMinuto.entrySet() ){
+				lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+			}
 		}
 		
 		lista = lista + "]";
@@ -196,8 +199,10 @@ public class DashboardServlet extends HttpServlet {
 	private String formatarStringVolumeLigacaoURA(HashMap<String, Integer> volumeURA) {
 		String lista = "[[\"URA\", \"Volume\"]";
 		
-		for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
-			lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+		if(volumeURA != null) {
+			for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
+				lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+			}
 		}
 		
 		lista = lista + "]";
