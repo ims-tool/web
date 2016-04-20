@@ -45,10 +45,10 @@
 								<td>{{ controlPanel.loginid || "empty"}}</td>
 								<td>{{ controlPanel.datetime || "empty"}}</td>
 								<td>{{ controlPanel.versionid || "empty"}}</td>
-								<td>
+								<td class='col-md-1'>
 										<input class="form-control" type ="number" id="timeout" ng-model="controlPanel.timeout" ng-blur="changeTimeout($index)" />
 								</td>
-								<td>
+								<td class='col-md-1'>
 									<select ng-model="controlPanel.status" class="form-control" ng-change = "changeFlag($index)">
 									<option value="true">Ativo</option>
 									<option value="false">Inativo</option>
