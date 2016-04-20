@@ -1,8 +1,5 @@
-app
-		.controller(
-				'AccessCtrl',
-				function($rootScope, $location, $scope, $http, $mdDialog,
-						$mdMedia) {
+
+app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdDialog, $mdMedia) {
 
 					checkAccess('webaccess');
 
@@ -47,8 +44,7 @@ app
 							$scope.showUser = true;
 							$scope.showButtonUser = false;
 							$scope.user = '';
-							setLog(3, 'add login web admin',
-									'ims-tool-web-admin', user.login, 0, 0);
+							setLog(3, 'add login web admin', 'webaccess', data.login+' | '+ data.name, 0, 0);
 							$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/access/findAllUser').success(function(data1) {
 										$scope.users = data1;
 									});
@@ -88,10 +84,29 @@ app
 										contentType : "application/json",
 										dataType : 'json'
 									})
-							setLog(2, 'add login web admin',
-									'ims-tool-web-admin', data.login, 0,
-									data.id);
+							setLog(2, 'remove login web admin', 'webaccess', data.login, 0, data.id);
 							$scope.users.splice(index, 1);
+						}
+					};
+					
+					$scope.resetPassword = function(index) {
+
+						var data = $scope.users[index];
+
+						var box = confirm("Deseja realmente realizar o reset de senha do usuário "+data.login+"?");
+						if (box === true) {
+							data.pw1 = "";
+
+							$.ajax({
+										type : "POST",
+										data : JSON.stringify(data),
+										url : 'http://'
+												+ window.location.hostname
+												+ ":8080/ims-tool-server/rest/access/update",
+										contentType : "application/json",
+										dataType : 'json'
+									})
+							setLog(1, 'reset login web admin', 'webaccess', data.login, 0, data.id);
 						}
 					};
 
@@ -111,12 +126,7 @@ app
 							fullscreen : useFullScreen
 						});
 
-						$scope
-								.$watch(
-										function() {
-											return $mdMedia('xs')
-													|| $mdMedia('sm');
-										},
+						$scope.$watch(function() {return $mdMedia('xs')|| $mdMedia('sm');},
 										function(wantsFullScreen) {
 											$scope.customFullscreen = (wantsFullScreen === true);
 										});
@@ -130,7 +140,6 @@ app
 						$scope.user.pw2 = data.password;
 						$scope.showUser = false;
 						$scope.showButtonUser = true;
-						setLog(1, 'add login web admin', 'ims-tool-web-admin', data.login, 0, data.id);
 
 					};
 					$scope.showConfirm = function(ev) {
@@ -139,9 +148,7 @@ app
 
 				})
 
-app
-		.controller(
-				'EditAccessCtrl',
+app.controller('EditAccessCtrl',
 				function($rootScope, $location, $scope, $http, $mdDialog,
 						$mdMedia) {
 

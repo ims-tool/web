@@ -5,6 +5,7 @@ import br.com.ims.flow.dao.AnswerDAO;
 import br.com.ims.flow.dao.AudioDAO;
 import br.com.ims.flow.dao.ConditionDAO;
 import br.com.ims.flow.dao.ConditionMapDAO;
+import br.com.ims.flow.dao.ControlPanelDAO;
 import br.com.ims.flow.dao.DecisionDAO;
 import br.com.ims.flow.dao.DisconnectDAO;
 import br.com.ims.flow.dao.FlowDAO;
@@ -119,6 +120,9 @@ public class DAOFactory {
 	}
 	public SequenceDAO getSequenceDAO() {
 		return SequenceDAO.getInstance();
+	}
+	public ControlPanelDAO getControlPanelDAO() {
+		return ControlPanelDAO.getInstance();
 	}
 
 }

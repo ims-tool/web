@@ -58,7 +58,8 @@ function node_addContextMenu(div_name,node_id,node_name,form_type) {
 	console.log(form_type);
 	if(form_type == 'DecisionChance' ||
 			form_type == 'Choice' ||
-			form_type == 'NoMatchInput') {
+			form_type == 'NoMatch' ||
+			form_type == 'NoInput') {
 		context.attach('#'+div_name, [
 		                          		
   	  		{header: node_name},

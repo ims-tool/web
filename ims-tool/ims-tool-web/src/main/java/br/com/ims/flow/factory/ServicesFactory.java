@@ -9,6 +9,7 @@ import br.com.ims.flow.service.ConditionGroupEditorService;
 import br.com.ims.flow.service.ConditionMapEditorService;
 import br.com.ims.flow.service.ConditionMapService;
 import br.com.ims.flow.service.ConditionService;
+import br.com.ims.flow.service.ControlPanelService;
 import br.com.ims.flow.service.DecisionService;
 import br.com.ims.flow.service.DependenceEditorService;
 import br.com.ims.flow.service.DisconnectService;
@@ -170,6 +171,9 @@ public class ServicesFactory {
 	}
 	public OperationService getOperationService() {
 		return new OperationService();
+	}
+	public ControlPanelService getControlPanelService() {
+		return new ControlPanelService();
 	}
 
 }

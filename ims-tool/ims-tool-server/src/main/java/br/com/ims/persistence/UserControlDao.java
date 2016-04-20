@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
@@ -33,14 +34,24 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 		PreparedStatement stm = null;
 		ResultSet rs = null;
 		String response = "NOK";
+		Boolean isNewUser = Boolean.FALSE;
 		try {
 			conn = new ConnectionDB();
-			
-			String query = "SELECT * FROM ACCESS.USER u, "
-					+ "ACCESS.artifact_access_type_user UA, ACCESS.artifact A, ACCESS.SYSTEM S "
-					+ "WHERE upper(u.LOGIN) = '"+login.toUpperCase()+"' and upper(u.password) = '"+password.toUpperCase()+"' "
-							+ "and u.id = ua.userid and a.id = ua.artifactid and s.id = a.systemid and "
-							+ "s.id = "+system;
+			String query = "";
+			if(StringUtils.isNotBlank(password)){
+				query = "SELECT * FROM ACCESS.USER u, "
+						+ "ACCESS.artifact_access_type_user UA, ACCESS.artifact A, ACCESS.SYSTEM S "
+						+ "WHERE upper(u.LOGIN) = '"+login.toUpperCase()+"' and upper(u.password) = '"+password.toUpperCase()+"' "
+						+ "and u.id = ua.userid and a.id = ua.artifactid and s.id = a.systemid and "
+						+ "s.id = "+system;
+			}else{
+				query = "SELECT * FROM ACCESS.USER u, "
+						+ "ACCESS.artifact_access_type_user UA, ACCESS.artifact A, ACCESS.SYSTEM S "
+						+ "WHERE upper(u.LOGIN) = '"+login.toUpperCase()+"' and (u.password is null or u.password = '') "
+						+ "and u.id = ua.userid and a.id = ua.artifactid and s.id = a.systemid and "
+						+ "s.id = "+system;
+				
+			}
 			
 			rs = conn.ExecuteQuery(query);
 			
@@ -149,6 +160,8 @@ private static Logger logger = Logger.getLogger(UserControlDao.class);
 			//new user
 			sql  = "insert into access.user (name, email, login, password, id) values ('"+user.getName()+"', '"+user.getEmail()+"', '"+user.getLogin()+"' , '"+user.getPassword()+"', nextval('serial'))";
 			
+		}else if (user.getId() == -2){
+			sql = "update access.user set password = '"+user.getPassword()+"' where login = '"+user.getLogin()+"'"; 
 		}else{
 			sql = "update access.user set name= '"+user.getName()+"', email= '"+user.getEmail()+"', login = '"+user.getLogin()+"', password = '"+user.getPassword()+"' where id="+user.getId(); 
 		}

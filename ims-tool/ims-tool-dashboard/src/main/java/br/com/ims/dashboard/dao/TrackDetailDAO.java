@@ -1,7 +1,6 @@
 package br.com.ims.dashboard.dao;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,7 @@ import org.apache.log4j.Logger;
 import br.com.ims.dashboard.model.TagModel;
 import br.com.ims.dashboard.model.TrackDetailModel;
 import br.com.ims.dashboard.model.TrackServiceModel;
-import br.com.ims.dashboard.util.OracleConn;
+import br.com.ims.dashboard.util.DbConnection;
 
 
 public class TrackDetailDAO {
@@ -26,13 +25,15 @@ public class TrackDetailDAO {
 		String context = null;
 		ResultSet rs = null;
 		String sql = "";
-		OracleConn oracle = null;
+		//OracleConn oracle = null;
+		DbConnection db = null;
 		
-		sql = "select context from log where id = "+logId;
+		sql = "select context from flow.log where id = "+logId;
 		
 		try {
-			oracle = new OracleConn("IVR_OWNER");
-			rs = oracle.ExecuteQuery(sql);
+			//oracle = new OracleConn("IVR_OWNER");
+			db = new DbConnection("");
+			rs = db.ExecuteQuery(sql);
 			
 			if (rs.next()) {
 				context = rs.getString("context");				
@@ -43,8 +44,8 @@ public class TrackDetailDAO {
 			return null;
 
 		} finally {
-			try {rs.close();} catch (SQLException e) {e.printStackTrace();}
-			oracle.finalize();
+			
+			db.finalize();
 
 		}
 		
@@ -64,19 +65,21 @@ public class TrackDetailDAO {
 		List<TrackDetailModel> retorno = new ArrayList<TrackDetailModel>();
 		ResultSet rs = null;
 		String sql = "select f.id formid, f.name formName, t.id trackid, to_char(t.rowdate,'dd/mm/yyyy hh24:mi:ss') rowdate, to_char(l.startdate,'dd/mm/yyyy hh24:mi:ss') startdate, to_char(l.stopdate,'dd/mm/yyyy hh24:mi:ss') stopdate, t.tagid, f.description, ft.name formtypename, ft.id formtypeid "+
-				      "from log l "+
-				      "join track t on t.logid = l.id and t.rowdate between l.startdate and l.stopdate "+
-				      "join form f on f.id = t.formid "+
-				      "join formtype ft on ft.id = f.formtype "+
+				      "from flow.log l "+
+				      "join flow.track t on t.logid = l.id and t.rowdate between l.startdate and l.stopdate "+
+				      "join flow.form f on f.id = t.formid "+
+				      "join flow.formtype ft on ft.id = f.formtype "+
 				      "where l.id = "+logId+" "+
 				      "and t.log_type = 'C' "+
 				      "order by t.rowdate "; 
-		OracleConn oracle = null;
+		//OracleConn oracle = null;
+		DbConnection db = null;
 		
 		
 		try {
-			oracle = new OracleConn("IVR_OWNER");
-			rs = oracle.ExecuteQuery(sql);
+			//oracle = new OracleConn("IVR_OWNER");
+			db = new DbConnection("");
+			rs = db.ExecuteQuery(sql);
 			
 			while (rs.next()) {
 				 
@@ -103,8 +106,8 @@ public class TrackDetailDAO {
 			return null;
 
 		} finally {
-			try {rs.close();} catch (SQLException e) {e.printStackTrace();}
-			oracle.finalize();
+			//try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			db.finalize();
 
 		}
 		
@@ -147,19 +150,23 @@ public class TrackDetailDAO {
 		
 		List<TrackDetailModel> retorno = new ArrayList<TrackDetailModel>();
 		ResultSet rs = null;
-		String sql = "select f.id formid, f.name formName, t.id trackid, to_char(t.rowdate,'dd/mm/yyyy hh24:mi:ss') rowdate, to_char(l.startdate,'dd/mm/yyyy hh24:mi:ss') startdate, to_char(l.stopdate,'dd/mm/yyyy hh24:mi:ss') stopdate, t.tagid, f.description, ft.name formtypename, ft.id formtypeid "+
-					 "from log l "+
-					 "join track t on t.logid = l.id and t.rowdate between l.startdate and l.stopdate "+
-					 "join form f on f.id = t.formid "+
-					 "join formtype ft on ft.id = f.formtype "+
-					 "where l.id = "+logId+" "+ 
-					 "and t.log_type is null "+
-					 "order by t.rowdate ";
-		OracleConn oracle = null;
+		String sql = "select f.id formid, f.name formName, t.id trackid, to_char(t.rowdate,'dd/mm/yyyy hh24:mi:ss') rowdate, to_char(l.startdate,'dd/mm/yyyy hh24:mi:ss') startdate, to_char(l.stopdate,'dd/mm/yyyy hh24:mi:ss') stopdate, t.tagid, f.description, ft.name formtypename, ft.id formtypeid,tag.description tag_description,tt.name tag_type "+ 
+					 "from flow.log l "+ 
+					 "join flow.track t on t.logid = l.id and t.rowdate between l.startdate and l.stopdate "+ 
+					 "left join flow.tag on tag.id = t.tagid "+ 
+					 "left join flow.tagtype tt on tt.id = tag.tagtypeid "+ 
+					 "left join flow.form f on f.id = t.formid "+ 
+					 "left join flow.formtype ft on ft.id = f.formtype "+ 
+					 "where l.id = "+logId+" "+
+					 "and t.log_type is null "+ 
+					 "order by t.rowdate";
+		//OracleConn oracle = null;
+		DbConnection db = null;
 		
 		try {
-			oracle = new OracleConn("IVR_OWNER");
-			rs = oracle.ExecuteQuery(sql);
+			//oracle = new OracleConn("IVR_OWNER");
+			db = new DbConnection("");
+			rs = db.ExecuteQuery(sql);
 			
 			while (rs.next()) {
 				 
@@ -186,8 +193,8 @@ public class TrackDetailDAO {
 			return null;
 
 		} finally {
-			try {rs.close();} catch (SQLException e) {e.printStackTrace();}
-			oracle.finalize();
+			//try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			db.finalize();
 
 		}
 		/**
@@ -236,16 +243,16 @@ public class TrackDetailDAO {
 		          "from ( "+
 		          "		select ts.id id, ts.method_service, ts.parameters_in parameters_in, ts.description, "+
 		          "		ts.result_call result_call, ts.errorcodeid, ts.groupid groupid,ts.rowdate rowdate "+
-		          "		from  trackservice ts "+
+		          "		from  flow.trackservice ts "+
 		          "		where "+
-		          "		ts.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+(1/24/60) and "+
+		          "		ts.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		          "		ts.trackid = "+trackId+" "+
 		          "		UNION ALL "+
 		          "		select tg.id id, 'TAG' method_service, '' parameters_in, '' description, "+
 		          "		TO_CHAR(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
-		          "		from tracktag tg "+
+		          "		from flow.tracktag tg "+
 		          "		where "+
-		          "		tg.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+(1/24/60) and "+
+		          "		tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		          "		tg.trackid = "+trackId+" "+ 
 		          ") tr "+
 		          "	order by rowdate";
@@ -257,15 +264,15 @@ public class TrackDetailDAO {
 					  "		from ( "+
 		              "			select ts.id id, ts.method_service, ts.parameters_in parameters_in, "+
 		              "         ts.result_call result_call, ts.errorcodeid, ts.groupid groupid,ts.rowdate rowdate "+
-		              " 	    from trackservice ts "+
+		              " 	    from flow.trackservice ts "+
 		              "		    where "+
-		              "		    ts.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+(1/24/60) and "+
+		              "		    ts.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		              "	        ts.trackid = "+trackId+" "+
 		              "		    UNION ALL "+
 		              "		    select tg.id id, 'TAG' method_service, '' parameters_in, "+
 		              "         to_char(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
-		              "		    from tracktag tg "+
-		              "		    where tg.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+(1/24/60) and "+
+		              "		    from flow.tracktag tg "+
+		              "		    where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		              "		    tg.trackid = "+trackId+" "+
 		              "		) "+
 		              ") tr "+
@@ -279,14 +286,14 @@ public class TrackDetailDAO {
 					  "		from ( "+
 					  "			select ts.id id, ts.method_service, ts.parameters_in parameters_in, "+
                       "			ts.result_call result_call, ts.errorcodeid, ts.groupid groupid,ts.rowdate rowdate "+
-                      "			from trackservice ts "+
-                      "			where ts.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+(1/24/60) "+
+                      "			from flow.trackservice ts "+
+                      "			where ts.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
                       "			and ts.trackid = "+trackId+" "+
                       "			UNION ALL "+
                       "			select tg.id id, 'TAG' method_service, '' parameters_in, "+
                       " 		to_char(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
-                      "			from tracktag tg "+
-                      "			where tg.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+(1/24/60) "+
+                      "			from flow.tracktag tg "+
+                      "			where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
                       "			and tg.trackid = "+trackId+" "+
                       "		) "+
                       ") tr "+
@@ -298,25 +305,26 @@ public class TrackDetailDAO {
 					  "from ( "+
 					  "		select ts.id id, ts.method_service, ts.parameters_in parameters_in, "+
 					  "		ts.result_call result_call, ts.errorcodeid, ts.groupid groupid,ts.rowdate rowdate "+
-					  "		from  trackservice ts "+
-					  "		where ts.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+(1/24/60) "+
+					  "		from  flow.trackservice ts "+
+					  "		where ts.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
 					  "		and ts.trackid = "+trackId+" "+ 
 					  "		UNION ALL "+
 					  "		select tg.id id, 'TAG' method_service, '' parameters_in, "+
 					  "		TO_CHAR(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
-					  "		from tracktag tg "+
-					  "		where tg.rowdate between to_date('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and to_date('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+(1/24/60) "+
+					  "		from flow.tracktag tg "+
+					  "		where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
 					  "		and tg.trackid = "+trackId+" "+
 					  ") tr "+
 					  "order by rowdate";
 			}
 		}
 		
-		OracleConn oracle = null;
-		
+		//OracleConn oracle = null;
+		DbConnection db = null;
 		try {
-			oracle = new OracleConn("IVR_OWNER");
-			rs = oracle.ExecuteQuery(sql);
+			//oracle = new OracleConn("IVR_OWNER");
+			db = new DbConnection("");
+			rs = db.ExecuteQuery(sql);
 			
 			while (rs.next()) {
 				 
@@ -334,7 +342,7 @@ public class TrackDetailDAO {
 						track.setTag(tag);
 					} else {
 						track.getTag().setId(Integer.valueOf(track.getResultCall()));
-						track.getTag().setDescription("### TAG NÃO CADASTRADA ###");
+						track.getTag().setDescription("### TAG Nï¿½O CADASTRADA ###");
 					}
 				} else {
 					track.getTag().setDescription(track.getResultCall());					
@@ -349,8 +357,7 @@ public class TrackDetailDAO {
 			log.error("[TrackDetail -> getTrackServiceDetail] -" + e.getMessage(),e);			
 
 		} finally {
-			try {rs.close();} catch (SQLException e) {e.printStackTrace();}
-			oracle.finalize();
+			db.finalize();
 
 		}
 		return retorno;
@@ -358,12 +365,14 @@ public class TrackDetailDAO {
 
 	public TagModel getTag(Integer tagId) {
 		ResultSet rs = null;		
-		OracleConn oracle = null;
-		String sql = "select id, tagtypeid,description from tag where id ="+tagId;
+		//OracleConn oracle = null;
+		DbConnection db = null;
+		String sql = "select id, tagtypeid,description from flow.tag where id ="+tagId;
 		TagModel tag = null;
 		try {
-			oracle = new OracleConn("IVR_OWNER");
-			rs = oracle.ExecuteQuery(sql);
+			//oracle = new OracleConn("IVR_OWNER");
+			db = new DbConnection("");
+			rs = db.ExecuteQuery(sql);
 			
 			if (rs.next()) {
 				 
@@ -380,8 +389,8 @@ public class TrackDetailDAO {
 			return null;
 
 		} finally {
-			try {rs.close();} catch (SQLException e) {e.printStackTrace();}
-			oracle.finalize();
+			
+			db.finalize();
 
 		}
 		return tag;

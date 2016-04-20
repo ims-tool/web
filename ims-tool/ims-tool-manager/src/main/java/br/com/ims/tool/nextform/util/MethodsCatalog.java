@@ -259,6 +259,7 @@ public class MethodsCatalog {
 
 			methodInvocationVO.setValue(UraConstants.SUCCESS);
 			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.TP_LOJA, tp_loja, true);
+			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.CLASSIFICACAO_TRANSF, E_CLASSIFIATEND, true);
 
 		} catch (AxisFault e) {
 			methodInvocationVO.setValue(UraConstants.FAIL);

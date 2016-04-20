@@ -8,3 +8,14 @@ HTMLJSCSSDIALOG1.TMPL.HTMLTABDIALOG.TMPL.HTML
 .dialogdemoBasicUsage .footer, .dialogdemoBasicUsage .footer > code {
   font-size: 0.8em;
   margin-top: 50px; }
+  
+  
+
+#pButton{
+	height:60px; 
+	width: 60px;
+	border: none;
+	background-size: 50% 50%;
+	background-position: center;
+}
+.play{background: url('../images/play.png') no-repeat;}

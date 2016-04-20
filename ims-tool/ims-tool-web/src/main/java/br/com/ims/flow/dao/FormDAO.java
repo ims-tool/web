@@ -66,8 +66,14 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(formType.getName().equals(Constants.FORM_TYPE_MENU)) {
 			obj = (Object)ServicesFactory.getInstance().getMenuService().get(objectId);
 		}
+		if(formType.getName().equals(Constants.FORM_TYPE_CHOICE)) {
+			obj = (Object)ServicesFactory.getInstance().getMenuService().getChoice(objectId);
+		}
 		if(formType.getName().equals(Constants.FORM_TYPE_DECISION)) {
 			obj = (Object)ServicesFactory.getInstance().getDecisionService().get(objectId);
+		}
+		if(formType.getName().equals(Constants.FORM_TYPE_DECISION_CHANCE)) {
+			obj = (Object)ServicesFactory.getInstance().getDecisionService().getChance(objectId);
 		}
 		if(formType.getName().equals(Constants.FORM_TYPE_FLOW)) {
 			obj = (Object)ServicesFactory.getInstance().getFlowService().get(objectId);
@@ -145,8 +151,7 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 				form.setId(rs.getString("f_id"));
 				form.setName(rs.getString("f_name"));
 				form.setDescription(rs.getString("f_description"));
-				form.setFormType(formType);
-				form.setFormId(obj);
+				form.setFormType(formType,obj);
 				form.setCondition(condition);
 				form.setTag(tag);
 				form.setPositionX(rs.getString("f_positionx"));
@@ -276,6 +281,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
 			result = ServicesFactory.getInstance().getFlowService().delete((FlowEntity)obj);
 		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_OPERATION)) {
+			result = ServicesFactory.getInstance().getOperationService().delete((OperationEntity)obj);
+		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
 			result = ServicesFactory.getInstance().getTransferService().delete((TransferEntity)obj);
 		}
@@ -307,6 +315,9 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
 			result = ServicesFactory.getInstance().getFlowService().update((FlowEntity)obj);
+		}
+		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_OPERATION)) {
+			result = ServicesFactory.getInstance().getOperationService().update((OperationEntity)obj);
 		}
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
 			result = ServicesFactory.getInstance().getTransferService().update((TransferEntity)obj);

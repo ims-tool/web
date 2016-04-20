@@ -240,7 +240,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		boolean result = true;
 		String sql = "UPDATE flow.operation SET name = '"+entity.getName()+"',description = '"+entity.getDescription()+"',"
 				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+","
-				   + "nextformid="+(entity.getNextForm() == null || entity.getNextForm().length() == 0 ? "NULL" : entity.getNextForm())+"',"
+				   + "nextformid="+(entity.getNextForm() == null || entity.getNextForm().length() == 0 ? "NULL" : entity.getNextForm())+","
 				   + "versionid  =  '"+entity.getVersionId()+"' "
 				   + "WHERE id = "+entity.getId();
 		DbConnection db = new DbConnection("OperationDAO-update");

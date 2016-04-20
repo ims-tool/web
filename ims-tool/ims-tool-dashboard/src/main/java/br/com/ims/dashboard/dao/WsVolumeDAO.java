@@ -1,14 +1,13 @@
 package br.com.ims.dashboard.dao;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import br.com.ims.dashboard.model.WsVolumeModel;
-import br.com.ims.dashboard.util.OracleConn;
+import br.com.ims.dashboard.util.DbConnection;
 
 
 public class WsVolumeDAO {
@@ -25,12 +24,13 @@ public class WsVolumeDAO {
 		List<WsVolumeModel> retorno = new ArrayList<WsVolumeModel>();
 		ResultSet rs = null;
 		String sql = "";
-		OracleConn oracle = null;
+		//OracleConn oracle = null;
+		DbConnection db = null;
 		
 		sql = "SELECT ID, METHOD_SERVICE, CHAMADAS_SERVICO, TOTAL_TIMEOUT "+
 				", ROUND(TME*100/TIME_OUT,2) PERCENT_USOU_TIMEOUT "+
 				", PERCENT_COM_TIMEOUT "+
-				", CASE WHEN PERCENT_COM_TIMEOUT >= "+limite_timeout+" 'NOK' ELSE 'OK' END STATUS "+
+				", CASE WHEN PERCENT_COM_TIMEOUT >= "+limite_timeout+" THEN 'NOK' ELSE 'OK' END STATUS "+
 				"FROM "+
 				"( "+
 				"	Select ID, METHOD_SERVICE,MAX(TOTAL_CHAMADAS) CHAMADAS_SERVICO,MAX(TIMEOUT_PICO),MAX(TIMEOUT) TIME_OUT "+
@@ -45,19 +45,20 @@ public class WsVolumeDAO {
 				"		, MAX(TIME_EXEC) over (partition by C.ID,ts.method_service) TIMEOUT_PICO "+
 				"		, C.TIMEOUT TIMEOUT "+
 				"		, TS.TIME_EXEC "+
-				"		from ivr_owner.trackservice ts "+
-				"		JOIN IVR_OWNER.CONTROLPANEL C ON C.METHODNAME=TS.METHOD_SERVICE "+
-				"		where ts.rowdate BETWEEN TO_DATE('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND  TO_DATE('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS') "+
-				"	) "+
+				"		from flow.trackservice ts "+
+				"		JOIN flow.CONTROLPANEL C ON C.METHODNAME=TS.METHOD_SERVICE "+
+				"		where ts.rowdate BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND  TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS') "+
+				"	) A "+
 				"	GROUP BY  ID, METHOD_SERVICE "+
-				") "+
+				") A "+
 				"WHERE PERCENT_COM_TIMEOUT >-1 "+
 				"AND CHAMADAS_SERVICO > "+num_chamadas_minima+" "+
 				"order by 2,1; "; 
 				 
 		try {
-			oracle = new OracleConn("IVR_OWNER");
-			rs = oracle.ExecuteQuery(sql);
+			//oracle = new OracleConn("IVR_OWNER");
+			db = new DbConnection("");
+			rs = db.ExecuteQuery(sql);
 			
 			while (rs.next()) {
 				
@@ -79,8 +80,7 @@ public class WsVolumeDAO {
 			return null;
 
 		} finally {
-			try {rs.close();} catch (SQLException e) {e.printStackTrace();}
-			oracle.finalize();
+			db.finalize();
 
 		}
 		

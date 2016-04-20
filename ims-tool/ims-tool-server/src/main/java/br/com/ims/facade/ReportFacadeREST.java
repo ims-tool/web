@@ -1,6 +1,7 @@
 package br.com.ims.facade;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -24,7 +25,9 @@ import org.codehaus.jackson.map.ObjectWriter;
 import org.json.JSONObject;
 
 import br.com.ims.control.MessageCtrl;
+import br.com.ims.control.ReportCtrl;
 import br.com.ims.control.ServiceHourCtrl;
+import br.com.ims.tool.entity.Controlpanel;
 import br.com.ims.tool.entity.Message;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
@@ -42,12 +45,12 @@ import com.sun.jersey.multipart.FormDataParam;
  * @author Cesar
  */
 @Stateless
-@Path("message")
-public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
+@Path("report")
+public class ReportFacadeREST extends AbstractFacade<ServiceHour> {
 	@PersistenceContext(unitName = "ivrPersistence")
 	private EntityManager em;
 
-	public MessageFacadeREST() {
+	public ReportFacadeREST() {
 		super(ServiceHour.class);
 	}
 
@@ -59,61 +62,18 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 	}
 
 	@POST
-	@Path("/update")
+	@Path("/updateControlPanel")
 	@Consumes("application/json")
 	public void update(String entity) {
 
 		JSONObject jsonObj = new JSONObject(entity);
-		Message message = new Message();
-		message.setId(jsonObj.getInt("id"));
-		try {
-			message.setName(jsonObj.getString("name"));
-		} catch (Exception e) {
-			message.setName("");
-		}
-		try {
-			message.setDescription(jsonObj.getString("description"));
-		} catch (Exception e) {
-			message.setDescription("");
-		}
-		try {
-			message.setFlag(jsonObj.getString("flag"));
-		} catch (Exception e) {
-			message.setFlag("I");
-		}
-		try {
-			message.setDatai(jsonObj.getString("datai"));
-		} catch (Exception e) {
-			message.setDatai("010120000000");
-		}
-		try {
-			message.setDataf(jsonObj.getString("dataf"));
-		} catch (Exception e) {
-			message.setDataf("010120000000");
-		}
-		try {
-			message.setDdd_in(jsonObj.getString("ddd_in"));
-		} catch (Exception e) {
-			message.setDdd_in("");
-		}
-		try {
-			message.setDdd_not_in(jsonObj.getString("ddd_not_in"));
-		} catch (Exception e) {
-			message.setDdd_not_in("");
-		}
-		try {
-			message.setSpot(jsonObj.getString("spot"));
-		} catch (Exception e) {
-			message.setSpot("");
-		}
-		try {
-			Integer i = jsonObj.getInt("msg_order");
-			message.setMsg_order(i.toString());
-		} catch (Exception e) {
-			message.setMsg_order("999");
-		}
-
-		MessageCtrl.save(message);
+		Controlpanel cp = new Controlpanel();
+		cp.setId(jsonObj.getInt("id"));
+		cp.setLoginid(jsonObj.getString("loginid"));
+		cp.setStatus(jsonObj.getString("status"));
+		cp.setTimeout(jsonObj.getInt("timeout"));
+		
+		ReportCtrl.save(cp);
 	}
 
 	@PUT
@@ -129,34 +89,13 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 		super.remove(super.find(id));
 	}
 
-	@GET
-	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String find(@PathParam("id") Integer id) {
-		ServiceHour p = new ServiceHour();
-		p = ServiceHourCtrl.find(id);
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String json = "";
-		try {
-			json = ow.writeValueAsString(p);
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return json;
-	}
+	
 
 	@GET
-	@Path("findType/{user}")
+	@Path("getTypeControlPanel")
 	@Produces("application/json")
-	public String findType(@PathParam("user") String user) {
-		List<ServiceHourType> lista = ServiceHourCtrl.findType(user);
+	public String getTypeControlPanel() {
+		List<String> lista = ReportCtrl.getTypeControlPanel();
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = "";
 		try {
@@ -176,10 +115,11 @@ public class MessageFacadeREST extends AbstractFacade<ServiceHour> {
 	}
 
 	@GET
-	@Path("findAll")
+	@Path("getControlPanelList/{group}")
 	@Produces("application/json")
-	public String findListMessage() {
-		List<Message> lista = MessageCtrl.findAll();
+	public String getControlPanelList(@PathParam("group") String group) {
+		
+		List<Controlpanel> lista = ReportCtrl.getControlPanelList(group);
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		String json = "";
 		try {

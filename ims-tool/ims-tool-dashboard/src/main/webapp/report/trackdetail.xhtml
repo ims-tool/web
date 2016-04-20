@@ -121,11 +121,13 @@
 			                        		<thead>
 				                                <tr>
 				                                    <td>DATA/HORA</td>
-				                                    <td>TIPO</td>
-				                                    <td>ID</td>
+				                                    <td>TIPO FORM</td>
+				                                    <td>FORMID</td>
 				                                    <td>NOME</td>
-				                                    <td>DESCRIÇÃO</td>
-				                                    			                                    			                                  
+				                                    <td>DESCRIÇÃO FORM</td>
+				                                    <td>TAGID</td>
+				                                    <td>TIPO TAG</td>
+				                                    <td>DESCRIÇÃO TAG</td>				                                    			                                    			                                 
 				                                </tr>
 				                            </thead>
 			                        		<c:forEach var="t" items="${trackdetail}">
@@ -135,6 +137,10 @@
 												    <td>${t.formId}</td>
 												    <td>${t.formName}</td>
 												    <td>${t.description}</td>
+												    <td>${t.tagid}</td>
+												    <td>${t.tag_type}</td>
+												    <td>${t.tag_description}</td>
+												     
 												</tr>
 				                                <c:forEach var="ts" items="${t.service}">
 				                                	<tr>

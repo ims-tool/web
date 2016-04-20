@@ -61,10 +61,10 @@ public class DashboardServlet extends HttpServlet {
 		if (funct.equalsIgnoreCase("buscaRetencao")) {
 			PrintWriter outer = response.getWriter();
 			DashboardFactory dashboardController = new DashboardFactory();
-			//HashMap<Integer,Retencao> listRetencao = dashboardController.verificaRetencao();
+			HashMap<Integer,Retencao> listRetencao = dashboardController.verificaRetencao();
 			/**
 			 * mock
-			 */
+			 *
 			HashMap<Integer,Retencao> listRetencao = new HashMap<Integer,Retencao>();
 			Retencao ret = new Retencao();
 			ret.setData("10:00");
@@ -92,10 +92,10 @@ public class DashboardServlet extends HttpServlet {
 		if (funct.equalsIgnoreCase("buscaWebService")) {
 			PrintWriter outer = response.getWriter();
 			DashboardFactory dashboardController = new DashboardFactory();
-			//HashMap<String,String> webService = dashboardController.verificaWebServices();
+			HashMap<String,String> webService = dashboardController.verificaWebServices();
 			/**
 			 * mock
-			 */
+			 *
 			HashMap<String,String> webService = new HashMap<String,String>();
 			webService.put("OK", "95.05");
 			webService.put("NOK", "4.95");
@@ -110,10 +110,10 @@ public class DashboardServlet extends HttpServlet {
 			PrintWriter outer = response.getWriter();
 			DashboardFactory dashboardController = new DashboardFactory();
 
-			//HashMap<String,Integer> volumeMinuto = dashboardController.verificaVolumeLigacaoMinuto();
+			HashMap<String,Integer> volumeMinuto = dashboardController.verificaVolumeLigacaoMinuto();
 			/**
 			 * mock
-			 */
+			 *
 			HashMap<String,Integer> volumeMinuto = new HashMap<String,Integer>();
 			volumeMinuto.put("09/12/2015 10:00", 80);
 			volumeMinuto.put("09/12/2015 10:01", 95);
@@ -137,10 +137,10 @@ public class DashboardServlet extends HttpServlet {
 			PrintWriter outer = response.getWriter();
 			DashboardFactory dashboardController = new DashboardFactory();
 
-			//HashMap<String,Integer> volumeURA = dashboardController.verificaVolumeLigacaoURA();
+			HashMap<String,Integer> volumeURA = dashboardController.verificaVolumeLigacaoURA();
 			/**
 			 * mock
-			 */
+			 *
 			HashMap<String,Integer> volumeURA = new HashMap<String,Integer>();
 			volumeURA.put("URA1", 1200);
 			volumeURA.put("URA2", 5392);
@@ -159,10 +159,11 @@ public class DashboardServlet extends HttpServlet {
 	
 	private String formatarStringWebService(HashMap<String, String> webService) {
 		String lista = "[[\"WebServices\", \"Porcentagem\"]";
+		if(webService != null && webService.containsKey("OK") && webService.get("OK") != null) {
+			lista = lista + ",[\"OK\", "+webService.get("OK").toString()+"]";
+			lista = lista + ",[\"NOK\", "+webService.get("NOK").toString()+"]";
+		}
 		
-		
-		lista = lista + ",[\"OK\", "+webService.get("OK").toString()+"]";
-		lista = lista + ",[\"NOK\", "+webService.get("NOK").toString()+"]";
 		
 		lista = lista + "]";
 		
@@ -171,8 +172,10 @@ public class DashboardServlet extends HttpServlet {
 	private String formatarStringRetencao(HashMap<Integer, Retencao> listRetencao) {
 		String lista = "[[\"Data\", \"Porcentagem\", \"Media\"]";
 		
-		for (int i = 0; i < listRetencao.size(); i++) {
-			lista = lista + ",[\""+listRetencao.get(i).getData()+"\", "+listRetencao.get(i).getPorcentagem()+", 30]";
+		if(listRetencao != null) {
+			for (int i = 0; i < listRetencao.size(); i++) {
+				lista = lista + ",[\""+listRetencao.get(i).getData()+"\", "+listRetencao.get(i).getPorcentagem()+", 30]";
+			}
 		}
 		lista = lista + "]";
 
@@ -182,8 +185,10 @@ public class DashboardServlet extends HttpServlet {
 	private String formatarStringVolumeLigacaoMinuto(HashMap<String, Integer> volumeMinuto) {
 		String lista = "[[\"Minuto\", \"Volume\"]";
 		
-		for(java.util.Map.Entry<String, Integer> entry : volumeMinuto.entrySet() ){
-			lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+		if(volumeMinuto != null) {
+			for(java.util.Map.Entry<String, Integer> entry : volumeMinuto.entrySet() ){
+				lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+			}
 		}
 		
 		lista = lista + "]";
@@ -194,8 +199,10 @@ public class DashboardServlet extends HttpServlet {
 	private String formatarStringVolumeLigacaoURA(HashMap<String, Integer> volumeURA) {
 		String lista = "[[\"URA\", \"Volume\"]";
 		
-		for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
-			lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+		if(volumeURA != null) {
+			for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
+				lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+			}
 		}
 		
 		lista = lista + "]";

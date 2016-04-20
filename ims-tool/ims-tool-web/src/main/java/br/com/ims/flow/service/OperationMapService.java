@@ -1,9 +1,14 @@
 package br.com.ims.flow.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.DAOFactory;
+import br.com.ims.flow.factory.ServicesFactory;
+import br.com.ims.flow.model.ControlPanelEntity;
 import br.com.ims.flow.model.OperationEntity;
 import br.com.ims.flow.model.OperationGroupEntity;
 import br.com.ims.flow.model.OperationMapEntity;
@@ -29,7 +34,25 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 	}
 	
 	public boolean save(OperationMapEntity entity) {
-		return DAOFactory.getInstance().getOperationMapDAO().save(entity);
+		boolean result = DAOFactory.getInstance().getOperationMapDAO().save(entity); 
+		if(result) {
+			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(entity.getName());
+			if(cp == null) {
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
+				cp = new ControlPanelEntity();
+				cp.setMethodname(entity.getMethodReference());
+				cp.setInternalService("true");
+				cp.setStatus("true");
+				cp.setVersionId(entity.getVersionId());
+				cp.setLoginid(Util.getUserName());
+				cp.setStartdate(sdf.format(Calendar.getInstance().getTime()));
+				cp.setOwner("IMS-TOOL");
+				cp.setReferencedBy("IMS-TOOL");
+				cp.setTimeout(10);
+				result = ServicesFactory.getInstance().getControlPanelService().save(cp);				
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -54,7 +77,25 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 	@Override
 	public boolean update(OperationMapEntity object) {
 		// TODO Auto-generated method stub
-		return DAOFactory.getInstance().getOperationMapDAO().update(object);
+		boolean result = DAOFactory.getInstance().getOperationMapDAO().update(object);
+		if(result) {
+			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(object.getName());
+			if(cp == null) {
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
+				cp = new ControlPanelEntity();
+				cp.setMethodname(object.getMethodReference());
+				cp.setInternalService("true");
+				cp.setStatus("true");
+				cp.setVersionId(object.getVersionId());
+				cp.setLoginid(Util.getUserName());
+				cp.setStartdate(sdf.format(Calendar.getInstance().getTime()));
+				cp.setOwner("IMS-TOOL");
+				cp.setReferencedBy("IMS-TOOL");
+				cp.setTimeout(10);
+				result = ServicesFactory.getInstance().getControlPanelService().save(cp);				
+			}
+		}
+		return result;
 		
 	}
 

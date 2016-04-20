@@ -262,7 +262,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 				for(ChoiceEntity choice : menu.getChoices()) {
 					sql = "INSERT INTO flow.choice (id,name,menu,dtmf,nextform,condition,tag,versionid) "+
 						   "VALUES ('"+choice.getId()+"','"+choice.getName()+"','"+menu.getId()+"','"+choice.getDtmf()+"',"+
-							(choice.getNextForm() == null | choice.getNextForm().length() == 0 ? "NULL" : choice.getNextForm())+","+
+							(choice.getNextForm() == null || choice.getNextForm().length() == 0 ? "NULL" : choice.getNextForm())+","+
 							(choice.getCondition() == null ? "NULL" : "'"+choice.getCondition().getId()+"'")+","+
 						   (choice.getTag() == null ? "NULL" : choice.getTag().getId())+","+menu.getVersionId()+") ";
 					result = result & db.ExecuteSql(sql);

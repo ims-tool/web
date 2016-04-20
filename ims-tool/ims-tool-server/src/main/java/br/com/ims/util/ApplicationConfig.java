@@ -22,5 +22,6 @@ public class ApplicationConfig extends Application {
 		resources.add(br.com.ims.facade.LogAuditFacadeREST.class);
 		resources.add(br.com.ims.facade.MessageFacadeREST.class);
 		resources.add(br.com.ims.facade.RouterFacadeREST.class);
+		resources.add(br.com.ims.facade.ReportFacadeREST.class);
 	}
 }

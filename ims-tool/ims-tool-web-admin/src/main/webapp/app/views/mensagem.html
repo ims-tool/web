@@ -1,16 +1,12 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
 <div class="page-header">
 
-
-
-
-	<div role="main" class="container theme-showcase">
+	<div role="main" class="container">
 		<div class="" style="margin-top: 90px;">
 			<h1>Mensagem</h1>
 
 			<div ng-controller="MensagemCtrl" ng-submit="submit()">
-				<form role="form" action="rest/file/upload" method="post"
-					enctype="multipart/form-data">
+				<form role="form" action="rest/file/upload" method="post" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-xs-6 col-md-3"></div>
 						<div class="col-xs-6 col-md-3"></div>
@@ -117,26 +113,29 @@
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th>Id</th>
 								<th>Nome</th>
 								<th>Descrição</th>
-								<th>Flag</th>
+								<th class="col-md-1">Flag</th>
 								<th>Data Início</th>
 								<th>Data Fim</th>
 								<th>DDD in</th>
 								<th>DDD not in</th>
 								<th>Local</th>
 								<th>Ordem</th>
-								<th>Comando</th>
+								<th class="col-md-1">Comando</th>
 								<th>Audio</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="message in messages">
-								<td>{{message.id}}</td>
 								<td>{{ message.name ||"empty"}}</td>
 								<td>{{ message.description || "empty"}}</td>
-								<td>{{ message.flag || "empty"}}</td>
+								
+								<td>
+									<select ng-model="message.flag" class="form-control" ng-change = "changeFlag($index)">
+									<option value="A">Ativo</option>
+									<option value="I">Inativo</option>
+								</td>
 								<td>{{ message.datai || "empty"}}</td>
 								<td>{{ message.dataf || "empty"}}</td>
 								<td>{{ message.ddd_in || "empty"}}</td>
@@ -150,13 +149,19 @@
 										<span class="glyphicon glyphicon-wrench" aria-hidden="true">
 										</span>
 									</button> 
-									
+									<button type="button" ng-click="removeMessage($index)"
+											class="btn btn-danger" data-toggle="tooltip"
+											data-placement="left" title="Excluir usuário">
+											<span class="glyphicon glyphicon-trash" aria-hidden="true">
+											</span>
+										</button>
 								</td>
 								<td>
-								<audio controls>
-										<source src="" type="audio/wav">
+									<audio width=10%  controls>
+										  <source ng-src='{{trustSrc(message.path)}}' type="audio/wav">
+										
 									</audio>
-									</td>
+								</td>
 							</tr>
 						</tbody>
 					</table>

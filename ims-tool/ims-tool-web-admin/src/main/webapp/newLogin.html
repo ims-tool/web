@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<link rel="icon" href="/ims-tool-web-admin/resources/img/logo_increase.png" type="image/ico" />
+<link rel="icon"
+	href="/ims-tool-web-admin/resources/img/logo_increase.png"
+	type="image/ico" />
 <html lang="pt-br" ng-app="appLogin">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -34,34 +36,40 @@
 </head>
 <body>
 	<!--login modal-->
-	<div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
+	<div id="loginModal" class="modal show" tabindex="-1" role="dialog"
+		aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h1 class="text-center">IMS Web Admin Login</h1>
+					<h1 class="text-center">IMS Web Admin - cadastrar nova senha</h1>
 				</div>
-				<div class="modal-body" ng-controller="LoginCtrl">
-					<form class="form col-md-12 center-block" ng-submit="getLogin(user)">
+				<div class="modal-body" ng-controller="NewLoginCtrl">
+					<form class="form col-md-12 center-block" ng-submit="setNewPassword(user)">
 						<div class="form-group">
-							<input type="text" class="form-control input-lg"
-								placeholder="Usuário" ng-model="user.login" required>
-								 <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+							<input type="text" id= "user" class="form-control input-lg"
+								placeholder="Usuário" ng-model="user.login" required  readonly>  
 						</div>
 						<div class="form-group">
 							<input type="password" class="form-control input-lg"
-								placeholder="Senha" ng-model="user.password">
-								
+								placeholder="Senha" ng-model="user.pw1" required> <span
+								ng-show="form.password.$dirty && form.password.$error.required"
+								class="help-block">Password is required</span>
+						</div>
+						<div class="form-group"> 
+							<input type="password" class="form-control input-lg"
+								placeholder="Senha" ng-model="user.pw2" required> <span
+								ng-show="form.password.$dirty && form.password.$error.required"
+								class="help-block">Password is required</span>
+
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
-							<span><a href="#">Need help?</a></span>
+							<button type="submit" class="btn btn-primary btn-lg btn-block">Cadastrar nova senha</button>
 						</div>
-					
+
 					</form>
 				</div>
 				<div class="modal-footer">
-					<div class="col-md-12">
-					</div>
+					<div class="col-md-12"></div>
 				</div>
 			</div>
 		</div>
