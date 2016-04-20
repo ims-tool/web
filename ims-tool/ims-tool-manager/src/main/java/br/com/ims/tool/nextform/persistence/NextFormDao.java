@@ -137,7 +137,8 @@ public class NextFormDao {
 			String query = " SELECT PC.ID, PC.NAME, PC.DESCRIPTION, PC.GRAMMAR, PC.FLUSHPROMPT, PC.PROMPT,"
 					+ " PC.NOINPUT, PC.NOMATCH, PC.FETCHTIMEOUT, PC.INTERDIGITTIMEOUT,   PC.TERMINATINGTIMEOUT,"
 					+ " PC.TERMINATINGCHARACTER, PC.NEXTFORM, PR.ID,   PR.NAME, GR.ID, GR.NAME, GR.DESCRIPTION,"
-					+ " GR.TYPE, GR.SIZEMAX, GR.SIZEMIN, PC.TAG  FROM FLOW.PROMPTCOLLECT PC   LEFT OUTER JOIN FLOW.GRAMMAR GR ON "
+					+ " GR.TYPE, GR.SIZEMAX, GR.SIZEMIN, PC.TAG, PC.NOINPUT_NEXTFORM, PC.NOINPUT_TAG, PC.NOMATCH_NEXTFORM, PC.NOMATCH_TAG "
+					+ " FROM FLOW.PROMPTCOLLECT PC   LEFT OUTER JOIN FLOW.GRAMMAR GR ON "
 					+ " PC.GRAMMAR = GR.ID  LEFT OUTER JOIN FLOW.PROMPT PR ON PC.PROMPT = PR.ID   WHERE PC.ID ="
 					+ idpromptCollect;
 
@@ -176,8 +177,8 @@ public class NextFormDao {
 
 				promptCollect.setGrammarDto(grammar);
 
-				promptCollect.setNoInputDto(getNoMatchInputById(promptCollect.getNoInput(), jsonContext));
-				promptCollect.setNoMatchDto(getNoMatchInputById(promptCollect.getNoMatch(), jsonContext));
+				promptCollect.setNoInputDto(getNoMatchInputById(promptCollect.getNoInput(), rs.getLong("NOINPUT_NEXTFORM"), rs.getLong("NOINPUT_TAG"), jsonContext));
+				promptCollect.setNoMatchDto(getNoMatchInputById(promptCollect.getNoMatch(), rs.getLong("NOMATCH_NEXTFORM"), rs.getLong("NOMATCH_TAG"), jsonContext));
 			}
 		} catch (SQLException e) {
 			logger.error("Erro ao Recuperar o PromptCollect de ID: " + idpromptCollect, e);
@@ -292,14 +293,14 @@ public class NextFormDao {
 		return listaAudioVar;
 	}
 
-	public NoMatchInputDto getNoMatchInputById(long id, String jsonContext) throws Exception {
+	public NoMatchInputDto getNoMatchInputById(long id, long nextForm, long tag, String jsonContext) throws Exception {
 		NoMatchInputDto noMatchInput = null;
 
 		ResultSet rs = null;
 		ConnectionDB conn = null;
 		try {
 			conn = new ConnectionDB();
-			String query = " SELECT NMI.ID, NMI.TYPE, NMI.THRESHOLD,  NMI.PROMPT, NMI.NEXTFORM, PR.ID, PR.NAME, NMI.TAG  "
+			String query = " SELECT NMI.ID, NMI.TYPE, NMI.THRESHOLD,  NMI.PROMPT, PR.ID, PR.NAME  "
 					+ " FROM FLOW.NOMATCHINPUT NMI, FLOW.PROMPT PR  WHERE NMI.ID = " + id + "  AND NMI.PROMPT = PR.ID ";
 
 			rs = conn.ExecuteQuery(query);
@@ -309,12 +310,12 @@ public class NextFormDao {
 				noMatchInput.setType(rs.getString(2));
 				noMatchInput.setThreshold(rs.getLong(3));
 				noMatchInput.setPrompt(rs.getLong(4));
-				noMatchInput.setNextForm(rs.getLong(5));
-				noMatchInput.setTag(rs.getLong(8));
+				noMatchInput.setNextForm(nextForm);
+				noMatchInput.setTag(tag);
 
 				PromptDto prompt = new PromptDto();
-				prompt.setId(rs.getLong(6));
-				prompt.setName(rs.getString(7));
+				prompt.setId(rs.getLong(5));
+				prompt.setName(rs.getString(6));
 				prompt.setListaPromptAudio(getListPromptAudioByPromptId(prompt.getId(), jsonContext));
 
 				noMatchInput.setPromptDto(prompt);
@@ -336,8 +337,9 @@ public class NextFormDao {
 		try {
 			conn = new ConnectionDB();
 			String query = " SELECT MN.ID, MN.NAME, MN.DESCRIPTION, MN.PROMPT, MN.NOINPUT, MN.NOMATCH,  MN.FETCHTIMEOUT,"
-					+ "MN.TERMINATINGTIMEOUT, MN.TERMINATINGCHARACTER, PR.ID, PR.NAME  FROM FLOW.MENU MN, FLOW.PROMPT PR  "
-					+ "WHERE MN.ID = " + menuId + "  AND MN.PROMPT = PR.ID ";
+					+ " MN.TERMINATINGTIMEOUT, MN.TERMINATINGCHARACTER, PR.ID, PR.NAME, MN.NOINPUT_NEXTFORM, MN.NOINPUT_TAG, MN.NOMATCH_NEXTFORM, MN.NOMATCH_TAG "
+					+ " FROM FLOW.MENU MN, FLOW.PROMPT PR  "
+					+ " WHERE MN.ID = " + menuId + "  AND MN.PROMPT = PR.ID ";
 
 			rs = conn.ExecuteQuery(query);
 			if (rs.next()) {
@@ -359,8 +361,8 @@ public class NextFormDao {
 
 				menuDto.setPromptDto(prompt);
 
-				menuDto.setNoMatchDto(getNoMatchInputById(menuDto.getNoMatch(), jsonContext));
-				menuDto.setNoInputDto(getNoMatchInputById(menuDto.getNoInput(), jsonContext));
+				menuDto.setNoMatchDto(getNoMatchInputById(menuDto.getNoMatch(), rs.getLong("NOMATCH_NEXTFORM"), rs.getLong("NOMATCH_TAG"), jsonContext));
+				menuDto.setNoInputDto(getNoMatchInputById(menuDto.getNoInput(), rs.getLong("NOINPUT_NEXTFORM"), rs.getLong("NOINPUT_TAG"), jsonContext));
 
 				menuDto.setListaChoiceDto(getListChoiceByMenuId(menuDto.getId(), jsonContext));
 			}
@@ -537,9 +539,20 @@ public class NextFormDao {
 				operationMap.setMethodReference(rs.getString(12).trim());
 
 				operationMap.setLogActive(rs.getInt(14));
-				operationMap.setActive("true".equalsIgnoreCase(rs.getString(15).trim()) ? true : false);
-				operationMap.setTimeout(rs.getInt(16));
-				operationMap.setInternalService(rs.getBoolean(17));
+				try {
+					operationMap.setActive("true".equalsIgnoreCase(rs.getString(15).trim()) ? true : false);
+				} catch (Exception e) {
+					logger.error("Método não cadastrado na tabela CONTROLPANEL: " + rs.getString(12).trim(), e);
+					operationMap.setActive(true);
+				}
+				try {
+					operationMap.setTimeout(rs.getInt(16));
+					operationMap.setInternalService(rs.getBoolean(17));
+				} catch (Exception e) {
+					logger.error("Cadastro de método incompleto na tabela CONTROLPANEL: " + rs.getString(12).trim(), e);
+					operationMap.setTimeout(10);
+					operationMap.setInternalService(true);
+				}
 
 				// buscar lista de parameters
 				operationGroup.setListaOperationParameters(getListOperationParameters(operationGroup.getId()));
@@ -553,6 +566,8 @@ public class NextFormDao {
 		} catch (SQLException e) {
 			logger.error("Erro ao Recuperar Operation de ID: " + operationId, e);
 			throw new Exception("Erro ao Recuperar Operation de ID: " + operationId, e);
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			conn.finalize();
 		}

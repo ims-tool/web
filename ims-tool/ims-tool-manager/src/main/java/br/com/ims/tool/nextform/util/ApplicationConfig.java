@@ -17,5 +17,7 @@ public class ApplicationConfig extends Application {
 	private void addRestResourceClasses(Set<Class<?>> resources) {
 		resources.add(br.com.ims.tool.nextform.service.NextFormService.class);
 		resources.add(br.com.ims.tool.nextform.service.InvokeMethodImpl.class);
+		resources.add(br.com.ims.tool.nextform.service.TrackTagService.class);
+		resources.add(br.com.ims.tool.nextform.service.TrackDetailService.class);
 	}
 }

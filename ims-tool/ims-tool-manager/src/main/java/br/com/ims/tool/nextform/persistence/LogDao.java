@@ -107,7 +107,6 @@ public class LogDao {
 			stm.setString(4, MethodInvocationUtils.getContextValue(contexto, MapValues.VDN));
 			stm.setString(5, MethodInvocationUtils.getContextValue(contexto, MapValues.ANI));
 			stm.setLong(6, validNumber(MethodInvocationUtils.getContextValue(contexto, MapValues.ANI)));
-			
 			stm.setLong(7, Long.valueOf(logId));
 			
 			stm.executeUpdate();
@@ -377,7 +376,7 @@ public class LogDao {
 					form = rs.getString("tagid");
 				}
 			
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.error("Erro ao consultar instancia", e);
 			throw new DaoException("Erro ao consultar instancia", e);
 		}  finally {
