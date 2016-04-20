@@ -350,7 +350,7 @@ public class ConditionGroupEditorBean extends AbstractBean {
 			this.conditionValue.setValue8("");
 			this.conditionValue.setValue9("");
 			this.conditionValue.setValue10("");
-		} else if(this.conditionValue.getOperation().equals("OR")) {			
+		} else if(this.conditionValue.getOperation().equals("IN")) {			
 			this.conditionValue.setValue2(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value2").toString());
 			this.conditionValue.setValue3(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value3").toString());
 			this.conditionValue.setValue4(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value4").toString());

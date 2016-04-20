@@ -81,12 +81,12 @@ public class ReportServlet extends HttpServlet {
 					String flowName = request.getParameter("flowName") == null || request.getParameter("flowName").length() == 0 ? "TODOS" :  request.getParameter("flowName").toString();
 					String formulario = request.getParameter("formulario") == null || request.getParameter("formulario").length() == 0 ? "TODOS" :  request.getParameter("formulario").toString(); 
 					String finalizacao = request.getParameter("finalizacao") == null || request.getParameter("finalizacao").length() == 0 ? "TODOS" :  request.getParameter("finalizacao").toString(); 
-					String tags = request.getParameter("tags") == null || request.getParameter("tags").length() == 0 ? "0" :  request.getParameter("tags").toString(); 
+					String tags = request.getParameter("tags") == null || request.getParameter("tags").length() == 0 ? "TODOS" :  request.getParameter("tags").toString(); 
 					String vdn = request.getParameter("vdn") == null || request.getParameter("vdn").length() == 0 ? "TODOS" :  request.getParameter("vdn").toString();
 					
 
 					LogUraDAO dao = new LogUraDAO();
-					if(!flowName.equals("TODOS")) {
+					if(!flowName.equalsIgnoreCase("TODOS")) {
 						dnis = dao.getDnisByName(flowName);
 					}
 					
