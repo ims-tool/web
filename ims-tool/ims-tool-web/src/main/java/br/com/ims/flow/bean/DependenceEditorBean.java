@@ -58,6 +58,9 @@ public class DependenceEditorBean extends AbstractBean {
     	if(Constants.DEPENDENCE_OBJECT_TYPE_OPERATION_MAP.equals(this.objectType)) {
     		this.objects = ServicesFactory.getInstance().getOperationMapService().getUsed(this.objectId);
     	}
+    	if(Constants.DEPENDENCE_OBJECT_TYPE_VERSION.equals(this.objectType)) {
+    		this.objects = ServicesFactory.getInstance().getVersionService().getUsed(this.objectId);
+    	}
     	return objects;
 	}
 

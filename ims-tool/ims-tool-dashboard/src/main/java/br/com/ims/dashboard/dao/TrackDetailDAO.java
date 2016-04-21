@@ -177,10 +177,14 @@ public class TrackDetailDAO {
 				track.setRowdate(rs.getString("rowdate"));
 				track.setStartdate(rs.getString("startdate"));
 				track.setStopdate(rs.getString("stopdate"));
-				track.setTagId(rs.getInt("tagid"));
+				
 				track.setDescription(rs.getString("description"));
 				track.setFormTypeName(rs.getString("formtypename"));
 				track.setFormTypeId(rs.getInt("formtypeid"));
+				track.setTagId(rs.getInt("tagid"));
+				track.setTagDescription(rs.getString("tag_description"));
+				track.setTagType(rs.getString("tag_type"));
+	
 				
 				track.setService(this.getTrackServiceDetail(track.getTrackId(),track.getStartdate(), track.getStopdate(),"trackdetail", track.getFormTypeId()));
 				
@@ -249,7 +253,7 @@ public class TrackDetailDAO {
 		          "		ts.trackid = "+trackId+" "+
 		          "		UNION ALL "+
 		          "		select tg.id id, 'TAG' method_service, '' parameters_in, '' description, "+
-		          "		TO_CHAR(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
+		          "		CAST(tg.tagid AS TEXT) result_call, 0, 0, tg.rowdate rowdate "+
 		          "		from flow.tracktag tg "+
 		          "		where "+
 		          "		tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
@@ -270,7 +274,7 @@ public class TrackDetailDAO {
 		              "	        ts.trackid = "+trackId+" "+
 		              "		    UNION ALL "+
 		              "		    select tg.id id, 'TAG' method_service, '' parameters_in, "+
-		              "         to_char(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
+		              "         CAST(tg.tagid AS TEXT) result_call, 0, 0, tg.rowdate rowdate "+
 		              "		    from flow.tracktag tg "+
 		              "		    where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' and "+
 		              "		    tg.trackid = "+trackId+" "+
@@ -291,7 +295,7 @@ public class TrackDetailDAO {
                       "			and ts.trackid = "+trackId+" "+
                       "			UNION ALL "+
                       "			select tg.id id, 'TAG' method_service, '' parameters_in, "+
-                      " 		to_char(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
+                      " 		CAST(tg.tagid AS TEXT) result_call, 0, 0, tg.rowdate rowdate "+
                       "			from flow.tracktag tg "+
                       "			where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
                       "			and tg.trackid = "+trackId+" "+
@@ -310,7 +314,7 @@ public class TrackDetailDAO {
 					  "		and ts.trackid = "+trackId+" "+ 
 					  "		UNION ALL "+
 					  "		select tg.id id, 'TAG' method_service, '' parameters_in, "+
-					  "		TO_CHAR(tg.tagid) result_call, 0, 0, tg.rowdate rowdate "+
+					  "		CAST(tg.tagid AS TEXT) result_call, 0, 0, tg.rowdate rowdate "+
 					  "		from flow.tracktag tg "+
 					  "		where tg.rowdate between TO_TIMESTAMP('"+startdate+"','dd/mm/yyyy hh24:mi:ss') and TO_TIMESTAMP('"+stopdate+"','dd/mm/yyyy hh24:mi:ss')+interval '1 minute' "+
 					  "		and tg.trackid = "+trackId+" "+
@@ -385,7 +389,7 @@ public class TrackDetailDAO {
 			}
 
 		} catch (Exception e) {
-			log.error("[TrackDetail -> getTrackDetail] -" + e.getMessage(),e);
+			log.error("[TrackDetail -> getTag] -" + e.getMessage(),e);
 			return null;
 
 		} finally {

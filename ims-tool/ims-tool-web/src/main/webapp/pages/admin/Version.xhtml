@@ -50,7 +50,7 @@
 	            <p:inputText id="version_user" value="#{bean.version.system_user}" readonly="true" label="label_version_user" />
 	 
 	            <h:outputLabel id="label_version_description" for="version_description" value="DESCRIPTION:" />
-	            <p:inputTextarea id="version_description" value="#{bean.version.description}" required="true" requiredMessage="Please,inform a Description" label="label_version_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            <p:inputTextarea id="version_description" value="#{bean.version.description}" requiredMessage="Please, inform the Description" label="label_version_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
 	
 	 			<f:facet name="footer">
 	                <p:commandButton value="New" 
@@ -84,11 +84,12 @@
 			            <h:outputText value="#{v.getDateCreateString()}" />
 			        </p:column>
 			        <p:column headerText="DESCRIPTION" filterBy="#{v.description}" filterMatchMode="contains">
-			            <h:outputText value="#{v.description}" />
+			            <h:outputText value="#{v.description}"  />
 			        </p:column>
 			        <p:column headerText="ALTERED ITEMS" >
 			            <h:outputText rendered="#{bean.isUsed(v.id) eq false}" value="Empty" />
-			            <p:commandButton rendered="#{bean.isUsed(v.id)}" icon="ui-icon-search" title="View" />
+						<p:commandButton rendered="#{bean.isUsed(v.id) eq true}"  icon="ui-icon-search" actionListener="#{bean.viewDependence(v.id,v.description)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
+									            
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
 			             <p:commandButton icon="ui-icon-check" 

@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import br.com.ims.flow.factory.ServicesFactory;
+
 @SuppressWarnings("serial")
 public class VersionEntity extends AbstractEntity {
 	
@@ -40,6 +42,9 @@ public class VersionEntity extends AbstractEntity {
 	}
 	public String toString() {
 		return this.id+" - "+this.description;
+	}
+	public boolean isUsed() {
+		return ServicesFactory.getInstance().getVersionService().isUsed(this.id);
 	}
 	
 	

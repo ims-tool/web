@@ -1,5 +1,6 @@
 package br.com.ims.control;
 
+import java.util.Date;
 import java.util.List;
 
 import br.com.ims.persistence.MessageDao;

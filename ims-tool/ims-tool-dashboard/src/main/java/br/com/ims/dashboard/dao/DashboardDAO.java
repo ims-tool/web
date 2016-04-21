@@ -150,7 +150,7 @@ public class DashboardDAO {
 		sql = "select r.description ,count(1) volume "+ 
 			  "from flow.router r,flow.log l "+
 			  "where l.STARTDATE BETWEEN now()-interval '1 hour' AND now() "+
-			  "and l.dnis = CAST( r.dnis  AS text )  "+
+			  "and l.dnis = r.dnis  "+
 			  "group by r.description "+
 			  "order by 2 desc "; 
 

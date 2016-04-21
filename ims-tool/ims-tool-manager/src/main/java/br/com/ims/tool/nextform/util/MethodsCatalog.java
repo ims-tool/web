@@ -308,6 +308,42 @@ public class MethodsCatalog {
 
 		return methodInvocationVO;
 	}
+	
+	public MethodInvocationVO getParameter(String jsonContext, Map<String, String> parameters) {
+
+		MethodsCatalogDao dao = new MethodsCatalogDao();
+		MethodInvocationVO methodInvocationVO = MethodInvocationVO.getInstance();
+		String flag = parameters.get("VALUE");
+		
+		try {
+			if (dao.getParameter(flag)) {
+				methodInvocationVO.setValue(UraConstants.YES);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SUNDAY_HOLIDAY,
+						UraConstants.YES, true);
+			} else {
+				methodInvocationVO.setValue(UraConstants.NO);
+				Date date = new Date();
+				Calendar calendar = GregorianCalendar.getInstance();
+				calendar.setTime(date);
+				if (calendar.get(Calendar.DAY_OF_WEEK) == 7) {
+					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SUNDAY_HOLIDAY,
+							UraConstants.YES, true);
+				} else {
+					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SUNDAY_HOLIDAY,
+							UraConstants.NO, true);
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error("Erro getHoliday ", e);
+			methodInvocationVO.setValue(UraConstants.NO);
+		}
+		methodInvocationVO.setErrorCode(0);
+		methodInvocationVO.setJsonContext(jsonContext);
+
+		return methodInvocationVO;
+	}
+	
  
 	public MethodInvocationVO getMensagensURA(String jsonContext, Map<String, String> parameters) {
 

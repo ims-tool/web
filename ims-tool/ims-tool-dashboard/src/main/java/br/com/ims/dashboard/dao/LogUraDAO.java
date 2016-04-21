@@ -40,7 +40,12 @@ public class LogUraDAO {
 		
 		return result;
 	}
-	
+	private boolean isNumber(String str) {
+		if(str == null) {
+			return false;
+		}; 
+		return str.matches("-?\\d+");
+	}
 	public List<LogUraModel> getLogUra(String datahoraI, String datahoraF,String telefone, String dnis, String formulario,String finalizacao, String tags, String vdn ) {
 		
 		log.debug("[LogUra] - " + "getLogUra");
@@ -72,21 +77,16 @@ public class LogUraDAO {
 			"	, TS.RESULT_CALL  \"VDN TRANSFERIDO\" "+
 			"	, L.Context CONTEXTO "+
 			"	from flow.log l "+
-			"	join flow.form f on  (upper(f.name) = upper('"+dnis+"') OR upper('"+dnis+"') ='TODOS') "+
 			"	join flow.track t "+
 			"	     on t.rowdate BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+
-			"	    and t.logid=l.id and t.formid=f.id "+
+			"	    and t.logid=l.id "+
 			"	JOIN flow.trackservice ts  "+
 			"	   ON ts.rowdate BETWEEN l.startdate-interval '1 minute' AND l.startdate+interval '15 minute' "+ 
 			"	   and ts.logid=l.id and TS.TRACKID=T.ID  and ts.method_service = 'Transfer�ncia VDN' "+
 			"	where l.startdate BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '59 seconds' "+
-			"	AND ('"+dnis+"' = l.DNIS OR '"+dnis+"' = 'TODOS') "+
-			"	AND ( L.ANI LIKE '%"+telefone+"%'  OR l.instance LIKE '%"+telefone+"%'  OR upper('"+telefone+"')='TODOS') "+ 
-			"	and (L.ID IN (SELECT TT1.LOGID  "+
-			"	       FROM flow.tracktag tt1  "+
-			"	       WHERE TT1.ROWDATE BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS')-interval '1 minute' AND TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+                                     
-			"	             and tt1.tagid in("+tags+") "+
-			"	             ) OR "+tags+"=0) "+
+			"	<DNIS> "+
+			"	<INSTANCIA> "+ 
+			"	<TAG> "+
 			"	union all "+
 			"	Select  /* + rule */ DISTINCT "+
 			"	l.id LogID "+
@@ -106,23 +106,34 @@ public class LogUraDAO {
 			"	, '' "+
 			"	, L.Context CONTEXTO "+
 			"	from flow.log l "+
-			"	join flow.form f on  (upper(f.name) = upper('"+formulario+"') OR upper('"+formulario+"') ='TODOS') "+
 			"	join flow.track t  "+
 			"	     on t.rowdate BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+
-			"	     and t.logid=l.id and t.formid=f.id  "+
+			"	     and t.logid=l.id "+
 			"	where l.startdate BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS') AND TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '59 seconds' "+
-			"	AND ('"+dnis+"' = l.DNIS OR '"+dnis+"' = 'TODOS') "+
-			"	AND ( L.ANI LIKE '%"+telefone+"%'  OR l.instance LIKE '%"+telefone+"%'  OR upper('"+telefone+"')='TODOS')  "+
+			"	<DNIS> "+
+			"	<INSTANCIA> "+
 			"	AND (l.finalstatus<>'T' or l.finalstatus is null) "+
-			"	and (L.ID IN (SELECT TT1.LOGID  "+
-			"	       FROM flow.tracktag tt1  "+
-			"	       WHERE TT1.ROWDATE BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS')-interval '1 minute' AND TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+                                     
-			"	             and tt1.tagid in("+tags+")   "+
-			"	             ) OR "+tags+"=0) "+ 			
+			"	<TAG> "+ 			
 			"	) X "+
 			"	WHERE ('"+vdn+"'=\"VDN TRANSFERIDO\" OR UPPER('"+vdn+"')='TODOS') "+
 			"	AND (UPPER('"+finalizacao+"')=FINALIZACAO OR UPPER('"+finalizacao+"')='TODOS')  "+
-			"	order by 1 "; 
+			"	order by 1 ";
+		
+		if(isNumber(dnis)) {
+			sql = sql.replace("<DNIS>", "AND l.DNIS = "+dnis+" ");
+		}
+		if(isNumber(telefone)) {
+			sql = sql.replace("<INSTANCIA>", "AND ( L.ANI LIKE '%"+telefone+"%'  OR l.instance LIKE '%"+telefone+"%') ");
+		}
+		if(!tags.equalsIgnoreCase("TODOS") && tags.length() > 0) {
+			String filter = "and (L.ID IN (SELECT TT1.LOGID  "+
+							" 	FROM flow.tracktag tt1  "+
+							"	WHERE TT1.ROWDATE BETWEEN TO_TIMESTAMP('"+datahoraI+"','DD/MM/YYYY HH24:MI:SS')-interval '1 minute' AND TO_TIMESTAMP('"+datahoraF+"','DD/MM/YYYY HH24:MI:SS')+interval '15 minute' "+                                     
+							"	and tt1.tagid in("+tags+")   "+
+							"	) ) ";
+			sql = sql.replace("<TAG>", filter);
+		}
+		sql = sql.replace("<DNIS>","").replace("<INSTANCIA>", "").replace("<TAG>", "");
 		
 		try {
 			//oracle = new OracleConn("IVR_OWNER");

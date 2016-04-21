@@ -29,6 +29,7 @@ import br.com.ims.control.ReportCtrl;
 import br.com.ims.control.ServiceHourCtrl;
 import br.com.ims.tool.entity.Controlpanel;
 import br.com.ims.tool.entity.Message;
+import br.com.ims.tool.entity.ReportLog;
 import br.com.ims.tool.entity.ServiceHour;
 import br.com.ims.tool.entity.ServiceHourType;
 
@@ -138,28 +139,6 @@ public class ReportFacadeREST extends AbstractFacade<ServiceHour> {
 
 	}
 
-	@GET
-	@Path("findSpot")
-	@Produces("application/json")
-	public String findSpotList() {
-		List<String> lista = MessageCtrl.findSpotList();
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String json = "";
-		try {
-			json = ow.writeValueAsString(lista);
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return json;
-
-	}
 
 	@GET
 	@Path("{from}/{to}")
@@ -180,47 +159,7 @@ public class ReportFacadeREST extends AbstractFacade<ServiceHour> {
 		return em;
 	}
 
-	@GET
-	@Path("/nextidMessage")
-	@Produces("application/json")
-	public String getNextidMessage() {
-		String lista = MessageCtrl.getNexIdMessage();
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String json = "";
-		try {
-			json = ow.writeValueAsString(lista);
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return json;
 
-	}
-
-	@GET
-	@Path("findSpotList")
-	@Produces("application/json")
-	public String getSpot() {
-		List<String> lista = MessageCtrl.findSpotList();
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String json = "";
-		try {
-			json = ow.writeValueAsString(lista);
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return json;
-	}
 
 	@POST
 	@Path("/remove")
@@ -232,6 +171,45 @@ public class ReportFacadeREST extends AbstractFacade<ServiceHour> {
 		message.setId(jsonObj.getInt("id"));
 
 		MessageCtrl.remove(message.getId());
+	}
+	
+	@GET
+	@Path("getArtifactList/{data}")
+	@Produces("application/json")
+	public String getArtifactList(@PathParam("data") Date dateLog) {
+		List<String> lista = ReportCtrl.getArtifactList(dateLog);
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return json;
+	}
+	
+	@GET
+	@Path("getLogList/{data}/{artifact}")
+	@Produces("application/json")
+	public String getLogList(@PathParam("data") Date dateLog, @PathParam("artifact") String artifact) {
+		
+		List<ReportLog> lista = ReportCtrl.getLogList(dateLog, artifact);
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 
 }
