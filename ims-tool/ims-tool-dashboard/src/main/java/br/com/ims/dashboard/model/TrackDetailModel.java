@@ -7,14 +7,18 @@ public class TrackDetailModel {
 	private Integer id;
 	private Long formId;
 	private String formName;
+	private String description;
+	private Integer formTypeId;
+	private String formTypeName;
 	private Long trackId;
 	private String rowdate;
 	private String startdate;
 	private String stopdate;
 	private Integer tagId;
-	private String description;
-	private Integer formTypeId;
-	private String formTypeName;
+	private String tagType;
+	private String tagDescription;
+
+	
 	
 	List<TrackServiceModel> service;
 	
@@ -97,6 +101,19 @@ public class TrackDetailModel {
 	public void setService(List<TrackServiceModel> service) {
 		this.service = service;
 	}
+	public String getTagType() {
+		return tagType;
+	}
+	public void setTagType(String tagType) {
+		this.tagType = tagType;
+	}
+	public String getTagDescription() {
+		return tagDescription;
+	}
+	public void setTagDescription(String tagDescription) {
+		this.tagDescription = tagDescription;
+	}
+	
 
 	
 	

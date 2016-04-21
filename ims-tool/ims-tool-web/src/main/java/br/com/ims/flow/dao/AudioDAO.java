@@ -83,12 +83,15 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	}
 	public boolean save(AudioEntity audio) {
 		boolean result = true;
+		
+		audit(audio);
 		String sql = "INSERT INTO flow.audio (id,type,name,description,path,versionid) "+
 					 "VALUES ('"+audio.getId()+"','"+audio.getType()+"','"+audio.getName()+"','"+audio.getDescription()+"','"+audio.getPath()+"',"+audio.getVersionId()+") ";
 		             
 		DbConnection db = new DbConnection("AudioDAO-save");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		
 		return result;
 	}
 

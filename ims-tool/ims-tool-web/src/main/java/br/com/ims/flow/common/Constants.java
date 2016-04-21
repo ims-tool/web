@@ -32,6 +32,7 @@ public class Constants {
 	public final static String DEPENDENCE_OBJECT_TYPE_GRAMMAR = "Grammar";
 	public final static String DEPENDENCE_OBJECT_TYPE_NOMATCH_NOINPUT = "NoMatchNoInput";
 	public final static String DEPENDENCE_OBJECT_TYPE_OPERATION_MAP = "OperationMap";
+	public final static String DEPENDENCE_OBJECT_TYPE_VERSION = "Version";
 	
 	public final static String NO_MATCH = "NOMATCH";
 	public final static String NO_INPUT = "NOINPUT";

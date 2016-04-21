@@ -2,12 +2,15 @@ package br.com.ims.flow.bean;
 
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.VersionEntity;
@@ -73,6 +76,12 @@ public class VersionEditorBean extends AbstractBean {
 	@Override
 	public void save(ActionEvent event) {
 			 
+		version.setDescription(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formAdmin:version_description").toString());
+		if(version.getDescription() == null || version.getDescription().length() == 0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Version","Please, inform the Description");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
 		ServicesFactory.getInstance().getVersionService().save(version);
 		
 		ServicesFactory.getInstance().getIvrEditorService().getBean().setVersion(version);
@@ -122,6 +131,9 @@ public class VersionEditorBean extends AbstractBean {
 	//	this.promptId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_prompt_input").toString();
 	//	this.announce.setFlushprompt(Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formForm:dialog_form_flush_prompt_input")));
 						
+	}
+	public void viewDependence(String id, String name) {
+		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_VERSION,id, name);
 	}
     
 }
