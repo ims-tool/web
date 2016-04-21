@@ -61,48 +61,47 @@
 			<br>
 				<div class="form-group">
 							<div class="col-md-3">
-								<label for="spot">User</label> 
-									<select ng-model="log.artifact" class="form-control" ng-change="getControlPanelList()">
-									<option ng-repeat="user in users" value="{{user}}">{{user}}</option>
-								</select>
+							   <md-datepicker  ng-model="log.data" md-placeholder="Escolha o dia" ng-change="getArtifactList()"></md-datepicker>
 							</div>
-				</div>	
+				
+				<div class="form-group">
+				<div class="col-md-3">
+							   <select ng-model="log.artifact" class="form-control">
+							   <option ng-repeat="artifact in artifacts" value="{{artifact}}">{{artifact}}</option>
+							  </select>
+				</div>
+				<div class="col-md-3">
+							   <button class="btn btn-info" type="button" ng-click="searchLog()">Pesquisar</button>
+				</div> 
+				</div>				  
 				<br> <br>
 				<br> <br>
 
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th>id</th>
-								<th>Grupo</th>
-								<th>Método</th>
-								<th>Descrição</th>
-								<th>Referencia</th>
+								<th>Data</th>
+								<th>Id</th>
 								<th>Login</th>
-								<th>Alteração</th>
-								<th>Versão</th>
-								<th>timeout</th>
-								<th>Status</th>
+								<th>Tipo</th>
+								<th>Descrição</th>
+								<th>Artefato</th>
+								<th>Valor Original</th>
+								<th>Valor ID</th>
+								<th>ID Artefato</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="controlPanel in controlPanelList">
-								<td>{{ controlPanel.id ||"empty"}}</td>
-								<td>{{ controlPanel.owner ||"empty"}}</td>
-								<td>{{ controlPanel.methodname || "empty"}}</td>
-								<td>{{ controlPanel.description || "empty"}}</td>
-								<td>{{ controlPanel.referencedby || "empty"}}</td>
-								<td>{{ controlPanel.loginid || "empty"}}</td>
-								<td>{{ controlPanel.datetime || "empty"}}</td>
-								<td>{{ controlPanel.versionid || "empty"}}</td>
-								<td class='col-md-1'>
-										<input class="form-control" type ="number" id="timeout" ng-model="controlPanel.timeout" ng-blur="changeTimeout($index)" />
-								</td>
-								<td class='col-md-1'>
-									<select ng-model="controlPanel.status" class="form-control" ng-change = "changeFlag($index)">
-									<option value="true">Ativo</option>
-									<option value="false">Inativo</option>
-								</td>
+							<tr ng-repeat="log in logs">
+								<td>{{ log.rowdate ||"empty"}}</td>
+								<td>{{ log.id ||"empty"}}</td>
+								<td>{{ log.login || "empty"}}</td>
+								<td>{{ log.type || "empty"}}</td>
+								<td>{{ log.description || "empty"}}</td>
+								<td>{{ log.artifact || "empty"}}</td>
+								<td>{{ log.originalValue || "empty"}}</td>
+								<td>{{ log.valueid || "empty"}}</td>
+								<td>{{ log.artifactid || "empty"}}</td>
 							</tr>
 						</tbody>
 					</table>		

@@ -5,12 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import br.com.ims.tool.entity.Controlpanel;
+import br.com.ims.tool.entity.ReportLog;
 import br.com.ims.tool.util.ConnectionDB;
 
 public class ReportDao {
@@ -103,9 +106,98 @@ public class ReportDao {
 		} catch (SQLException e) {
 			logger.error("Erro ao recuperar type control panel", e);
 		} finally {
+			try {
+				stm.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			conn.finalize();
 		}
 		
+	}
+
+
+	public static List<String> getArtifactList(Date dateLog) {
+		List<String> listArtifact = new ArrayList<String>();
+		ConnectionDB conn = null;
+		ResultSet rs = null;
+		try {
+			conn = new ConnectionDB();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar c = Calendar.getInstance();
+			c.setTime(dateLog);
+			c.add(Calendar.DATE, 1);  // number of days to add
+			
+//			String query = "select  a.rowdate, a.id, u.login, c.description, a.description, a.artifact, a.original_value, a.valueid, a.artifactid  from log.audit a, access.user u, log.type_change c where a.userid = u.id and c.id = a.typeid and rowdate between '"+sdf.format(dateLog)+"' and '"+sdf.format(c.getTime())+"'";
+			
+			String query = "select  distinct(artifact) from log.audit where rowdate between '"+sdf.format(dateLog)+"' and '"+sdf.format(c.getTime())+"'";
+			
+			rs = conn.ExecuteQuery(query);
+			
+			while(rs.next()){
+				listArtifact.add(rs.getString(1));
+			}
+			
+		} catch (SQLException e) {
+			logger.error("Erro ao recuperar type control panel", e);
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			conn.finalize();
+		}
+		return listArtifact;
+	}
+
+
+	public static List<ReportLog> getLogList(Date dateLog, String artifact) {
+		List<ReportLog> listReportlog = new ArrayList<ReportLog>();
+		ConnectionDB conn = null;
+		ResultSet rs = null;
+		try {
+			conn = new ConnectionDB();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar c = Calendar.getInstance();
+			c.setTime(dateLog);
+			c.add(Calendar.DATE, 1);  // number of days to add
+			
+			String query = "select  a.rowdate, a.id, u.login, c.description, a.description, a.artifact, a.original_value, a.valueid, a.artifactid  from log.audit a, access.user u, log.type_change c where a.userid = u.id and c.id = a.typeid and rowdate between '"+sdf.format(dateLog)+"' and '"+sdf.format(c.getTime())+"' "
+					+ " and a.artifact = '"+artifact+"'" ;
+			
+			rs = conn.ExecuteQuery(query);
+			
+			while(rs.next()){
+				ReportLog rl = new ReportLog();
+				SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				rl.setRowdate(sdf2.format(rs.getTimestamp(1)));
+				rl.setId(rs.getInt(2));
+				rl.setLogin(rs.getString(3));
+				rl.setType(rs.getString(4));
+				rl.setDescription(rs.getString(5));
+				rl.setArtifact(rs.getString(6));
+				rl.setOriginalValue(rs.getString(7));
+				rl.setValueid(rs.getInt(8));
+				rl.setArtifactid(rs.getInt(9));
+				listReportlog.add(rl);
+				
+			}
+			
+		} catch (SQLException e) {
+			logger.error("Erro ao recuperar log list report", e);
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			conn.finalize();
+		}
+		return listReportlog;
 	}
 
 }

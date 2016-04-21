@@ -5,6 +5,11 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 					$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 					$rootScope.activetab = $location.path();
 					$scope.report = {};
+					$scope.artifacts ={};
+					$scope.log = {};
+					$scope.logs = {};
+					$scope.log.artifact = "";
+					 $scope.myDate = new Date();
 					$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getTypeControlPanel').success(function(data1) {
 						$scope.data = {
 							    repeatSelect: null,
@@ -55,8 +60,25 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 							}
 						});
 					}
-				})
+					$scope.getArtifactList = function(){
+								$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getArtifactList/'+$scope.log.data).success(function(data1) {
+									$scope.artifacts = data1;
+								});
 
+					}
+					$scope.searchLog = function(){
+							console.log($scope.log.artifact);
+							if(!$scope.log.artifact.trim()){
+								bootbox.alert("Por favor selecione os parametros para a pesquisa!");
+							}else{
+								$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getLogList/'+$scope.log.data+"/"+$scope.log.artifact).success(function(data1) {
+									$scope.logs = data1;
+								});
+							}
+					}
+					
+})					
+					
 function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, pvalueid){
 	var logaudit = {userLogin: localStorage.getItem('login'), typeid: ptypeid, description : pdescription, artifact: partifact, originalvalue: poriginalvalue, valueid : pvalueid, artifactid : partifactid};
 	$.ajax({
@@ -77,5 +99,4 @@ function saveControlPanel(controlPanel){
 		contentType : "application/json",
 		dataType : 'json'
 	});
-	
 }
