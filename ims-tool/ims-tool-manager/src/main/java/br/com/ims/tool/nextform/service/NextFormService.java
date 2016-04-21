@@ -172,9 +172,9 @@ public class NextFormService {
 					
 					transfer.setVdn(rule.getNumber());
 					transfer.setTag(rule.getTag());
-					transfer.setPrompt(null);
+					transfer.setPromptDto(null);
 					if(rule.getPrompt() >  0) {
-						transfer.setPrompt(dao.getPromptById(rule.getPrompt(), jsonContext));
+						transfer.setPromptDto(dao.getPromptById(rule.getPrompt(), jsonContext));
 					}
 				} else {
 					errorCode = -1;

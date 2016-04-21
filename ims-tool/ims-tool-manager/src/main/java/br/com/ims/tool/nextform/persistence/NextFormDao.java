@@ -720,7 +720,7 @@ public class NextFormDao {
 	}
 
 	public PromptDto getPromptById(long promptId, String jsonContext) throws Exception {
-		PromptDto prompt = null;
+		PromptDto promptDto = null;
 		ResultSet rs = null;
 		ConnectionDB conn = null;
 		try {
@@ -729,10 +729,10 @@ public class NextFormDao {
 
 			rs = conn.ExecuteQuery(query);
 			if (rs.next()) {
-				prompt = new PromptDto();
-				prompt.setId(rs.getLong(1));
-				prompt.setName(rs.getString(2));
-				prompt.setListaPromptAudio(getListPromptAudioByPromptId(prompt.getId(), jsonContext));
+				promptDto = new PromptDto();
+				promptDto.setId(rs.getLong(1));
+				promptDto.setName(rs.getString(2));
+				promptDto.setListaPromptAudio(getListPromptAudioByPromptId(promptDto.getId(), jsonContext));
 
 			}
 		} catch (SQLException e) {
@@ -741,7 +741,7 @@ public class NextFormDao {
 		} finally {
 			conn.finalize();
 		}
-		return prompt;
+		return promptDto;
 	}
 	public PromptDto getPromptByPromptName(String name, String jsonContext) throws Exception {
 		PromptDto prompt = null;

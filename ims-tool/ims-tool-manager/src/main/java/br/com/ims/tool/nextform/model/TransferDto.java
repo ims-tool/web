@@ -12,7 +12,7 @@ public class TransferDto implements Serializable {
 	private long transferRuleId;
 	private long tag;
 	
-	private PromptDto prompt;
+	private PromptDto promptDto;
 	private String vdn;
 	private String UUI;
 	
@@ -46,11 +46,11 @@ public class TransferDto implements Serializable {
 	public void setTag(long tag) {
 		this.tag = tag;
 	}
-	public PromptDto getPrompt() {
-		return prompt;
+	public PromptDto getPromptDto() {
+		return promptDto;
 	}
-	public void setPrompt(PromptDto prompt) {
-		this.prompt = prompt;
+	public void setPromptDto(PromptDto promptDto) {
+		this.promptDto = promptDto;
 	}
 	public String getVdn() {
 		return vdn;
@@ -67,7 +67,7 @@ public class TransferDto implements Serializable {
 	@Override
 	public String toString() {
 		return "TransferDto [id=" + id + ", name=" + name + ", description=" + description 
-				+ ", transferRuleId=" + transferRuleId + ", tag=" + tag + ", prompt=" + prompt 
+				+ ", transferRuleId=" + transferRuleId + ", tag=" + tag + ", prompt=" + promptDto 
 				+ ", vdn=" + vdn + ", UUI=" + UUI + "]";
 	}
 
