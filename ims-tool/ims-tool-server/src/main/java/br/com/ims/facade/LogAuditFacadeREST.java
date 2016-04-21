@@ -50,14 +50,37 @@ public class LogAuditFacadeREST extends AbstractFacade<Audit> {
     	
     	JSONObject jsonObj = new JSONObject(entity);
     	
-    	Audit logAudit = new Audit(); 
-    	logAudit.setArtifact((String) jsonObj.get("artifact"));
-    	logAudit.setDescription((String) jsonObj.get("description"));
-    	logAudit.setOriginalValue((String) jsonObj.get("description"));
-    	logAudit.setTypeid((Integer) jsonObj.get("typeid"));
-    	logAudit.setUserLogin((String) jsonObj.get("userLogin"));
-    	logAudit.setOriginalValue((String) jsonObj.get("originalvalue"));
-    	logAudit.setArtifactid((Integer) jsonObj.get("artifactid"));
+    	Audit logAudit = new Audit();
+    	try {
+    		logAudit.setArtifact((String) jsonObj.get("artifact"));
+		} catch (Exception e) {
+			logAudit.setArtifact("nc");
+		}
+    	try {
+    		logAudit.setDescription((String) jsonObj.get("description"));
+		} catch (Exception e) {
+			logAudit.setDescription("nc");
+		}
+    	try {
+    		logAudit.setOriginalValue((String) jsonObj.get("originalvalue"));
+		} catch (Exception e) {
+			logAudit.setOriginalValue("nc");
+		}
+    	try {
+    		logAudit.setTypeid((Integer) jsonObj.get("typeid"));
+		} catch (Exception e) {
+			logAudit.setTypeid(-1);
+		}
+    	try {
+    		logAudit.setUserLogin((String) jsonObj.get("userLogin"));
+		} catch (Exception e) {
+			logAudit.setUserLogin("nc");
+		}
+    	try {
+    		logAudit.setArtifactid((Integer) jsonObj.get("artifactid"));
+		} catch (Exception e) {
+			logAudit.setArtifactid(-1);
+		}
     	try {
     		logAudit.setValueid((Integer) jsonObj.get("valueid"));
 		} catch (Exception e) {
