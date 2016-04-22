@@ -20,6 +20,7 @@ import br.com.ims.tool.nextform.model.ConditionGroupDto;
 import br.com.ims.tool.nextform.model.ConditionParametersDto;
 import br.com.ims.tool.nextform.model.ConditionValueDto;
 import br.com.ims.tool.nextform.model.DecisionChanceDto;
+import br.com.ims.tool.nextform.model.DecisionConditionDto;
 import br.com.ims.tool.nextform.model.DecisionDto;
 import br.com.ims.tool.nextform.model.DecisionParametersDto;
 import br.com.ims.tool.nextform.model.DisconnectDto;
@@ -793,9 +794,7 @@ public class NextFormDao {
 
 				MethodInvocation invocationService = new MethodInvocation();
 
-				MethodInvocationVO serviceReturn = invocationService.invoke(context,
-						conditionGroup.getConditionMap().getMethodReference(), map,
-						conditionGroup.getConditionMap().getTimeout(), conditionGroup.getConditionMap().isActive());
+				MethodInvocationVO serviceReturn = invocationService.invoke(context, conditionGroup.getConditionMap().getMethodReference(), map, conditionGroup.getConditionMap().getTimeout(), conditionGroup.getConditionMap().isActive());
 
 				String param = null;
 				if (UraUtils.isNotNull(map)) {
@@ -809,7 +808,6 @@ public class NextFormDao {
 
 					if (UraUtils.isNotNull(conditionValue.getOperation())) {
 
-						System.out.println("teste");
 						if (processaOperacao(conditionValue.getOperation(), conditionGroup.getConditionMap().getType(), serviceReturn.getValue(), conditionValue)) {
 
 							if (conditionValue.getTagTrue() > 0) {
@@ -848,6 +846,86 @@ public class NextFormDao {
 
 		return retorno;
 	}
+	
+	public DecisionConditionDto validarDecisionCondition(String context, long conditionId) throws Exception {
+		ConditionDto condition = null;
+		Long trackId = null;
+		DecisionConditionDto dCDto = new DecisionConditionDto();
+		dCDto.setCondition(Boolean.FALSE);
+		try {
+			condition = new ConditionDao().getConditionsById(conditionId);
+
+			trackId = LogUtils.getTrackId();
+			LogUtils.createTrackCondition(context, trackId);
+
+			for (ConditionGroupDto conditionGroup : condition.getListaConditionGroup()) {
+				dCDto.setCondition(Boolean.FALSE);
+
+				Map<String, String> map = null;
+
+				if (UraUtils.isNotNull(conditionGroup.getListaConditionParameters()) && !conditionGroup.getListaConditionParameters().isEmpty()) {
+					map = new HashMap<String, String>();
+					for (ConditionParametersDto conditionParameters : conditionGroup.getListaConditionParameters()) {
+						map.put(conditionParameters.getParamName(), conditionParameters.getParamValue());
+					}
+				}
+
+				MethodInvocation invocationService = new MethodInvocation();
+
+				MethodInvocationVO serviceReturn = invocationService.invoke(context, conditionGroup.getConditionMap().getMethodReference(), map, conditionGroup.getConditionMap().getTimeout(), conditionGroup.getConditionMap().isActive());
+				dCDto.setJsonContext(serviceReturn.getJsonContext());
+				String param = null;
+				if (UraUtils.isNotNull(map)) {
+					param = map.toString();
+				}
+				long trackServiceId = LogUtils.getTrackServiceId();
+				if (conditionGroup.getConditionMap().getLogActive() > 0) {
+					LogUtils.createTrackService(trackServiceId, trackId, conditionGroup.getId(),conditionGroup.getConditionMap().getMethodReference(), serviceReturn.getValue(), param, serviceReturn.getErrorCode(), Long.parseLong(MethodInvocationUtils.getContextValue(context, MapValues.LOGID)), serviceReturn.getTimeService());
+				}
+				for (ConditionValueDto conditionValue : conditionGroup.getListaConditionValue()) {
+
+					if (UraUtils.isNotNull(conditionValue.getOperation())) {
+
+						if (processaOperacao(conditionValue.getOperation(), conditionGroup.getConditionMap().getType(), serviceReturn.getValue(), conditionValue)) {
+
+							if (conditionValue.getTagTrue() > 0) {
+								LogUtils.createTrackTag(trackServiceId, trackId,Long.valueOf(MethodInvocationUtils.getContextValue(context, MapValues.LOGID)), conditionValue.getTagTrue());
+							}
+							dCDto.setCondition(Boolean.TRUE);
+							return dCDto;
+
+						} else {
+							if (conditionValue.getTagFalse() > 0) {
+								LogUtils.createTrackTag(trackServiceId, trackId,
+										Long.valueOf(MethodInvocationUtils.getContextValue(context, MapValues.LOGID)),
+										conditionValue.getTagFalse());
+							}
+						}
+
+					} else {
+						if (conditionValue.getTagFalse() > 0) {
+							LogUtils.createTrackTag(trackServiceId, trackId,
+									Long.valueOf(MethodInvocationUtils.getContextValue(context, MapValues.LOGID)),
+									conditionValue.getTagFalse());
+						}
+					}
+
+				}
+
+			}
+
+		} catch (DaoException e) {
+			logger.error("Erro ao Recuperar a Decision Condition para o Id: " + conditionId, e);
+			throw new Exception("Erro ao Recuperar a Decision  Condition para o Id: " + conditionId, e);
+
+		} catch (Exception e) {
+			logger.error("Erro ao Validar a Decision  Condition para o Id: " + conditionId, e);
+			throw new Exception("Erro ao Validar a Decision  Condition para o Id: " + conditionId, e);
+		}
+
+		return dCDto;
+	}
+	
 
 	private boolean processaOperacao(String operacao, String type, String resultado, ConditionValueDto conditionValue) {
 		try {
