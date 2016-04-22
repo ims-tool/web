@@ -151,6 +151,7 @@ public class NextFormService {
 			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_DECISION) {
 				
 				nextForm = processDecision(nextForm, trackId, logId);
+				jsonContext = nextForm.getJsonContexto();
 				if (nextForm == null) {
 					LogUtils.createLogDetail(FormConstants.FORM_NAO_ENCONTRADO, String.valueOf(nextFormId), logId);
 
