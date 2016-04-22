@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.model.AnswerEntity;
 import br.com.ims.flow.model.TagEntity;
@@ -12,6 +14,7 @@ import br.com.ims.flow.model.TagTypeEntity;
 
 @SuppressWarnings("serial")
 public class AnswerDAO extends AbstractDAO<AnswerEntity>{
+	public static Logger log = Logger.getLogger(AnswerDAO.class);
 	private static AnswerDAO instance = null;
 	//private DbConnection db =  null;
 	private AnswerDAO() {
@@ -26,7 +29,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	}
 	
 	public List<AnswerEntity> getByFilter(String where) {
-		
+		log.debug("getByFilter("+where+")");
 		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.nextform a_nextform,a.versionid a_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
@@ -72,6 +75,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			db.finalize();
 			/*try {
@@ -97,7 +101,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	
 	public boolean save(AnswerEntity answer) {
 		boolean result = true;
-		
+		log.debug("save()");
 		String sql = "INSERT INTO flow.answer (id,name,description,nextform,tag,versionid) "+
 					 "VALUES ('"+answer.getId()+"','"+answer.getName()+"','"+answer.getDescription()+"',"
 					 		+(answer.getNextForm() ==  null || answer.getNextForm().length() == 0 ? "NULL" : answer.getNextForm())+","
@@ -112,6 +116,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	@Override
 	public boolean update(AnswerEntity answer) {
 		boolean result = true;
+		log.debug("update()");
 		String sql = "UPDATE flow.answer SET name='"+answer.getName()+"',description='"+answer.getDescription()+"',"
 					+ "nextform="+(answer.getNextForm() == null || answer.getNextForm().length() == 0 ? "NULL" : answer.getNextForm())+","
 					+ "tag="+(answer.getTag() == null ? "NULL" : answer.getTag().getId())+",versionid='"+answer.getVersionId()+"' "+
@@ -126,6 +131,7 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 	@Override
 	public boolean delete(AnswerEntity answer) {
 		boolean result = true;
+		log.debug("delete()");
 		String sql = "DELETE FROM flow.answer WHERE id = '"+answer.getId()+"' ";
 		DbConnection db = new DbConnection("AnswerDAO-delete");             
 		result = db.ExecuteSql(sql);

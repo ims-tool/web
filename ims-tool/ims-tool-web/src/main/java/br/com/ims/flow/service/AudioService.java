@@ -30,35 +30,37 @@ public class AudioService extends AbstractEntityService <AudioEntity>{
 	}
 	
 	public boolean isUsed(String id) {
-		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll();
-		for(PromptEntity prompt :  prompts) { 
-			if(prompt.getAudios() != null && prompt.getAudios().size() > 0) {
-				for(PromptAudioEntity promptAudio : prompt.getAudios()) {
-					if(promptAudio.getAudio().getId().equals(id)) {
-						return true;
-					}
-				}
-			}
+		if(id == null || id.length() ==0) {
+			return false;
 		}
-		return false;
+		List<PromptAudioEntity> promptaudios = DAOFactory.getInstance().getPromptDAO().getPromptAudio("WHERE pa.audio ='" + id + "' ",true);
+	    if (promptaudios.size() > 0) {
+	      return true;
+	    }
+	    return false;
 	}
 	public List<String[]> getUsed(String id) {
 		List<String[]> result = new ArrayList<String[]>();
-		List<PromptEntity> prompts = DAOFactory.getInstance().getPromptDAO().getAll();
-		for(PromptEntity prompt :  prompts) { 
-			if(prompt.getAudios() != null && prompt.getAudios().size() > 0) {
-				boolean found = false;
-				for(int index = 0; index < prompt.getAudios().size() && !found; index++) {
-					PromptAudioEntity promptAudio = prompt.getAudios().get(index);
-					if(promptAudio.getAudio().getId().equals(id)) {
-						found = true;
-						String [] dependence = {"Prompt",prompt.getName()};
-						result.add(dependence);
-					}
-				}
-			}
+		if(id == null || id.length() == 0) {
+			return result;
 		}
-		return result;
+		List<String> promptIds = new ArrayList();
+	    List<PromptAudioEntity> promptaudios = DAOFactory.getInstance().getPromptDAO().getPromptAudio("WHERE pa.audio ='" + id + "' ",true);
+	    if (promptaudios.size() > 0) {
+	      for (PromptAudioEntity pa : promptaudios) {
+	        if (!promptIds.contains(pa.getPromptId()))
+	        {
+	          promptIds.add(pa.getPromptId());
+	          PromptEntity prompt = DAOFactory.getInstance().getPromptDAO().get(pa.getPromptId(), true);
+	          if (prompt != null)
+	          {
+	            String[] dependence = { "Prompt", prompt.getName() };
+	            result.add(dependence);
+	          }
+	        }
+	      }
+	    }
+	    return result;
 	}
 
 	@Override

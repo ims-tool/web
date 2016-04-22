@@ -30,13 +30,13 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 		return instance;
 	}
 	public ChoiceEntity getChoice(String id) {
-		List<ChoiceEntity> result = getChoicesByFilter("WHERE c.id = '"+id+"'");
+		List<ChoiceEntity> result = getChoicesByFilter("WHERE c.id = '"+id+"'",false);
 		if(result.size() > 0) {
 			return result.get(0);
 		}
 		return null;
 	}
-	private List<ChoiceEntity> getChoicesByFilter(String where) {
+	public List<ChoiceEntity> getChoicesByFilter(String where,boolean lazy) {
 		String sql = "SELECT c.id c_id,c.name c_name,c.menu c_menu,c.dtmf c_dtmf,c.nextform c_nextform,c.condition c_condition,c.versionid c_versionid, "+					
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
@@ -69,8 +69,10 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 					tag.setType(tagType);
 				}
 				ConditionEntity condition = null;
-				if(rs.getString("c_condition") != null && rs.getString("c_condition").length() > 0) {
-					condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("c_condition"));
+				if(!lazy) {
+					if(rs.getString("c_condition") != null && rs.getString("c_condition").length() > 0) {
+						condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("c_condition"));
+					}
 				}
 				
 				ChoiceEntity choice = new ChoiceEntity();
@@ -166,7 +168,7 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 					prompt_ni = ServicesFactory.getInstance().getPromptService().get(rs.getString("ni_prompt"));
 				if(rs.getString("nm_prompt") != null && rs.getString("nm_prompt").length() > 0)
 					prompt_nm = ServicesFactory.getInstance().getPromptService().get(rs.getString("nm_prompt"));
-				choices = this.getChoicesByFilter("WHERE c.menu = '"+rs.getString("m_id")+"'");
+				choices = this.getChoicesByFilter("WHERE c.menu = '"+rs.getString("m_id")+"'",lazy);
 			}
 			
 			
@@ -235,6 +237,13 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 	}
 	public MenuEntity get(String id) {
 		List<MenuEntity> result = this.getByFilter("WHERE m.id = '"+id+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
+	public MenuEntity get(String id,boolean lazy) {
+		List<MenuEntity> result = this.getByFilter("WHERE m.id = '"+id+"'",lazy);
 		if(result.size() > 0) {
 			return result.get(0);
 		}

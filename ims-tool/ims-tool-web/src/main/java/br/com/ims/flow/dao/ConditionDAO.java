@@ -5,7 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.model.AudioEntity;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.ConditionGroupEntity;
 import br.com.ims.flow.model.ConditionMapEntity;
@@ -17,6 +20,7 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	//private DbConnection db =  null;
+	public static Logger log = Logger.getLogger(ConditionDAO.class);
 	private static ConditionDAO instance = null;
 	private ConditionDAO() {
 		//db =  new DbConnection("ConditionDAO"); 			
@@ -30,6 +34,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	}
 	
 	private List<ConditionParameterEntity> getConditionParameters(String conditionGroupId) {
+		log.debug("getConditionParameters("+conditionGroupId+")");
 		String sql = "SELECT cp.id cp_id,cp.conditiongroupid cp_conditiongroupid,cp.paramname cp_paramname,cp.paramvalue cp_paramvalue, cp.versionid cp_versionid "+
 				 "FROM flow.conditionparameters cp "+
                "WHERE cp.conditiongroupid ='"+conditionGroupId+"' ";
@@ -50,6 +55,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			db.finalize();
 			/*try {
@@ -62,6 +68,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		return result;
 	}
 	private List<ConditionValueEntity> getConditionValues(String conditionGroupId) {
+		log.debug("getConditionValues("+conditionGroupId+")");
 		String sql = "SELECT cv.id cv_id,cv.conditiongroupid cv_conditiongroupid,cv.ordernum cv_ordernum,cv.operation cv_operation,cv.versionid cv_versionid, "
 				    + "cv.value1 cv_value1, cv.value2 cv_value2,cv.value3 cv_value3,cv.value4 cv_value4,cv.value5 cv_value5,"
 				    + "cv.value6 cv_value6, cv.value7 cv_value7,cv.value8 cv_value8,cv.value9 cv_value9,cv.value10 cv_value10,"
@@ -132,6 +139,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			db.finalize();
 			/*
@@ -145,13 +153,19 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		return result;
 	}
 	
-	private List<ConditionGroupEntity> getConditionGroups(String conditionId) {
+	public List<ConditionGroupEntity> getConditionGroups(String where,boolean lazy) {
+		log.debug("getConditionGroups("+where+","+lazy+")");
 		String sql = "SELECT cg.id cg_id,cg.conditionid cg_conditionid,cg.ordernum cg_ordernum,cg.description cg_description,cg.versionid cg_versionid, "+
 				 "cm.id cm_id, cm.name cm_name,cm.description cm_description, cm.type cm_type, cm.methodreference cm_methodreference, cm.log_active cm_log_active "+
 				 "FROM flow.conditiongroup cg "+
                 "INNER JOIN flow.conditionmap cm ON cg.conditionmapid = cm.id "+ 
-                "WHERE cg.conditionid ='"+conditionId+"' "+
+                "<WHERE> "+
                 "ORDER BY cg.ordernum ";
+		if(where != null && where.length() > 0) {
+			sql = sql.replace("<WHERE>", where);
+		} else {
+			sql = sql.replace("<WHERE>", "");
+		}
 		List<ConditionGroupEntity> result = new ArrayList<ConditionGroupEntity>();
 		ResultSet rs = null;
 		DbConnection db = new DbConnection("ConditionDAO-getConditionGroups");
@@ -166,8 +180,13 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 				conditionMap.setMethodReference(rs.getString("cm_methodreference"));
 				conditionMap.setLogActive(rs.getInt("cm_log_active"));
 				
-				List<ConditionParameterEntity> cp = this.getConditionParameters(rs.getString("cg_id"));
-				List<ConditionValueEntity> cv = this.getConditionValues(rs.getString("cg_id"));
+				List<ConditionParameterEntity> cp = new ArrayList<ConditionParameterEntity>() ;
+				List<ConditionValueEntity> cv = new ArrayList<ConditionValueEntity>();
+				if(!lazy) {
+					cp.addAll(this.getConditionParameters(rs.getString("cg_id")));
+					cv.addAll(this.getConditionValues(rs.getString("cg_id")));
+				}
+				
 				
 				ConditionGroupEntity cg = new ConditionGroupEntity();
 				cg.setId(rs.getString("cg_id"));
@@ -183,6 +202,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			db.finalize();
 			/*try {
@@ -198,6 +218,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		return this.getByFilter(where, false);
 	}
 	public List<ConditionEntity> getByFilter(String where,boolean lazy) {
+		log.debug("getByFilter("+where+","+lazy+")");
 		String sql = "SELECT c.id c_id,c.name c_name,c.description c_description,c.versionid c_versionid, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
@@ -231,9 +252,9 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 					tag.setType(tagType);
 				}
 				
-				List<ConditionGroupEntity> groups = null;
+				List<ConditionGroupEntity> groups = new ArrayList<ConditionGroupEntity>();
 				if(!lazy) {
-					groups = this.getConditionGroups(rs.getString("c_id"));
+					groups.addAll(this.getConditionGroups("WHERE cg.conditionid ='"+rs.getString("c_id")+"' ",lazy));
 				}
 				
 				
@@ -250,6 +271,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			db.finalize();
 		/*	try {
@@ -278,6 +300,13 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 		}
 		return null;
 	}
+	public ConditionEntity get(String id,boolean lazy) {
+		List<ConditionEntity> result = this.getByFilter("WHERE c.id = '"+id+"'",lazy);
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
 	
 	public ConditionEntity getByName(String name) {
 		List<ConditionEntity> result = this.getByFilter("WHERE lower(c.name) = '"+name.toLowerCase()+"'");
@@ -289,6 +318,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	
 	public boolean save(ConditionEntity entity) {
 		boolean result = true;
+		log.debug("save()");
 		String sql = "INSERT INTO flow.condition (id,name,description,tag,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"',"
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
@@ -372,6 +402,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 	@Override
 	public boolean update(ConditionEntity entity) {
 		boolean result = true;
+		log.debug("update()");
 		String sql = "UPDATE flow.condition SET name = '"+entity.getName()+"',description = '"+entity.getDescription()+"',"
 				   + "tag = "+(entity.getTag() == null ? "NULL"  : entity.getTag().getId())+","
 				   + "versionid  =  '"+entity.getVersionId()+"' "
@@ -451,6 +482,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 
 	@Override
 	public boolean delete(ConditionEntity entity) {
+		log.debug("delete()");
 		String sql = "DELETE FROM flow.conditionparameters WHERE conditiongroupid in (SELECT id FROM flow.conditiongroup WHERE conditionid = '"+entity.getId()+"' )  ";
 		DbConnection db = new DbConnection("ConditionDAO-getConditionValues");
 		boolean result = db.ExecuteSql(sql);

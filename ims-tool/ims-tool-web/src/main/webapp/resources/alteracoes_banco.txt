@@ -313,3 +313,21 @@ CREATE INDEX ix_transferrule_versionid ON flow.transferrule (versionid);
 CREATE INDEX ix_controlpanel_methodname ON flow.controlpanel (methodname);
 
 
+create index ix_announce_prompt ON flow.announce(prompt);
+create index ix_promptcollect_prompt ON flow.promptcollect(prompt);
+create index ix_transferrule_prompt ON flow.transferrule(prompt);
+create index ix_menu_prompt ON flow.menu(prompt);
+
+
+create index ix_promptaudio_audio ON flow.promptaudio(audio);
+
+create index ix_choice_condition ON flow.choice(condition);
+create index ix_decisionchance_condition ON flow.decisionchance(condition);
+create index ix_transferrule_condition ON flow.transferrule(condition);
+create index ix_promptaudio_condition ON flow.promptaudio(condition);
+
+create index ix_conditiongroup_conditionmap ON flow.conditiongroup(conditionmapid);
+
+create index ix_operationgroup_operationmap ON flow.operationgroup(operationmapid);
+
+

@@ -369,9 +369,9 @@ public class PromptEditorBean extends AbstractBean {
 	}
 
 	public void deleteAudio(String id) {
-		for(int index = 0; index < this.prompt.getAudios().size(); index++) {
-			PromptAudioEntity promptAudio = this.prompt.getAudios().get(index);
-			if(promptAudio.getId().equals(id)) {
+		for (int index = 0; index < this.prompt.getAudios().size(); index++) {
+			PromptAudioEntity promptAudio = (PromptAudioEntity) this.prompt.getAudios().get(index);
+			if ((promptAudio.getAudio() != null) && (promptAudio.getAudio().getId().equals(id))) {
 				this.prompt.getAudios().remove(index);
 				index = this.prompt.getAudios().size();
 			}

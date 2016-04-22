@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionEntity;
@@ -16,6 +18,7 @@ import br.com.ims.flow.model.TagTypeEntity;
 @SuppressWarnings("serial")
 public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	private static DecisionDAO instance = null;
+	public static Logger log = Logger.getLogger(DecisionDAO.class);
 	//private DbConnection db =  null;
 	private DecisionDAO() {
 		//db =  new DbConnection("DecisionDAO");
@@ -30,7 +33,8 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 	
 
 	public DecisionChanceEntity getChance(String id) {
-		List<DecisionChanceEntity> result = getChancesByFilter("WHERE dc.id = '"+id+"'");
+		
+		List<DecisionChanceEntity> result = getChancesByFilter("WHERE dc.id = '"+id+"'",false);
 		if(result.size() > 0) {
 			return result.get(0);
 		}
@@ -38,7 +42,8 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		
 	}
 	
-	private List<DecisionChanceEntity> getChancesByFilter(String where) {
+	public List<DecisionChanceEntity> getChancesByFilter(String where,boolean lazy) {
+		log.debug("getChancesByFilter("+where+","+lazy+")");
 		String sql = "SELECT dc.id dc_id,dc.decisionid dc_decisionid,dc.ordernum dc_ordernum,dc.condition dc_condition,dc.nextformid dc_nextformid,dc.versionid dc_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
@@ -71,8 +76,10 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 					tag.setType(tagType);
 				}
 				ConditionEntity condition = null;
-				if(rs.getString("dc_condition") != null && rs.getString("dc_condition").length() > 0) {
-					condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("dc_condition"));
+				if(!lazy) {
+					if(rs.getString("dc_condition") != null && rs.getString("dc_condition").length() > 0) {
+						condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("dc_condition"));
+					}
 				}
 				
 				DecisionChanceEntity chance = new DecisionChanceEntity();
@@ -89,6 +96,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			db.finalize();
 		
@@ -96,8 +104,11 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		
 		return result;
 	}
-	
 	public List<DecisionEntity> getByFilter(String where) {
+		return getByFilter(where,false);
+	}
+	public List<DecisionEntity> getByFilter(String where, boolean lazy) {
+		log.debug("getByFilter("+where+","+lazy+")");
 		String sql = "SELECT d.id d_id,d.name d_name,d.description d_description,d.versionid d_versionid, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
@@ -130,9 +141,10 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 					tag.setDescription(rs.getString("t_description"));
 					tag.setType(tagType);
 				}
-				
-				List<DecisionChanceEntity> chances = this.getChancesByFilter("WHERE dc.decisionid ='"+rs.getString("d_id")+"' " );
-				
+				List<DecisionChanceEntity> chances = new ArrayList<DecisionChanceEntity>();
+				if(!lazy) {
+					chances.addAll(this.getChancesByFilter("WHERE dc.decisionid ='"+rs.getString("d_id")+"' ",lazy));
+				}
 				
 				DecisionEntity decision = new DecisionEntity();
 				decision.setId(rs.getString("d_id"));
@@ -147,6 +159,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			
 			db.finalize();
@@ -168,9 +181,17 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 		}
 		return null;
 	}
+	public DecisionEntity get(String id,boolean lazy) {
+		List<DecisionEntity> result = this.getByFilter("WHERE d.id = '"+id+"'",lazy);
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
 	
 	public boolean save(DecisionEntity entity) {
 		boolean result = true;
+		log.debug("save()");
 		String sql = "INSERT INTO flow.decision (id,name,description,tag,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getDescription()+"',"
 					 		+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
@@ -208,6 +229,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 
 	@Override
 	public boolean update(DecisionEntity entity) {
+		log.debug("update()");
 		boolean result = true;
 		String sql = "UPDATE flow.decision SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',"
 				+ "tag = "+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+", "
@@ -243,6 +265,7 @@ public class DecisionDAO extends AbstractDAO<DecisionEntity>{
 
 	@Override
 	public boolean delete(DecisionEntity entity) {
+		log.debug("delete()");
 		boolean result = true;
 		String sql = "DELETE FROM flow.decisionchance WHERE decisionid = '"+entity.getId()+"' ";
 		DbConnection db = new DbConnection("DecisionDAO-delete");

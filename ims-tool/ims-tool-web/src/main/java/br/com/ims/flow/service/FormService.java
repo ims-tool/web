@@ -25,6 +25,12 @@ public class FormService extends AbstractEntityService<FormEntity> {
 	public List<FormEntity> getByFormTypeName(String formTypeName) {
 		return DAOFactory.getInstance().getFormDAO().getByTypeName(formTypeName);
 	}
+	public Object getObject(FormEntity form) {
+	    if (form.getFormId() == null) {
+	      return null;
+	    }
+	    return DAOFactory.getInstance().getFormDAO().getObject(form.getFormType(), ((AbstractFormEntity)form.getFormId()).getId());
+	}
 
 	@Override
 	public FormEntity get(String id) {

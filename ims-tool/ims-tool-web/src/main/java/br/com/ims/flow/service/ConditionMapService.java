@@ -60,18 +60,15 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 		
-		List<ConditionEntity> conditions = ServicesFactory.getInstance().getConditionService().getAll();
-		
-		for(ConditionEntity condition :  conditions) {
-			List<ConditionGroupEntity> groups = condition.getListConditionGroup();
-			for(ConditionGroupEntity group : groups) {
-				if(group.getConditionMap().getId().equals(id)) {
-					return true;
-				}
-			}
-			
+		if ((id == null) || (id.length() == 0)) {
+			return false;
+		}
+		List<ConditionGroupEntity> conditions = DAOFactory.getInstance().getConditionDAO().getConditionGroups("WHERE cg.conditionmapid ='" + id + "' ", true);
+		if (conditions.size() > 0) {
+			return true;
 		}
 		return false;
+		
 	}
 
 	@Override
@@ -110,27 +107,23 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 		
 		
 		List<String[]> result = new ArrayList<String[]>();
-		
-		List<ConditionEntity> conditions = ServicesFactory.getInstance().getConditionService().getAll();
-		
-		for(ConditionEntity condition :  conditions) {
-			List<ConditionGroupEntity> groups = condition.getListConditionGroup();
-			
-			boolean found = false;
-			for(int index = 0; index < groups.size() && !found; index++) {
-			
-				ConditionGroupEntity group = groups.get(index);
-				if(group.getConditionMap().getId().equals(id)) {
-					found = true;
-					String [] dependence = {"Condition",condition.getName()};
-					result.add(dependence);
-				}
-			}
-			
-		}
-		
-		
-		return result;
+	    if ((id == null) || (id.length() == 0)) {
+	      return result;
+	    }
+	    List<ConditionGroupEntity> conditions = DAOFactory.getInstance().getConditionDAO().getConditionGroups("WHERE cg.conditionmapid ='" + id + "' ", true);
+	    if (conditions.size() > 0)
+	    {
+	      List<String> conditionId = new ArrayList<String>();
+	      for (ConditionGroupEntity group : conditions) {
+	        if (!conditionId.contains(group.getConditionId()))
+	        {
+	          ConditionEntity condition = DAOFactory.getInstance().getConditionDAO().get(group.getConditionId(), true);
+	          String[] dependence = { "Condition", condition.getName() };
+	          result.add(dependence);
+	        }
+	      }
+	    }
+	    return result;
 	}
 
 }

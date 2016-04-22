@@ -29,16 +29,21 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 		}
 		return instance;
 	}
-	private List<PromptAudioEntity> getPromptAudio(String idPrompt) {
-		log.info("getPromptAudio("+idPrompt+")");
-		System.out.println("PromptDAO-getPromptAudio("+idPrompt+")");
+	
+	public List<PromptAudioEntity> getPromptAudio(String where,boolean lazy) {
+		log.info("getPromptAudio("+where+")");
+		System.out.println("PromptDAO-getPromptAudio("+where+")");
 		String sql = "SELECT pa.prompt pa_prompt,pa.ordernum pa_ordernum,pa.condition pa_condition,pa.versionid pa_versionid, "+
 				     "a.id a_id,a.type a_type,a.name a_name,a.description a_description, a.path a_path,a.property a_property "+	                 
 	                 "FROM flow.promptaudio pa "+
 	                 "INNER JOIN flow.audio a ON pa.audio = a.id "+
-	                 "WHERE pa.prompt ='"+idPrompt+"' "+
+	                 "<WHERE> "+
 	                 "ORDER BY pa.ordernum";
 		List<PromptAudioEntity> result = new ArrayList<PromptAudioEntity>();
+		if(where != null && where.length() > 0) {
+			sql = sql.replace("<WHERE>", where);
+		}
+		sql = sql.replace("<WHERE>", "");
 		ResultSet rs = null;
 		DbConnection db = new DbConnection("PromptDAO");
 		try {
@@ -54,8 +59,10 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 				audio.setVersionId(null);
 				
 				ConditionEntity condition = null;
-				if(rs.getString("pa_condition") != null && rs.getString("pa_condition").length() > 0) {
-					condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("pa_condition"));
+				if(!lazy) {
+					if(rs.getString("pa_condition") != null && rs.getString("pa_condition").length() > 0) {
+						condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("pa_condition"));
+					}
 				}
 				
 				PromptAudioEntity promptAudio = new PromptAudioEntity ();
@@ -111,7 +118,7 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 				prompt.setName(rs.getString("p_name"));
 				List<PromptAudioEntity> promptAudioList = new ArrayList<PromptAudioEntity>();
 				if(!lazy) {
-					promptAudioList.addAll(getPromptAudio(rs.getString("p_id")));
+					promptAudioList.addAll(getPromptAudio("WHERE pa.prompt ='"+rs.getString("p_id")+"' ",lazy ));
 				}
 				prompt.setAudios(promptAudioList);
 				prompt.setVersionId(rs.getString("p_versionid"));
@@ -142,6 +149,14 @@ public class PromptDAO extends AbstractDAO<PromptEntity> {
 	}
 	public PromptEntity get(String id) {
 		List<PromptEntity> result = this.getByFilter("WHERE p.id = '"+id+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+		
+	}
+	public PromptEntity get(String id,boolean lazy) {
+		List<PromptEntity> result = this.getByFilter("WHERE p.id = '"+id+"'",lazy);
 		if(result.size() > 0) {
 			return result.get(0);
 		}

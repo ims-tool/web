@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import javax.el.ELContext;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
 import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.DefaultDiagramModel;
 import org.primefaces.model.diagram.Element;
@@ -24,22 +25,31 @@ import br.com.ims.flow.bean.IvrEditorBean;
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
+import br.com.ims.flow.dao.DisconnectDAO;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AbstractFormEntity;
+import br.com.ims.flow.model.AnnounceEntity;
+import br.com.ims.flow.model.AnswerEntity;
 import br.com.ims.flow.model.ChoiceEntity;
+import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.DecisionChanceEntity;
 import br.com.ims.flow.model.DecisionEntity;
+import br.com.ims.flow.model.DisconnectEntity;
+import br.com.ims.flow.model.FlowEntity;
 import br.com.ims.flow.model.FormEntity;
 import br.com.ims.flow.model.FormTypeEntity;
 import br.com.ims.flow.model.MenuEntity;
 import br.com.ims.flow.model.NoMatchInputEntity;
+import br.com.ims.flow.model.OperationEntity;
 import br.com.ims.flow.model.PromptCollectEntity;
+import br.com.ims.flow.model.ReturnEntity;
 import br.com.ims.flow.model.TagEntity;
+import br.com.ims.flow.model.TransferEntity;
 import br.com.ims.flow.model.VersionEntity;
 
 @SuppressWarnings("serial")
 public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
-	
+	public static Logger log = Logger.getLogger(IvrEditorService.class);
 	public IvrEditorService() {
 		ELContext elContext = FacesContext.getCurrentInstance().getELContext();
 		this.bean = (IvrEditorBean) elContext.getELResolver().getValue(elContext, null, "ivrEditorView");
@@ -224,6 +234,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     	
     }
     public boolean save(LogicalFlow logicalFlow, String flowName, VersionEntity version) {
+    	log.debug("save("+flowName+")");
     	boolean result = true;
     	Map<String,List<FormEntity>> map = new HashMap<String,List<FormEntity>>();
     	
@@ -248,7 +259,6 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     		form.setVersionId(version.getId());
     		form.setFlowName(flowName);
     		((AbstractFormEntity)form.getFormId()).setVersionId(version.getId());
-    		boolean exists = false;
     		
     		/**
     		 * Preciso salvar todos os forms pra manter a posição X e Y na tela
@@ -257,7 +267,6 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			result = result & ServicesFactory.getInstance().getFormService().save(form);
 				
     		} else {
-    			exists = true;
     			result = result & ServicesFactory.getInstance().getFormService().update(form);
     			
     			
@@ -309,7 +318,9 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			form.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER) ||
     			form.getFormType().getName().equals(Constants.FORM_TYPE_DISCONNECT) ||
     			form.getFormType().getName().equals(Constants.FORM_TYPE_RETURN)) {
-    			if(!exists) {
+    			Object obj = ServicesFactory.getInstance().getFormService().getObject(form);
+    	        if (obj == null)
+    	        {
     				List<FormEntity> listForm =  null;
         			if(map.get("INSERT") == null) {
         				listForm = new ArrayList<FormEntity>();
@@ -370,23 +381,85 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 		this.connect(source, element);
 		return element;
     }
+
+	private Object getNewObject(FormTypeEntity formType) {
+		if (formType.getName().equals("Announce")) {
+			return new AnnounceEntity();
+		}
+		if (formType.getName().equals("Answer")) {
+			return new AnswerEntity();
+		}
+		if (formType.getName().equals("Choice")) {
+			return new ChoiceEntity();
+		}
+		if (formType.getName().equals("Condition")) {
+			return new ConditionEntity();
+		}
+		if (formType.getName().equals("Decision")) {
+			return new DecisionEntity();
+		}
+		if (formType.getName().equals("DecisionChance")) {
+			return new DecisionChanceEntity();
+		}
+		if (formType.getName().equals("Disconnect")) {
+			return new DisconnectEntity();
+		}
+		if (formType.getName().equals("Flow")) {
+			return new FlowEntity();
+		}
+		if (formType.getName().equals("Menu")) {
+			return new MenuEntity();
+		}
+		if (formType.getName().equals("NoInput")) {
+			NoMatchInputEntity ni = new NoMatchInputEntity();
+			ni.setType("NOINPUT");
+			return ni;
+		}
+		if (formType.getName().equals("NoMatch")) {
+			NoMatchInputEntity ni = new NoMatchInputEntity();
+			ni.setType("NOMATCH");
+			return ni;
+		}
+		if (formType.getName().equals("Operation")) {
+			return new OperationEntity();
+		}
+		if (formType.getName().equals("PromptCollect")) {
+			return new PromptCollectEntity();
+		}
+		if (formType.getName().equals("Return")) {
+			return new ReturnEntity();
+		}
+		if (formType.getName().equals("Transfer")) {
+			return new TransferEntity();
+		}
+		return null;
+	}
     public void loadFlow(String formId) throws Exception {
+    	log.debug("loadFlow("+formId+")");
     	FormEntity answer = ServicesFactory.getInstance().getFormService().get(formId,true);
     	this.bean.updateTabFlowName(answer.getName());
     	List<FormEntity> flowTree = ServicesFactory.getInstance().getFormService().getByFilter("WHERE f.flowname = '"+answer.getName()+"'", false);
-    	
+    	boolean error = false;
+        List<String> listErrors = new ArrayList<String>();
     	if(flowTree != null  && flowTree.size() > 0) {
     		for(FormEntity form : flowTree) {
     			try {
-    				form.setNextForm(((AbstractFormEntity)form.getFormId()).getNextForm());
-	    			Element element = new Element(form);
-	    			element.setX(form.getPositionX());
-	    			element.setY(form.getPositionY());
-	    			
-	    			ServicesFactory.getInstance().getIvrEditorService().setEndPoint(form.getFormType(), element);
-	    			bean.getModel().addElement(element);
-	    			bean.getLogicalFlow().addNode(element);
+					if ((AbstractFormEntity) form.getFormId() == null) {
+						log.debug("Form: "+(form == null ? formId : form.getName())+", formID = NULL");
+						form.setFormId(getNewObject(form.getFormType()));
+						error = true;
+						listErrors.add(form == null ? formId : form.getName());
+					}
+					form.setNextForm(((AbstractFormEntity) form.getFormId()).getNextForm());
+					Element element = new Element(form);
+					element.setX(form.getPositionX());
+					element.setY(form.getPositionY());
+
+					ServicesFactory.getInstance().getIvrEditorService().setEndPoint(form.getFormType(), element);
+					((IvrEditorBean) this.bean).getModel().addElement(element);
+					((IvrEditorBean) this.bean).getLogicalFlow().addNode(element);
     			} catch(Exception e) {
+    				log.error("Error on load Element: "+(form == null ? formId : form.getName())+",exception: "+e.getMessage(),e);
 	        		throw new Exception("Error on load Element: "+(form == null ? formId : form.getName()),e);
 	        	}
     		}
@@ -466,13 +539,23 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			}
     			if(form.getNextForm() != null && form.getNextForm().length() > 0) {
     				Node target = bean.getLogicalFlow().getNode(form.getNextForm());
-    				this.connect(node.getElement(), target.getElement());
+    				if(target != null) { 
+    					this.connect(node.getElement(), target.getElement());
+    				}
     				
     			}
     		} catch(Exception e) {
+    			log.error("Error on load Node: "+(form == null ? formId : form.getName())+",exception: "+e.getMessage(),e);
         		throw new Exception("Error on load Node: "+(form == null ? formId : form.getName()),e);
         	}
     	}
+		if (error) {
+			StringBuffer obj = new StringBuffer();
+			for (String err : listErrors) {
+				obj.append(err + ",");
+			}
+			throw new Exception("Error on load Object(s): " + obj);
+		}
     	
     	
     }

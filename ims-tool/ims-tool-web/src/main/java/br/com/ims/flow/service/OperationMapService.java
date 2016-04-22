@@ -59,16 +59,13 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 	public boolean isUsed(String id) {
 		// TODO Auto-generated method stub
 		
-		List<OperationEntity> operations = DAOFactory.getInstance().getOperationDAO().getAll();
-		for(OperationEntity operation :  operations) {
-			if(operation.getListOperationGroup() != null) {
-				for(OperationGroupEntity group : operation.getListOperationGroup()) {
-					if(group.getOperationMap().getId().equals(id)) {
-						return true;
-					}
-				}
-			}
-			
+		if ((id == null) || (id.length() == 0)) {
+			return false;
+		}
+		List<OperationGroupEntity> operations = DAOFactory.getInstance().getOperationDAO()
+				.getOperationGroups("WHERE og.operationmapid '" + id + "' ", true);
+		if (operations.size() > 0) {
+			return true;
 		}
 		return false;
 		
@@ -108,23 +105,24 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 
 	@Override
 	public List<String[]> getUsed(String id) {
-		// TODO Auto-generated method stub
-		List<String []> result = new ArrayList<String []>();
-		List<OperationEntity> operations = DAOFactory.getInstance().getOperationDAO().getAll();
-		for(OperationEntity operation :  operations) {
-			boolean found = false;
-			if(operation.getListOperationGroup() != null) {
-				for(int index = 0; index < operation.getListOperationGroup().size() && !found; index++) {
-					OperationGroupEntity group = operation.getListOperationGroup().get(index);
-					if(group.getOperationMap().getId().equals(id)) {
-						String [] obj = {"Operation",operation.getName()};
-						result.add(obj);
-					}
-				}
-			}
-			
-		}
-		return result;
+	    List<String[]> result = new ArrayList<String[]>();
+	    if ((id == null) || (id.length() == 0)) {
+	      return result;
+	    }
+	    List<OperationGroupEntity> operations = DAOFactory.getInstance().getOperationDAO().getOperationGroups("WHERE og.operationmapid '" + id + "' ", true);
+	    if (operations.size() > 0)
+	    {
+	      List<String> operationId = new ArrayList<String>();
+	      for (OperationGroupEntity group : operations) {
+	        if (!operationId.contains(group.getOperationId()))
+	        {
+	          OperationEntity operation = DAOFactory.getInstance().getOperationDAO().get(group.getOperationId(), true);
+	          String[] obj = { "Operation", operation.getName() };
+	          result.add(obj);
+	        }
+	      }
+	    }
+	    return result;
 	}
 
 }

@@ -28,15 +28,20 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		}
 		return instance;
 	}
-	private List<TransferRuleEntity> getTransferRules(String transferId) {
+	public List<TransferRuleEntity> getTransferRules(String where, boolean lazy) {
 		String sql = "SELECT tr.id tr_id,tr.ordernum tr_ordernum,tr.transferid tr_transferid,tr.condition tr_condition,tr.prompt tr_prompt,tr.number tr_number,tr.versionid tr_versionid, "+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+	                 
 	                 "FROM flow.transferrule tr "+
 	                 "LEFT JOIN flow.tag t ON tr.tag = t.id "+ 
 					 "LEFT JOIN flow.tagtype tt ON t.tagtypeid = tt.id "+
-	                 "WHERE tr.transferid ='"+transferId+"' "+
+	                 "<WHERE> "+
 	                 "ORDER BY tr.ordernum ";
+		if(where != null && where.length() > 0) {
+			sql = sql.replace("<WHERE>", where);
+		} else {
+			sql = sql.replace("<WHERE>", "");
+		}
 		List<TransferRuleEntity> result = new ArrayList<TransferRuleEntity>();
 		ResultSet rs = null;
 		DbConnection db = new DbConnection("TransferDAO-getTransferRules");
@@ -56,12 +61,15 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 					tag.setType(tagType);
 				}
 				ConditionEntity condition = null;
-				if(rs.getString("tr_condition") != null && rs.getString("tr_condition").length() > 0) {
-					condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("tr_condition"));
-				}
 				PromptEntity prompt = null;
-				if(rs.getString("tr_prompt") != null && rs.getString("tr_prompt").length() > 0) {
-					prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("tr_prompt"));
+				if(!lazy) {
+					if(rs.getString("tr_condition") != null && rs.getString("tr_condition").length() > 0) {
+						condition = ServicesFactory.getInstance().getConditionService().get(rs.getString("tr_condition"));
+					}
+					
+					if(rs.getString("tr_prompt") != null && rs.getString("tr_prompt").length() > 0) {
+						prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("tr_prompt"));
+					}
 				}
 				
 				TransferRuleEntity transferRule = new TransferRuleEntity();
@@ -84,8 +92,11 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 		
 		return result;
 	}
+	public List<TransferEntity> getByFilter(String where) { 
+		return getByFilter(where,false);
+	}
 	
-	public List<TransferEntity> getByFilter(String where) {
+	public List<TransferEntity> getByFilter(String where, boolean lazy) {
 		String sql = "SELECT tr.id tr_id,tr.name tr_name,tr.description tr_description, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
@@ -119,8 +130,11 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 					tag.setType(tagType);
 				}
 				
-				List<TransferRuleEntity> rules = this.getTransferRules(rs.getString("tr_id"));
-				
+				List<TransferRuleEntity> rules = new ArrayList<TransferRuleEntity>();
+				if(!lazy) {
+					rules.addAll(this.getTransferRules("WHERE tr.transferid ='"+rs.getString("tr_id")+"' ",lazy));
+					 
+				}
 				
 				TransferEntity transfer = new TransferEntity();
 				transfer.setId(rs.getString("tr_id"));
@@ -149,6 +163,13 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 	}
 	public TransferEntity get(String id) {
 		List<TransferEntity> result = this.getByFilter("WHERE tr.id = '"+id+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
+	public TransferEntity get(String id,boolean lazy) {
+		List<TransferEntity> result = this.getByFilter("WHERE tr.id = '"+id+"'",lazy);
 		if(result.size() > 0) {
 			return result.get(0);
 		}

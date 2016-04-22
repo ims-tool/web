@@ -40,5 +40,12 @@ public class Constants {
 	public final static String SEQUENCE_UID = "flow.seq_uid";
 	public final static String SEQUENCE_TAG = "flow.seq_tag";
 	public final static String SEQUENCE_VERSION = "flow.seq_version";
+
+	public static final Integer AUDIT_TYPE_UPDATE = 1;
+	public static final Integer AUDIT_TYPE_DELETE = 2;
+	public static final Integer AUDIT_TYPE_ADD = 3;
+	public static final Integer AUDIT_TYPE_LOGIN = 4;
+	public static final Integer AUDIT_TYPE_LOGOUT = 5;
+	public static final String AUDIT_ARTIFACT = "ivr editor";
 	
 }

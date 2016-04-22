@@ -5,12 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.model.ConditionMapEntity;
 
 @SuppressWarnings("serial")
 public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 	//private DbConnection db =  null;
+	public static Logger log = Logger.getLogger(ConditionMapDAO.class);
 	private static ConditionMapDAO instance = null;
 	private ConditionMapDAO() {
 		//db = new DbConnection("ConditionMapDAO"); 			
@@ -23,6 +26,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		return instance;
 	}
 	public List<ConditionMapEntity> getByFilter(String where) {
+		log.debug("getByFilter("+where+")");
 		String sql = "SELECT cm.id cm_id, cm.name cm_name,cm.description cm_description, cm.type cm_type, cm.methodreference cm_methodreference, cm.log_active cm_log_active, cm.versionid cm_versionid "
 				    + "FROM flow.conditionmap cm "
 				    + "<WHERE> "
@@ -53,6 +57,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			db.finalize();
 			
@@ -89,7 +94,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 	}
 	
 	public boolean save(ConditionMapEntity entity) {
-		
+		log.debug("save()");
 		String sql = "INSERT INTO flow.conditionmap (id,name,description,type,methodreference,log_active,versionid) "
 				    + "VALUES ("+entity.getId()+",'"+entity.getName()+"','"+entity.getDescription()+"','"+entity.getType()+"','"+entity.getMethodReference()+"','"+entity.getLogActive()+"','"+entity.getVersionId()+"') ";
 		boolean result = true;
@@ -103,6 +108,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 	@Override
 	public boolean update(ConditionMapEntity entity) {
 		// TODO Auto-generated method stub
+		log.debug("update()");
 		String sql = "UPDATE flow.conditionmap SET name = '"+entity.getName()+"',description='"+entity.getDescription()+"',type = '"+entity.getType()+"',methodreference='"+entity.getMethodReference()+"',log_active='"+entity.getLogActive()+"' ,versionid='"+entity.getVersionId()+"' "
    			    	+ "WHERE id = '"+entity.getId()+"'  ";
 		boolean result = true;
@@ -115,6 +121,7 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 
 	@Override
 	public boolean delete(ConditionMapEntity entity) {
+		log.debug("delete()");
 		String sql = "DELETE FROM flow.conditionmap WHERE id = '"+entity.getId()+"'  ";
 		// TODO Auto-generated method stub
 		boolean result = true;

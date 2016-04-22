@@ -124,9 +124,9 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 	public boolean save(NoMatchInputEntity entity) {
 		boolean result = true;
 		
-		String sql = "INSERT INTO flow.nomatchinput (id,name,type,threshold,prompt,nextform,tag,versionid) "+
+		String sql = "INSERT INTO flow.nomatchinput (id,name,type,threshold,prompt,tag,versionid) "+
 					 "VALUES ('"+entity.getId()+"','"+entity.getName()+"','"+entity.getType()+"','"+entity.getThreshold()+"',"
-				   + (entity.getPrompt() ==null ? "NULL" : entity.getPrompt().getId())+","+entity.getNextForm()+","
+				   + (entity.getPrompt() ==null ? "NULL" : entity.getPrompt().getId())+","
 					+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+",'"+entity.getVersionId()+"') ";
 		DbConnection db = new DbConnection("NoMatchInputDAO-save");             
 		result = db.ExecuteSql(sql);
@@ -140,7 +140,6 @@ public class NoMatchInputDAO extends AbstractDAO<NoMatchInputEntity> {
 		
 		String sql = "UPDATE flow.nomatchinput SET name='"+entity.getName()+"',type='"+entity.getType()+"',threshold='"+entity.getThreshold()+"',"
 				   + "prompt="+(entity.getPrompt() == null ? "NULL" : entity.getPrompt().getId())+","
-				   + "nextform='"+entity.getNextForm()+"',"
 				   + "tag="+(entity.getTag() == null ? "NULL" : entity.getTag().getId())+","
 				   + "versionid='"+entity.getVersionId()+"' "
 				   + "WHERE id = '"+entity.getId()+"' ";

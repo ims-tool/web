@@ -54,13 +54,18 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		
 		return result;
 	}
-	private List<OperationGroupEntity> getOperationGroups(String operationId) {
+	public List<OperationGroupEntity> getOperationGroups(String where, boolean lazy) {
 		String sql = "SELECT og.id og_id,og.operationid og_operationid,og.ordernum og_ordernum,og.description og_description, og.versionid og_versionid ,"+
 					 "om.id om_id, om.name om_name,om.description om_description, om.methodreference om_methodreference, om.log_active om_log_active "+
 					 "FROM flow.operationgroup og "+
 	                 "LEFT JOIN flow.operationmap om ON og.operationmapid = om.id "+ 
-	                 "WHERE og.operationid ='"+operationId+"' "+
+	                 "<WHERE> "+
 	                 "ORDER BY og.ordernum ";
+		if(where != null && where.length() > 0) {
+			sql = sql.replace("<WHERE>", where);
+		} else {
+			sql = sql.replace("<WHERE>", "");
+		}
 		List<OperationGroupEntity> result = new ArrayList<OperationGroupEntity>();
 		ResultSet rs = null;
 		DbConnection db = new DbConnection("OperationDAO-getOperationGroups");
@@ -77,7 +82,10 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					operationMap.setLogActive(rs.getInt("om_log_active"));
 				}
 				
-				List<OperationParameterEntity> op = this.getOperationParameters(rs.getString("og_id"));
+				List<OperationParameterEntity> op = new ArrayList<OperationParameterEntity>();  
+				if(!lazy) {
+					op.addAll(this.getOperationParameters(rs.getString("og_id")));
+				}
 				
 				OperationGroupEntity og = new OperationGroupEntity();
 				og.setId(rs.getString("og_id"));
@@ -99,8 +107,11 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 		
 		return result;
 	}
-	
 	public List<OperationEntity> getByFilter(String where) {
+		return getByFilter(where,false);
+	}
+	
+	public List<OperationEntity> getByFilter(String where,boolean lazy) {
 		String sql = "SELECT o.id o_id,o.name o_name,o.description o_description,o.nextformid o_nextformid,o.versionid o_versionid, "+
 				 "t.id t_id, t.description t_description, "+ 
 				 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
@@ -134,7 +145,10 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 					tag.setType(tagType);
 				}
 				
-				List<OperationGroupEntity> groups = this.getOperationGroups(rs.getString("o_id"));
+				List<OperationGroupEntity> groups = new ArrayList<OperationGroupEntity>();
+				if(!lazy) {
+					groups.addAll(this.getOperationGroups("WHERE og.operationid ='"+rs.getString("o_id")+"' ",lazy));
+				}
 				
 				
 				OperationEntity operation = new OperationEntity();
@@ -167,6 +181,13 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 	}
 	public OperationEntity get(String id) {
 		List<OperationEntity> result = this.getByFilter("WHERE o.id = '"+id+"'");
+		if(result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
+	public OperationEntity get(String id,boolean lazy) {
+		List<OperationEntity> result = this.getByFilter("WHERE o.id = '"+id+"'",lazy);
 		if(result.size() > 0) {
 			return result.get(0);
 		}

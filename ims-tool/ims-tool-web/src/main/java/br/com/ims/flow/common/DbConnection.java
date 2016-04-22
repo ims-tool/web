@@ -33,6 +33,7 @@ public class DbConnection implements Serializable{
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			log.error(e.getMessage(),e);
 			e.printStackTrace();
 		} 
 		
@@ -40,10 +41,10 @@ public class DbConnection implements Serializable{
 
 	public void finalize() {
 		//System.out.println("finalizing");
-		try {rs.close();} catch(Exception e) {}
-		try {stmt.close();} catch(Exception e) {}
-		try {ctx.close();} catch(Exception e) {}
-		try {conn.close();} catch(Exception e) {}
+		try {if(rs != null) rs.close();} catch(Exception e) {}
+		try {if(stmt != null) stmt.close();} catch(Exception e) {}
+		try {if(ctx != null) ctx.close();} catch(Exception e) {}
+		try {if(conn != null)conn.close();} catch(Exception e) {}
 		
 	}
 	public boolean ExecuteSql(String sql) {
@@ -52,8 +53,6 @@ public class DbConnection implements Serializable{
 			stmt.execute(sql); 
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(sql);
 			log.error(e.getMessage(), e);
 			log.debug(sql);
 			return false;
@@ -68,7 +67,6 @@ public class DbConnection implements Serializable{
 			rs = stmt.executeQuery(sql);
 			
 	    } catch (Exception e) {
-	      e.printStackTrace();
 		  log.error(e.getMessage(), e);
 		  log.debug(sql);
 	      System.out.println(sql);

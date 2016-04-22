@@ -29,10 +29,12 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		}
 		return instance;
 	}
-	
 	public List<AnnounceEntity> getByFilter(String where) {
-		log.info("getByFilter("+where+")");
-		System.out.println("AnnounceDAO-getByFilter("+where+")");
+		return getByFilter(where,false);
+	}
+	
+	public List<AnnounceEntity> getByFilter(String where,boolean lazy) {
+		log.debug("getByFilter("+where+","+lazy+")");	
 		String sql = "SELECT a.id a_id,a.name a_name,a.description a_description,a.flushprompt a_flushprompt,a.prompt a_prompt,a.nextform a_nextform, a.versionid a_versionid,"+
 					 "t.id t_id, t.description t_description, "+ 
 					 "tt.id tt_id, tt.name tt_name,tt.description tt_description "+
@@ -65,8 +67,10 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 					tag.setType(tagType);
 				}
 				PromptEntity prompt = null;
-				if(rs.getString("a_prompt") != null && rs.getString("a_prompt").length() > 0) {
-					prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("a_prompt"));
+				if(!lazy) {
+					if(rs.getString("a_prompt") != null && rs.getString("a_prompt").length() > 0) {
+						prompt = ServicesFactory.getInstance().getPromptService().get(rs.getString("a_prompt"));
+					}
 				}
 				
 				AnnounceEntity announce = new AnnounceEntity();
@@ -84,6 +88,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} finally {
 			
 			db.finalize();
@@ -111,7 +116,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	}
 	
 	public boolean save(AnnounceEntity announce) {
-		log.info("save()");
+		log.debug("save()");
 		System.out.println("AnnounceDAO-save()");
 		boolean result = true;
 		
@@ -128,7 +133,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 
 	@Override
 	public boolean update(AnnounceEntity announce) {
-		log.info("update()");
+		log.debug("update()");
 		System.out.println("AnnounceDAO-update()");
 		boolean result = true;
 		String sql = "UPDATE flow.announce SET name='"+announce.getName()+"',description='"+announce.getDescription()+"',"
@@ -147,7 +152,7 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 	@Override
 	public boolean delete(AnnounceEntity announce) {
 		boolean result = true;
-		log.info("delete()");
+		log.debug("delete()");
 		System.out.println("AnnounceDAO-delete()");
 		String sql = "DELETE FROM flow.announce WHERE id = '"+announce.getId()+"' ";
 		DbConnection db = new DbConnection("AnnounceDAO-delete");             
