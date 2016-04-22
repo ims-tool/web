@@ -18,6 +18,7 @@ import br.com.ims.tool.nextform.model.AnnounceDto;
 import br.com.ims.tool.nextform.model.AnswerDto;
 import br.com.ims.tool.nextform.model.AudioDto;
 import br.com.ims.tool.nextform.model.DecisionChanceDto;
+import br.com.ims.tool.nextform.model.DecisionConditionDto;
 import br.com.ims.tool.nextform.model.DecisionDto;
 import br.com.ims.tool.nextform.model.DisconnectDto;
 import br.com.ims.tool.nextform.model.FlowDto;
@@ -150,6 +151,7 @@ public class NextFormService {
 			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_DECISION) {
 				
 				nextForm = processDecision(nextForm, trackId, logId);
+				jsonContext = nextForm.getJsonContexto();
 				if (nextForm == null) {
 					LogUtils.createLogDetail(FormConstants.FORM_NAO_ENCONTRADO, String.valueOf(nextFormId), logId);
 
@@ -342,19 +344,19 @@ public class NextFormService {
 		for (DecisionChanceDto decisionChance : decision.getListaDecisionChance()) {
 			
 			long trackServiceId = LogUtils.getTrackServiceId();
-			boolean condition = true;
+			DecisionConditionDto dcDto = null;
 			if(decisionChance.getCondition() > 0) {
 				try {
-					condition = dao.validarCondition(nextForm.getJsonContexto(), decisionChance.getCondition());
+					dcDto = dao.validarDecisionCondition(nextForm.getJsonContexto(), decisionChance.getCondition());
 				} catch (Exception e) {
 					e.printStackTrace();
 				} 				
 			} 
-			if(condition) {
+			if(dcDto.getCondition()) {
 				if (UraUtils.isNotNull(decisionChance) && decisionChance.getTag() > 0) {
 					LogUtils.createTrackTag(trackServiceId, trackId, logId, decisionChance.getTag());
 				}
-				return getNextFormByNextId(nextForm.getJsonContexto(), decisionChance.getNextForm());
+				return getNextFormByNextId(dcDto.getJsonContext(), decisionChance.getNextForm());
 			}
 
 		}
