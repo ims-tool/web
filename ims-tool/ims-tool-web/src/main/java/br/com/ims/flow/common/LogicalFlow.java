@@ -105,8 +105,14 @@ public class LogicalFlow implements Serializable{
     	nodeTarget.addSource(nodeSource);
 	    nodeSource.setConnection(connection);
 	    listFirstNode.remove(nodeTarget);
-	    Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();
-	    ((AbstractFormEntity)formId).setNextForm(((FormEntity)target.getData()).getId());
+	    if(!nodeTarget.getForm().getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOINPUT) &&
+	    		!nodeTarget.getForm().getFormType().getName().equalsIgnoreCase(Constants.FORM_TYPE_NOMATCH)) {
+	    	Object formId = ((FormEntity)nodeSource.getElement().getData()).getFormId();
+		    ((AbstractFormEntity)formId).setNextForm(((FormEntity)target.getData()).getId());
+	    }
+	    	
+
+	    
 	    
 	}
 	

@@ -5,10 +5,9 @@ public class Teste {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		DbConnection con;
+		DbConnection con = null;
 		try {
 			con = new DbConnection("");
-			con = con;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
