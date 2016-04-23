@@ -25,6 +25,7 @@ import br.com.ims.flow.bean.IvrEditorBean;
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.LogicalFlow;
 import br.com.ims.flow.common.Node;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AbstractFormEntity;
 import br.com.ims.flow.model.AnnounceEntity;
@@ -381,57 +382,63 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 		return element;
     }
 
-	private Object getNewObject(FormTypeEntity formType) {
-		if (formType.getName().equals("Announce")) {
-			return new AnnounceEntity();
+	private Object getNewObject(FormEntity form) {
+		Object result = null;
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_ANNOUNCE)) {
+			result = new AnnounceEntity();
 		}
-		if (formType.getName().equals("Answer")) {
-			return new AnswerEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_ANSWER)) {
+			result = new AnswerEntity();
 		}
-		if (formType.getName().equals("Choice")) {
-			return new ChoiceEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_CHOICE)) {
+			result = new ChoiceEntity();
 		}
-		if (formType.getName().equals("Condition")) {
-			return new ConditionEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_CONDITION)) {
+			result = new ConditionEntity();
 		}
-		if (formType.getName().equals("Decision")) {
-			return new DecisionEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION)) {
+			result = new DecisionEntity();
 		}
-		if (formType.getName().equals("DecisionChance")) {
-			return new DecisionChanceEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION_CHANCE)) {
+			result = new DecisionChanceEntity();
 		}
-		if (formType.getName().equals("Disconnect")) {
-			return new DisconnectEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_DISCONNECT)) {
+			result = new DisconnectEntity();
 		}
-		if (formType.getName().equals("Flow")) {
-			return new FlowEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_FLOW)) {
+			result = new FlowEntity();
 		}
-		if (formType.getName().equals("Menu")) {
-			return new MenuEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_MENU)) {
+			result = new MenuEntity();
 		}
-		if (formType.getName().equals("NoInput")) {
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
 			NoMatchInputEntity ni = new NoMatchInputEntity();
 			ni.setType("NOINPUT");
-			return ni;
+			result = ni;
 		}
-		if (formType.getName().equals("NoMatch")) {
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
 			NoMatchInputEntity ni = new NoMatchInputEntity();
 			ni.setType("NOMATCH");
-			return ni;
+			result = ni;
 		}
-		if (formType.getName().equals("Operation")) {
-			return new OperationEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_OPERATION)) {
+			result = new OperationEntity();
 		}
-		if (formType.getName().equals("PromptCollect")) {
-			return new PromptCollectEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
+			result = new PromptCollectEntity();
 		}
-		if (formType.getName().equals("Return")) {
-			return new ReturnEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_RETURN)) {
+			result = new ReturnEntity();
 		}
-		if (formType.getName().equals("Transfer")) {
-			return new TransferEntity();
+		if (form.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
+			result = new TransferEntity();
 		}
-		return null;
+		if(result != null) {
+			((AbstractFormEntity)result).setId(Util.getUID());
+			((AbstractFormEntity)result).setName(form.getName());
+			((AbstractFormEntity)result).setDescription(form.getDescription());
+		}
+		return result;
 	}
     public void loadFlow(String formId) throws Exception {
     	log.debug("loadFlow("+formId+")");
@@ -445,7 +452,7 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
     			try {
 					if ((AbstractFormEntity) form.getFormId() == null) {
 						log.debug("Form: "+(form == null ? formId : form.getName())+", formID = NULL");
-						form.setFormId(getNewObject(form.getFormType()));
+						form.setFormId(getNewObject(form));
 						error = true;
 						listErrors.add(form == null ? formId : form.getName());
 					}
@@ -849,8 +856,8 @@ public class IvrEditorService extends AbstractBeanService<IvrEditorBean>{
 			}
 			bean.getModel().connect(conn);
 			bean.getLogicalFlow().connect(source, target, conn);
+			
 
-			//this.connectForm(source, target);
 		}
     }
     

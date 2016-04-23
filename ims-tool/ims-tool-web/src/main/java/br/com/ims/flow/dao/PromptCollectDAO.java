@@ -216,7 +216,8 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		String sql = "INSERT INTO flow.promptcollect (id,name,description,flushprompt,prompt,grammar,noinput,nomatch,noinput_nextform,nomatch_nextform,"
 					+ "noinput_tag,nomatch_tag,fetchtimeout,interdigittimeout,terminatingtimeout,terminatingcharacter,nextform,tag,versionid) "+
 					 "VALUES ('"+promptCollect.getId()+"','"+promptCollect.getName()+"',"
-					+ "'"+promptCollect.getDescription()+"','"+promptCollect.getFlushprompt()+"',"
+					+ "'"+promptCollect.getDescription()+"',"
+					+ (promptCollect.getFlushprompt() == null ? "NULL" : promptCollect.getFlushprompt() )+","
 					+ (promptCollect.getPrompt() == null ? "NULL" : promptCollect.getPrompt().getId())+","
 					+ (promptCollect.getGrammar() == null ? "NULL" : promptCollect.getGrammar().getId())+","
 					+ (promptCollect.getNoInput() == null ? "NULL" : promptCollect.getNoInput().getId())+","
@@ -243,7 +244,8 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 	public boolean update(PromptCollectEntity promptCollect) {
 		boolean result = true;
 		String sql = "UPDATE flow.promptcollect SET name = '"+promptCollect.getName()+"', "+
-		             "description = '"+promptCollect.getDescription()+"',flushprompt = "+promptCollect.getFlushprompt()+", "+
+		             "description = '"+promptCollect.getDescription()+"',"+
+		             "flushprompt = "+(promptCollect.getFlushprompt()== null ? "NULL" : promptCollect.getFlushprompt())+", "+
 				     "prompt= "+(promptCollect.getPrompt() == null ? "NULL" :  promptCollect.getPrompt().getId())+","+
 				     "grammar= "+(promptCollect.getGrammar() == null ? "NULL" : promptCollect.getGrammar().getId())+","+
 				     "noinput="+(promptCollect.getNoInput() == null ? "NULL" : promptCollect.getNoInput().getId())+", "+
