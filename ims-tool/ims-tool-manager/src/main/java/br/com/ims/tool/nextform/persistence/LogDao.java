@@ -451,7 +451,7 @@ public class LogDao {
 			stm.setLong(2, trackId);
 			stm.setLong(3, logId);
 			stm.setLong(4, tagId);
-//			stm.executeUpdate();
+			stm.executeUpdate();
 
 		} catch (SQLException e) {
 			logger.error("Erro ao Inserir TRACKTAG ", e);
