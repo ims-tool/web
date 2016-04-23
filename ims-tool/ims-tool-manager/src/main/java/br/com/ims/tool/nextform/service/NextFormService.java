@@ -344,7 +344,11 @@ public class NextFormService {
 		for (DecisionChanceDto decisionChance : decision.getListaDecisionChance()) {
 			
 			long trackServiceId = LogUtils.getTrackServiceId();
-			DecisionConditionDto dcDto = null;
+			
+			DecisionConditionDto dcDto = new DecisionConditionDto();
+			dcDto.setCondition(Boolean.TRUE);
+			dcDto.setJsonContext(nextForm.getJsonContexto());
+			
 			if(decisionChance.getCondition() > 0) {
 				try {
 					dcDto = dao.validarDecisionCondition(nextForm.getJsonContexto(), decisionChance.getCondition());
