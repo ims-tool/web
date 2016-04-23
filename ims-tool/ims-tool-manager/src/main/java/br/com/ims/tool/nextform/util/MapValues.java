@@ -17,6 +17,9 @@ public interface MapValues extends Serializable {
 	public static final String AUDIO_PATH = "parameters.audio_path";
 	public static final String TP_LOJA = "customer.loja";
 	public static final String CLASSIFICACAO_TRANSF = "customer.transfer";
+	public static final String PARTNER = "customer.partner";
+	
+	
 	
 	
 	//Mensagens URA
@@ -53,7 +56,7 @@ public interface MapValues extends Serializable {
 	public static final String CHAMADOR_CONTATO = "call.chamadorContato";
 	public static final String VDN = "call.vdn";
 	public static final String ORIGEM = "call.origem";
-	public static final String PARTNER = "customer.partner";
+	
 
 	public static final String DOCUMENT = "customer.document";
 	public static final String DOCUMENT_TYPE = "customer.documentType";

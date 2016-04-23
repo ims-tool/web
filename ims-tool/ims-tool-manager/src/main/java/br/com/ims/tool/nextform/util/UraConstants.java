@@ -8,6 +8,7 @@ public interface UraConstants {
 	public static final String NC = "NC";
 	public static final String SUCCESS = "SUCCESS";
 	public static final String FAIL = "FAIL";
+	public static final String NOT_FOUND = "NOT_FOUND";
 
 	public static final String DNIS_TRANSF_INTERNA1 = "2001015";
 	public static final String DNIS_TRANSF_INTERNA2 = "2001016";

@@ -227,11 +227,18 @@ public class MethodsCatalog {
 			String E_TP_ESTRS = estr.getNumeric2();
 			String E_TP_NEGS = neg.getNumeric2();
 			String E_TP_SISTS = sist.getNumeric2();
+			Integer E_TP_ESTR = -1;
+			Integer E_TP_NEG = -1;
+			Integer E_TP_SIST = -1;
 
-			Integer E_TP_ESTR = Integer.valueOf(E_TP_ESTRS);
-			Integer E_TP_NEG = Integer.valueOf(E_TP_NEGS);
-			Integer E_TP_SIST = Integer.valueOf(E_TP_SISTS);
-			String tp_loja = "";
+			try {
+				E_TP_ESTR = Integer.valueOf(E_TP_ESTRS);
+				E_TP_NEG = Integer.valueOf(E_TP_NEGS);
+				E_TP_SIST = Integer.valueOf(E_TP_SISTS);
+			} catch (Exception e) {
+				methodInvocationVO.setValue(UraConstants.NOT_FOUND);
+			}
+			String tp_loja = "NC";
 
 			if (E_TP_NEG == 1 && E_TP_ESTR == 3) { // BOTICÁRIO LOJA
 				tp_loja = UraConstants.TP_BOTICARIO_LOJA;
@@ -258,8 +265,13 @@ public class MethodsCatalog {
 			}
 
 			methodInvocationVO.setValue(UraConstants.SUCCESS);
+			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.PARTNER, partner, true);
 			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.TP_LOJA, tp_loja, true);
 			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.CLASSIFICACAO_TRANSF, E_CLASSIFIATEND, true);
+			
+			if(tp_loja.equalsIgnoreCase("NC")){
+				methodInvocationVO.setValue(UraConstants.NOT_FOUND);
+			}
 
 		} catch (AxisFault e) {
 			methodInvocationVO.setValue(UraConstants.FAIL);
