@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ChoiceEntity;
 import br.com.ims.flow.model.ConditionEntity;
@@ -288,6 +290,8 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 						
 		}
 		db.finalize();
+		if(result)
+			Util.audit(menu, Constants.AUDIT_TYPE_ADD);
 		return result;
 
 	}
@@ -331,6 +335,8 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 						
 		}
 		db.finalize();
+		if(result)
+			Util.audit(menu, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 		
 		
@@ -349,6 +355,8 @@ public class MenuDAO extends AbstractDAO<MenuEntity>{
 			result = db.ExecuteSql(sql);
 		}
 		db.finalize();
+		if(result)
+			Util.audit(menu, Constants.AUDIT_TYPE_DELETE);
 		return result;
 		
 	}

@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.GrammarEntity;
 
 @SuppressWarnings("serial")
@@ -83,6 +85,8 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 		DbConnection db = new DbConnection("GrammarDAO-save");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_ADD);
 		return result;
 	}
 
@@ -94,6 +98,8 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 		DbConnection db = new DbConnection("GrammarDAO-update");            
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 		
 	}
@@ -105,6 +111,8 @@ public class GrammarDAO extends AbstractDAO<GrammarEntity> {
 		DbConnection db = new DbConnection("GrammarDAO-delete");         
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_DELETE);
 		return result;
 	}
 

@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
 
@@ -83,6 +85,8 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 		DbConnection db = new DbConnection("TagDAO-save");
 		boolean result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(tag, Constants.AUDIT_TYPE_ADD);
 		return result;
 		
 	}
@@ -97,6 +101,8 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 		DbConnection db = new DbConnection("TagDAO-update");
 		boolean result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 	}
 
@@ -109,6 +115,8 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 		DbConnection db = new DbConnection("TagDAO-delete");
 		boolean result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_DELETE);
 		return result;
 		
 	}

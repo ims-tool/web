@@ -7,8 +7,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
-import br.com.ims.flow.model.AudioEntity;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.ConditionGroupEntity;
 import br.com.ims.flow.model.ConditionMapEntity;
@@ -386,11 +387,12 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 								db.ExecuteSql(sql);
 								return result;
 							}
+							
 						}
 						
 					}
 				}
-							
+				Util.audit(entity, Constants.AUDIT_TYPE_ADD);			
 			}
 		} finally {
 			db.finalize();
@@ -473,6 +475,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 				}
 							
 			}
+			Util.audit(entity, Constants.AUDIT_TYPE_UPDATE);
 		} finally {
 			db.finalize();
 		}
@@ -504,6 +507,7 @@ public class ConditionDAO extends AbstractDAO<ConditionEntity> {
 			}
 			sql = "DELETE FROM flow.condition WHERE id = '"+entity.getId()+"' ";
 			result = db.ExecuteSql(sql);
+			Util.audit(entity, Constants.AUDIT_TYPE_DELETE);
 		}finally {
 			db.finalize();
 		}

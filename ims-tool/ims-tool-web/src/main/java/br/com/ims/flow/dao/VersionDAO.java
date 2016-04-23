@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.VersionEntity;
@@ -83,6 +84,8 @@ public class VersionDAO extends AbstractDAO<VersionEntity> {
 		DbConnection db = new DbConnection("VersionDAO-save");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_ADD);
 		return result;
 	}
 

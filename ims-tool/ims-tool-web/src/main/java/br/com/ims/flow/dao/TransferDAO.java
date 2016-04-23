@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.PromptEntity;
@@ -206,6 +208,8 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 						
 		}
 		db.finalize();
+		if(result)
+			Util.audit(transfer, Constants.AUDIT_TYPE_ADD);
 		return result;
 
 	}
@@ -241,6 +245,8 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 						
 		}
 		db.finalize();
+		if(result)
+			Util.audit(transfer, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 		
 		
@@ -258,6 +264,8 @@ public class TransferDAO extends AbstractDAO<TransferEntity>{
 			result = db.ExecuteSql(sql);
 		}
 		db.finalize();
+		if(result)
+			Util.audit(transfer, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 		
 	}

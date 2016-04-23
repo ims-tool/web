@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.DisconnectEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
@@ -104,6 +106,8 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		DbConnection db = new DbConnection("DecisionDAO-save");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(disconnect, Constants.AUDIT_TYPE_ADD);
 		return result;
 	}
 
@@ -117,6 +121,8 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		DbConnection db = new DbConnection("DecisionDAO-update");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(disconnect, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 		
 	}
@@ -129,6 +135,8 @@ public class DisconnectDAO extends AbstractDAO<DisconnectEntity>{
 		DbConnection db = new DbConnection("DecisionDAO-delete");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(disconnect, Constants.AUDIT_TYPE_DELETE);
 		return result;
 		
 	}

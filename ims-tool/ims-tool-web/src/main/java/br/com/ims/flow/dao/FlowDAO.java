@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.FlowEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
@@ -101,6 +103,8 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 		DbConnection db = new DbConnection("FlowDAO-save");            
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_ADD);
 		return result;
 	}
 
@@ -114,6 +118,8 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 		DbConnection db = new DbConnection("FlowDAO-update");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 		
 	}
@@ -125,6 +131,8 @@ public class FlowDAO extends AbstractDAO<FlowEntity>{
 		DbConnection db = new DbConnection("FlowDAO-delete");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_DELETE);
 		return result;
 		
 	}

@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.AudioEntity;
 
 @SuppressWarnings("serial")
@@ -89,14 +90,16 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 	public boolean save(AudioEntity audio) {
 		boolean result = true;
 		log.debug("save()");
-		audit(audio,Constants.AUDIT_TYPE_ADD);
 		String sql = "INSERT INTO flow.audio (id,type,name,description,path,versionid) "+
 					 "VALUES ('"+audio.getId()+"','"+audio.getType()+"','"+audio.getName()+"','"+audio.getDescription()+"','"+audio.getPath()+"',"+audio.getVersionId()+") ";
 		             
 		DbConnection db = new DbConnection("AudioDAO-save");
 		result = db.ExecuteSql(sql);
 		db.finalize();
-		
+		if(result) {
+			Util.audit(audio, Constants.AUDIT_TYPE_ADD);
+		}
+
 		return result;
 	}
 
@@ -110,6 +113,9 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		DbConnection db = new DbConnection("AudioDAO-update");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result) {
+			Util.audit(audio, Constants.AUDIT_TYPE_UPDATE);
+		}
 		return result;
 		
 	}
@@ -122,6 +128,9 @@ public class AudioDAO extends AbstractDAO<AudioEntity>{
 		DbConnection db = new DbConnection("AudioDAO-delete");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result) {
+			Util.audit(audio, Constants.AUDIT_TYPE_DELETE);
+		}
 		return result;
 		
 	}

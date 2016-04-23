@@ -7,6 +7,7 @@ import java.util.List;
 
 import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AbstractEntity;
 import br.com.ims.flow.model.AbstractFormEntity;
@@ -252,6 +253,8 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_OPERATION)) {
 			result = ServicesFactory.getInstance().getOperationService().save((OperationEntity)obj);
 		}
+		if(result)
+			Util.audit(obj, Constants.AUDIT_TYPE_ADD);
 		return result;
 	}
 	public boolean deleteObj(FormEntity entity) {
@@ -287,6 +290,8 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
 			result = ServicesFactory.getInstance().getTransferService().delete((TransferEntity)obj);
 		}
+		if(result)
+			Util.audit(obj, Constants.AUDIT_TYPE_DELETE);
 		return result;
 	}
 	public boolean updateObj(FormEntity entity) {
@@ -322,6 +327,8 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		if(entity.getFormType().getName().equals(Constants.FORM_TYPE_TRANSFER)) {
 			result = ServicesFactory.getInstance().getTransferService().update((TransferEntity)obj);
 		}
+		if(result)
+			Util.audit(obj, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 	}
 	
@@ -337,7 +344,8 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		DbConnection db = new DbConnection("FormDAO-save");
 		result = db.ExecuteSql(sql);
 		db.finalize();
-		
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_ADD);
 		return result;
 		
 	}
@@ -356,6 +364,8 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		DbConnection db = new DbConnection("FormDAO-update");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)	
+			Util.audit(entity, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 	}
 
@@ -369,6 +379,8 @@ public class FormDAO extends AbstractDAO<FormEntity>{
 		DbConnection db = new DbConnection("FormDAO-delete");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_DELETE);	
 		return result;
 	}
 

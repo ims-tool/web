@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AnnounceEntity;
 import br.com.ims.flow.model.PromptEntity;
@@ -127,6 +129,10 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 					 		+(announce.getTag() == null ? "NULL" : announce.getTag().getId())+",'"+announce.getVersionId()+"') ";
 		DbConnection db = new DbConnection("AnnounceDAO-save");             
 		result = db.ExecuteSql(sql);
+		if(result) {
+			Util.audit(announce, Constants.AUDIT_TYPE_ADD);
+		}
+			
 		db.finalize();
 		return result;
 	}
@@ -144,6 +150,9 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 					 "WHERE id = '"+announce.getId()+"' ";
 		DbConnection db = new DbConnection("AnnounceDAO-update");             
 		result = db.ExecuteSql(sql);
+		if(result) {
+			Util.audit(announce, Constants.AUDIT_TYPE_UPDATE);
+		}
 		db.finalize();
 		return result;
 		
@@ -157,6 +166,9 @@ public class AnnounceDAO extends AbstractDAO<AnnounceEntity>{
 		String sql = "DELETE FROM flow.announce WHERE id = '"+announce.getId()+"' ";
 		DbConnection db = new DbConnection("AnnounceDAO-delete");             
 		result = db.ExecuteSql(sql);
+		if(result) {
+			Util.audit(announce, Constants.AUDIT_TYPE_DELETE);
+		}
 		db.finalize();
 		return result;
 		

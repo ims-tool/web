@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.AnswerEntity;
 import br.com.ims.flow.model.TagEntity;
 import br.com.ims.flow.model.TagTypeEntity;
@@ -110,6 +112,9 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		DbConnection db = new DbConnection("AnswerDAO-save");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result) {
+			Util.audit(answer, Constants.AUDIT_TYPE_ADD);
+		}
 		return result;
 	}
 
@@ -124,6 +129,10 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		DbConnection db = new DbConnection("AnswerDAO-update");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result) {
+			Util.audit(answer, Constants.AUDIT_TYPE_UPDATE);
+		}
+
 		return result;
 		
 	}
@@ -136,6 +145,10 @@ public class AnswerDAO extends AbstractDAO<AnswerEntity>{
 		DbConnection db = new DbConnection("AnswerDAO-delete");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result) {
+			Util.audit(answer, Constants.AUDIT_TYPE_DELETE);
+		}
+
 		return result;
 		
 	}

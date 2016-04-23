@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.GrammarEntity;
 import br.com.ims.flow.model.NoMatchInputEntity;
@@ -232,6 +234,8 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		DbConnection db = new DbConnection("PromptCollectDAO-save");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(promptCollect, Constants.AUDIT_TYPE_ADD);
 		return result;
 	}
 
@@ -258,6 +262,8 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		DbConnection db = new DbConnection("PromptCollectDAO-update");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(promptCollect, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 		
 	}
@@ -269,6 +275,8 @@ public class PromptCollectDAO extends AbstractDAO<PromptCollectEntity>{
 		DbConnection db = new DbConnection("PromptCollectDAO-delete");             
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(promptCollect, Constants.AUDIT_TYPE_DELETE);
 		return result;
 		
 	}

@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.ConditionMapEntity;
 
 @SuppressWarnings("serial")
@@ -101,6 +103,8 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		DbConnection db = new DbConnection("ConditionMapDAO-save");
 		result =  db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_ADD);
 		return result;
 		
 	}
@@ -115,6 +119,8 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		DbConnection db = new DbConnection("ConditionMapDAO-update");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_UPDATE);
 		return result;
 		
 	}
@@ -128,6 +134,8 @@ public class ConditionMapDAO extends AbstractDAO<ConditionMapEntity> {
 		DbConnection db = new DbConnection("ConditionMapDAO-delete");
 		result = db.ExecuteSql(sql);
 		db.finalize();
+		if(result)
+			Util.audit(entity, Constants.AUDIT_TYPE_DELETE);
 		return result;
 	}
 

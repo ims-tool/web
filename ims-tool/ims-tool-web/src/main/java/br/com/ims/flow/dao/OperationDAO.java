@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.DbConnection;
+import br.com.ims.flow.common.Util;
 import br.com.ims.flow.model.OperationEntity;
 import br.com.ims.flow.model.OperationGroupEntity;
 import br.com.ims.flow.model.OperationMapEntity;
@@ -249,6 +251,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				}
 							
 			}
+			Util.audit(entity, Constants.AUDIT_TYPE_ADD);
 		} finally {
 			db.finalize();
 		}
@@ -310,6 +313,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				}
 							
 			}
+			Util.audit(entity, Constants.AUDIT_TYPE_UPDATE);
 		} finally {
 			db.finalize();
 		}
@@ -332,6 +336,7 @@ public class OperationDAO extends AbstractDAO<OperationEntity>{
 				return result;
 			sql = "DELETE FROM flow.operation WHERE id = '"+entity.getId()+"' ";
 			result = db.ExecuteSql(sql);
+			Util.audit(entity, Constants.AUDIT_TYPE_DELETE);
 		} finally {
 			db.finalize();
 		}
