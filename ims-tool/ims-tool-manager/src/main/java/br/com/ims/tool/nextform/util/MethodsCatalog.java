@@ -197,93 +197,101 @@ public class MethodsCatalog {
 	}
 
 	public MethodInvocationVO getSAPClient(String jsonContext, Map<String, String> parameters) {
-
+		
 		MethodInvocationVO methodInvocationVO = MethodInvocationVO.getInstance();
 		methodInvocationVO.setJsonContext(jsonContext);
-		methodInvocationVO.setValue(UraConstants.FAIL);
-
-		String transactionURL = "http://sappcrm.boticario.net:8002/sap/bc/srt/rfc/sap/z_crmf_get_class_cli2/600/z_crmf_get_class_cli2/binding";
-		String transactionTimeout = "10";
-		String partner = MethodInvocationUtils.getContextValue(jsonContext, MapValues.PROMPT_COLLECT);
-
-		try {
-			br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Char10 partner10 = new br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Char10();
-			Options options = new Options();
-			options.setTimeOutInMilliSeconds(Integer.parseInt(transactionTimeout) * 1000);
-			options.setTo(new EndpointReference(transactionURL));
-			Z_CRMF_GET_CLASS_CLI2Stub stub = new Z_CRMF_GET_CLASS_CLI2Stub(transactionURL);
-			stub._getServiceClient().setOptions(options);
-			Z_CRMF_GET_CLASS_CLI2Stub.Z_CRMF_GET_CLASS_CLI2 partnerCLI2 = new Z_CRMF_GET_CLASS_CLI2Stub.Z_CRMF_GET_CLASS_CLI2();
-			partner10.setChar10(partner);
-			partnerCLI2.setI_PARTNER(partner10);
-			Z_CRMF_GET_CLASS_CLI2Response response = stub.z_CRMF_GET_CLASS_CLI2(partnerCLI2);
-
-			Char2 classif = response.getE_CLASSIFIC();
-			br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Numeric2 estr = response.getE_TP_ESTR();
-			br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Numeric2 neg = response.getE_TP_NEG();
-			br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Numeric2 sist = response.getE_TP_SIST();
-
-			String E_CLASSIFIATEND = classif.getChar2();
-			String E_TP_ESTRS = estr.getNumeric2();
-			String E_TP_NEGS = neg.getNumeric2();
-			String E_TP_SISTS = sist.getNumeric2();
-			Integer E_TP_ESTR = -1;
-			Integer E_TP_NEG = -1;
-			Integer E_TP_SIST = -1;
-
-			try {
-				E_TP_ESTR = Integer.valueOf(E_TP_ESTRS);
-				E_TP_NEG = Integer.valueOf(E_TP_NEGS);
-				E_TP_SIST = Integer.valueOf(E_TP_SISTS);
-			} catch (Exception e) {
-				methodInvocationVO.setValue(UraConstants.NOT_FOUND);
-			}
-			String tp_loja = "NC";
-
-			if (E_TP_NEG == 1 && E_TP_ESTR == 3) { // BOTICÁRIO LOJA
-				tp_loja = UraConstants.TP_BOTICARIO_LOJA;
-			} else if (E_TP_NEG == 4 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3)) {// EUDORA
-																								// LOJA
-				tp_loja = UraConstants.TP_EUDORA_LOJA;
-			} else if (E_TP_NEG == 3 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3)) {// QDB
-				tp_loja = UraConstants.TP_QDB;
-			} else if (E_TP_NEG == 2 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3)) { // TBB
-				tp_loja = UraConstants.TP_TBB;
-			} else if (E_TP_NEG == 5 && E_TP_ESTR == 3) { // BOTICÁRIO
-															// INTERBELLE
-				tp_loja = UraConstants.TP_BOTICARIO_INTERBELLE;
-			} else if (E_TP_NEG == 6 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3)) { // QDB
-																								// INTERBELLE
-				tp_loja = UraConstants.TP_QDB_INTERBELLE;
-			} else if ((E_TP_NEG == 1 && E_TP_ESTR == 1) || (E_TP_NEG == 5 && E_TP_ESTR == 1)) { // BOTICÁRIO
-																									// VD
-				tp_loja = UraConstants.TP_BOTICARIO_VD;
-			} else if ((E_TP_NEG == 1 && E_TP_ESTR == 2) || (E_TP_NEG == 5 && E_TP_ESTR == 2)
-					|| (E_TP_NEG == 7 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3))) { // BOTICÁRIO
-																									// HIBRIDO
-				tp_loja = UraConstants.TP_HIBRIDO;
-			}
-
-			methodInvocationVO.setValue(UraConstants.SUCCESS);
-			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.PARTNER, partner, true);
-			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.TP_LOJA, tp_loja, true);
-			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.CLASSIFICACAO_TRANSF, E_CLASSIFIATEND, true);
+//		if(StringUtils.isNotBlank(MethodInvocationUtils.getContextValue(jsonContext, MapValues.SAP_VALUE))){
+//			methodInvocationVO.setValue(MethodInvocationUtils.getContextValue(jsonContext, MapValues.SAP_VALUE));
+//		}else{
 			
-			if(tp_loja.equalsIgnoreCase("NC")){
-				methodInvocationVO.setValue(UraConstants.NOT_FOUND);
+			methodInvocationVO.setValue(UraConstants.FAIL);
+			
+			String transactionURL = "http://sappcrm.boticario.net:8002/sap/bc/srt/rfc/sap/z_crmf_get_class_cli2/600/z_crmf_get_class_cli2/binding";
+			String transactionTimeout = "10";
+			String partner = MethodInvocationUtils.getContextValue(jsonContext, MapValues.PROMPT_COLLECT);
+			
+			try {
+				br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Char10 partner10 = new br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Char10();
+				Options options = new Options();
+				options.setTimeOutInMilliSeconds(Integer.parseInt(transactionTimeout) * 1000);
+				options.setTo(new EndpointReference(transactionURL));
+				Z_CRMF_GET_CLASS_CLI2Stub stub = new Z_CRMF_GET_CLASS_CLI2Stub(transactionURL);
+				stub._getServiceClient().setOptions(options);
+				Z_CRMF_GET_CLASS_CLI2Stub.Z_CRMF_GET_CLASS_CLI2 partnerCLI2 = new Z_CRMF_GET_CLASS_CLI2Stub.Z_CRMF_GET_CLASS_CLI2();
+				partner10.setChar10(partner);
+				partnerCLI2.setI_PARTNER(partner10);
+				Z_CRMF_GET_CLASS_CLI2Response response = stub.z_CRMF_GET_CLASS_CLI2(partnerCLI2);
+				
+				Char2 classif = response.getE_CLASSIFIC();
+				br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Numeric2 estr = response.getE_TP_ESTR();
+				br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Numeric2 neg = response.getE_TP_NEG();
+				br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Numeric2 sist = response.getE_TP_SIST();
+				
+				String E_CLASSIFIATEND = classif.getChar2();
+				String E_TP_ESTRS = estr.getNumeric2();
+				String E_TP_NEGS = neg.getNumeric2();
+				String E_TP_SISTS = sist.getNumeric2();
+				Integer E_TP_ESTR = -1;
+				Integer E_TP_NEG = -1;
+				Integer E_TP_SIST = -1;
+				
+				try {
+					E_TP_ESTR = Integer.valueOf(E_TP_ESTRS);
+					E_TP_NEG = Integer.valueOf(E_TP_NEGS);
+					E_TP_SIST = Integer.valueOf(E_TP_SISTS);
+				} catch (Exception e) {
+					methodInvocationVO.setValue(UraConstants.NOT_FOUND);
+					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SAP_VALUE, UraConstants.NOT_FOUND, true);
+				}
+				String tp_loja = "NC";
+				
+				if (E_TP_NEG == 1 && E_TP_ESTR == 3) { // BOTICÁRIO LOJA
+					tp_loja = UraConstants.TP_BOTICARIO_LOJA;
+				} else if (E_TP_NEG == 4 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3)) {// EUDORA
+					// LOJA
+					tp_loja = UraConstants.TP_EUDORA_LOJA;
+				} else if (E_TP_NEG == 3 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3)) {// QDB
+					tp_loja = UraConstants.TP_QDB;
+				} else if (E_TP_NEG == 2 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3)) { // TBB
+					tp_loja = UraConstants.TP_TBB;
+				} else if (E_TP_NEG == 5 && E_TP_ESTR == 3) { // BOTICÁRIO
+					// INTERBELLE
+					tp_loja = UraConstants.TP_BOTICARIO_INTERBELLE;
+				} else if (E_TP_NEG == 6 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3)) { // QDB
+					// INTERBELLE
+					tp_loja = UraConstants.TP_QDB_INTERBELLE;
+				} else if ((E_TP_NEG == 1 && E_TP_ESTR == 1) || (E_TP_NEG == 5 && E_TP_ESTR == 1)) { // BOTICÁRIO
+					// VD
+					tp_loja = UraConstants.TP_BOTICARIO_VD;
+				} else if ((E_TP_NEG == 1 && E_TP_ESTR == 2) || (E_TP_NEG == 5 && E_TP_ESTR == 2)
+						|| (E_TP_NEG == 7 && (E_TP_ESTR == 1 || E_TP_ESTR == 2 || E_TP_ESTR == 3))) { // BOTICÁRIO
+					// HIBRIDO
+					tp_loja = UraConstants.TP_HIBRIDO;
+				}
+				
+				methodInvocationVO.setValue(UraConstants.SUCCESS);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.PARTNER, partner, true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SAP_VALUE, UraConstants.SUCCESS, true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.TP_LOJA, tp_loja, true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.CLASSIFICACAO_TRANSF, E_CLASSIFIATEND, true);
+				
+				if(tp_loja.equalsIgnoreCase("NC")){
+					methodInvocationVO.setValue(UraConstants.NOT_FOUND);
+					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SAP_VALUE, UraConstants.NOT_FOUND, true);
+				}
+				
+			} catch (AxisFault e) {
+				methodInvocationVO.setValue(UraConstants.FAIL);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SAP_VALUE, UraConstants.FAIL, true);
+			} catch (RemoteException e) {
+				methodInvocationVO.setValue(UraConstants.FAIL);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SAP_VALUE, UraConstants.FAIL, true);
+			} catch (Exception ex) {
+				methodInvocationVO.setValue(UraConstants.FAIL);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SAP_VALUE, UraConstants.FAIL, true);
 			}
-
-		} catch (AxisFault e) {
-			methodInvocationVO.setValue(UraConstants.FAIL);
-		} catch (RemoteException e) {
-			methodInvocationVO.setValue(UraConstants.FAIL);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			methodInvocationVO.setValue(UraConstants.FAIL);
-		}
-
-		methodInvocationVO.setJsonContext(jsonContext);
-
+			methodInvocationVO.setJsonContext(jsonContext);
+//		}
 		return methodInvocationVO;
 	}
 

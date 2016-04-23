@@ -79,7 +79,7 @@ public class LogAuditFacadeREST extends AbstractFacade<Audit> {
     	try {
     		logAudit.setArtifactid((Integer) jsonObj.get("artifactid"));
 		} catch (Exception e) {
-			logAudit.setArtifactid(-1);
+			logAudit.setArtifactid(0);
 		}
     	try {
     		logAudit.setValueid((Integer) jsonObj.get("valueid"));
