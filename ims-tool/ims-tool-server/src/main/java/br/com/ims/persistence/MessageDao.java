@@ -57,7 +57,7 @@ public class MessageDao {
 				message.setDdd_not_in(rs.getString(8));
 				message.setSpot(rs.getString(9));
 				message.setMsg_order(rs.getString(10));
-				message.setPath(path + message.getId().toString()+".wav");
+				message.setPath(path +"/msg/"+ message.getId().toString()+".wav");
 				message.setPath(message.getPath().trim());
 				listMessage.add(message);
 
@@ -288,7 +288,7 @@ public class MessageDao {
 		String path = "http://localhost:8080/_audios/msg/";
 		try {
 			conn = new ConnectionDB();
-			String query = "select value from flow.parameters where name like '%path_msg%'";
+			String query = "select value from flow.parameters where name like '%AUDIO_PATH%'";
 
 			rs = conn.ExecuteQuery(query);
 			
