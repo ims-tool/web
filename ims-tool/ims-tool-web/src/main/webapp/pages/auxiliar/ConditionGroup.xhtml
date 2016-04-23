@@ -118,9 +118,13 @@
 				 			                 filter="true" filterMatchMode="startsWith" 
 				 			                 label="label_auxiliar_conditiongroup_operation"
 				 			                 style="margin-bottom:5px">
-				 				<f:selectItem itemLabel="Equal (=)" itemValue="=" />
-				 				<f:selectItem itemLabel="BETWEEN" itemValue="BETWEEN" />
+				 				<f:selectItem itemLabel="=" itemValue="=" />
+				 				<f:selectItem itemLabel="&gt;" itemValue="&gt;" />
+				 				<f:selectItem itemLabel="&lt;" itemValue="&lt;" />
 				 				<f:selectItem itemLabel="IN" itemValue="IN" />
+				 				<f:selectItem itemLabel="NOT IN" itemValue="NOT IN" />
+				 				<f:selectItem itemLabel="BETWEEN" itemValue="BETWEEN" />
+				 				
 				 				<p:ajax event="change"  update="panelConditionGroupAddValues1"/>
 				 			</p:selectOneMenu>
 				 		</p:panelGrid>
@@ -129,31 +133,31 @@
 			            	<p:inputText id="auxiliar_conditiongroup_value1" value="#{bean.conditionValue.value1}" label="label_auxiliar_conditiongroup_value1"  style="width:100px;margin:0px 5px 5px 0px" />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value2" for="auxiliar_conditiongroup_value2" value="Value2:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value2" value="#{bean.conditionValue.value2}" label="label_auxiliar_conditiongroup_value2" disabled="#{bean.conditionValue.operation eq '='}" style="width:100px;margin:0px 5px 5px 0px"  />
+			            	<p:inputText id="auxiliar_conditiongroup_value2" value="#{bean.conditionValue.value2}" label="label_auxiliar_conditiongroup_value2" disabled="#{bean.conditionValue.operation eq '=' or bean.conditionValue.operation eq '&gt;' or bean.conditionValue.operation eq '&lt;'}" style="width:100px;margin:0px 5px 5px 0px"  />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value3" for="auxiliar_conditiongroup_value3" value="Value3:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value3" value="#{bean.conditionValue.value3}" label="label_auxiliar_conditiongroup_value3" disabled="#{bean.conditionValue.operation ne 'IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<p:inputText id="auxiliar_conditiongroup_value3" value="#{bean.conditionValue.value3}" label="label_auxiliar_conditiongroup_value3" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value4" for="auxiliar_conditiongroup_value4" value="Value4:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value4" value="#{bean.conditionValue.value4}" label="label_auxiliar_conditiongroup_value4" disabled="#{bean.conditionValue.operation ne 'IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<p:inputText id="auxiliar_conditiongroup_value4" value="#{bean.conditionValue.value4}" label="label_auxiliar_conditiongroup_value4" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value5" for="auxiliar_conditiongroup_value5" value="Value5:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value5" value="#{bean.conditionValue.value5}" label="label_auxiliar_conditiongroup_value5" disabled="#{bean.conditionValue.operation ne 'IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<p:inputText id="auxiliar_conditiongroup_value5" value="#{bean.conditionValue.value5}" label="label_auxiliar_conditiongroup_value5" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value6" for="auxiliar_conditiongroup_value6" value="Value6:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value6" value="#{bean.conditionValue.value6}" label="label_auxiliar_conditiongroup_value6" disabled="#{bean.conditionValue.operation ne 'IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<p:inputText id="auxiliar_conditiongroup_value6" value="#{bean.conditionValue.value6}" label="label_auxiliar_conditiongroup_value6" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value7" for="auxiliar_conditiongroup_value7" value="Value7:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value7" value="#{bean.conditionValue.value7}" label="label_auxiliar_conditiongroup_value7" disabled="#{bean.conditionValue.operation ne 'IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<p:inputText id="auxiliar_conditiongroup_value7" value="#{bean.conditionValue.value7}" label="label_auxiliar_conditiongroup_value7" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value8" for="auxiliar_conditiongroup_value8" value="Value8:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value8" value="#{bean.conditionValue.value8}" label="label_auxiliar_conditiongroup_value8" disabled="#{bean.conditionValue.operation ne 'IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<p:inputText id="auxiliar_conditiongroup_value8" value="#{bean.conditionValue.value8}" label="label_auxiliar_conditiongroup_value8" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value9" for="auxiliar_conditiongroup_value9" value="Value9:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value9" value="#{bean.conditionValue.value9}" label="label_auxiliar_conditiongroup_value9" disabled="#{bean.conditionValue.operation ne 'IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<p:inputText id="auxiliar_conditiongroup_value9" value="#{bean.conditionValue.value9}" label="label_auxiliar_conditiongroup_value9" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_value10" for="auxiliar_conditiongroup_value10" value="Value10:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value10" value="#{bean.conditionValue.value10}" label="label_auxiliar_conditiongroup_value10" disabled="#{bean.conditionValue.operation ne 'IN'}" style="width:100px;margin:0px 5px 5px 0px" />		            			            		            
+			            	<p:inputText id="auxiliar_conditiongroup_value10" value="#{bean.conditionValue.value10}" label="label_auxiliar_conditiongroup_value10" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />		            			            		            
 				        </p:panelGrid>
 				       <p:panelGrid id="panelConditionGroupTag" columns="3" style="margin-bottom:10px" >	
 			            	<h:outputLabel id="label_auxiliar_conditiongroup_tagTrue" for="auxiliar_conditiongroup_tagTrue" value="Tag True:" />

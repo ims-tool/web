@@ -206,6 +206,19 @@ public class ConditionGroupEditorBean extends AbstractBean {
 				return;
 			}
 			ConditionMapEntity map = ServicesFactory.getInstance().getConditionMapService().get(this.mapId);
+			
+			for(ConditionValueEntity value :  this.listConditionValue) {
+				if(map.getType().equals("TEXT") &&
+						(value.getOperation().equals(">") || 
+								value.getOperation().equals("<") ||
+								value.getOperation().equals("BETWEEN")) ) {
+					FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Group","Return of MAP is TEXT and doesn't work properly with Operation '"+this.conditionValue.getOperation()+"' in VALUE number order '"+value.getOrderNum()+"' ");
+					FacesContext.getCurrentInstance().addMessage(null, msg);
+					return;
+				} 
+			}
+			
+			
 			this.conditionGroup.setConditionMap(map);
 			
 			this.conditionGroup.setListConditionParameters(this.listConditionParameter);
@@ -271,13 +284,28 @@ public class ConditionGroupEditorBean extends AbstractBean {
 				return;
 			}
 		}
+		if(this.mapId == null || this.mapId.length() ==0) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Group - Value","You must assign the MAP before!");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
+		ConditionMapEntity map = ServicesFactory.getInstance().getConditionMapService().get(this.mapId);
+		if(map.getType().equals("TEXT") &&
+				(this.conditionValue.getOperation().equals(">") || 
+						this.conditionValue.getOperation().equals("<") ||
+						this.conditionValue.getOperation().equals("BETWEEN")) ) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Group - Value","Return of MAP is TEXT and doesn't work properly with Operation '"+this.conditionValue.getOperation()+"'");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		} 
 		
 		if(this.conditionValue.getValue1() == null || this.conditionValue.getValue1().length() == 0) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Group - Value","Please, inform Value1!");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return;
 		}
-		if(!this.conditionValue.getOperation().equals("=") && (this.conditionValue.getValue2() == null || this.conditionValue.getValue2().length() == 0)) {
+		if(!(this.conditionValue.getOperation().equals("=") || this.conditionValue.getOperation().equals("<") || this.conditionValue.getOperation().equals(">") ) 
+				&& (this.conditionValue.getValue2() == null || this.conditionValue.getValue2().length() == 0)) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Group - Value","Please, inform Value2!");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return;
@@ -350,7 +378,7 @@ public class ConditionGroupEditorBean extends AbstractBean {
 			this.conditionValue.setValue8("");
 			this.conditionValue.setValue9("");
 			this.conditionValue.setValue10("");
-		} else if(this.conditionValue.getOperation().equals("IN")) {			
+		} else if(this.conditionValue.getOperation().equals("IN") || this.conditionValue.getOperation().equals("NOT IN")) {			
 			this.conditionValue.setValue2(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value2").toString());
 			this.conditionValue.setValue3(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value3").toString());
 			this.conditionValue.setValue4(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value4").toString());
