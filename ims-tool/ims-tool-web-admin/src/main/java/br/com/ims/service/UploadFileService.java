@@ -25,7 +25,7 @@ public class UploadFileService {
 	public void uploadFile(@FormDataParam("fileName") final String fileName, @FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		
 		if(StringUtils.isNotBlank(fileDetail.getFileName())){
-			String uploadedFileLocation = "C://Cesar/"+ fileName+".wav";
+			String uploadedFileLocation = "C://Program Files/Apache Software Foundation/Tomcat 7.0/webapps/ROOT/_audios/msg/"+ fileName+".wav";
 			writeToFile(uploadedInputStream, uploadedFileLocation);
 			// save it
 			try {

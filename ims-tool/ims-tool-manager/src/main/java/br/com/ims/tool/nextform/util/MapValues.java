@@ -18,6 +18,7 @@ public interface MapValues extends Serializable {
 	public static final String TP_LOJA = "customer.loja";
 	public static final String CLASSIFICACAO_TRANSF = "customer.transfer";
 	public static final String PARTNER = "customer.partner";
+	public static final String SAP_VALUE = "customer.sapValue";
 	
 	
 	
