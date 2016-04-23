@@ -8,6 +8,11 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 					$scope.artifacts ={};
 					$scope.log = {};
 					$scope.logs = {};
+					$scope.callLog = {};
+					$scope.callLogs = {};
+					$scope.call = {};
+					$scope.call.ani = "";
+					$scope.call.dnis = "";
 					$scope.log.artifact = "";
 					 $scope.myDate = new Date();
 					$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getTypeControlPanel').success(function(data1) {
@@ -67,7 +72,6 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 
 					}
 					$scope.searchLog = function(){
-							console.log($scope.log.artifact);
 							if(!$scope.log.artifact.trim()){
 								bootbox.alert("Por favor selecione os parametros para a pesquisa!");
 							}else{
@@ -76,6 +80,21 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 								});
 							}
 					}
+					$scope.searchCallLog = function(){
+						
+						if(!$scope.call.ani){
+							$scope.call.ani = "0";
+						}
+						if(!$scope.call.dnis){
+							$scope.call.dnis = "0";
+						}
+							console.log("pesquisando");
+							$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getCallLogList/'+$scope.call.datai+"/"+$scope.call.dataf+"/"+$scope.call.ani+"/"+$scope.call.dnis).success(function(data1) {
+								$scope.callLogs = data1;
+								console.log(data1);
+							});
+						}
+					
 					
 })					
 					
