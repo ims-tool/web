@@ -60,8 +60,10 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 					
 					$scope.showForm = function() {
 						$scope.message = {};
+						var id;
 						$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/nextidMessage').success(function(data1) {
 							$scope.message.id = data1;
+							$scope.message.name = data1;
 						});
 						$scope.showMessage = false;
 						$scope.showNewButton = true;
