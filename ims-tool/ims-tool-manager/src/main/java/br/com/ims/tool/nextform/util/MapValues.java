@@ -20,6 +20,19 @@ public interface MapValues extends Serializable {
 	public static final String PARTNER = "customer.partner";
 	public static final String SAP_VALUE = "customer.sapValue";
 	
+	public static final String MENU_CSF = "menu";
+	public static final String MENU_CSF_OP1 = "menu.op1";
+	public static final String MENU_CSF_OP2 = "menu.op2";
+	public static final String MENU_CSF_OP3 = "menu.op3";
+	public static final String MENU_CSF_OP4 = "menu.op4";
+	public static final String MENU_CSF_OP5 = "menu.op5";
+	public static final String MENU_CSF_OP6 = "menu.op6";
+	public static final String MENU_CSF_OP7 = "menu.op7";
+	public static final String MENU_CSF_OP8 = "menu.op8";
+	public static final String MENU_CSF_OP9 = "menu.op9";
+	
+	
+	
 	
 	
 	

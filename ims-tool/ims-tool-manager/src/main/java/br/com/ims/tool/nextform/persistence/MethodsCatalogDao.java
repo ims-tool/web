@@ -247,13 +247,13 @@ private boolean getDDD(String ddd_in, String ddd_not_in, String ddd) {
 				return Boolean.TRUE;
 			}
 		} catch (ParseException e) {
-			throw new DaoException("Erro ao realizar parse data getDate",e);
+			logger.error("Erro ao realizar parse data getDate ", e);
 		}
 		
 		return false;
 	}
 
-	public boolean getParameter(String flag) throws DaoException {
+	public boolean getFlagIsActive(String flag) throws DaoException {
 		
 		ResultSet rs = null;
 		Connection conn = null;
@@ -273,8 +273,8 @@ private boolean getDDD(String ddd_in, String ddd_not_in, String ddd) {
 					}
 				}
 			}
-		} catch (SQLException e) {
-			throw new DaoException("Erro ao recuperar flag ", e);
+		} catch (Exception e) {
+			logger.error("Erro ao recuperar flag ", e);
 		} finally {
 			try {
 				conn.close();
@@ -287,6 +287,41 @@ private boolean getDDD(String ddd_in, String ddd_not_in, String ddd) {
 		}
 
 		return isFlagAtivo;
+	}
+
+	public String getParameter(String valueName) {
+		
+		ResultSet rs = null;
+		Connection conn = null;
+		PreparedStatement stm = null;
+
+		try {
+			conn = new ConnectionDB().getConnection();
+			stm = conn.prepareStatement("select value from flow.parameters where name = ?");
+			stm.setString(1, valueName);
+
+			rs = stm.executeQuery();
+			if (rs != null) {
+				while (rs.next()) {
+					return rs.getString(1);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Erro getParameter ", e);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e1) {
+			}
+			try {
+				stm.close();
+			} catch (SQLException e) {
+			}
+		}
+
+		
+		return null;
+		
 	}
 
 
