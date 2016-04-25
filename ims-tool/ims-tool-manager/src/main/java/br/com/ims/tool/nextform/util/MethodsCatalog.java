@@ -336,7 +336,7 @@ public class MethodsCatalog {
 		String flag = parameters.get("VALUE");
 		
 		try {
-			if (dao.getParameter(flag)) {
+			if (dao.getFlagIsActive(flag)) {
 				methodInvocationVO.setValue(UraConstants.YES);
 				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SUNDAY_HOLIDAY,
 						UraConstants.YES, true);
@@ -497,7 +497,7 @@ public class MethodsCatalog {
 				
 			if (parameters.get(key) != null) {
 				try {
-					if(dao.getParameter(parameters.get(key).toString())){
+					if(dao.getFlagIsActive(parameters.get(key).toString())){
 						methodInvocationVO.setValue(UraConstants.YES);
 						jsonContext = MethodInvocationUtils.setContextValue(jsonContext, "PARAMETER."+key,
 								UraConstants.YES, true);
@@ -516,6 +516,39 @@ public class MethodsCatalog {
 		methodInvocationVO.setErrorCode(0);
 		methodInvocationVO.setJsonContext(jsonContext);
 		
+
+		return methodInvocationVO;
+	}
+	
+	
+	public MethodInvocationVO getMenuStatus(String jsonContext, Map<String, String> parameters) {
+
+		MethodsCatalogDao dao = new MethodsCatalogDao();
+		MethodInvocationVO methodInvocationVO = MethodInvocationVO.getInstance();
+		long errorCode = FormConstants.NO_ERROR;
+		
+		for (int i = 1; i < 10; i++) {
+			try {
+				if(dao.getFlagIsActive("F1"+i)){
+					String valueStore = dao.getParameter("menu_op"+i);
+					if(valueStore.contains(MethodInvocationUtils.getContextValue(jsonContext, MapValues.TP_LOJA))){
+						jsonContext = MethodInvocationUtils.setContextValue(jsonContext, "menu.op"+i, UraConstants.YES, true);
+					}else{
+						jsonContext = MethodInvocationUtils.setContextValue(jsonContext, "menu.op"+i, UraConstants.NO, true);
+					}
+				}else{
+					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, "menu.op"+i, UraConstants.NO, true);
+				}
+			} catch (Exception e) {
+				errorCode = FormConstants.ERROR_GENERIC_EXCEPTION;
+				methodInvocationVO.setValue(UraConstants.NO);
+				logger.error("Erro getMenuStatus", e);
+			}
+		}
+
+		methodInvocationVO.setErrorCode(errorCode);
+		methodInvocationVO.setValue(UraConstants.YES);
+		methodInvocationVO.setJsonContext(jsonContext);
 
 		return methodInvocationVO;
 	}
