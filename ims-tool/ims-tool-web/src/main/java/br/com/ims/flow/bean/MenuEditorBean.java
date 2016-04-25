@@ -132,8 +132,9 @@ public class MenuEditorBean extends AbstractBean {
 						}
 						if(remove) {
 							this.menu.getChoices().remove(index);
-							ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
+							ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);							
 							index = -1;
+							break;
 						} 
 						 
 					}

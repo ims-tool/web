@@ -115,6 +115,7 @@ public class DecisionEditorBean extends AbstractBean {
 							this.decision.getListDecisionChance().remove(decisionChance);							
 							ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
 							index = -1;
+							break;
 						} 
 						 
 					}
