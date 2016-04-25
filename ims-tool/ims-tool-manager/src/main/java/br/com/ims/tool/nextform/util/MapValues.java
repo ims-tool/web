@@ -71,9 +71,9 @@ public interface MapValues extends Serializable {
 	public static final String ANO_BASE = "customer.anoBase";
 	public static final String ACCOUNT_CATEGORY = "customer.accountCategory";
 	
-	public static final String DDD = "instance.ddd";
-	public static final String INSTANCE = "instance.numberPhone";
-	public static final String UF = "instance.uf";
+	public static final String DDD = "call.ddd";
+	public static final String INSTANCE = "call.numberPhone";
+	public static final String UF = "call.uf";
 	public static final String CIDADE = "instance.infu_name_county";
 	public static final String PERFIL = "instance.perfil";
 
@@ -108,6 +108,6 @@ public interface MapValues extends Serializable {
 	public static final String TEMPO_MENU = "tempo.menu";
 	
 	public static final String TEMP_HORARIO = "temp.horario";
-	public static final String SUNDAY_HOLIDAY = "sundayHoliday";
+	public static final String SUNDAY_HOLIDAY = "temp.sundayHoliday";
 	
 }

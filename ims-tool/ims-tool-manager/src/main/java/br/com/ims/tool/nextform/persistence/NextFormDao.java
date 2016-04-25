@@ -704,7 +704,7 @@ public class NextFormDao {
 		ConnectionDB conn = null;
 		try {
 			conn = new ConnectionDB();
-			String query = " SELECT ID FROM FLOW.FORM WHERE NAME = " + flowName;
+			String query = " SELECT ID FROM FLOW.FORM WHERE name = '" + flowName+"'";
 
 			rs = conn.ExecuteQuery(query);
 			if (rs.next()) {
