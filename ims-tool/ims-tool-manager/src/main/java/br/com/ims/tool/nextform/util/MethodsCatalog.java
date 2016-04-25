@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub;
 import br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Char2;
 import br.com.avaya.pso.boticario.Z_CRMF_GET_CLASS_CLI2Stub.Z_CRMF_GET_CLASS_CLI2Response;
+import br.com.ims.tool.nextform.exception.DaoException;
 import br.com.ims.tool.nextform.model.MethodInvocationVO;
 import br.com.ims.tool.nextform.persistence.MethodsCatalogDao;
 
@@ -485,6 +486,38 @@ public class MethodsCatalog {
 			jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT, "-1", true);
 		}
 		return jsonContext;
+	}
+	
+	public MethodInvocationVO getFlag(String jsonContext, Map<String, String> parameters) {
+
+		MethodsCatalogDao dao = new MethodsCatalogDao();
+
+		MethodInvocationVO methodInvocationVO = MethodInvocationVO.getInstance();
+		for (String key : parameters.keySet()) {
+				
+			if (parameters.get(key) != null) {
+				try {
+					if(dao.getParameter(parameters.get(key).toString())){
+						methodInvocationVO.setValue(UraConstants.YES);
+						jsonContext = MethodInvocationUtils.setContextValue(jsonContext, "PARAMETER."+key,
+								UraConstants.YES, true);
+					} else {
+						methodInvocationVO.setValue(UraConstants.NO);
+						jsonContext = MethodInvocationUtils.setContextValue(jsonContext, "PARAMETER."+key,
+								UraConstants.NO, true);
+					}
+				} catch (DaoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		methodInvocationVO.setErrorCode(0);
+		methodInvocationVO.setJsonContext(jsonContext);
+		
+
+		return methodInvocationVO;
 	}
 
 

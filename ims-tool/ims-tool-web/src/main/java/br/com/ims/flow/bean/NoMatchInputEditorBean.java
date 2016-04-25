@@ -203,6 +203,8 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	public void edit(String id) {
 		// TODO Auto-generated method stub
 		this.noMatchInput = ServicesFactory.getInstance().getNoMatchInputService().get(id);
+		if(this.noMatchInput.getPrompt() != null)
+			this.promptId = this.noMatchInput.getPrompt().getId(); 
 		this.insert = false;
 		
 	}
