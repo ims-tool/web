@@ -19,6 +19,7 @@ import br.com.ims.flow.service.FormTypeService;
 import br.com.ims.flow.service.GrammarEditorService;
 import br.com.ims.flow.service.GrammarService;
 import br.com.ims.flow.service.IvrEditorService;
+import br.com.ims.flow.service.LoginBeanService;
 import br.com.ims.flow.service.MenuService;
 import br.com.ims.flow.service.NoMatchInputEditorService;
 import br.com.ims.flow.service.NoMatchInputService;
@@ -174,6 +175,9 @@ public class ServicesFactory {
 	}
 	public ControlPanelService getControlPanelService() {
 		return new ControlPanelService();
+	}
+	public LoginBeanService getLoginBeanService() {
+		return new LoginBeanService();
 	}
 
 }

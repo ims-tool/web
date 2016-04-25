@@ -303,14 +303,13 @@ public class MethodsCatalog {
 		try {
 			if (dao.inHoliday(ivr)) {
 				methodInvocationVO.setValue(UraConstants.YES);
-				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SUNDAY_HOLIDAY,
-						UraConstants.YES, true);
+				jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SUNDAY_HOLIDAY, UraConstants.YES, true);
 			} else {
 				methodInvocationVO.setValue(UraConstants.NO);
 				Date date = new Date();
 				Calendar calendar = GregorianCalendar.getInstance();
 				calendar.setTime(date);
-				if (calendar.get(Calendar.DAY_OF_WEEK) == 7) {
+				if (calendar.get(Calendar.DAY_OF_WEEK) == 1) {
 					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.SUNDAY_HOLIDAY,
 							UraConstants.YES, true);
 				} else {

@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
   <display-name>ims-tools</display-name>
+  <!-- Login filter -->
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>br.com.ims.flow.common.LoginFilter</filter-class>
+    </filter>
+    <!-- Set the login filter to secure all the pages in the /secured/* path of the application  -->
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/pages/*</url-pattern>
+    </filter-mapping>
+  
   <welcome-file-list>
-    <welcome-file>index.xhtml</welcome-file>
+    <welcome-file>pages/index.xhtml</welcome-file>
   </welcome-file-list>
   <context-param>
     <param-name>org.primefaces.extensions.DELIVER_UNCOMPRESSED_RESOURCES

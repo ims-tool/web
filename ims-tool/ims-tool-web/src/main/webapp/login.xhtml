@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<h:head>
+        <title><ui:insert name="title">IMS Tools</ui:insert></title>
+		<link href="#{request.contextPath}/imagens/icones/favicon.ico" rel='shortcut icon' type='imagens/x-icon' />
+		<script src="#{request.contextPath}/resources/js/context.js" type="text/javascript"></script>
+		<script src="#{request.contextPath}/resources/js/script.js" type="text/javascript"></script>
+		<script src="#{request.contextPath}/resources/js/locale.js" type="text/javascript"></script>
+		<h:outputStylesheet name="estilo.css" library="css" />
+		<h:outputStylesheet name="context.standalone.css" library="css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		     
+</h:head>
+
+<h:body onload="PF('dlg').show();">	
+	
+	<div id="wrap">
+			<div id="cabecalho">
+				<div id="fundoCabecalho">
+					<div id="conteudoCabecalho">
+						<div id="containerLogos">						
+							<h1 id="titulo">
+								<p>IMS - Tools</p>								
+							</h1>							
+						</div>						
+						
+					</div>
+				</div>
+			</div>
+	
+			<div id="conteudo">
+				<h:form id="login-form">
+					<p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+					<p:dialog header="Login" widgetVar="dlg" resizable="false" closable="false">
+						<h:panelGrid columns="2" cellpadding="5">
+				            <h:outputLabel for="username" value="Username:" />
+				            <p:inputText id="username" value="#{loginBean.username}" required="true" label="username" />
+				 
+				            <h:outputLabel for="password" value="Password:" />
+				            <p:password id="password" value="#{loginBean.password}" required="true" label="password" />
+				 
+				            <f:facet name="footer">
+				                <p:commandButton value="Login" update="growl" action="#{loginBean.doLogin}"
+				                                 oncomplete="handleLoginRequest(xhr, status, args)" />
+				            </f:facet>  
+				        </h:panelGrid>
+			        </p:dialog>
+			 	</h:form>
+				<script type="text/javascript">
+				    function handleLoginRequest(xhr, status, args) {
+				        if(args.validationFailed || !args.loggedIn) {
+				            PF('dlg').jq.effect("shake", {times:5}, 100);
+				        }
+				        else {
+				            PF('dlg').hide();
+				            $('#loginLink').fadeOut();
+				        }
+				    }
+				</script>
+			</div>
+		</div>
+		<div id="rodape">
+			<div id="conteudoRodape">
+				<p class="textoCapacidade">E2E</p>				
+			</div>						
+		</div>
+
+</h:body>
+</html>

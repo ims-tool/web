@@ -3,6 +3,8 @@ package br.com.ims.persistence;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,6 +14,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import br.com.ims.tool.entity.CallLog;
 import br.com.ims.tool.entity.Controlpanel;
 import br.com.ims.tool.entity.ReportLog;
 import br.com.ims.tool.util.ConnectionDB;
@@ -198,6 +201,67 @@ public class ReportDao {
 			conn.finalize();
 		}
 		return listReportlog;
+	}
+
+
+	public static List<CallLog> getCallLogList(String datei, String datef, String ani, String dnis) {
+		List<CallLog> listCalllog = new ArrayList<CallLog>();
+		ConnectionDB conn = null;
+		ResultSet rs = null;
+		if(ani.equalsIgnoreCase("0")){
+			ani = null;
+		}
+		if(dnis.equalsIgnoreCase("0")){
+			dnis = null;
+		}
+		
+		try {
+			conn = new ConnectionDB();
+			
+			  String query = " "
+					    +" select '<span style=\"display:inline-flex\"><a href=\"logview.jsp?logid='||l.id||'\" target=\"_blank\"><img class=\"logico\" src=\"img/view.png\"></a>&nbsp<a href=\"logdetail.jsp?logid='||l.id||'\" target=\"_blank\"><img class=\"logico\" src=\"img/detail.png\"></a></span>' link, "
+					    +"        l.id, l.ucid, l.startdate, l.stopdate, l.ani, l.dnis, l.vdn, l.finalstatus, l.context "
+					    +" from flow.log l "
+					    +" where l.startdate between '"+datei+"' and '"+datef+"' ";
+					  if (StringUtils.isNotBlank(ani)) {
+					   query+=" and replace(to_char(l.ani,'99999999999999999999'),' ','') like '"+ani+"' ";   
+					  }
+					  if (StringUtils.isNotBlank(dnis)) {
+					   query+=" and replace(to_char(l.dnis,'99999999999999999999'),' ','') like '"+dnis+"' ";   
+					  }
+					  query+=" order by l.startdate ";
+			
+			rs = conn.ExecuteQuery(query);
+			
+			while(rs.next()){
+				CallLog cl = new CallLog();
+				SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SSS");
+				cl.setLink(rs.getString("link"));
+				cl.setId(rs.getLong("id"));
+				cl.setUcid(rs.getString("ucid"));
+				cl.setStartdate(sdf2.format(rs.getTimestamp("startdate")));
+				cl.setStopdate(sdf2.format(rs.getTimestamp("stopdate")));
+				cl.setAni(rs.getString("ani"));
+				cl.setDnis(rs.getString("dnis"));
+				cl.setVdn(rs.getString("vdn"));
+				cl.setFinalStatus(rs.getString("finalstatus"));
+				cl.setContext(rs.getString("context"));
+				
+				listCalllog.add(cl);
+				
+			}
+			
+		} catch (SQLException e) {
+			logger.error("Erro ao recuperar call log list report", e);
+		} finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			conn.finalize();
+		}
+		return listCalllog;
 	}
 
 }

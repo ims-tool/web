@@ -125,21 +125,19 @@ public class NextFormService {
 				MenuDto menu =
 						dao.getMenuByMenuId(nextForm.getFormid(), jsonContext);
 				nextForm.setMenu(menu);
+			//invertido type flow com flow internal para fazer validações.	
+			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_FLOW_INTERNAL) {
 				
-			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_FLOW) {
-				
-				FlowDto flow =
-						dao.getFlowById(nextForm.getFormid());
+				FlowDto flow = dao.getFlowById(nextForm.getFormid());
 				nextForm.setFlow(flow);
 				
 				if (UraUtils.isNotNull(flow) && flow.getTag() > 0) {
 					LogUtils.createTrackTag(LogUtils.getTrackServiceId(), trackId, logId, flow.getTag());
 				}
-
-			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_FLOW_INTERNAL) {
+				//invertido type flow com flow internal para fazer validações.
+			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_FLOW) {
 				
-				FlowDto flow =
-						dao.getFlowById(nextForm.getFormid());
+				FlowDto flow = dao.getFlowById(nextForm.getFormid());
 				
 				flow.setFlowFirstForm(dao.getFormIdByFlowName(flow.getFlowName()));
 				nextForm.setFlow(flow);
@@ -340,9 +338,10 @@ public class NextFormService {
 			decision = dao.getDecisionById(nextForm.getFormid());
 		} catch (Exception e) {
 		}
-		
+		int count = 0;
 		for (DecisionChanceDto decisionChance : decision.getListaDecisionChance()) {
 			
+			count++;
 			long trackServiceId = LogUtils.getTrackServiceId();
 			
 			DecisionConditionDto dcDto = new DecisionConditionDto();
@@ -352,6 +351,7 @@ public class NextFormService {
 			if(decisionChance.getCondition() > 0) {
 				try {
 					dcDto = dao.validarDecisionCondition(nextForm.getJsonContexto(), decisionChance.getCondition());
+					nextForm.setJsonContexto(dcDto.getJsonContext());
 				} catch (Exception e) {
 					e.printStackTrace();
 				} 				

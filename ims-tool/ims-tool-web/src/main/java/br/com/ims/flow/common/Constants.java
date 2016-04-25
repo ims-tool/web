@@ -48,4 +48,5 @@ public class Constants {
 	public static final Integer AUDIT_TYPE_LOGOUT = 5;
 	public static final String AUDIT_ARTIFACT = "ivr editor";
 	
+	public static final String SYSTEM_ID = "3";
 }

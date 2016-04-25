@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import br.com.ims.control.MessageCtrl;
 import br.com.ims.control.ReportCtrl;
 import br.com.ims.control.ServiceHourCtrl;
+import br.com.ims.tool.entity.CallLog;
 import br.com.ims.tool.entity.Controlpanel;
 import br.com.ims.tool.entity.Message;
 import br.com.ims.tool.entity.ReportLog;
@@ -211,5 +212,27 @@ public class ReportFacadeREST extends AbstractFacade<ServiceHour> {
 		}
 		return json;
 	}
+	
+	@GET
+	@Path("getCallLogList/{datei}/{datef}/{ani}/{dnis}")
+	@Produces("application/json")
+	public String getCallLogList(@PathParam("datei") String datei,@PathParam("datef") String datef, @PathParam("ani") String ani, @PathParam("dnis") String dnis) {
+		
+		List<CallLog> lista = ReportCtrl.getCallLogList(datei, datef, ani, dnis);
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String json = "";
+		try {
+			json = ow.writeValueAsString(lista);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return json;
+	}
+	
+	
 
 }
