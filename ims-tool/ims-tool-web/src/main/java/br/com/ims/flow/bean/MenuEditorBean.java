@@ -77,6 +77,8 @@ public class MenuEditorBean extends AbstractBean {
     	if(this.menu.getNoMatch() != null) {
     		this.noMatchId = this.menu.getNoMatch().getId(); 
     	}    	
+    	if(this.menu.getPrompt() != null)
+    		this.promptId = this.menu.getPrompt().getId();
     	this.choices = (List<ChoiceEntity>)((ArrayList<ChoiceEntity>)this.menu.getChoices()).clone();
     	
     	this.originalName = this.menu.getName();
@@ -153,6 +155,7 @@ public class MenuEditorBean extends AbstractBean {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
 					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
+					break;
 				}
 				
 			}
@@ -165,6 +168,7 @@ public class MenuEditorBean extends AbstractBean {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
 					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
+					break;
 				}
 				
 			}

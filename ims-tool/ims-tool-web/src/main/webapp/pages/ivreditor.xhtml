@@ -24,8 +24,9 @@
     				
 	    				<p:dataTable id="palleteData" var="formType" value="#{ivrEditorView.formTypes}" >
 				            <p:column headerText="Pallete">
-				            	<p:graphicImage id="pallete" url="#{formType.imagePathSuccess}" width="60px" height="60px" alt="formType.description" />
+				            	<p:graphicImage id="pallete"  url="#{formType.imagePathSuccess}" width="60px" height="60px" alt="#{formType.description}" />
 				                <p:draggable for="pallete" revert="true" helper="clone" />
+				                <p:tooltip id="toolTip" for="pallete" value="#{formType.description}" />
 				            </p:column>
 				       </p:dataTable>
     				

@@ -20,7 +20,7 @@
 						<tr>
 							<th>Dia da Semana</th>
 							<th>Tipo</th>
-							<th>Hora Inínio</th>
+							<th>Hora Início</th>
 							<th>Hora Fim</th>
 							<th>Última alteração</th>
 						</tr>
@@ -28,13 +28,13 @@
 					<tbody>
 						<tr ng-repeat="hour in hours | filter: { type: option.type} | orderBy:'weekday'">
 							<td>
-								<div ng-if="1 == hour.weekday">Domingo</div>
-								<div ng-if="2 == hour.weekday">Segunda-feira</div>
-								<div ng-if="3 == hour.weekday">Terça-feira</div>
-								<div ng-if="4 == hour.weekday">Quarta-feira</div>
-								<div ng-if="5 == hour.weekday">Quinta-feira</div>
-								<div ng-if="6 == hour.weekday">Sexta-feira</div>
-								<div ng-if="7 == hour.weekday">Sábado</div>
+								<div ng-if="0 == hour.weekday">Domingo</div>
+								<div ng-if="1 == hour.weekday">Segunda-feira</div>
+								<div ng-if="2 == hour.weekday">Terça-feira</div>
+								<div ng-if="3 == hour.weekday">Quarta-feira</div>
+								<div ng-if="4 == hour.weekday">Quinta-feira</div>
+								<div ng-if="5 == hour.weekday">Sexta-feira</div>
+								<div ng-if="6 == hour.weekday">Sábado</div>
 							</td>
 							<td>{{hour.type}}</td>
 							<td>

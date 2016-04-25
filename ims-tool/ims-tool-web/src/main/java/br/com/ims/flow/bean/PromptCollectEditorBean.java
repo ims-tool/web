@@ -161,6 +161,7 @@ public class PromptCollectEditorBean extends AbstractBean {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT)) {
 					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
+					break;
 				}
 				
 			}
@@ -173,6 +174,7 @@ public class PromptCollectEditorBean extends AbstractBean {
 				FormEntity formTarget = (FormEntity)target.getElement().getData();
 				if(formTarget.getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
 					ServicesFactory.getInstance().getIvrEditorService().deleteForm(target.getElement(),true);
+					break;
 				}
 				
 			}

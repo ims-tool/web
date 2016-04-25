@@ -215,7 +215,7 @@ public class ConditionEditorBean extends AbstractBean {
 	
 
 	public boolean isUsed(String id) {
-		return ServicesFactory.getInstance().getPromptService().isUsed(id) ;
+		return ServicesFactory.getInstance().getConditionService().isUsed(id) ;
 	}
 
 	public List<String> paremeterView(String id) {
