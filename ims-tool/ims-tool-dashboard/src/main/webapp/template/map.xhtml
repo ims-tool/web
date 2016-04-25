@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" > 
+	<body> 
+		<ui:composition> 
+			<!--main content start-->		      
+		    <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Map</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div> 
+		      
+	             <!-- page start-->
+	             <div id="morris">
+	                 <div class="row mt">
+	                     <div class="col-lg-6">
+	                         <div class="panel panel-default">
+		                        <div class="panel-heading">
+		                            Volume de ligações por estado
+		                        </div>
+		                        <!-- /.panel-heading -->
+		                        <div class="panel-body">
+		                            <div id="map_volume_ligacao_estado"></div>
+		                        </div>
+		                        <!-- /.panel-body -->
+		                  </div>
+	                     </div>
+	                     <div class="col-lg-6">
+	                         <div class="panel panel-default">
+		                        <div class="panel-heading">
+		                            Volume de ligações por URA
+		                        </div>
+		                        <!-- /.panel-heading -->
+		                        <div class="panel-body">
+		                            <div id="chart_bar_volume_ligacao_ura"></div>
+		                        </div>
+		                        <!-- /.panel-body -->
+		                  </div>
+	                     </div>
+	                 </div>
+	             </div>
+	             <!-- page end-->		          
+		</ui:composition> 
+		
+	</body> 
+</html>

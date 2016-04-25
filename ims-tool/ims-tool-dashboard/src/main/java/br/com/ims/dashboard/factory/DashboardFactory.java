@@ -26,5 +26,9 @@ public class DashboardFactory {
 		DashboardDAO dao = new DashboardDAO();		
 		return dao.retornaVolumeLigacaoURA();
 	}
+	public HashMap<String,Integer> getVolumeLigacaoEstado(String minutes) {
+		DashboardDAO dao = new DashboardDAO();		
+		return dao.getVolumeLigacaoEstado(minutes);
+	}
 
 }

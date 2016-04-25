@@ -152,6 +152,17 @@ public class DashboardServlet extends HttpServlet {
 			outer.print(lista);
 			
 		}
+		if (funct.equalsIgnoreCase("getVolumeLigacaoEstado")) {
+			String minutes = request.getParameter("minutes") == null ? "15" : request.getParameter("minutes");
+			PrintWriter outer = response.getWriter();
+			DashboardFactory dashboardController = new DashboardFactory();
+
+			HashMap<String,Integer> volumeLigacaoEstado = dashboardController.getVolumeLigacaoEstado(minutes);
+			
+			String lista = formatarStringVolumeLigacaoEstado(volumeLigacaoEstado);
+			outer.print(lista);
+			
+		}
 			
 		
 	}
@@ -202,6 +213,90 @@ public class DashboardServlet extends HttpServlet {
 		if(volumeURA != null) {
 			for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
 				lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+			}
+		}
+		
+		lista = lista + "]";
+
+
+		return lista;
+	}
+
+	private String formatarStringVolumeLigacaoEstado(HashMap<String, Integer> volumeURA) {
+		HashMap<String, String> localidades = new HashMap<>();
+		localidades.put("11", "São Paulo");
+		localidades.put("12", "S. José dos Campos");
+		localidades.put("13", "Santos");
+		localidades.put("14", "Baurú");
+		localidades.put("15", "Sorocaba");
+		localidades.put("16", "Ribeirão Preto");
+		localidades.put("17", "S. José do Rio Preto");
+		localidades.put("18", "Presidente Prudente");
+		localidades.put("19", "Campinas");
+		localidades.put("21", "Rio de Janeiro");
+		localidades.put("22", "Campos");
+		localidades.put("24", "Volta Redonda");
+		localidades.put("27", "Vitória");
+		localidades.put("28", "Cach. de Itapemirim");
+		localidades.put("31", "Belo Horizonte");
+		localidades.put("32", "Juiz de Fora");
+		localidades.put("33", "Gov. Valadares");
+		localidades.put("34", "Uberlândia");
+		localidades.put("35", "Varginha");
+		localidades.put("37", "Divinópolis");
+		localidades.put("38", "Montes Claros");
+		localidades.put("41", "Curitiba");
+		localidades.put("42", "Ponta Grossa");
+		localidades.put("43", "Londrina");
+		localidades.put("44", "Maringá");
+		localidades.put("45", "Foz do Iguaçú");
+		localidades.put("46", "Pato Branco");
+		localidades.put("47", "Joinville");
+		localidades.put("48", "Florianópolis");
+		localidades.put("49", "Chapecó");
+		localidades.put("51", "Porto Alegre");
+		localidades.put("53", "Pelotas");
+		localidades.put("54", "Caxias do Sul");
+		localidades.put("55", "Santa Maria");
+		localidades.put("61", "Brasília*");
+		localidades.put("62", "Goiânia");
+		localidades.put("63", "Palmas");
+		localidades.put("64", "Rio Verde");
+		localidades.put("65", "Cuiabá");
+		localidades.put("66", "Rondonópolis");
+		localidades.put("67", "Campo Grande");
+		localidades.put("68", "Rio Branco");
+		localidades.put("69", "Porto Velho");
+		localidades.put("71", "Salvador");
+		localidades.put("73", "Ilhéus");
+		localidades.put("74", "Juazeiro");
+		localidades.put("75", "Feira de Santana");
+		localidades.put("77", "Barreiras");
+		localidades.put("79", "Aracajú");
+		localidades.put("81", "Recife");
+		localidades.put("82", "Maceió");
+		localidades.put("83", "João Pessoa");
+		localidades.put("84", "Natal");
+		localidades.put("85", "Fortaleza");
+		localidades.put("86", "Teresina");
+		localidades.put("87", "Petrolina");
+		localidades.put("88", "Juazeiro do Norte");
+		localidades.put("89", "Picos");
+		localidades.put("91", "Belém");
+		localidades.put("92", "Manaus");
+		localidades.put("93", "Santarém");
+		localidades.put("94", "Marabá");
+		localidades.put("95", "Boa Vista");
+		localidades.put("96", "Macapá");
+		localidades.put("97", "Coari");
+		localidades.put("98", "São Luis");
+		localidades.put("99", "Imperatriz");
+		
+		String lista = "[[\"Cidade\", \"Qtde\"]";
+		
+		if(volumeURA != null) {
+			for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
+				lista += ",[\""+localidades.get(entry.getKey())+"\","+entry.getValue()+"]";
 			}
 		}
 		

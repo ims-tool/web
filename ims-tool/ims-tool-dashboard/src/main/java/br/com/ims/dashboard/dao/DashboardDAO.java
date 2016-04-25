@@ -175,5 +175,38 @@ public class DashboardDAO {
 		return volume;
 	}
 	
+	public HashMap<String,Integer> getVolumeLigacaoEstado(String minutes) {
+		
+		log.debug("[Dashboard IMSMap] - " + "iniciando busca por Volume de Ligacoes por Estado");
+
+		HashMap<String,Integer> volume = new HashMap<String,Integer>();
+		ResultSet rs = null;
+		String sql = "";
+		
+		DbConnection db = null;
+
+		sql = "select ddd, count(*) qtde from flow.log l where l.startdate > localtimestamp - interval '"+minutes+" hours' group by ddd "; 
+
+		try {
+			//oracle = new OracleConn("IVR_OWNER");
+			db= new DbConnection("");
+			rs = db.ExecuteQuery(sql);
+			
+			while (rs.next()) {
+				volume.put(rs.getString("ddd"), rs.getInt("qtde"));				
+			}
+
+		} catch (Exception e) {
+			log.error("[Dashboard Volume Ligacao Estado] -" + e.getMessage(),e);
+			return null;
+
+		} finally {
+			//try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			db.finalize();
+
+		}
+		return volume;
+	}	
+	
 
 }
