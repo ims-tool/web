@@ -17,7 +17,9 @@ import javax.faces.context.FacesContext;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import br.com.ims.flow.bean.LoginBean;
 import br.com.ims.flow.factory.DAOFactory;
+import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AbstractEntity;
 
 @SuppressWarnings("serial")
@@ -48,7 +50,13 @@ public class Util implements Serializable {
 		return Calendar.getInstance().getTime();
 	}
 	public static String getUserName() {
-		String result = System.getProperty("user.name");   
+		String result = "";
+		LoginBean bean = ServicesFactory.getInstance().getLoginBeanService().getBean();
+		if(bean == null) {
+			result = System.getProperty("user.name");
+		} else {
+			result = bean.getUsername();
+		}
 		/*Class<?> c = null;
 	    Object   o = null;
 	    Method  method = null;  

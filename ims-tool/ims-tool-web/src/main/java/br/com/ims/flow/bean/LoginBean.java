@@ -22,20 +22,15 @@ import br.com.ims.flow.common.Constants;
  
  
 /**
- * Simple login bean.
- *
- * @author itcuties
+ * 
  */
-@ManagedBean
+@ManagedBean(name = "loginBean")
 @SessionScoped
 public class LoginBean implements Serializable {
  
     private static final long serialVersionUID = 7765876811740798583L;
     public static Logger log = Logger.getLogger(LoginBean.class);
  
-    // Simple user database :)
-    private static final String[] users = {"anna:qazwsx","kate:123456"};
-     
     private String username;
     private String password;
      
