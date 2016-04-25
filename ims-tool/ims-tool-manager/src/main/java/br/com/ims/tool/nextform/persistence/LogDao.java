@@ -74,7 +74,7 @@ public class LogDao {
 		PreparedStatement stm = null;
 		
 
-		String instancia = MethodInvocationUtils.getContextValue(contexto, MapValues.INSTANCE);
+		String instancia = MethodInvocationUtils.getContextValue(contexto, MapValues.ANI);
 		try {
 			if(instancia == null || instancia.isEmpty()) {
 				instancia = MethodInvocationUtils.getContextValue(contexto, MapValues.ANI);;
@@ -111,7 +111,7 @@ public class LogDao {
 			
 			stm.executeUpdate();
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			logger.error("Erro ao Finalizar Log LogId= "+logId, e);
 			throw new DaoException("Erro ao Finalizar Log ", e);
 		} finally {
