@@ -526,7 +526,6 @@ public class MethodsCatalog {
 		MethodsCatalogDao dao = new MethodsCatalogDao();
 		MethodInvocationVO methodInvocationVO = MethodInvocationVO.getInstance();
 		long errorCode = FormConstants.NO_ERROR;
-		
 		for (int i = 1; i < 10; i++) {
 			try {
 				if(dao.getFlagIsActive("F1"+i)){

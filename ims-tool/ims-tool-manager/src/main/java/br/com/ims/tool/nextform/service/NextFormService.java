@@ -158,7 +158,7 @@ public class NextFormService {
 			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_OPERATION) {
 				
 				nextForm = processOperation(nextForm, trackId, logId);
-				
+				jsonContext = nextForm.getJsonContexto();
 			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_TRANSFER) {
 				
 			
@@ -299,17 +299,18 @@ public class NextFormService {
 				}
 				try {
 					MethodInvocation invocationService = new MethodInvocation();
-					if (operationGroup.getOperationMap().isInternalService()){
+//					if (operationGroup.getOperationMap().isInternalService()){
 						serviceReturn = invocationService.invoke(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
-					}else{
-						serviceReturn = invocationService.invokeExternalService(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
-					}
+//					}else{
+//						serviceReturn = invocationService.invoke(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
+//						serviceReturn = invocationService.invokeExternalService(context, operationGroup.getOperationMap().getMethodReference(), map, operationGroup.getOperationMap().getTimeout(), operationGroup.getOperationMap().isActive());
+//					}
 					
 					context = serviceReturn.getJsonContext();
 					
-//					if  (operationGroup.getOperationMap().getLogActive() > 0) {
-//						LogUtils.createTrackService(LogUtils.getTrackServiceId(), trackId, operationGroup.getId(), operationGroup.getOperationMap().getMethodReference(), serviceReturn.getValue(), param, serviceReturn.getErrorCode(), logId, serviceReturn.getTimeService());
-//					}
+					if  (operationGroup.getOperationMap().getLogActive() > 0) {
+						LogUtils.createTrackService(LogUtils.getTrackServiceId(), trackId, operationGroup.getId(), operationGroup.getOperationMap().getMethodReference(), serviceReturn.getValue(), param, serviceReturn.getErrorCode(), logId, serviceReturn.getTimeService());
+					}
 					
 				} catch (Exception e) {
 					LogUtils.createTrackService(LogUtils.getTrackServiceId(), trackId, operationGroup.getId(), e.getMessage(), serviceReturn.getValue(), param, FormConstants.ERROR_GENERIC_EXCEPTION, logId, 0);
