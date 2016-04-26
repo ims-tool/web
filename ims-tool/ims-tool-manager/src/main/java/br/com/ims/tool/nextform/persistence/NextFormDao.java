@@ -244,6 +244,11 @@ public class NextFormDao {
 						audio.setType(UraConstants.WAV);
 						audio.setDescription(MethodInvocationUtils.getContextValue(jsonContext, audio.getName()));
 						audio.setName(MethodInvocationUtils.getContextValue(jsonContext, audio.getName()));
+						path = MethodInvocationUtils.getContextValue(jsonContext, MapValues.AUDIO_PATH)+ "/msg/";
+						path = path.replace("///", "/");
+						path = path.replace("//", "/");
+						path = path.replace(":/", "://");
+						audio.setPath(path);
 
 						// Nao carrega o prompt audio com name vazio
 						if ("".equals(audio.getName()))

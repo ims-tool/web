@@ -162,8 +162,8 @@ public class MethodsCatalogDao {
 				try { 
 					conn = new ConnectionDB().getConnection();
 					
-					stm = conn.prepareStatement("select name, flag, datai, dataf, ddd_in, ddd_not_in from flow.mensagem where spot = (select id from flow.spot t where name like ? ) and flag = 'A' order by msg_order");
-					stm.setString(1, "%" + contextValue + "%");
+					stm = conn.prepareStatement("select name, flag, datai, dataf, ddd_in, ddd_not_in from flow.mensagem where spot like ? and flag = 'A' order by msg_order");
+					stm.setString(1,  "%"+contextValue+"%");
 					
 					rs = stm.executeQuery();
 					
@@ -172,7 +172,7 @@ public class MethodsCatalogDao {
 						if(getDate(rs.getString("datai"), rs.getString("dataf"))){
 							if(getDDD(rs.getString("ddd_in"), rs.getString("ddd_not_in"), ddd)){
 								i++;
-								mapAudio.put(i, rs.getString("nome").replace(".wav", ""));
+								mapAudio.put(i, rs.getString("name").replace(".wav", ""));
 							}
 						}
 					}
