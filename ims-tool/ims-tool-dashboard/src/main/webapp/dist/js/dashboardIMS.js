@@ -233,25 +233,6 @@ function drawMapVolumeLigacaoEstado() {
 	}
 	var chartLine = new google.visualization.GeoChart(div);
 	
-	/*function selectHandler() {
-		
-		 var selectedItem = chartLine.getSelection()[0];
-         
-         if (selectedItem) {
-        	 
-        	 var dataHoraI = tabelaLine.getValue(selectedItem.row, 0)+":00";
-        	 var dataHoraF = tabelaLine.getValue(selectedItem.row, 0)+":59";
-        	 var url = "/ims-tool-dashboard/Dashboard?funct=getVolumeLigacaoEstado&tempo=15";
-        	 
-        	 window.open(url);
-        	 
-         }
-		
-   }
-	
-	
-   google.visualization.events.addListener(chartLine, 'select', selectHandler); */
-	
 	$.get("/ims-tool-dashboard/Dashboard?action=getVolumeLigacaoEstado&minutes=60", function(data){
 		tabelaLine = google.visualization.arrayToDataTable(JSON.parse(data));
  		var optionsLine = {region: 'BR',
