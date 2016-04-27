@@ -1,11 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-<div class="page-header">
-   <h1>Flag</h1>
+<div role="main" class="container-fluid">
+   <h2>Flag</h2>
    
-   <div role="main" class="container theme-showcase">
-		<div class="" style="margin-top: 90px;">
-		
-
 			<div class="bs-component" ng-controller="FlagCtrl">
 				<table class="table table-striped table-hover">
 					<thead>
@@ -30,7 +26,7 @@
 							<td>{{parameter.type}}</td>
 							<td>
 								<input type="checkbox" ng-model="parameter.value"
-								ng-true-value="'false'" ng-false-value="'true'"
+								ng-true-value="'true'" ng-false-value="'false'"
 								ng-click="verifyStatus(parameter)"></input>
 							</td>
 							<td>{{parameter.loginid}}</td>
@@ -43,7 +39,3 @@
 
 			</div>
 		</div>
-	</div>
-   
-   
-</div>

@@ -203,6 +203,12 @@ public class GrammarEditorBean extends AbstractBean {
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		this.grammar = ServicesFactory.getInstance().getGrammarService().get(id);
+		if(this.isUsed(id)) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Grammar","You cannot delete Grammar '"+this.grammar.getName()+"' because there are dependences.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
 		if(ServicesFactory.getInstance().getGrammarService().delete(this.grammar)) {
 			
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Grammar",this.grammar.getName()+" - Deleted!");

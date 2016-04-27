@@ -87,8 +87,7 @@
 			            <h:outputText value="#{v.description}"  />
 			        </p:column>
 			        <p:column headerText="ALTERED ITEMS" >
-			            <h:outputText rendered="#{bean.isUsed(v.id) eq false}" value="Empty" />
-						<p:commandButton rendered="#{bean.isUsed(v.id) eq true}"  icon="ui-icon-search" actionListener="#{bean.viewDependence(v.id,v.description)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
+			         	<p:commandButton icon="ui-icon-search" actionListener="#{bean.viewDependence(v.id,v.description)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
 									            
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">

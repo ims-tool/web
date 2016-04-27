@@ -214,6 +214,12 @@ public class ConditionMapEditorBean extends AbstractBean {
 	@Override
 	public void delete(String id) {
 		this.conditionMap = ServicesFactory.getInstance().getConditionMapService().get(id);
+		if(this.isUsed(id)) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Condition Map","You cannot delete Condition Map '"+this.conditionMap.getName()+"' because there are dependences.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
 		if(ServicesFactory.getInstance().getConditionMapService().delete(this.conditionMap)) {
 			
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Map",this.conditionMap.getName()+" - Deleted!");

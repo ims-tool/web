@@ -116,13 +116,12 @@
 			        <p:column headerText="NAME" filterBy="#{c.name}" filterMatchMode="contains">
 			            <h:outputText value="#{c.name}" />
 			        </p:column>
-			        <p:column headerText="IN USE" >
-			            <h:outputText rendered="#{conditionEditorView.isUsed(c.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{conditionEditorView.isUsed(c.id) eq true}" icon="ui-icon-search" actionListener="#{conditionEditorView.viewDependence(c.id,c.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
+			        <p:column headerText="DEPENDENCES" >
+			            <p:commandButton icon="ui-icon-search" actionListener="#{conditionEditorView.viewDependence(c.id,c.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
 			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{conditionEditorView.edit(c.id)}" update="@form"/>
-			             <p:commandButton icon="ui-icon-close" disabled="#{conditionEditorView.isUsed(c.id)}"  title="Delete" actionListener="#{conditionEditorView.delete(c.id)}" update="@form">
+			             <p:commandButton icon="ui-icon-close" title="Delete" actionListener="#{conditionEditorView.delete(c.id)}" update="@form">
 			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
 			             </p:commandButton>			                
 			        </p:column>

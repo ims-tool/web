@@ -380,8 +380,15 @@ public class PromptEditorBean extends AbstractBean {
 	@Override
 	public void delete(String id) {
 		// TODO Auto-generated method stub
-		
 		this.prompt = ServicesFactory.getInstance().getPromptService().get(id);
+		if(this.isUsed(id)) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Prompt","You cannot delete Prompt '"+this.prompt.getName()+"' because there are dependences.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
+		
+		
 		if(ServicesFactory.getInstance().getPromptService().delete(this.prompt)) {
 			
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.prompt.getName()+" - Deleted!");

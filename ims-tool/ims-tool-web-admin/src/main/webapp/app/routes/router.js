@@ -85,6 +85,29 @@
 			      }
 		      
 		   })
+		   
+		   .state('controlpanel', {
+			   url : '/controlpanel',
+			   templateUrl: 'app/views/controlpanel.html',
+			   data: {
+			        requireLogin: true
+			      }
+		   })
+		   
+		  .state('logaudit', {
+			   url : '/logaudit',
+			   templateUrl: 'app/views/logaudit.html',
+			   data: {
+			        requireLogin: true
+			      }
+		   })
+		   .state('calllog', {
+			   url : '/calllog',
+			   templateUrl: 'app/views/calllog.html',
+			   data: {
+			        requireLogin: true
+			      }
+		   })
 		   ;
 			 
 		   		    

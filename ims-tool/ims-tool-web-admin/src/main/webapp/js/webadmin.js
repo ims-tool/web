@@ -11,7 +11,7 @@ window.onload = function(){
 	if(login === "null" || login === "" || login === null){
 		window.location.href = '/ims-tool-web-admin/login.html';
 	}else{
-		//verificar quais artefatos ficarão disponíveis.
+		/*verificar quais artefatos ficarão disponíveis.
 		document.getElementById('webflag').className = 'hidden';
 		document.getElementById('webparameter').className = 'hidden';
 		document.getElementById('webhour').className = 'hidden';
@@ -43,12 +43,13 @@ window.onload = function(){
 			   document.getElementById('webreport').className = '';
 		    }
 		}
+		*/
 		
 	}	
 }
 
 function releaseUser() {
-	setLog(5, 'logout web admin', 'ims-tool-web-admin', 'nc', 0, 0)
+	setLog(5, 'logout web admin', 'acesso web admin', 'nc', 0, 0)
     localStorage.setItem("login", null);
     window.location.href = '/ims-tool-web-admin';
 }

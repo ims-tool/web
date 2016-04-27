@@ -89,10 +89,13 @@ public class MessageDao {
 			String query = "select max(m.id)+1 nextId from flow.mensagem m";
 
 			rs = conn.ExecuteQuery(query);
-
-			while (rs.next()) {
+			
+			if(rs.next()){
 				nextIdMessage = String.valueOf(rs.getInt(1));
+			}else{
+				nextIdMessage = "1";
 			}
+
 		} catch (SQLException e) {
 			logger.error("Erro ao recuperar next id", e);
 		} finally {
@@ -100,7 +103,6 @@ public class MessageDao {
 			try {
 				rs.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

@@ -78,17 +78,18 @@ app.controller('FlagCtrl',function($rootScope, $location, $scope, $http) {
 					// callback for ng-click 'editUser':
 					$scope.verifyStatus = function(parameter) {
 						var data = parameter;
-						var box = confirm("Deseja realmente alterar a flag?");
-						if (box === true) {
-							$.ajax({
-										type : "POST",
-										data : JSON.stringify(data),
-										url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/parameters/update",
-										contentType : "application/json",
-										dataType : 'json'
-									});
-							setLog(1, 'update flag', 'webflag', parameter.value, 1 ,parameter.id);
-						}
+						bootbox.confirm("Deseja realmente alterar parametro?", function(result) {
+							if(result === true){
+								$.ajax({
+									type : "POST",
+									data : JSON.stringify(data),
+									url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/parameters/update",
+									contentType : "application/json",
+									dataType : 'json'
+								});
+						setLog(1, 'update parametro', 'parametro', parameter.value, 1 ,parameter.id);
+							}
+						});
 					};
 				});
 
@@ -124,7 +125,7 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    'dataType': 'json',
 		    'success': function(data){
 		    	if(data.result !== 'OK'){
-		    		alert("Login inválido");
+		    		bootbox.alert("Login inválido");
 		    	}else{
 		    
 		    		if(!user.password){
@@ -133,8 +134,8 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    		}else{
 		    			localStorage.setItem("login", user.login);
 		    			localStorage.setItem("artifact", JSON.stringify(data.artifact));
-		    			setLog(4, 'login web admin', 'ims-tool-web-admin', 'nc', 0, 0)
-		    			window.location.href = '../ims-tool-web-admin/';
+		    			setLog(4, 'login web admin', 'acesso web admin', 'nc', 0, 0)
+		    			window.location.href = '../ims-tool-web-admin/#/home';
 		    		}
 		    		
 		    	}
