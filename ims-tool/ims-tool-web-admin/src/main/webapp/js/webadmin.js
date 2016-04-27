@@ -49,7 +49,7 @@ window.onload = function(){
 }
 
 function releaseUser() {
-	setLog(5, 'logout web admin', 'ims-tool-web-admin', 'nc', 0, 0)
+	setLog(5, 'logout web admin', 'acesso web admin', 'nc', 0, 0)
     localStorage.setItem("login", null);
     window.location.href = '/ims-tool-web-admin';
 }
