@@ -134,7 +134,7 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    			localStorage.setItem("login", user.login);
 		    			localStorage.setItem("artifact", JSON.stringify(data.artifact));
 		    			setLog(4, 'login web admin', 'ims-tool-web-admin', 'nc', 0, 0)
-		    			window.location.href = '../ims-tool-web-admin/';
+		    			window.location.href = '../ims-tool-web-admin/#/home';
 		    		}
 		    		
 		    	}
