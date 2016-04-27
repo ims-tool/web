@@ -60,7 +60,7 @@ function drawChartLineRetencao() {
  			legend: { position: 'bottom' },
  			lineWidth: 4		
  		};
- 		
+ 		tabela.sort([{column: 0}]);
  		chart.draw(tabela, options);
  	} );
  
@@ -155,7 +155,7 @@ function drawChartLineVolumeLigacaoMinuto() {
  			lineWidth: 4		
  		};
  		
- 		
+ 		tabelaLine.sort([{column: 0}]);
  		chartLine.draw(tabelaLine, optionsLine);
  	} );
  
@@ -218,6 +218,7 @@ function drawChartLineVolumeLigacaoUra() {
 	 			legend: { position: 'bottom' },
 	 			lineWidth: 4		
 	 		};
+		tabela.sort([{column: 0}]);
 		chart.draw(tabela, options);
 	} );
 
@@ -263,7 +264,7 @@ function drawChartAcumulado() {
  				legend: { position: 'bottom' }
  			};
  		
- 		
+ 		tabelaLine.sort([{column: 0}]);
  		chart.draw(tabelaLine, optionsLine);
  	} );
  

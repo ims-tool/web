@@ -70,13 +70,13 @@ public class DashboardDAO {
 		//OracleConn oracle = null;
 		DbConnection db = null;
 
-		sql = "SELECT SUBSTR(TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI'),1,15)||'0' DIA, "+ 
+		sql = "SELECT TO_CHAR(STARTDATE,'HH24')||':00' DIA, "+ 
 			  "COUNT(1) QTDE, "+
 			  "SUM(CASE WHEN FINALSTATUS = 'R' THEN 1 ELSE 0 END) QTDE_RET, "+ 
 			  "ROUND(100*(SUM(CASE WHEN FINALSTATUS = 'R' THEN 1 ELSE 0 END) /COUNT(1)),2) PORCENTAGEM "+
 			  "FROM FLOW.LOG WHERE STARTDATE BETWEEN now()-interval '1 hour' AND now() "+
-			  "GROUP BY SUBSTR(TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI'),1,15) "+
-			  "ORDER BY TO_TIMESTAMP(SUBSTR(TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI'),1,15)||'0','DD/MM/YYYY HH24:MI')";
+			  "GROUP BY TO_CHAR(STARTDATE,'HH24') "+
+			  "ORDER BY TO_TIMESTAMP(TO_CHAR(STARTDATE,'HH24'),'HH24')";
 
 		try {
 			//oracle = new OracleConn("IVR_OWNER");
@@ -113,11 +113,11 @@ public class DashboardDAO {
 		//OracleConn oracle = null;
 		DbConnection db = null;
 
-		sql = "SELECT TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI') DIA, "+ 
+		sql = "SELECT TO_CHAR(STARTDATE,'HH24:MI') DIA, "+ 
 			  "COUNT(1) VOLUME "+
 			  "FROM FLOW.LOG WHERE STARTDATE BETWEEN now()-interval '1 hour' AND now() "+
-			  "GROUP BY TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI') "+
-			  "ORDER BY TO_TIMESTAMP(TO_CHAR(STARTDATE,'DD/MM/YYYY HH24:MI'),'DD/MM/YYYY HH24:MI') "; 
+			  "GROUP BY TO_CHAR(STARTDATE,'HH24:MI') "+
+			  "ORDER BY TO_TIMESTAMP(TO_CHAR(STARTDATE,'HH24:MI'),'HH24:MI') "; 
 
 		try {
 			//oracle = new OracleConn("IVR_OWNER");
@@ -125,7 +125,7 @@ public class DashboardDAO {
 			rs = db.ExecuteQuery(sql);
 			
 			while (rs.next()) {
-				volume.put(rs.getString("DIA"), rs.getInt("VOLUME"));				
+				volume.put( rs.getString("DIA"), rs.getInt("VOLUME"));
 			}
 
 		} catch (Exception e) {
