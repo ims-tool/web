@@ -17,22 +17,15 @@
 <link href="/ims-tool-web-admin/template/bower_components/morrisjs/morris.css" rel="stylesheet" />
 <link href="/ims-tool-web-admin/template/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <link href="/ims-tool-web-admin/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
-
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-<link href="/ims-tool-web-admin/css/bootstrap.min.css" rel="stylesheet">
-<link href="/ims-tool-web-admin/css/style.css" rel="stylesheet">
-<link href="/ims-tool-web-admin/css/bootstrap-toggle.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/bootstrap-switch.min.css" rel="stylesheet">
-<link href="/ims-tool-web-admin/css/highlight.css" rel="stylesheet">
-<link href="/ims-tool-web-admin/css/xeditable.css" rel="stylesheet">
+
 <script src="/ims-tool-web-admin/template/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/ims-tool-web-admin/template/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/template/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+<script src="/ims-tool-web-admin/template/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/template/bower_components/raphael/raphael-min.js"></script>
 <script src="/ims-tool-web-admin/template/bower_components/morrisjs/morris.min.js"></script>
 <script src="/ims-tool-web-admin/js/jquery.cookie.js"></script>
 <script src="/ims-tool-web-admin/template/dist/js/sb-admin-2.js"></script>
-<script src="js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/js/angular.min.js"></script>
 <script src="/ims-tool-web-admin/js/angular-ui-router.js"></script>
 <script src="/ims-tool-web-admin/js/angularjs-dropdown-multiselect.js"></script>
@@ -55,18 +48,14 @@
 <script src="/ims-tool-web-admin/app/controllers/accessctrl.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/mensagemctrl.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/reportctrl.js"></script>
-<script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
-<script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
 <script src="/ims-tool-web-admin/js/highlight.js"></script>
 <script src="/ims-tool-web-admin/js/webadmin.js"></script>
-
 </head>
 <body>
 <div id="wrapper">
 	<!-- Navigation -->
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-		<div class="container-fluid">
 		<div class="navbar-header ">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
 				data-target=".navbar-collapse">
@@ -75,7 +64,7 @@
 					class="icon-bar"></span>
 			</button>
 		</div>	
-			<a class="" href="index.xhtml">
+			<a class="" href="#">
 					<img src="/ims-tool-web-admin/resources/img/IMS_LOGO.png" alt="IMS" width="100px" height="50px">
 			</a>
 					<ul class="nav navbar-nav navbar-right" style="float:right">
@@ -83,36 +72,40 @@
 					<li><a href="#" onclick="releaseUser()">Logout</a></li>
 					</ul>
 						
-		</div>
 		
 		<!-- /.navbar-header -->
 		<div class="navbar-default sidebar" role="navigation">
-			<div class="sidebar-nav navbar-collapse">
+			<div class="sidebar-nav">
 				<ul class="nav" id="side-menu">
-					<li><a href="/ims-tool-dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
-					<li><a><i class="fa fa-table fa-fw"></i> Relatório<spanclass="fa arrow"></span></a>
+				 	
+					<li><a href="/ims-tool-dashboard/"><i class="fa fa-dashboard fa-fw"></i> Dashboard<spanclass="fa arrow"></a></li>
+					<li><a><i class="fa fa-table fa-fw"></i> Relatório<spanclass="fa arrow"></a>
 						<ul class="nav nav-second-level">
-							<li><a href="/ims-tool-web-admin/#/calllog">Log Ura</a></li>
+							<li><a href="/ims-report/log.jsp">Log Ura</a></li>
 							<!--<li><a href="/ims-tool-web-admin/#/mensagem">WebServices</a></li>-->
 						</ul> 
-					<li><a href="#"><i class="fa fa-edit fa-fw"></i> Configuração<spanclass="fa arrow"></span></a>
+					</li>
+					<li><a href="#"><i class="fa fa-edit fa-fw"></i> Configuração<spanclass="fa arrow"></a>
 						<ul class="nav nav-second-level">
 							<li><a href="/ims-tool-web-admin/#/flag">Flag</a></li>
 							<li><a href="/ims-tool-web-admin/#/parameter">Parâmetro</a></li>
 							<li><a href="/ims-tool-web-admin/#/hour">Horário</a></li>
 							<li><a href="/ims-tool-web-admin/#/mensagem">Mensagem</a></li>
-						</ul> <!-- /.nav-second-level --></li>
-					<li><a href="#"><i class="fa fa-lock fa-fw"></i> Administrativo<spanclass="fa arrow"></span></a>
+						</ul>
+					</li>
+					<li><a href="#"><i class="fa fa-lock fa-fw"></i> Administrativo<spanclass="fa arrow"></a>
 						<ul class="nav nav-second-level">
 							<li><a href="/ims-tool-web-admin/#/access">Acesso</a></li>
 							<li><a href="/ims-tool-web-admin/#/logaudit">Log Audit</a></li>
 							<li><a href="/ims-tool-web-admin/#/controlpanel">Painel de Controle</a></li>
-						</ul> <!-- /.nav-second-level --></li>
-					<li><a href="#"><i class="fa  fa-wrench fa-fw"></i> Desenvolvimento<spanclass="fa arrow"></span></a>
+						</ul>
+					</li>
+					<li><a href="#"><i class="fa fa-wrench fa-fw"></i> Desenvolvimento<spanclass="fa arrow"></a>
 						<ul class="nav nav-second-level">
 							<li><a href="/ims-tool-web">Editor</a></li>
 							<li><a href="/ims-report">Debug</a></li>
-						</ul> <!-- /.nav-second-level --></li>			
+						</ul> <!-- /.nav-second-level -->
+					</li>			
 				</ul>
 			</div>
 			<!-- /.sidebar-collapse -->
