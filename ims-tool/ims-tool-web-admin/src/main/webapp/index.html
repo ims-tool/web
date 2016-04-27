@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <link rel="icon" href="/ims-tool-web-admin/resources/img/logo_increase.png" type="image/ico" />
-<html ng-app="app" >
+<html ng-app="app">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
 <title>IMS - Tool - Web Admin</title>
@@ -9,23 +9,60 @@
 <link href="/ims-tool-web-admin/css/bootstrap.min.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/style.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/bootstrap-toggle.css" rel="stylesheet">
-<link href="/ims-tool-web-admin/css/bootstrap-switch.min.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/highlight.css" rel="stylesheet">
 <link href="/ims-tool-web-admin/css/xeditable.css" rel="stylesheet">
-<script src="js/jquery-2.1.4.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+
+<!-- Bootstrap Core CSS -->
+<link href="/ims-tool-web-admin/template/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- MetisMenu CSS -->
+<link href="/ims-tool-web-admin/template/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet" />
+
+<!-- Timeline CSS -->
+<link href="/ims-tool-web-admin/template/dist/css/timeline.css" rel="stylesheet" />
+
+<!-- Custom CSS -->
+<link href="/ims-tool-web-admin/template/dist/css/sb-admin-2.css" rel="stylesheet" />
+
+<!-- Morris Charts CSS -->
+<link href="/ims-tool-web-admin/template/bower_components/morrisjs/morris.css" rel="stylesheet" />
+
+<!-- Custom Fonts -->
+<link href="/ims-tool-web-admin/template/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/ims-tool-web-admin/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
+
+<script src="/ims-tool-web-admin/template/bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/ims-tool-web-admin/template/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/ims-tool-web-admin/template/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- Morris Charts JavaScript -->
+<script src="/ims-tool-web-admin/template/bower_components/raphael/raphael-min.js"></script>
+<script src="/ims-tool-web-admin/template/bower_components/morrisjs/morris.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/ims-tool-web-admin/js/jquery.cookie.js"></script>
+<script src="/ims-tool-web-admin/template/dist/js/sb-admin-2.js"></script>
+
+
+<script src="/ims-tool-web-admin/template/dist/js/jsapi.js"></script>
+
+
+<script src="/ims-tool-web-admin/template/dist/js/dashboardIMS.js"></script>
 <script src="/ims-tool-web-admin/js/angular.min.js"></script>
 <!--  <script src="/ims-tool-web-admin/js/angular-route.min.js"></script>-->
 <script src="/ims-tool-web-admin/js/angular-ui-router.js"></script>
-<script src="/ims-tool-web-admin/js/angularjs-dropdown-multiselect.js"></script>
-<script src="/ims-tool-web-admin/js/bootstrap-switch.min.js"></script>
-<script src="/ims-tool-web-admin/js/bootbox.min.js"></script>
-<script src="/ims-tool-web-admin/js/mask.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-aria.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-messages.min.js"></script>
+
 <!-- Angular Material Library -->
 <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
 <script src="/ims-tool-web-admin/js/require.js"></script>
 <script src="/ims-tool-web-admin/app/app.js"></script>
 <script src="/ims-tool-web-admin/app/util/util.js"></script>
@@ -35,55 +72,80 @@
 <script src="/ims-tool-web-admin/js/xeditable.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/controllers.js"></script>
 <script src="/ims-tool-web-admin/app/controllers/accessctrl.js"></script>
-<script src="/ims-tool-web-admin/app/controllers/mensagemctrl.js"></script>
-<script src="/ims-tool-web-admin/app/controllers/reportctrl.js"></script>
 <script src="/ims-tool-web-admin/js/jquery-2.1.4.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap.min.js"></script>
 <script src="/ims-tool-web-admin/js/bootstrap-toggle.js"></script>
 <script src="/ims-tool-web-admin/js/highlight.js"></script>
 <script src="/ims-tool-web-admin/js/webadmin.js"></script>
+<script src="/ims-tool-web-admin/template/dist/js/dashboard.js"></script>
+
 
 </head>
 <body>
 
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container-fluid span12">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-					aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#"> IMS Admin</a>
-			</div>
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">In&iacute;cio</a></li>
-					
-					<li><a href="#" onclick="releaseUser()">Logout</a></li>
+	<!-- Navigation -->
+	<nav class="navbar navbar-default navbar-static-top" role="navigation"
+		style="margin-bottom: 0">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="index.xhtml">IMS DASHBOARD</a>
+		</div>
+		<!-- /.navbar-header -->
+
+
+		<div class="navbar-default sidebar" role="navigation">
+			<div class="sidebar-nav navbar-collapse">
+				<ul class="nav" id="side-menu">
+
+					<li><a href="index.xhtml"><i class="fa fa-dashboard fa-fw"></i>
+							Dashboard</a></li>
+					<li><a href="#"><i class="fa fa-table fa-fw"></i> Report<span
+							class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+							<li><a
+								href="/ims-dashboard/Report?menu=report&amp;submenu=logura">Log
+									Ura</a></li>
+							<li><a
+								href="/ims-dashboard/Report?menu=report&amp;submenu=wsvolume">WebServices</a>
+							</li>
+						</ul> <!-- /.nav-second-level --></li>
 				</ul>
 			</div>
+			<!-- /.sidebar-collapse -->
 		</div>
+		<!-- /.navbar-static-side -->
 	</nav>
- </br>
- </br>
- </br>
+	<!--main content start-->
 
-	<div ng-controller="tabCtrl" class="span12" >
-	<ul class="nav nav-tabs">
-		<li id ='home' ui-class="{active: activetab == '/'}"><a ui-sref="welcome" >Home</a></li>
-		<li id ='webflag' ui-class="{active: activetab == '/flag'}" ><a  ui-sref="flag">Flag</a></li>
-		<li id ='webparameter' ui-class="{active: activetab == '/parameter'}"><a  ui-sref="parameter">Parâmetro</a></li>
-		<li id ='webhour' ui-class="{active: activetab == '/hour'}"><a  ui-sref="hour">Horário</a></li>
-		<li id ='webaccess' ui-class="{active: activetab == '/access'}"><a  ui-sref="access">Acesso</a></li>
-		<li id ='webmensagem' ui-class="{active: activetab == '/mensagem'}"><a  ui-sref="mensagem">Mensagem URA</a></li>
-		<li id ='webreport' ui-class="{active: activetab == '/report'}"><a  ui-sref="report">Relatório</a></li>
+
+	<!-- page start-->
+	<div id="page-wrapper">
+		<div id="morris">
+				<div ng-controller="tabCtrl" class="span12" >
+				<ul class="nav nav-tabs">
+				<li id ='home' ui-class="{active: activetab == '/'}"><a ui-sref="welcome" >Home</a></li>
+				<li id ='webflag' ui-class="{active: activetab == '/flag'}" ><a  ui-sref="flag">Flag</a></li>
+				<li id ='webparameter' ui-class="{active: activetab == '/parameter'}"><a  ui-sref="parameter">Parâmetro</a></li>
+				<li id ='webhour' ui-class="{active: activetab == '/hour'}"><a  ui-sref="hour">Horário</a></li>
+				<li id ='webaccess' ui-class="{active: activetab == '/access'}"><a  ui-sref="access">Acesso</a></li>
+				<li id ='webmensagem' ui-class="{active: activetab == '/mensagem'}"><a  ui-sref="mensagem">Mensagem URA</a></li>
+				<li id ='webreport' ui-class="{active: activetab == '/report'}"><a  ui-sref="report">Relatório</a></li>
 	</ul>
 	</div>
-	<div class="row-fluid">
-  		<div class="span12" ui-view></div>
+
+			<div ui-view></div>
+		</div>
 	</div>
+	<!-- page end-->
+	</br>
+	</br>
+	</br>
+
+
 </body>
 </html>
