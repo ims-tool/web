@@ -30,5 +30,21 @@ public class DashboardFactory {
 		DashboardDAO dao = new DashboardDAO();		
 		return dao.getVolumeLigacaoEstado(minutes);
 	}
+	public HashMap<String,Integer> getAcumulado() {
+		DashboardDAO dao = new DashboardDAO();		
+		return dao.retornaAcumulado();
+	}
+	public HashMap<String,Integer> getMenuPrincipalUltimaHora() {
+		DashboardDAO dao = new DashboardDAO();		
+		return dao.retornaMenuPrincipalUltimaHora();
+	}
+	public HashMap<String,Integer> getMenuPrincipalAcumuladoDia() {
+		DashboardDAO dao = new DashboardDAO();		
+		return dao.retornaMenuPrincipalAcumuladoDia();
+	}
+	public String getFinalizacao() {
+		DashboardDAO dao = new DashboardDAO();		
+		return dao.retornaFinalizacao();
+	}
 
 }

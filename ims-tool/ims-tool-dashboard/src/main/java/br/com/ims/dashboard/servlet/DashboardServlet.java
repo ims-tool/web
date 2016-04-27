@@ -163,8 +163,38 @@ public class DashboardServlet extends HttpServlet {
 			outer.print(lista);
 			
 		}
+		if (funct.equalsIgnoreCase("getAcumulado")) {
+			PrintWriter outer = response.getWriter();
+			DashboardFactory dashboardController = new DashboardFactory();
+
+			HashMap<String,Integer> acumulado = dashboardController.getAcumulado();
 			
-		
+			String lista = formatarStringAcumulado(acumulado);
+			outer.print(lista);
+		}
+		if (funct.equalsIgnoreCase("getMenuPrincipalUltimaHora")) {
+			PrintWriter outer = response.getWriter();
+			DashboardFactory dashboardController = new DashboardFactory();
+
+			HashMap<String,Integer> resultado = dashboardController.getMenuPrincipalUltimaHora();
+			
+			String lista = formatarStringMenuPrincipal(resultado);
+			outer.print(lista);
+		}			
+		if (funct.equalsIgnoreCase("getMenuPrincipalAcumuladoDia")) {
+			PrintWriter outer = response.getWriter();
+			DashboardFactory dashboardController = new DashboardFactory();
+
+			HashMap<String,Integer> resultado = dashboardController.getMenuPrincipalAcumuladoDia();
+			
+			String lista = formatarStringMenuPrincipal(resultado);
+			outer.print(lista);
+		}			
+		if (funct.equalsIgnoreCase("getFinalizacao")) {
+			PrintWriter outer = response.getWriter();
+			DashboardFactory dashboardController = new DashboardFactory();
+			outer.print(dashboardController.getFinalizacao());
+		}						
 	}
 	
 	
@@ -292,11 +322,11 @@ public class DashboardServlet extends HttpServlet {
 		localidades.put("98", "São Luis");
 		localidades.put("99", "Imperatriz");
 		
-		String lista = "[[\"Cidade\", \"Qtde\"]";
+		String lista = "[[\"Cidade\", \"DDD\", \"Qtde\"]";
 		
 		if(volumeURA != null) {
 			for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
-				lista += ",[\""+localidades.get(entry.getKey())+"\","+entry.getValue()+"]";
+				lista += ",[\""+localidades.get(entry.getKey())+"\","+entry.getKey()+","+entry.getValue()+"]";
 			}
 		}
 		
@@ -306,5 +336,34 @@ public class DashboardServlet extends HttpServlet {
 		return lista;
 	}
 
+	private String formatarStringAcumulado(HashMap<String, Integer> volumeURA) {
+		String lista = "[[\"Data\", \"Volume\"]";
+		
+		if(volumeURA != null) {
+			for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
+				lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+			}
+		}
+		
+		lista = lista + "]";
 
+
+		return lista;
+	}
+	
+	private String formatarStringMenuPrincipal(HashMap<String, Integer> volume) {
+		String lista = "[[\"Opção\", \"Qtde\"]";
+		
+		if(volume != null) {
+			for(java.util.Map.Entry<String, Integer> entry : volume.entrySet() ){
+				lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+			}
+		}
+		
+		lista = lista + "]";
+
+
+		return lista;
+	}
+	
 }

@@ -1,6 +1,9 @@
 package br.com.ims.dashboard.dao;
 
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
@@ -185,10 +188,9 @@ public class DashboardDAO {
 		
 		DbConnection db = null;
 
-		sql = "select ddd, count(*) qtde from flow.log l where l.startdate > localtimestamp - interval '"+minutes+" hours' group by ddd "; 
+		sql = "select ddd, count(*) qtde from flow.log l where l.startdate > localtimestamp - interval '"+minutes+" minutes' and l.ddd is not null group by ddd "; 
 
 		try {
-			//oracle = new OracleConn("IVR_OWNER");
 			db= new DbConnection("");
 			rs = db.ExecuteQuery(sql);
 			
@@ -206,7 +208,157 @@ public class DashboardDAO {
 
 		}
 		return volume;
+	}
+
+	
+	public HashMap<String,Integer> retornaAcumulado() {
+		
+		log.debug("[Dashboard IMSMap] - " + "iniciando busca por Volume de Ligacoes por Estado");
+
+		HashMap<String,Integer> volume = new HashMap<String,Integer>();
+		ResultSet rs = null;
+		String sql = "";
+		
+		DbConnection db = null;
+		
+		Calendar ch = Calendar.getInstance();
+		Calendar c7 = Calendar.getInstance();
+		c7.add(Calendar.HOUR, -7*24);
+		Calendar c14 = Calendar.getInstance();
+		c14.add(Calendar.HOUR, -14*24);
+		
+		SimpleDateFormat df0 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		sql = " select 'Hoje' dia, count(*) qtde from flow.log l where l.startdate between '"+df0.format(ch.getTime())+"' and '"+df.format(ch.getTime())+"'  union all "
+			+ " select '-7 dias' dia, count(*) qtde from flow.log l where l.startdate between '"+df0.format(c7.getTime())+"' and '"+df.format(c7.getTime())+"'  union all "
+			+ " select '-14 dias' dia, count(*) qtde from flow.log l where l.startdate between '"+df0.format(c14.getTime())+"' and '"+df.format(c14.getTime())+"'  "; 
+
+		try {
+			db= new DbConnection("");
+			rs = db.ExecuteQuery(sql);
+			
+			while (rs.next()) {
+				volume.put(rs.getString("dia"), rs.getInt("qtde"));				
+			}
+
+		} catch (Exception e) {
+			log.error("[Dashboard Volume Ligacao Estado] -" + e.getMessage(),e);
+			return null;
+
+		} finally {
+			//try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			db.finalize();
+
+		}
+		return volume;
+	}
+	
+	public HashMap<String,Integer> retornaMenuPrincipalUltimaHora() {
+		
+		log.debug("[Dashboard IMSMap] - " + "iniciando retornaMenuPrincipalUltimaHora");
+
+		HashMap<String,Integer> volume = new HashMap<String,Integer>();
+		ResultSet rs = null;
+		String sql = "";
+		
+		DbConnection db = null;
+		
+		sql = " Select t.description||' tag: '||tg.tagid opcao, count(*) qtde"
+			+ " from flow.tracktag tg "
+			+ " left join flow.tag t on t.id=tg.tagid "
+			+ " where tg.rowdate between current_date - INTERVAL'1 hour' and current_date "
+			+ " and tg.tagid in (150,152,168,182,184,185,468,187,469,529,529) "
+			+ " group by t.description||' tag: '||tg.tagid"; 
+
+		try {
+			db= new DbConnection("");
+			rs = db.ExecuteQuery(sql);
+			
+			while (rs.next()) {
+				volume.put(rs.getString("opcao"), rs.getInt("qtde"));				
+			}
+
+		} catch (Exception e) {
+			log.error("[Dashboard retornaMenuPrincipalUltimaHora] -" + e.getMessage(),e);
+			return null;
+
+		} finally {
+			//try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			db.finalize();
+
+		}
+		return volume;
 	}	
 	
+	public HashMap<String,Integer> retornaMenuPrincipalAcumuladoDia() {
+		
+		log.debug("[Dashboard IMSMap] - " + "iniciando retornaMenuPrincipalAcumuladoDia");
 
+		HashMap<String,Integer> volume = new HashMap<String,Integer>();
+		ResultSet rs = null;
+		String sql = "";
+		
+		DbConnection db = null;
+		
+		sql = " Select t.description||' tag: '||tg.tagid opcao, count(*) qtde"
+			+ " from flow.tracktag tg "
+			+ " left join flow.tag t on t.id=tg.tagid "
+			+ " where tg.rowdate between date_trunc('day',current_date) and current_date "
+			+ " and tg.tagid in (150,152,168,182,184,185,468,187,469,529,529) "
+			+ " group by t.description||' tag: '||tg.tagid"; 
+
+		try {
+			db= new DbConnection("");
+			rs = db.ExecuteQuery(sql);
+			
+			while (rs.next()) {
+				volume.put(rs.getString("opcao"), rs.getInt("qtde"));				
+			}
+
+		} catch (Exception e) {
+			log.error("[Dashboard retornaMenuPrincipalAcumuladoDia] -" + e.getMessage(),e);
+			return null;
+
+		} finally {
+			//try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			db.finalize();
+
+		}
+		return volume;
+	}		
+
+	public String retornaFinalizacao() {
+		
+		log.debug("[Dashboard IMSMap] - " + "iniciando retornaFinalizacao");
+
+		String volume = "";
+		ResultSet rs = null;
+		String sql = "";
+		
+		DbConnection db = null;
+		
+		sql = " Select X.MINUTO, ROUND(SUM(X.ATH)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ATH, ROUND(SUM(X.ABN)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ABN, ROUND(SUM(X.RET)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) RET FROM (Select to_char(l.startdate, 'HH12:MI') MINUTO,sum(case when finalstatus='T' then 1 else 0 end) ATH,sum(case when finalstatus='A' then 1 else 0 end) ABN,sum(case when finalstatus='R' then 1 else 0 end) RET from flow.log l where l.startdate between date_trunc ('day',current_date') and current_date  group by to_char(l.startdate, 'HH12:MI'),finalstatus) X GROUP BY X.MINUTO ORDER BY 1"; 
+
+		try {
+			db= new DbConnection("");
+			rs = db.ExecuteQuery(sql);
+			volume = "[";
+			volume += "[\"Minuto\",\"Ath\",\"Abn\",\"Ret\"]";
+			while (rs.next()) {
+				volume += ",[\""+rs.getString("MINUTO")+"\","+rs.getString("ATH")+","+rs.getString("ABN")+","+rs.getString("RET")+"]";
+			}
+			volume += "]";
+		} catch (Exception e) {
+			log.error("[Dashboard retornaFinalizacao] -" + e.getMessage(),e);
+			return null;
+
+		} finally {
+			//try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			db.finalize();
+
+		}
+		return volume;
+	}	
+	
 }

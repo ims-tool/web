@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    xmlns:c="http://java.sun.com/jsp/jstl/core" > 
+	<h:head> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	    
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	    <meta name="description" content="" />
+	    <meta name="author" content="Ims Dashboard" />
+	    <meta name="keyword" content="Ims, Dashboard" />
+	
+    	<title><ui:insert name="title">IMS - DASHBOARD</ui:insert></title>
+		
+	  	<!-- Bootstrap Core CSS -->
+	    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+	
+	    <!-- MetisMenu CSS -->
+	    <link href="bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet" />
+	
+	    <!-- Timeline CSS -->
+	    <link href="dist/css/timeline.css" rel="stylesheet" />
+	
+	    <!-- Custom CSS -->
+	    <link href="dist/css/sb-admin-2.css" rel="stylesheet" />
+	
+	    <!-- Morris Charts CSS -->
+	    <link href="bower_components/morrisjs/morris.css" rel="stylesheet" />
+	
+	    <!-- Custom Fonts -->
+	    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	    
+	    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    	<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
+	
+	    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	    <!--[if lt IE 9]>
+	        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	    <![endif]-->
+		
+		 <!-- jQuery -->
+	    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+	
+	    <!-- Bootstrap Core JavaScript -->
+	    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	
+	    <!-- Metis Menu Plugin JavaScript -->
+	    <script src="bower_components/metisMenu/dist/metisMenu.min.js"></script>
+	
+	    <!-- Morris Charts JavaScript -->
+	    <script src="bower_components/raphael/raphael-min.js"></script>
+	    <script src="bower_components/morrisjs/morris.min.js"></script>
+	    
+	    <!-- Custom Theme JavaScript -->
+	    <script src="dist/js/sb-admin-2.js"></script>	    
+	    
+
+		<script src="dist/js/dashboard.js"></script>
+		<script src="dist/js/jsapi.js"></script>
+	    
+	    
+	    <script src="dist/js/dashboardIMS.js"></script>
+	    
+	    
+	
+	    
+	</h:head> 
+	<h:body> 
+		<div id="wrapper">
+	 
+			<ui:insert name="header" > 
+				<ui:include src="/template/header.xhtml" /> 
+			</ui:insert> 
+			<div id="page-wrapper">			
+				<ui:insert name="content" > 
+					<ui:include src="/template/servicos.xhtml" /> 
+				</ui:insert> 
+			</div> 			
+		</div>
+		
+
+	</h:body> 
+</html>
