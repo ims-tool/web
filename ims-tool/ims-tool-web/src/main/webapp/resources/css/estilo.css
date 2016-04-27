@@ -171,10 +171,6 @@ body > #wrap {
 	float: left;	
 }
 
-#conteudoRodape .logoGVT {
-	float: right;	
-}
-
 
 /*Opera Fix*/
 body:before {
@@ -189,16 +185,21 @@ body:before {
 /*-----------cabeçalho------------*/
 
 #cabecalho {
-	background: url("../imagens/outros/fundoGeralCabecalho.png") top left repeat-x;
+	/*background: url("../imagens/logos/IMS_LOGO.png") top left repeat-x;
+	background: url("../imagens/logos/IMS_LOGO.png") top left no-repeat;
 	width: 100%;	
 	overflow: visible;
-	style="z-index: 2000; 
+	style="z-index: 2000;*/
+	
+	color: #777777;
 }
 
 #fundoCabecalho {
-	background: url("../imagens/outros/fundoCabecalho.png") top left no-repeat;
+	/*background: url("../imagens/logos/IMS_LOGO.png") top left no-repeat;
 	width: 100%;	
-	overflow: hidden;
+	overflow: hidden;*/
+	
+	color: #777777;
 }
 
 #conteudoCabecalho {
@@ -252,22 +253,24 @@ body:before {
     top: 8px !important;
     right: 16px !important;
     font-size: 14px !important;
+   
 		
 }
 
-#links {
-	float: right;
+.links {
+	float: inherit;
 	margin-right: 3px;
 	font-size: 10px;
+	color: #182955;
 }
 
-#links a {
-	color: #182955;
+.links a {
+	color: #182955 !important;
 	padding-right: 5px;
 }
 
-#links a:hover {
-	color: #182955;
+.links a:hover {
+	color: #182955 !important;
 	text-decoration: none;
 }
 

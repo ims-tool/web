@@ -7,18 +7,16 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:fn="http://java.sun.com/jsp/jstl/functions">
-
-<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
 <h:head>
         <title><ui:insert name="title">IMS Tools</ui:insert></title>
-		<link href="#{request.contextPath}/imagens/icones/favicon.ico" rel='shortcut icon' type='imagens/x-icon' />
+        <link rel="icon" href="#{request.contextPath}/imagens/logos/IMS_LOGO.png" type="image/ico" />
 		<script src="#{request.contextPath}/resources/js/context.js" type="text/javascript"></script>
 		<script src="#{request.contextPath}/resources/js/script.js" type="text/javascript"></script>
 		<script src="#{request.contextPath}/resources/js/locale.js" type="text/javascript"></script>
 		<h:outputStylesheet name="estilo.css" library="css" />
 		<h:outputStylesheet name="context.standalone.css" library="css" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
 		     
 </h:head>
 
@@ -29,39 +27,43 @@
 				<div id="fundoCabecalho">
 					<div id="conteudoCabecalho">
 						<div id="containerLogos">						
-							<h1 id="titulo">
-								<p>IMS - Tools</p>								
-							</h1>							
+							
+							<img src="#{request.contextPath}/imagens/logos/IMS_LOGO.png" alt="IMS" width="100px" height="50px" />
+					
+							<img src="#{request.contextPath}/imagens/logos/boticario_logo.png" style="float:right" alt="Grupo Boticário" width="100px" height="50px" />
+													
 						</div>						
-						<div id="containerWelcome">
-							<h:form>
-								<h3>Welcome #{loginBean.username}</h3>
-								<h3><h:commandLink styleClass="links" action="#{loginBean.doLogout}" value="Logout"/></h3>
-							</h:form>			
 														
-						</div>	
+							
 					</div>
+					
 				</div>
 				<div class="menuPrincipal">
 					<h:form>  
 					    <p:menubar >  
 					        <p:submenu label="IVR Editor" id="FlowEditor" icon="ui-icon-pencil">  
 					           	<p:menuitem value="Ivr Editor" url="/pages/ivreditor.faces" />					           	  								  
-					        </p:submenu>  					        
+					        </p:submenu> 
+					        <f:facet name="options">
+                 				 <h:commandLink styleClass="links" action="#{loginBean.doLogout}" value="Logout"/>
+                 			</f:facet>
+					        					        
 					    </p:menubar>  
 					  
 					</h:form>  
 				</div>				
 			</div>
+			
 			<p:growl id="msgGlobal" showDetail="false" />
 				
 			<div id="conteudo">
+				
 				<ui:insert name="conteudo">Default content</ui:insert>
 			</div>
 		</div>
 		<div id="rodape">
 			<div id="conteudoRodape">
-				<p class="textoCapacidade">E2E</p>				
+				<p class="textoCapacidade"></p>				
 			</div>						
 		</div>
 </h:body>

@@ -641,13 +641,15 @@ public class IvrEditorBean extends AbstractBean {
 			if(this.form.getFormType().getName().equals(Constants.FORM_TYPE_MENU) ||
 					this.form.getFormType().getName().equals(Constants.FORM_TYPE_DECISION) ||
 					this.form.getFormType().getName().equals(Constants.FORM_TYPE_PROMPT_COLLECT)) {
-				for(Node nodeTarget :  node.getListTarget()) {
+				for(int index = 0; index < node.getListTarget().size(); index++) {
+					Node nodeTarget = node.getListTarget().get(index);
 					if(nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_CHOICE) ||
 							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_DECISION_CHANCE) ||
 							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCHINPUT) || 
 							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOINPUT) ||
 							nodeTarget.getForm().getFormType().getName().equals(Constants.FORM_TYPE_NOMATCH)) {
 						ServicesFactory.getInstance().getIvrEditorService().deleteForm(nodeTarget.getElement(),true);
+						index = -1;
 					}
 				}
 				
