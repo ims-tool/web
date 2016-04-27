@@ -141,7 +141,7 @@ public class OperationEditorBean extends AbstractBean {
 	public void edit(String id) {
 		collect();
 		
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/auxiliar/ConditionGroup.xhtml");
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setComplementPageEditor("/pages/forms/OperationGroup.xhtml");
 		
 		ServicesFactory.getInstance().getOperationGroupEditorService().getBean().setOperationBean(this);
 		

@@ -142,7 +142,7 @@ alter table flow.operationgroup alter column description type character varying(
 
 alter table flow.operation alter column id type bigint;
 alter table flow.operation alter column "name" type character varying(30);
-alter table flow.operation alter column description type character varying(30);
+alter table flow.operation alter column description type character varying(256);
 alter table flow.operation alter column nextformid type bigint;
 
 alter table flow.operationmap alter column id type bigint;

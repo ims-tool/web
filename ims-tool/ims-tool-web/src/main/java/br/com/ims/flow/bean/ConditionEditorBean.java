@@ -339,7 +339,6 @@ public class ConditionEditorBean extends AbstractBean {
 		
 		ServicesFactory.getInstance().getConditionGroupEditorService().getBean().setConditionBean(this);
 		
-		
 		for(ConditionGroupEntity group : this.conditionGroups) {
 			if(group.getId().equals(id)) {
 				ServicesFactory.getInstance().getConditionGroupEditorService().getBean().setConditionGroup(group);

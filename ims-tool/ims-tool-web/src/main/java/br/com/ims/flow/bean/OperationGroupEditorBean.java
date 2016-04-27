@@ -72,6 +72,8 @@ public class OperationGroupEditorBean extends AbstractBean {
 	public void setOperationGroup(OperationGroupEntity operationGroup) {
 		this.insert = false;
 		this.operationGroup = operationGroup;
+		if(this.operationGroup.getOperationMap() != null)
+			this.mapId = this.operationGroup.getOperationMap().getId(); 
 		if(this.operationGroup.getListOperationParameters() == null) {
     		this.operationGroup.setListOperationParameters(new ArrayList<OperationParameterEntity>());
     	}
