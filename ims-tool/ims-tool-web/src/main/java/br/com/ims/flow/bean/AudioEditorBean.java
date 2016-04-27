@@ -213,6 +213,13 @@ public class AudioEditorBean extends AbstractBean {
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		this.audio = ServicesFactory.getInstance().getAudioService().get(id);
+		if(this.isUsed(id)) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Audio","You cannot delete Audio '"+this.audio.getName()+"' because there are dependences.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
+		
 		if(ServicesFactory.getInstance().getAudioService().delete(this.audio)) {
 			
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Audio",this.audio.getName()+" - Deleted!");

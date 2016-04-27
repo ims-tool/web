@@ -108,14 +108,12 @@
 			        <p:column headerText="PROMPT" >
 			            <h:outputText value="#{n.prompt != null ? n.prompt.name : 'Empty'}" />
 			        </p:column>
-			        <p:column headerText="IN USE" >
-			            <h:outputText rendered="#{nomatchinputEditorView.isUsed(n.id) eq false}" value="NO" />
-			            
-			            <p:commandButton rendered="#{nomatchinputEditorView.isUsed(n.id) eq true}" icon="ui-icon-search" actionListener="#{nomatchinputEditorView.viewDependence(n.id,n.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
+			        <p:column headerText="DEPENDENCES" >
+			            <p:commandButton icon="ui-icon-search" actionListener="#{nomatchinputEditorView.viewDependence(n.id,n.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId"/>
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
 			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{nomatchinputEditorView.edit(n.id)}" update="@form"/>
-			             <p:commandButton icon="ui-icon-close" disabled="#{nomatchinputEditorView.isUsed(n.id)}"  title="Delete" actionListener="#{nomatchinputEditorView.delete(n.id)}" update="@form">
+			             <p:commandButton icon="ui-icon-close" title="Delete" actionListener="#{nomatchinputEditorView.delete(n.id)}" update="@form">
 			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
 			             </p:commandButton>			                
 			        </p:column>

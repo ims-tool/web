@@ -368,6 +368,12 @@ public class ConditionEditorBean extends AbstractBean {
 	@Override
 	public void delete(String id) {
 		this.condition = ServicesFactory.getInstance().getConditionService().get(id);
+		if(this.isUsed(id)) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Condition","You cannot delete Condition '"+this.condition.getName()+"' because there are dependences.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
 		if(ServicesFactory.getInstance().getConditionService().delete(this.condition)) {
 			
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition",this.condition.getName()+" - Deleted!");

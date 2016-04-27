@@ -101,14 +101,13 @@
 			        <p:column headerText="SIZE MAX" filterBy="#{g.sizeMax}" filterMatchMode="contains">
 			            <h:outputText value="#{g.sizeMax}" />
 			        </p:column>
-			        <p:column headerText="IN USE" >
-			            <h:outputText rendered="#{grammarEditorView.isUsed(g.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{grammarEditorView.isUsed(g.id) eq true}" icon="ui-icon-search" actionListener="#{grammarEditorView.viewDependence(g.id,g.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
+			        <p:column headerText="DEPENDENCES" >
+			            <p:commandButton icon="ui-icon-search" actionListener="#{grammarEditorView.viewDependence(g.id,g.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId"/>
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
 			             
 			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{grammarEditorView.edit(g.id)}" update="@form"/>
-			             <p:commandButton icon="ui-icon-close" disabled="#{grammarEditorView.isUsed(g.id)}"  title="Delete" actionListener="#{grammarEditorView.delete(g.id)}" update="@form">
+			             <p:commandButton icon="ui-icon-close" title="Delete" actionListener="#{grammarEditorView.delete(g.id)}" update="@form">
 			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
 			             </p:commandButton>		                
 			        </p:column>

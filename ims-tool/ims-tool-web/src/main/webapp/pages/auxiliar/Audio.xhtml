@@ -96,13 +96,12 @@
 			        <p:column headerText="PATH" >
 			            <h:outputText value="#{a.path}" />
 			        </p:column>
-			        <p:column headerText="IN USE" >
-			            <h:outputText rendered="#{audioEditorView.isUsed(a.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{audioEditorView.isUsed(a.id) eq true}" icon="ui-icon-search" actionListener="#{audioEditorView.viewDependence(a.id,a.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
+			        <p:column headerText="DEPENDENCES" >
+			            <p:commandButton icon="ui-icon-search" actionListener="#{audioEditorView.viewDependence(a.id,a.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
 			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{audioEditorView.edit(a.id)}" update="@form"/>
-			             <p:commandButton icon="ui-icon-close" disabled="#{audioEditorView.isUsed(a.id)}"  title="Delete" actionListener="#{audioEditorView.delete(a.id)}" update="@form">
+			             <p:commandButton icon="ui-icon-close"  title="Delete" actionListener="#{audioEditorView.delete(a.id)}" update="@form">
 			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
 			             </p:commandButton>			                
 			        </p:column>

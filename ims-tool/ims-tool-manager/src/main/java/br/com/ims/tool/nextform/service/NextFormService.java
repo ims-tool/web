@@ -221,6 +221,7 @@ public class NextFormService {
 						}
 						
 						nextForm = getNextFormByNextId(jsonContext, answer.getNextForm());
+						jsonContext = nextForm.getJsonContexto();
 					}					
 			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_RETURN){
 				

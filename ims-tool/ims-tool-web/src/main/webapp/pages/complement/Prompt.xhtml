@@ -133,13 +133,12 @@
 			        <p:column headerText="NAME" filterBy="#{p.name}" filterMatchMode="contains">
 			            <h:outputText value="#{p.name}" />
 			        </p:column>
-			        <p:column headerText="IN USE" >
-			            <h:outputText rendered="#{promptEditorView.isUsed(p.id) eq false}" value="NO" />
-			            <p:commandButton rendered="#{promptEditorView.isUsed(p.id) eq true}" icon="ui-icon-search" actionListener="#{promptEditorView.viewDependence(p.id,p.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" title="Yes" />
+			        <p:column headerText="DEPENDENCES" >
+			            <p:commandButton icon="ui-icon-search" actionListener="#{promptEditorView.viewDependence(p.id,p.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" />
 			        </p:column>
 			        <p:column style="width:32px;text-align: center">
 			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{promptEditorView.edit(p.id)}" update="@form"/>
-			             <p:commandButton icon="ui-icon-close" disabled="#{promptEditorView.isUsed(p.id)}"  title="Delete" actionListener="#{promptEditorView.delete(p.id)}" update="@form">
+			             <p:commandButton icon="ui-icon-close" title="Delete" actionListener="#{promptEditorView.delete(p.id)}" update="@form">
 			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
 			             </p:commandButton>			                
 			        </p:column>

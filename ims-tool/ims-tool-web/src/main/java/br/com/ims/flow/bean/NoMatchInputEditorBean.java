@@ -213,6 +213,12 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		this.noMatchInput = ServicesFactory.getInstance().getNoMatchInputService().get(id);
+		if(this.isUsed(id)) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "NoInput/NoMatch","You cannot delete NoInput/NoMatch '"+this.noMatchInput.getName()+"' because there are dependences.");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			return;
+		}
 		if(ServicesFactory.getInstance().getNoMatchInputService().delete(this.noMatchInput)) {
 			
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "NoInput/NoMatch",this.noMatchInput.getName()+" - Deleted!");
