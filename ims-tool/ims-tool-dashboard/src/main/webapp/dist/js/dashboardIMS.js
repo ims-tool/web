@@ -37,13 +37,13 @@ function drawChartLineRetencao() {
 		
 		var selectedItem = chart.getSelection()[0];
          
-         if (selectedItem) {
+        /* if (selectedItem) {
            var dataHoraI = tabela.getValue(selectedItem.row, 0)+":00";
            var dataHoraF = tabela.getValue(selectedItem.row, 0)+":59";
            var url = "/ims-tool-dashboard/Report?menu=report&submenu=logura&action=consultar&datahoraI="+dataHoraI+
                      "&datahoraF="+dataHoraF+"&finalizacao=R"
            window.open(url);
-         }
+         }*/
 		
    }
 	
@@ -75,7 +75,7 @@ function drawChartWebServices() {
     
     function selectHandler() {
 		
-		var selectedItem = chart.getSelection()[0];
+		/*var selectedItem = chart.getSelection()[0];
          
          if (selectedItem) {
            
@@ -83,7 +83,7 @@ function drawChartWebServices() {
            
            var url = "/ims-tool-dashboard/Report?menu=report&submenu=wsvolume&action=consultar&status="+status
            window.open(url);
-         }
+         }*/
 		
    }
 	
@@ -128,7 +128,7 @@ function drawChartLineVolumeLigacaoMinuto() {
 	
 	function selectHandler() {
 		
-		 var selectedItem = chartLine.getSelection()[0];
+		 /*var selectedItem = chartLine.getSelection()[0];
          
          if (selectedItem) {
         	 
@@ -138,7 +138,7 @@ function drawChartLineVolumeLigacaoMinuto() {
         	 
         	 window.open(url);
         	 
-         }
+         }*/
 		
    }
 	
@@ -178,7 +178,7 @@ function drawChartLineVolumeLigacaoUra() {
 	
 	function selectHandler() {
 		
-		var selectedItem = chart.getSelection()[0];
+		/*var selectedItem = chart.getSelection()[0];
          
          if (selectedItem) {
            
@@ -195,7 +195,7 @@ function drawChartLineVolumeLigacaoUra() {
            var url = "/ims-tool-dashboard/Report?menu=report&submenu=logura&action=consultar&datahoraI="+dataHoraI+
                      "&datahoraF="+dataHoraF+"&flowName="+flowName;
            window.open(url);
-         }
+         }*/
 	}
    }
 	

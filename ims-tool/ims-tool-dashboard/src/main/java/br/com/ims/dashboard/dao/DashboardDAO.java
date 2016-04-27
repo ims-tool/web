@@ -3,7 +3,6 @@ package br.com.ims.dashboard.dao;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
@@ -267,7 +266,7 @@ public class DashboardDAO {
 		sql = " Select t.description||' tag: '||tg.tagid opcao, count(*) qtde"
 			+ " from flow.tracktag tg "
 			+ " left join flow.tag t on t.id=tg.tagid "
-			+ " where tg.rowdate between current_date - INTERVAL'1 hour' and current_date "
+			+ " where tg.rowdate between now() - INTERVAL'1 hour' and now() "
 			+ " and tg.tagid in (150,152,168,182,184,185,468,187,469,529,529) "
 			+ " group by t.description||' tag: '||tg.tagid"; 
 
@@ -304,7 +303,7 @@ public class DashboardDAO {
 		sql = " Select t.description||' tag: '||tg.tagid opcao, count(*) qtde"
 			+ " from flow.tracktag tg "
 			+ " left join flow.tag t on t.id=tg.tagid "
-			+ " where tg.rowdate between date_trunc('day',current_date) and current_date "
+			+ " where tg.rowdate between date_trunc('day',now()) and now() "
 			+ " and tg.tagid in (150,152,168,182,184,185,468,187,469,529,529) "
 			+ " group by t.description||' tag: '||tg.tagid"; 
 
@@ -338,7 +337,7 @@ public class DashboardDAO {
 		
 		DbConnection db = null;
 		
-		sql = " Select X.MINUTO, ROUND(SUM(X.ATH)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ATH, ROUND(SUM(X.ABN)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ABN, ROUND(SUM(X.RET)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) RET FROM (Select to_char(l.startdate, 'HH12:MI') MINUTO,sum(case when finalstatus='T' then 1 else 0 end) ATH,sum(case when finalstatus='A' then 1 else 0 end) ABN,sum(case when finalstatus='R' then 1 else 0 end) RET from flow.log l where l.startdate between date_trunc('day',current_date) and current_date  group by to_char(l.startdate, 'HH12:MI'),finalstatus) X GROUP BY X.MINUTO ORDER BY 1"; 
+		sql = " Select X.MINUTO, ROUND(SUM(X.ATH)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ATH, ROUND(SUM(X.ABN)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ABN, ROUND(SUM(X.RET)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) RET FROM (Select to_char(l.startdate, 'HH12:MI') MINUTO,sum(case when finalstatus='T' then 1 else 0 end) ATH,sum(case when finalstatus='A' then 1 else 0 end) ABN,sum(case when finalstatus='R' then 1 else 0 end) RET from flow.log l where l.startdate between date_trunc('day',now()) and now()  group by to_char(l.startdate, 'HH12:MI'),finalstatus) X GROUP BY X.MINUTO ORDER BY 1"; 
 
 		try {
 			db= new DbConnection("");
