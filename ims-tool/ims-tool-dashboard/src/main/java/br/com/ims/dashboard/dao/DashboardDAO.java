@@ -16,18 +16,18 @@ public class DashboardDAO {
 	
 	Logger log = Logger.getLogger(DashboardDAO.class);
 
-	public HashMap<String,String> getHealthWebServices() {
+	public HashMap<String,String> getWebServiceTimeout() {
 		
-		log.debug("[Dashboard IMS] - " + "iniciando busca por HealthWebServices");
+		log.debug("[Dashboard IMS] - " + "iniciando busca por WebServiceTimeout");
 		
 		HashMap<String,String> webServices = new HashMap<String, String>();
 		ResultSet rs = null;
 		String sql = "";
 		//OracleConn oracle = null;
 		DbConnection db = null;
-		sql = "SELECT 100-ROUND(100*(SUM(ERRO)/COUNT(1)),2) OK, ROUND(100*(SUM(ERRO)/COUNT(1)),2) NOK  FROM ( "+
-			  "	  SELECT method_service,COUNT(1) TOTAL,SUM(TIMEOUT) TIMEOUT,100*(SUM(TIMEOUT)/COUNT(1)) PORCENTAGEM, "+ 
-			  "	         CASE WHEN 100*(SUM(TIMEOUT)/COUNT(1)) > 0 THEN 1 ELSE 0 END ERRO  "+
+		sql = "SELECT 100-ROUND(100*(SUM(TIMEOUT)/COUNT(1)),2) OK, ROUND(100*(SUM(TIMEOUT)/COUNT(1)),2) NOK  FROM ( "+
+			  "	  SELECT method_service,COUNT(1) TOTAL, "+ 
+			  "	         CASE WHEN 100*(SUM(TIMEOUT)/COUNT(1)) > 0 THEN 1 ELSE 0 END TIMEOUT  "+
 			  "	  FROM (  "+
 			  "	      Select   "+
 			  "	       C.ID,  "+
@@ -50,7 +50,42 @@ public class DashboardDAO {
 			}
 
 		} catch (Exception e) {
-			log.error("[Dashboard HealthWebServices] -" + e.getMessage(),e);
+			log.error("[Dashboard WebServiceTimeout] -" + e.getMessage(),e);
+			return null;
+
+		} finally {
+			//oracle.finalize();
+			db.finalize();
+
+		}
+		return webServices;
+	}
+	public HashMap<String,Integer> getWebServiceStatus() {
+		
+		log.debug("[Dashboard IMS] - " + "iniciando busca por WebServiceStatus");
+		
+		HashMap<String,Integer> webServices = new HashMap<String, Integer>();
+		ResultSet rs = null;
+		String sql = "";
+		//OracleConn oracle = null;
+		DbConnection db = null;
+		sql = "select e.id||' - '||e.description status ,count(1) qtde "
+				+ "from flow.trackservice ts "
+				+ "inner join flow.errorcode e on ts.errorcodeid = e.id "
+				+ "where ts.rowdate BETWEEN now()-interval '1 hour' and now() "
+				+ "group by e.id||' - '||e.description ";
+
+		try {
+			db = new DbConnection("");
+			//oracle = new OracleConn("IVR_OWNER");
+			rs = db.ExecuteQuery(sql);
+			
+			while (rs.next()) {
+				webServices.put(rs.getString("status"), rs.getInt("qtde"));
+			}
+
+		} catch (Exception e) {
+			log.error("[Dashboard WebServiceStatus] -" + e.getMessage(),e);
 			return null;
 
 		} finally {

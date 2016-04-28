@@ -13,9 +13,13 @@ public class DashboardFactory {
 		return dao.retornaRetencao();
 	}
 	
-	public HashMap<String,String> verificaWebServices() {
+	public HashMap<String,String> verificaWebServicesTimeout() {
 		DashboardDAO dao = new DashboardDAO();
-		return dao.getHealthWebServices();
+		return dao.getWebServiceTimeout();
+	}
+	public HashMap<String,Integer> verificaWebServicesStatus() {
+		DashboardDAO dao = new DashboardDAO();
+		return dao.getWebServiceStatus();
 	}
 	
 	public HashMap<String,Integer> verificaVolumeLigacaoMinuto() {

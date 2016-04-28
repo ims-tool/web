@@ -10,7 +10,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+
 public class ConnectionDB {
+	public static Logger log = Logger.getLogger(ConnectionDB.class);
+	
 
 	InitialContext ctx = null;
 	DataSource ds = null;
@@ -25,6 +29,7 @@ public class ConnectionDB {
 			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/flow");
 			conn = ds.getConnection();
 		} catch (Exception e) {
+			log.error("ConnectionDB()-"+e.getMessage(),e);
 			e.printStackTrace();
 		}
 	}
@@ -64,6 +69,7 @@ public class ConnectionDB {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println(sql);
+			log.error("ExecuteSql("+sql+")-"+e.getMessage(),e);
 			return false;
 		}
 	}
@@ -76,6 +82,7 @@ public class ConnectionDB {
 					ResultSet.CONCUR_READ_ONLY);
 			rs = stmt.executeQuery(sql);
 		} catch (Exception e) {
+			log.error("ExecuteQuery("+sql+")-"+e.getMessage(),e);
 			e.printStackTrace();
 		}
 		return rs;
@@ -93,6 +100,7 @@ public class ConnectionDB {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("executeQuery("+pst.toString()+")-"+e.getMessage(),e);
 		} finally {
 			try {
 				pst.close();
@@ -103,11 +111,11 @@ public class ConnectionDB {
 	}
 	
 	public void executeInsert(PreparedStatement pst) {
-		rs = null;
 		try {
-			pst.executeQuery();
+			pst.execute();			
 
 		} catch (SQLException e) {
+			log.error("executeInsert("+pst.toString()+")-"+e.getMessage(),e);
 		} finally {
 			try {
 				pst.close();

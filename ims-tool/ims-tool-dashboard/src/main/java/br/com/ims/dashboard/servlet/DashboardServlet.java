@@ -89,10 +89,10 @@ public class DashboardServlet extends HttpServlet {
 			outer.print(lista);
 			
 		}
-		if (funct.equalsIgnoreCase("buscaWebService")) {
+		if (funct.equalsIgnoreCase("buscaWebServiceTimeout")) {
 			PrintWriter outer = response.getWriter();
 			DashboardFactory dashboardController = new DashboardFactory();
-			HashMap<String,String> webService = dashboardController.verificaWebServices();
+			HashMap<String,String> webService = dashboardController.verificaWebServicesTimeout();
 			/**
 			 * mock
 			 *
@@ -102,7 +102,16 @@ public class DashboardServlet extends HttpServlet {
 			/**
 			 * fim mock		
 			 */
-			String lista = formatarStringWebService(webService);
+			String lista = formatarStringWebServiceTimeout(webService);
+			outer.print(lista);
+			
+		}
+		if (funct.equalsIgnoreCase("buscaWebServiceStatus")) {
+			PrintWriter outer = response.getWriter();
+			DashboardFactory dashboardController = new DashboardFactory();
+			HashMap<String,Integer> webService = dashboardController.verificaWebServicesStatus();
+			
+			String lista = formatarStringWebServiceStatus(webService);
 			outer.print(lista);
 			
 		}
@@ -198,16 +207,28 @@ public class DashboardServlet extends HttpServlet {
 	}
 	
 	
-	private String formatarStringWebService(HashMap<String, String> webService) {
+	private String formatarStringWebServiceTimeout(HashMap<String, String> webService) {
 		String lista = "[[\"WebServices\", \"Porcentagem\"]";
 		if(webService != null && webService.containsKey("OK") && webService.get("OK") != null) {
 			lista = lista + ",[\"OK\", "+webService.get("OK").toString()+"]";
-			lista = lista + ",[\"NOK\", "+webService.get("NOK").toString()+"]";
+			lista = lista + ",[\"TIMEOUT\", "+webService.get("NOK").toString()+"]";
 		}
 		
 		
 		lista = lista + "]";
 		
+		return lista;
+	}
+	private String formatarStringWebServiceStatus(HashMap<String, Integer> webService) {
+		String lista = "[[\"Status\", \"Qtde\"]";
+		if(webService != null) {
+			for(java.util.Map.Entry<String, Integer> entry : webService.entrySet() ){
+				lista += ",[\""+entry.getKey()+"\","+entry.getValue()+"]";
+			}
+			
+		}
+		lista = lista + "]";
+				
 		return lista;
 	}
 	private String formatarStringRetencao(HashMap<Integer, Retencao> listRetencao) {

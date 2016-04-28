@@ -2,7 +2,8 @@
 google.load("visualization", "1", {packages : [ "corechart" ]});
 google.load('visualization', '1', {packages:['table']});
 
-google.setOnLoadCallback(drawChartWebServices);
+google.setOnLoadCallback(drawChartWebServicesTimeout);
+google.setOnLoadCallback(drawChartWebServicesStatus);
 google.setOnLoadCallback(drawChartLineRetencao);
 google.setOnLoadCallback(drawChartLineVolumeLigacaoMinuto);
 google.setOnLoadCallback(drawChartLineVolumeLigacaoUra);
@@ -12,7 +13,8 @@ google.setOnLoadCallback(drawChartMenuPrincipalUltimaHora);
 google.setOnLoadCallback(drawChartMenuPrincipalAcumuladoDia);
 google.setOnLoadCallback(drawChartFinalizacao);
 
-setInterval(drawChartWebServices, 600000);
+setInterval(drawChartWebServicesTimeout, 600000);
+setInterval(drawChartWebServicesStatus, 600000);
 setInterval(drawChartLineRetencao, 600000);
 setInterval(drawChartLineVolumeLigacaoMinuto, 600000);
 setInterval(drawChartLineVolumeLigacaoUra, 600000);
@@ -66,10 +68,10 @@ function drawChartLineRetencao() {
  
 }
 
-function drawChartWebServices() {
+function drawChartWebServicesTimeout() {
 	var tabela;
 	
-	var chart = new google.visualization.PieChart(document.getElementById('chart_donut_webService'));
+	var chart = new google.visualization.PieChart(document.getElementById('chart_donut_webServiceTimeout'));
     
 	
     
@@ -90,7 +92,7 @@ function drawChartWebServices() {
 	
    google.visualization.events.addListener(chart, 'select', selectHandler); 
     
- 	$.get("/ims-tool-dashboard/Dashboard?action=buscaWebService", function(data){
+ 	$.get("/ims-tool-dashboard/Dashboard?action=buscaWebServiceTimeout", function(data){
  		tabela = google.visualization.arrayToDataTable(JSON.parse(data));
 	
 	    var options = {
@@ -102,7 +104,6 @@ function drawChartWebServices() {
 	          color: 'white',
 	          fontSize:18
 	      },
-	      legend: 'none',
 	      chartArea: { 
 	            left: 10, 
 	            top: 10, 
@@ -115,6 +116,53 @@ function drawChartWebServices() {
  	} );
 }
 
+function drawChartWebServicesStatus() {
+	var tabela;
+	
+	var chart = new google.visualization.PieChart(document.getElementById('chart_donut_webServiceStatus'));
+    
+	
+    
+    function selectHandler() {
+		
+		/*var selectedItem = chart.getSelection()[0];
+         
+         if (selectedItem) {
+           
+           var status = tabela.getValue(selectedItem.row, 0);
+           
+           var url = "/ims-tool-dashboard/Report?menu=report&submenu=wsvolume&action=consultar&status="+status
+           window.open(url);
+         }*/
+		
+   }
+	
+	
+   google.visualization.events.addListener(chart, 'select', selectHandler); 
+    
+ 	$.get("/ims-tool-dashboard/Dashboard?action=buscaWebServiceStatus", function(data){
+ 		tabela = google.visualization.arrayToDataTable(JSON.parse(data));
+	
+	    var options = {
+		  height: 260,
+          width: 480,
+	      pieHole: 0.5,
+	      pieSliceText: 'value',
+	      pieSliceTextStyle: {
+	          color: 'white',
+	          fontSize:18
+	      },
+	      chartArea: { 
+	            left: 10, 
+	            top: 10, 
+	            width: '100%', 
+	            height: '100%'
+	        },
+	    };
+	    chart.draw(tabela, options);
+	    
+ 	} );
+}
 
 //Volume de ligação por minuto
 function drawChartLineVolumeLigacaoMinuto() {
