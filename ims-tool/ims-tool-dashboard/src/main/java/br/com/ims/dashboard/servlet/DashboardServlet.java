@@ -211,7 +211,7 @@ public class DashboardServlet extends HttpServlet {
 		return lista;
 	}
 	private String formatarStringRetencao(HashMap<Integer, Retencao> listRetencao) {
-		String lista = "[[\"Data\", \"Porcentagem\", \"Media\"]";
+		String lista = "[[\"Data\", \"Porcentagem\", \"Meta\"]";
 		
 		if(listRetencao != null) {
 			for (int i = 0; i < listRetencao.size(); i++) {

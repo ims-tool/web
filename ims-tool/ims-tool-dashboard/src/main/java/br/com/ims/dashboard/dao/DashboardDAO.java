@@ -73,7 +73,7 @@ public class DashboardDAO {
 		sql = "SELECT TO_CHAR(STARTDATE,'HH24')||':00' DIA, "+ 
 			  "COUNT(1) QTDE, "+
 			  "SUM(CASE WHEN FINALSTATUS = 'R' THEN 1 ELSE 0 END) QTDE_RET, "+ 
-			  "ROUND(100*(SUM(CASE WHEN FINALSTATUS = 'R' THEN 1 ELSE 0 END) /COUNT(1)),2) PORCENTAGEM "+
+			  "ROUND(100*(SUM(CASE WHEN FINALSTATUS = 'R' THEN 1 ELSE 0 END)) /COUNT(1),2) PORCENTAGEM "+
 			  "FROM FLOW.LOG WHERE STARTDATE BETWEEN now()-interval '1 hour' AND now() "+
 			  "GROUP BY TO_CHAR(STARTDATE,'HH24') "+
 			  "ORDER BY TO_TIMESTAMP(TO_CHAR(STARTDATE,'HH24'),'HH24')";
@@ -337,7 +337,7 @@ public class DashboardDAO {
 		
 		DbConnection db = null;
 		
-		sql = " Select X.MINUTO, ROUND(SUM(X.ATH)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ATH, ROUND(SUM(X.ABN)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ABN, ROUND(SUM(X.RET)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) RET FROM (Select to_char(l.startdate, 'HH12:MI') MINUTO,sum(case when finalstatus='T' then 1 else 0 end) ATH,sum(case when finalstatus='A' then 1 else 0 end) ABN,sum(case when finalstatus='R' then 1 else 0 end) RET from flow.log l where l.startdate between date_trunc('day',now()) and now()  group by to_char(l.startdate, 'HH12:MI'),finalstatus) X GROUP BY X.MINUTO ORDER BY 1"; 
+		sql = " Select X.MINUTO, ROUND(SUM(X.ATH)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ATH, ROUND(SUM(X.ABN)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ABN, ROUND(SUM(X.RET)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) RET FROM (Select to_char(l.startdate, 'HH24:MI') MINUTO,sum(case when finalstatus='T' then 1 else 0 end) ATH,sum(case when finalstatus='A' then 1 else 0 end) ABN,sum(case when finalstatus='R' then 1 else 0 end) RET from flow.log l where l.startdate between date_trunc('day',now()) and now()  group by to_char(l.startdate, 'HH24:MI'),finalstatus) X GROUP BY X.MINUTO ORDER BY 1"; 
 
 		try {
 			db= new DbConnection("");
