@@ -37,7 +37,7 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 	public boolean save(ConditionMapEntity entity) {
 		boolean result = DAOFactory.getInstance().getConditionMapDAO().save(entity);
 		if(result) {
-			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(entity.getName());
+			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(entity.getMethodReference());
 			if(cp == null) {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
 				cp = new ControlPanelEntity();
@@ -76,7 +76,7 @@ public class ConditionMapService extends AbstractEntityService<ConditionMapEntit
 		// TODO Auto-generated method stub
 		boolean result = DAOFactory.getInstance().getConditionMapDAO().update(entity);
 		if(result) {
-			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(entity.getName());
+			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(entity.getMethodReference());
 			if(cp == null) {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
 				cp = new ControlPanelEntity();

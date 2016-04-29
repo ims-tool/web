@@ -36,7 +36,7 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 	public boolean save(OperationMapEntity entity) {
 		boolean result = DAOFactory.getInstance().getOperationMapDAO().save(entity); 
 		if(result) {
-			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(entity.getName());
+			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(entity.getMethodReference());
 			if(cp == null) {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
 				cp = new ControlPanelEntity();
@@ -49,6 +49,7 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 				cp.setOwner("IMS-TOOL");
 				cp.setReferencedBy("IMS-TOOL");
 				cp.setTimeout(10);
+				
 				result = ServicesFactory.getInstance().getControlPanelService().save(cp);				
 			}
 		}
@@ -76,7 +77,7 @@ public class OperationMapService extends AbstractEntityService<OperationMapEntit
 		// TODO Auto-generated method stub
 		boolean result = DAOFactory.getInstance().getOperationMapDAO().update(object);
 		if(result) {
-			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(object.getName());
+			ControlPanelEntity cp =  ServicesFactory.getInstance().getControlPanelService().getByMethod(object.getMethodReference());
 			if(cp == null) {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); 
 				cp = new ControlPanelEntity();
