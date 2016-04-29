@@ -125,7 +125,7 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    'dataType': 'json',
 		    'success': function(data){
 		    	if(data.result !== 'OK'){
-		    		bootbox.alert("Login inválido");
+		    		alert("Login inválido")
 		    	}else{
 		    
 		    		if(!user.password){
