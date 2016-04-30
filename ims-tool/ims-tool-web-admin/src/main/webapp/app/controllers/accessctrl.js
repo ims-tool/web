@@ -44,7 +44,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 							$scope.showUser = true;
 							$scope.showButtonUser = false;
 							$scope.user = '';
-							setLog(3, 'add login web admin', 'webaccess', data.login+' | '+ data.name, 0, 0);
+							setLog(3, 'add login web admin', 'ACESSO', data.login+' | '+ data.name, 0, 0);
 							$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/access/findAllUser').success(function(data1) {
 										$scope.users = data1;
 									});
@@ -84,7 +84,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 										contentType : "application/json",
 										dataType : 'json'
 									})
-							setLog(2, 'remove login web admin', 'webaccess', data.login, 0, data.id);
+							setLog(2, 'remove login web admin', 'ACESSO', data.login, 0, data.id);
 							$scope.users.splice(index, 1);
 						}
 					};
@@ -106,7 +106,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 										contentType : "application/json",
 										dataType : 'json'
 									})
-							setLog(1, 'reset login web admin', 'webaccess', data.login, 0, data.id);
+							setLog(1, 'reset login web admin', 'ACESSO', data.login, 0, data.id);
 						}
 					};
 
@@ -254,13 +254,7 @@ app.controller('EditAccessCtrl',
 
 							$scope.accesses.splice(index, 1);
 
-							setLog(
-									2,
-									'remove login access',
-									'ims-tool-web-admin',
-									data.system + '|' + data.artifact + '|'
-											+ data.accessType + '|' + data.area,
-									0, 0);
+							setLog( 2,'remove login access', 'ACESSO', data.system + '|' + data.artifact + '|'+ data.accessType + '|' + data.area, 0, 0);
 						}
 					};
 
@@ -298,14 +292,7 @@ app.controller('EditAccessCtrl',
 											function(data2) {
 												$scope.accesses = data2;
 											});
-							setLog(
-									3,
-									'add access',
-									'ims-tool-web-admin',
-									$scope.access.system + '|'
-											+ $scope.access.artifact + '|'
-											+ $scope.access.accessType + '|'
-											+ $scope.access.areaList.toString(),
+							setLog( 3, 'add access', 'ACESSO', $scope.access.system + '|' + $scope.access.artifact + '|'+ $scope.access.accessType + '|' + $scope.access.areaList.toString(),
 									0, 0);
 						} else {
 							$mdDialog
