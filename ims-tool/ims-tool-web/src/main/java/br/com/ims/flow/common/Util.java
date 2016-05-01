@@ -1,5 +1,9 @@
 package br.com.ims.flow.common;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -194,8 +198,32 @@ public class Util implements Serializable {
 		}
 		
 	}
-	//public static String get
-    
 	
+	// save uploaded file to new location
+	public static void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) {
+			OutputStream out = null;
+			try {
+				out = new FileOutputStream(new File(uploadedFileLocation));
+				int read = 0;
+				byte[] bytes = new byte[1024];
+
+				while ((read = uploadedInputStream.read(bytes)) != -1) {
+					out.write(bytes, 0, read);
+				}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				try {
+					out.flush();
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+		}
      
 }

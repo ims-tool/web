@@ -55,8 +55,11 @@ alter table flow.prompt alter column id type bigint;
 
 alter table flow.audiovar alter column id type bigint;
 alter table flow.audiovar alter column audioid type bigint;
+alter table flow.audiovar ADD COLUMN paramtype character varying(30);
 
 alter table flow.audio alter column id type bigint;
+
+alter table flow.audio ADD COLUMN context character varying(100);
 
 alter table flow.choice alter column id type bigint;
 alter table flow.choice alter column menu type bigint;

@@ -199,7 +199,7 @@ public class NextFormDao {
 			conn = new ConnectionDB();
 
 			String query = " SELECT PA.PROMPT, PA.AUDIO, PA.ORDERNUM, AU.ID, AU.TYPE, AU.NAME, AU.DESCRIPTION, "
-					+ " AU.PATH, PA.CONDITION FROM FLOW.PROMPTAUDIO PA, FLOW.AUDIO AU  " + " WHERE PA.PROMPT = "
+					+ " AU.PATH, PA.CONDITION,AU.CONTEXT  FROM FLOW.PROMPTAUDIO PA, FLOW.AUDIO AU  " + " WHERE PA.PROMPT = "
 					+ promptId + "  AND PA.AUDIO = AU.ID  ORDER BY PA.ORDERNUM ";
 
 			rs = conn.ExecuteQuery(query);
@@ -223,6 +223,7 @@ public class NextFormDao {
 					audio.setName(rs.getString(6));
 					audio.setDescription(rs.getString(7));
 					String path = MethodInvocationUtils.getContextValue(jsonContext, MapValues.AUDIO_PATH)+ "/" +rs.getString(8) + "/";
+					audio.setContext(rs.getString(10));
 					path = path.replace("///", "/");
 					path = path.replace("//", "/");
 					path = path.replace(":/", "://");
@@ -231,19 +232,19 @@ public class NextFormDao {
 					if (UraConstants.VAR.equalsIgnoreCase(audio.getType())) {
 						audio.setListAudioVar(getListAudioVarByAudioId(audio.getId()));
 
-						audio.setValue(MethodInvocationUtils.getContextValue(jsonContext, audio.getPath()));
+						audio.setValue(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
 
 					}
 					if (UraConstants.VAR_TTS.equalsIgnoreCase(audio.getType())) {
 						audio.setType(UraConstants.TTS);
-						audio.setDescription(MethodInvocationUtils.getContextValue(jsonContext, audio.getPath()));
-						audio.setName(MethodInvocationUtils.getContextValue(jsonContext, audio.getPath()));
+						audio.setDescription(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
+						audio.setName(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
 					}
 
 					if (UraConstants.V_WAV.equalsIgnoreCase(audio.getType())) {
 						audio.setType(UraConstants.WAV);
-						audio.setDescription(MethodInvocationUtils.getContextValue(jsonContext, audio.getName()));
-						audio.setName(MethodInvocationUtils.getContextValue(jsonContext, audio.getName()));
+						audio.setDescription(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
+						audio.setName(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
 						path = MethodInvocationUtils.getContextValue(jsonContext, MapValues.AUDIO_PATH)+ "/msg/";
 						path = path.replace("///", "/");
 						path = path.replace("//", "/");

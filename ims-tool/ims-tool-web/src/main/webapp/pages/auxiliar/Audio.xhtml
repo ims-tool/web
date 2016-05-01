@@ -36,8 +36,8 @@
 				<h3>#{audioEditorView.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
 			</h:panelGrid>
 				
-			<h:panelGrid cellpadding="5" id="panelGrid_audio">
-				
+			<h:panelGrid columns="2" cellpadding="5" id="panelPrincipal">
+	 	
 				<h:outputLabel id="label_complement_audio_id" for="complement_audio_id" value="ID:" />
 	            <p:inputText id="complement_audio_id" value="#{audioEditorView.audio.id}" readonly="true" label="label_complement_audio_id" />
 	            
@@ -45,26 +45,108 @@
 	            <p:selectOneMenu value="#{audioEditorView.audio.type}" 
 	 			                 id="complement_audio_type" 
 	 			                 label="label_complement_audio_type" >
+	 				<f:selectItem itemLabel="Select One" itemValue="" />
 	 				<f:selectItem itemLabel="WAV" itemValue="WAV" />
 	 				<f:selectItem itemLabel="V_WAV" itemValue="V_WAV" />
 	 				<f:selectItem itemLabel="TTS" itemValue="TTS" />
 	 				<f:selectItem itemLabel="VAR" itemValue="VAR" />	
 	 				
-	 				<p:ajax update="formAuxiliar:panelGrid_audio" listener="#{audioEditorView.typeChange}" />
+	 				<p:ajax event="change"  update="formAuxiliar:panelPrincipal,formAuxiliar:panelVAR,formAuxiliar:panelUPLOAD" listener="#{audioEditorView.typeChange}" />
 	 			</p:selectOneMenu>
-	 		</h:panelGrid>
-	 		
-	 		<h:panelGrid cellpadding="5" id="TYPE_WAV"   >
-	 
-	            <h:outputLabel id="label_complement_audio_name" for="complement_audio_name" value="Name: *" />
+		 		
+	            <h:outputLabel id="label_complement_audio_name" for="complement_audio_name" value="Name: " />
 	            <p:inputText id="complement_audio_name" value="#{audioEditorView.audio.name}" requiredMessage="Please,inform the Name" label="label_complement_audio_name" style="width:350px" maxlength="255" />
 	            
-	            <h:outputLabel id="label_complement_audio_description" for="complement_audio_description" value="Description: *" />
+	            <h:outputLabel id="label_complement_audio_description" for="complement_audio_description" value="Description: " />
 	            <p:inputTextarea id="complement_audio_description" value="#{audioEditorView.audio.description}"  requiredMessage="Please,inform the Description" label="label_complement_audio_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
 	            
-	            <h:outputLabel id="label_complement_audio_path" for="complement_audio_path" value="Path: " />
-	            <p:inputText id="complement_audio_path" value="#{audioEditorView.audio.path}" label="label_complement_audio_path" style="width:350px" />
+	            <h:outputLabel id="label_complement_audio_context" for="complement_audio_context" value="Context: " />
+	           	<p:inputText disabled="#{audioEditorView.audio.type ne 'VAR' and audioEditorView.audio.type ne 'V_WAV'}" id="complement_audio_context" value="#{audioEditorView.audio.context}" label="label_complement_audio_context" style="width:350px" />
 	            
+			    <h:outputLabel id="label_complement_audio_path" for="complement_audio_path" value="Path: " />
+		    	<p:inputText disabled="#{audioEditorView.audio.type ne 'WAV' and audioEditorView.audio.type ne 'V_WAV'}" id="complement_audio_path" value="#{audioEditorView.audio.path}" label="label_complement_audio_path" style="width:350px" />		        	           	
+	        </h:panelGrid>
+	        <p:panel id="panelUPLOAD" visible="#{audioEditorView.audio.type eq 'WAV'}" style="margin-bottom:20px" >
+	 			<h:outputLabel id="label_complement_audio_upload" for="complement_audio_upload" value="Upload:" />
+		 		<p:fileUpload id="complement_audio_upload" fileUploadListener="#{audioEditorView.handleFileUpload}" mode="advanced" dragDropSupport="true"
+		 				  oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  
+		 				  update="@form,formComplement" 
+		 				  allowTypes="/(\.|\/)(mp3)$/" />
+            </p:panel>          
+             
+            <p:panel id="panelVAR" header="VAR PARAMETERS"  visible="#{audioEditorView.audio.type eq 'VAR'}" style="margin-bottom:20px" >
+            	
+            	<h:panelGrid columns="2" cellpadding="5" id="panelParameters"   >
+	 
+	            	<h:outputLabel id="label_complement_audio_formatName" for="complement_audio_formatName" value="Type:" />
+		            <p:selectOneMenu value="#{audioEditorView.formatName}" 
+		            				 id="complement_audio_formatName"
+		 			                 filter="true" filterMatchMode="startsWith" 
+		 			                 label="label_complement_audio_formatName"
+		 			                 style="width:100px;margin:0px 5px 5px 0px">
+		 				<f:selectItem itemLabel="Select One" itemValue="" />
+		 				<f:selectItem itemLabel="Number" itemValue="number" />
+	 					<f:selectItem itemLabel="Date" itemValue="date" />
+	 					<f:selectItem itemLabel="Time" itemValue="time" />
+	 					<f:selectItem itemLabel="Currency" itemValue="currency" />
+	 					<f:selectItem itemLabel="Digits" itemValue="digits" />
+	 					<f:selectItem itemLabel="TTS" itemValue="tts" />
+	 					<f:selectItem itemLabel="Digits-200ms" itemValue="digits-200ms" />
+	 					<f:selectItem itemLabel="Digits-500ms" itemValue="digits-500ms" />
+	 					<f:selectItem itemLabel="Digits-1s" itemValue="digits-1s" />	
+	 				
+	 					<p:ajax update="formAuxiliar:panelVAR" listener="#{audioEditorView.formatNameChange}" />
+		 			</p:selectOneMenu>
+		 			<h:outputLabel id="label_complement_audio_formatParameter" for="complement_audio_formatParameter" value="Format: "/>
+		            <p:selectOneMenu value="#{audioEditorView.formatParameter}"
+		            				 id="complement_audio_formatParameter"
+		 			                 filter="true" filterMatchMode="startsWith" 
+		 			                 label="label_complement_audio_formatParameter"
+		 			                 style="width:100px;margin:0px 5px 5px 0px">
+		 				<f:selectItem itemLabel="Select One" itemValue="" />
+			 			<f:selectItems value="#{audioEditorView.getListFormatParameter()}" var="parameter"
+								itemValue="#{parameter}" itemLabel="#{parameter}"  />	
+	 				
+	 					<p:ajax update="formAuxiliar:panelVAR" listener="#{audioEditorView.formatParameterChange}" />
+	 					
+		 			</p:selectOneMenu>
+		 			<h:outputLabel id="label_complement_audio_formatValue" for="complement_audio_formatValue" value="Parameter: " style="width:100px;margin:0px 5px 5px 0px"/>
+		            <p:selectOneMenu value="#{audioEditorView.formatValue}"
+		            				 id="complement_audio_formatValue"
+		 			                 filter="true" filterMatchMode="startsWith" 
+		 			                 label="label_complement_audio_formatValue"
+		 			                 style="width:100px;margin:0px 5px 5px 0px">
+		 				<f:selectItem itemLabel="Select One" itemValue="" />
+			 			<f:selectItems value="#{audioEditorView.listFormatValue}" var="value"
+								itemValue="#{value}" itemLabel="#{value}"  />	
+	 				
+		 			</p:selectOneMenu>
+		 		</h:panelGrid>
+	 			
+	 			<p:commandButton value="Add" icon="ui-icon-plusthick" update="formAuxiliar:panelVAR" ajax="true" immediate="true" actionListener="#{audioEditorView.addFormatParameter}"/>
+	 			
+	 			<p:dataTable  scrollable="true" var="a" value="#{audioEditorView.audio.audioVar}" resizableColumns="true">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{a.id}" />
+			        </p:column>
+			        <p:column headerText="TYPE" filterBy="#{a.formatName}" filterMatchMode="contains">
+			            <h:outputText value="#{a.formatName}" />
+			        </p:column>
+			        <p:column headerText="PARAMETER" filterBy="#{a.formatParameter}" filterMatchMode="contains">
+			            <h:outputText value="#{a.formatParameter}" />
+			        </p:column>
+			        <p:column headerText="VALUE" filterBy="#{a.formatValue}" filterMatchMode="contains">
+			            <h:outputText value="#{a.formatValue}" />
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             <p:commandButton icon="ui-icon-close"  title="Delete" actionListener="#{audioEditorView.deleteVar(a.id)}" update="@form" /> 			                
+			        </p:column>
+			        
+			    </p:dataTable>
+            </p:panel>
+            
+			<h:panelGrid columns="2" cellpadding="5">
+            
 	            <f:facet name="footer">
 	                
 	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{audioEditorView.insert eq true}" update="@form" actionListener="#{audioEditorView.newAudio}"/>
@@ -74,9 +156,8 @@
 					<c:if test="#{audioEditorView.insert == false}">
 					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formComplement" actionListener="#{audioEditorView.update}"/>
 					</c:if>
-	            </f:facet>  	           
-	        </h:panelGrid>
-	       
+	            </f:facet>  
+	       </h:panelGrid>
 	        <p:separator />
 	        
 	        <p:panel id="panelPromptAudios" header="Audios Registered" style="margin-bottom:20px" >
@@ -92,6 +173,9 @@
 			        </p:column>
 			        <p:column headerText="DESCRIPTION" filterBy="#{a.description}" filterMatchMode="contains">
 			        	<p:inputTextarea readonly="true" rows="2" autoResize="false" style="width:150px; cursor:text;" value="#{a.description}" />			            
+			        </p:column>
+			        <p:column headerText="CONTEXT" >
+			            <h:outputText value="#{a.context}" />
 			        </p:column>
 			        <p:column headerText="PATH" >
 			            <h:outputText value="#{a.path}" />

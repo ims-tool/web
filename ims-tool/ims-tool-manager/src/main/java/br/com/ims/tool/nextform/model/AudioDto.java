@@ -5,6 +5,15 @@ import java.util.Collection;
 
 public class AudioDto implements Serializable {
 	
+	public String getContext() {
+		return context;
+	}
+
+	public void setContext(String context) {
+		this.context = context;
+	}
+
+
 	private static final long serialVersionUID = -4323198614637990232L;
 	
 	private long id;
@@ -12,6 +21,7 @@ public class AudioDto implements Serializable {
 	private String name;
 	private String description;
 	private String path;
+	private String context;
 	
 	private String value;
 	
@@ -72,11 +82,12 @@ public class AudioDto implements Serializable {
 	public void setListAudioVar(Collection<AudioVarDto> listAudioVar) {
 		this.listAudioVar = listAudioVar;
 	}
-
+	
+	
 	@Override
 	public String toString() {
 		return "AudioDto [id=" + id + ", type=" + type + ", name=" + name
-				+ ", description=" + description + ", path=" + path
+				+ ", description=" + description + ",context="+context +", path=" + path
 				+ ", value=" + value + ", listAudioVar=" + listAudioVar + "]";
 	}
 	
