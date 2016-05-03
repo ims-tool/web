@@ -46,7 +46,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 						bootbox.confirm("Deseja alterar?", function(result) {
 							if(result === true){
 								saveMessage(data);
-								setLog(1, "update flag message ims-tool-web-admin", "webmessage", data.flag, 0, data.id);
+								setLog(1, "update flag message ims-tool-web-admin", "MENSAGEM", data.flag, 0, data.id);
 							}else{
 								$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/findAll').success(function(data1) {
 									
@@ -91,7 +91,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 							if(result === true){
 								removeMessage(data);
 								$scope.messages.splice(index, 1);
-								setLog(2, "remove message ims-tool-web-admin", "webmessage", data.name, 0, data.id);
+								setLog(2, "remove message ims-tool-web-admin", "MENSAGEM", data.name, 0, data.id);
 							}else{
 							}
 						});
@@ -113,7 +113,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 				            var rawData = new ArrayBuffer();            
 				            saveMessage($scope.message);
 				            console.log($scope.message.id)
-				            setLog(1, "update message ims-tool-web-admin", "webmessage", $scope.message.name, 0, $scope.message.id);
+				            setLog(1, "update message ims-tool-web-admin", "MENSAGEM", $scope.message.name, 0, $scope.message.id);
 				            $scope.message = {};
 							$scope.showCancelButton = true;
 							$scope.showNewButton = false;

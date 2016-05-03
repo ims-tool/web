@@ -10,6 +10,7 @@ function checkAccess(access){
 	    }
 	}
 	if(!result){
+		//bootbox.alert("Voc\u00ea n\u00e3o possui acesso a esta funcionalidade. Por gentileza, entrar em contato com o administrador.");
 		alert("Voc\u00ea n\u00e3o possui acesso a esta funcionalidade. Por gentileza, entrar em contato com o administrador.");
 		window.location.href = '/ims-tool-web-admin/';
 	}
@@ -27,6 +28,7 @@ function listAccess(access){
 	    }
 	}
 	if(!result){
+		//bootbox.alert("Voc\u00ea n\u00e3o possui acesso a esta funcionalidade. Por gentileza, entrar em contato com o administrador.");
 		alert("Voc\u00ea n\u00e3o possui acesso a esta funcionalidade. Por gentileza, entrar em contato com o administrador.");
 		window.location.href = '/ims-tool-web-admin/';
 	}

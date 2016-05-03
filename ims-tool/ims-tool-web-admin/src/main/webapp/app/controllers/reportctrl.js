@@ -42,7 +42,7 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 								}else{
 									statusOld = 'true';
 								}
-								setLog(1, "update flag controlPanel ims-tool-web-admin", "webreport", statusOld, 0, data.id);
+								setLog(1, "update flag controlPanel ims-tool-web-admin", "PAINEL CONTROLE", statusOld, 0, data.id);
 							}else{
 								$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getControlPanelList/'+$scope.report.type).success(function(data1) {
 									$scope.controlPanelList = data1;
@@ -57,7 +57,7 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 							if(result === true){
 								saveControlPanel(data);
 								console.log(data);
-								setLog(1, "update timeout controlPanel ims-tool-web-admin", "webreport", data.timeout.toString(), 0, data.id);
+								setLog(1, "update timeout controlPanel ims-tool-web-admin", "PAINEL CONTROLE", data.timeout.toString(), 0, data.id);
 							}else{
 								$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getControlPanelList/'+$scope.report.type).success(function(data1) {
 									$scope.controlPanelList = data1;

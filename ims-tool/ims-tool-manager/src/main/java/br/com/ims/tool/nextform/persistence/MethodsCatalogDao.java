@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 
 import br.com.ims.tool.nextform.exception.DaoException;
 import br.com.ims.tool.nextform.util.ConnectionDB;
+import br.com.ims.tool.nextform.util.LogUtils;
+import br.com.ims.tool.nextform.util.MethodInvocationUtils;
 
 public class MethodsCatalogDao {
 

@@ -40,7 +40,7 @@ app.controller('HourCtrl',function($rootScope, $location, $scope, $http) {
 								contentType : "application/json",
 								dataType : 'json'
 							});
-					setLog(1, 'hour admin', 'ims-tool-web-admin', localStorage.getItem('oldhour'), 2 ,hour.id);
+					setLog(1, 'Alterar horário URA', 'HORARIO URA', localStorage.getItem('oldhour'), 2 ,hour.id);
 				}
 			};
 			
@@ -87,7 +87,7 @@ app.controller('FlagCtrl',function($rootScope, $location, $scope, $http) {
 									contentType : "application/json",
 									dataType : 'json'
 								});
-						setLog(1, 'update parametro', 'parametro', parameter.value, 1 ,parameter.id);
+						setLog(1, 'update parametro', 'PARÂMETRO', parameter.value, 1 ,parameter.id);
 							}
 						});
 					};
@@ -134,7 +134,7 @@ appLogin.controller('LoginCtrl', function($rootScope, $location, $scope, $http){
 		    		}else{
 		    			localStorage.setItem("login", user.login);
 		    			localStorage.setItem("artifact", JSON.stringify(data.artifact));
-		    			setLog(4, 'login web admin', 'acesso web admin', 'nc', 0, 0)
+		    			setLog(4, 'login web admin', 'LOGIN/LOGOUT', 'nc', 0, 0)
 		    			window.location.href = '../ims-tool-web-admin/#/home';
 		    		}
 		    		
@@ -162,7 +162,7 @@ appLogin.controller('NewLoginCtrl', function($rootScope, $location, $scope, $htt
 				dataType : 'json',
 				'success': function(data){
 					window.location.href = '/ims-tool-web-admin/login.html';
-					setLog(1, 'cadastrou nova senha', 'ims-tool-web-admin', $scope.user.login , 0, 0)
+					setLog(1, 'cadastrou nova senha', 'ACESSO', $scope.user.login , 0, 0)
 				}
 			})
 			

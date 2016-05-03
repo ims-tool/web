@@ -114,6 +114,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 
 						var data = $scope.users[index];
 						sessionStorage.setItem('user', JSON.stringify(data));
+						
 						var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))
 								&& $scope.customFullscreen;
 						$mdDialog.show({
