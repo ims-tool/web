@@ -45,9 +45,7 @@
 	            <p:inputText id="util_tag_id" value="#{tagEditorView.tag.id}" readonly="true" label="label_util_tag_id" />
 	            
 	            <h:outputLabel id="label_util_tag_type" for="util_tag_type" value="TYPE:" />
-	            <p:selectOneMenu required="true" 
-	 			                 requiredMessage="Please,select a Type" 
-	 			                 value="#{tagEditorView.tagTypeId}" 
+	            <p:selectOneMenu value="#{tagEditorView.tagTypeId}" 
 	 			                 id="util_tag_type"
 	 			                 filter="true" filterMatchMode="startsWith" 
 	 			                 label="label_util_tag_type">
@@ -57,16 +55,22 @@
 	 			</p:selectOneMenu>
 	 
 	            <h:outputLabel id="label_util_tag_description" for="util_tag_description" value="Description:" />
-	            <p:inputTextarea id="util_tag_description" value="#{tagEditorView.tag.description}" required="true" requiredMessage="Please,inform a Description" label="label_util_tag_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            <p:inputTextarea id="util_tag_description" value="#{tagEditorView.tag.description}" requiredMessage="Please,inform a Description" label="label_util_tag_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
 	            
 	            <f:facet name="footer">
-	            	<p:commandButton value="New" disabled="#{tagEditorView.insert}"  update="@form,formForm,formFlow,formOther" actionListener="#{tagEditorView.init}"/>
-	                <p:commandButton value="Save" oncomplete="handleUtilSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther" actionListener="#{tagEditorView.save}"/>
+	            	<p:commandButton value="New" icon="ui-icon-newwin" disabled="#{tagEditorView.insert eq true}" update="@form" actionListener="#{tagEditorView.init}"/>
+	                <c:if test="#{tagEditorView.insert == true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleTagSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther" actionListener="#{tagEditorView.save}"/>
+					</c:if>
+					<c:if test="#{tagEditorView.insert == false}">
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleTagSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther" actionListener="#{tagEditorView.update}"/>
+					</c:if>
+	                
 	            </f:facet>  	           
 	        </h:panelGrid>	
 	        <p:separator />
 	        <p:panel id="panelTags" header="Tags Registered" style="margin-bottom:20px">
- 				<p:dataTable  scrollable="true" scrollHeight="150" var="t" value="#{tagEditorView.tags}">
+ 				<p:dataTable  resizableColumns="true" scrollable="true" scrollHeight="150" var="t" value="#{tagEditorView.tags}">
 			        <p:column headerText="ID" filterBy="#{t.id}" filterMatchMode="contains" >
 			            <h:outputText value="#{t.id}" />
 			        </p:column>
@@ -79,9 +83,13 @@
 			        
 			        <p:column style="width:32px;text-align: center">
 			             
-			             <p:commandButton  oncomplete="PF('settingUtilDlg').hide()" update="@form,formForm,formFlow,formOther" ajax="true" immediate="true" icon="ui-icon-check" title="Select" rendered="#{tagEditorView.rendered}">
+			             <p:commandButton  oncomplete="PF('tagDlg').hide()" 
+			                               update="@form,formForm,formFlow,formOther" 
+			             				   ajax="true" immediate="true" icon="ui-icon-check" 
+			             				   title="Select" rendered="#{tagEditorView.rendered}" >
 			                <f:setPropertyActionListener value="#{t}" target="#{tagEditorView.tag}" />
 			            </p:commandButton>
+			            <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{tagEditorView.edit(t.id)}" update="@form"/>
 			             
 			        </p:column>
 			        

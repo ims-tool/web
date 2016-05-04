@@ -94,8 +94,8 @@ public class TagDAO extends AbstractDAO<TagEntity>{
 	@Override
 	public boolean update(TagEntity entity) {
 		// TODO Auto-generated method stub
-		String sql = "UPDATE flow.tag SET typetypeid='"+entity.getType().getId()+"',description='"+entity.getDescription()+"',versionid='"+entity.getVersionId()+"' "+
-					 "WHERE id '"+entity.getId()+"' ";
+		String sql = "UPDATE flow.tag SET tagtypeid='"+entity.getType().getId()+"',description='"+entity.getDescription()+"',versionid='"+entity.getVersionId()+"' "+
+					 "WHERE id = '"+entity.getId()+"' ";
 
 	             
 		DbConnection db = new DbConnection("TagDAO-update");

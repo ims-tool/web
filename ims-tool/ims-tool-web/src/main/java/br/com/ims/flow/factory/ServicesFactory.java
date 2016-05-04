@@ -35,6 +35,7 @@ import br.com.ims.flow.service.TagEditorService;
 import br.com.ims.flow.service.TagService;
 import br.com.ims.flow.service.TagTypeService;
 import br.com.ims.flow.service.TransferService;
+import br.com.ims.flow.service.VersionEditorService;
 import br.com.ims.flow.service.VersionService;
 
 
@@ -178,6 +179,9 @@ public class ServicesFactory {
 	}
 	public LoginBeanService getLoginBeanService() {
 		return new LoginBeanService();
+	}
+	public VersionEditorService getVersionEditorService() {
+		return new VersionEditorService();
 	}
 
 }

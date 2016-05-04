@@ -46,6 +46,13 @@ function handleAdminSaveRequest(xhr, status, args) {
         }        	
     }			        
 }
+function handleTagSaveRequest(xhr, status, args) {		        						       
+    if(!args.validationFailed) {				        	
+    	if(args.saved == true) {
+        	PF('tagDlg').hide();
+        }        	
+    }			        
+}
 function node_onMouseOut(nodeElement,id) {
 	var parent = nodeElement.parentElement;
 	diagram_onNodeMove([

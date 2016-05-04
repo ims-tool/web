@@ -89,9 +89,9 @@ public class IvrEditorBean extends AbstractBean {
         if(version == null) {
         	
         	requestVersion(false);
-        	RequestContext context = RequestContext.getCurrentInstance();
+        	/*RequestContext context = RequestContext.getCurrentInstance();
         	context.execute("PF('settingAdminDlg').show();");
-            context.update("settingAdminDlgId");
+            context.update("settingAdminDlgId");*/
             
         }
     }
@@ -346,7 +346,7 @@ public class IvrEditorBean extends AbstractBean {
             this.node = logicalFlow.getNode(event.getSourceElement());            
             ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
             ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
-            this.utilPageEditor = "/pages/util/TAG.xhtml";
+
         	
         	
             
@@ -376,7 +376,7 @@ public class IvrEditorBean extends AbstractBean {
         this.node = logicalFlow.getNode(event.getNewSourceElement());            
         ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
         ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
-        this.utilPageEditor = "/pages/util/TAG.xhtml";
+
     	
         suspendEvent = true;
     }
@@ -520,6 +520,8 @@ public class IvrEditorBean extends AbstractBean {
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
+		
+		ServicesFactory.getInstance().getVersionEditorService().getBean().setIvrEditorBean(this);
 		
 		RequestContext context = RequestContext.getCurrentInstance();
     	context.execute("PF('settingAdminDlg').show();");

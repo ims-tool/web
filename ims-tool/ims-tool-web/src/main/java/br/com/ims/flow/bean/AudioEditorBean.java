@@ -20,6 +20,7 @@ import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.AudioEntity;
 import br.com.ims.flow.model.AudioVarEntity;
+import br.com.ims.flow.model.VersionEntity;
  
 @SuppressWarnings("serial")
 @ManagedBean(name = "audioEditorView")
@@ -40,7 +41,7 @@ public class AudioEditorBean extends AbstractBean {
 	private List<String> listFormatParameter;
 	private List<String> listFormatValue;
 
-	
+	private VersionEntity version;
 	
     public AudioEditorBean() {
     	init();
@@ -63,6 +64,20 @@ public class AudioEditorBean extends AbstractBean {
     	
     }
    
+    public void requestVersion(boolean save) {
+		if(save) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have to assign the Version to save changes.",
+	                "Audio");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+		ServicesFactory.getInstance().getVersionEditorService().getBean().setAudioEditorBean(this);
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+    	context.execute("PF('settingAdminDlg').show();");
+        context.update("settingAdminDlgId");
+	}
    
     
 	public AudioEntity getAudio() {
@@ -153,11 +168,22 @@ public class AudioEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-			return false;
+	
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
+			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+				return false;
+			}
+			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+			
+		} else {
+			if(this.version == null) {
+				this.requestVersion(true);
+				return false;
+			}
 		}
-		this.audio.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
+		this.audio.setVersionId(version.getId());
+		
 		return true;
 	}
 	public void newAudio(ActionEvent event) {
@@ -341,7 +367,12 @@ public class AudioEditorBean extends AbstractBean {
 		this.formatValue = "";
 	}
 
-	
+	public VersionEntity getVersion() {
+		return version;
+	}
+	public void setVersion(VersionEntity version) {
+		this.version = version;
+	}
 
 
 	public void formatNameChange() {
@@ -463,6 +494,7 @@ public class AudioEditorBean extends AbstractBean {
 		// TODO Auto-generated method stub
 		if(this.promptBean != null) {
 			this.promptBean.setAudioId(this.audio.getId());
+			this.promptBean.setVersion(this.version);
 		}
 		
 	}
@@ -490,6 +522,7 @@ public class AudioEditorBean extends AbstractBean {
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		this.audio = ServicesFactory.getInstance().getAudioService().get(id);
+		this.insert = false;
 		if(this.isUsed(id)) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Audio","You cannot delete Audio '"+this.audio.getName()+"' because there are dependences.");
 			 
@@ -498,18 +531,11 @@ public class AudioEditorBean extends AbstractBean {
 		}
 		
 		if(ServicesFactory.getInstance().getAudioService().delete(this.audio)) {
-			
+			this.insert = true;
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Audio",this.audio.getName()+" - Deleted!");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			updateExternalsBean();
-			
-			init();
-			
-			RequestContext context = RequestContext.getCurrentInstance();
-			boolean saved = true;
-			context.addCallbackParam("saved", saved);
 		} else {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Audio","Error on Delete "+this.audio.getName()+", please contact your support.");
 			 

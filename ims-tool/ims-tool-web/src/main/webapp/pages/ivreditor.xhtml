@@ -101,9 +101,9 @@
 								 
 							    
 							    
-								<p:ajax event="connect" listener="#{ivrEditorView.onConnect}" update="formFlow,settingUtilDlgId,flowEditor" oncomplete="PF('settingUtilDlg').show()"  />
-						        <p:ajax event="disconnect"  listener="#{ivrEditorView.onDisconnect}" update="formFlow,settingUtilDlgId,flowEditor"  />
-						        <p:ajax event="connectionChange" listener="#{ivrEditorView.onConnectionChange}" update="formFlow,settingUtilDlgId,flowEditor" oncomplete="PF('settingUtilDlg').show()" />
+								<p:ajax event="connect" listener="#{ivrEditorView.onConnect}" update="formFlow,flowEditor,formTag" oncomplete="PF('tagDlg').show()"  />
+						        <p:ajax event="disconnect"  listener="#{ivrEditorView.onDisconnect}" update="formFlow,flowEditor"  />
+						        <p:ajax event="connectionChange" listener="#{ivrEditorView.onConnectionChange}" update="formFlow,flowEditor,formTag" oncomplete="PF('tagDlg').show()" />
 								  
 						    </p:diagram>
 						    
@@ -185,34 +185,39 @@
 			 	</h:form>			 			       
 		    </p:dialog>
 		    
-		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formComplement">
 			 		<ui:include src="#{ivrEditorView.complementPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
-		    <p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+		    <p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formAuxiliar">
 			 		<ui:include src="#{ivrEditorView.auxiliarPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
-		    <p:dialog id="settingUtilDlgId" header="Util" widgetVar="settingUtilDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+		    <p:dialog id="settingUtilDlgId" header="Util" widgetVar="settingUtilDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formUtil">
 			 		<ui:include src="#{ivrEditorView.utilPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
-		    <p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+		    <p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formOther" >
 			 		<ui:include src="#{ivrEditorView.otherPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
-		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formAdmin" >
 			 		<ui:include src="/pages/admin/Version.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
-		    <p:dialog id="dependenceDlgId" header="Dependences" widgetVar="dependenceDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" >
+		    <p:dialog id="dependenceDlgId" header="Dependences" widgetVar="dependenceDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formDependence" >
 			 		<ui:include src="/pages/dependence/Dependences.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="tagDlgId" header="TAG" widgetVar="tagDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formTag" >
+			 		<ui:include src="/pages/util/TAG.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
 		    

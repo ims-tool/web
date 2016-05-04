@@ -14,14 +14,13 @@ import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.ConditionMapEntity;
+import br.com.ims.flow.model.VersionEntity;
  
 @SuppressWarnings("serial")
 @ManagedBean(name = "conditionmapEditorView")
 @ViewScoped
 public class ConditionMapEditorBean extends AbstractBean {
      
-	
-	
 	private ConditionMapEntity conditionMap;
 	private List<ConditionMapEntity> conditionMaps;
 	
@@ -29,6 +28,9 @@ public class ConditionMapEditorBean extends AbstractBean {
 	
 	
 	ConditionGroupEditorBean conditionGroupBean;
+	
+	
+	private VersionEntity version;
 	
 	
 	public ConditionMapEditorBean() {
@@ -124,15 +126,36 @@ public class ConditionMapEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-			return false;
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
+			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+				return false;
+			}
+			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		} else {
+			if(this.version == null) {
+				this.requestVersion(true);
+				return false;
+			}
 		}
-		this.conditionMap.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
+		this.conditionMap.setVersionId(this.version.getId());
 		return true;
 	}
 
-	
+	public void requestVersion(boolean save) {
+		if(save) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have to assign the Version to save changes.",
+	                "Condition Map");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+		ServicesFactory.getInstance().getVersionEditorService().getBean().setConditionMapEditorBean(this);
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+    	context.execute("PF('settingAdminDlg').show();");
+        context.update("settingAdminDlgId");
+	}
 	public void save(ActionEvent event) {
 
 		if(this.validateFields()) {
@@ -160,7 +183,13 @@ public class ConditionMapEditorBean extends AbstractBean {
 		
     }   
 	
-	
+	public VersionEntity getVersion() {
+		return version;
+	}
+
+	public void setVersion(VersionEntity version) {
+		this.version = version;
+	}	
 	
 	@Override
 	public boolean isUsed(String id) {
@@ -199,6 +228,7 @@ public class ConditionMapEditorBean extends AbstractBean {
 	protected void updateExternalsBean() {
 		if(this.conditionGroupBean != null) {
 			this.conditionGroupBean.setMapId(this.conditionMap.getId());
+			this.conditionGroupBean.getConditionBean().setVersion(this.version);
 		}
 	}
 
@@ -214,6 +244,7 @@ public class ConditionMapEditorBean extends AbstractBean {
 	@Override
 	public void delete(String id) {
 		this.conditionMap = ServicesFactory.getInstance().getConditionMapService().get(id);
+		this.insert = false;
 		if(this.isUsed(id)) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Condition Map","You cannot delete Condition Map '"+this.conditionMap.getName()+"' because there are dependences.");
 			 
@@ -221,18 +252,12 @@ public class ConditionMapEditorBean extends AbstractBean {
 			return;
 		}
 		if(ServicesFactory.getInstance().getConditionMapService().delete(this.conditionMap)) {
+			this.insert = true;
 			
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition Map",this.conditionMap.getName()+" - Deleted!");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			updateExternalsBean();
-			
-			init();
-			
-			RequestContext context = RequestContext.getCurrentInstance();
-			boolean saved = true;
-			context.addCallbackParam("saved", saved);
 		} else {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition Map","Error on Delete "+this.conditionMap.getName()+", please contact your support.");
 			 

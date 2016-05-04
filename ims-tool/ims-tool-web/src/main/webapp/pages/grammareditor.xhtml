@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	 <h:head>
+	    <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	</h:head>
+	
+	<ui:composition template="/pages/template/mainTemplate.xhtml">
+		<ui:define name="conteudo">
+			<p:growl id="msg" showDetail="true" autoUpdate="true"/>
+			
+			<h:form id="formFlow">
+				<h:panelGrid columns="1" cellpadding="5">
+	 				<h:outputText value="Version: #{grammarEditorView.version eq null ? 'unversioned' : grammarEditorView.version.toString()}" style="font-weight:bold"  />
+	 			</h:panelGrid> 	
+			</h:form>
+			<p:separator />
+			
+			<h:form id="formComplement">
+			
+			 	<input type="hidden" name="internalPage" value="true" />
+				<ui:include src="/pages/complement/Grammar.xhtml" />
+			</h:form>
+
+			<p:dialog id="dependenceDlgId" header="Dependences" widgetVar="dependenceDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" >
+			 	<h:form id="formDependence" >
+			 		<ui:include src="/pages/dependence/Dependences.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>		        
+		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+			 	<h:form id="formAdmin" >
+			 		<ui:include src="/pages/admin/Version.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
+		    
+		    <p:dialog id="settingComplementDlgId" widgetVar="settingComplementDlg"   >
+			 	<!--  não apague esse dialog -->
+		    </p:dialog>
+
+		    
+		    
+		    <h:form id="formForm">
+			 	<!--  não apague esse form -->
+			</h:form>
+			
+		</ui:define>
+	</ui:composition>
+</html>

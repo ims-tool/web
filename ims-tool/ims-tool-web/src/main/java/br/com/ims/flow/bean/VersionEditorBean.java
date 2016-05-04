@@ -20,21 +20,35 @@ import br.com.ims.flow.model.VersionEntity;
 @ViewScoped
 public class VersionEditorBean extends AbstractBean {
      
-	//continuar!!
 	private VersionEntity version;
 	private List<VersionEntity> versions;
 	
+	private IvrEditorBean ivrEditorBean;
+	private AudioEditorBean audioEditorBean;
+	private PromptEditorBean promptEditorBean;
+	private ConditionEditorBean conditionEditorBean;
+	private ConditionMapEditorBean conditionMapEditorBean;
+	private TagEditorBean tagEditorBean;
+	private GrammarEditorBean grammarEditorBean;
 	
     public VersionEditorBean() {
     	init();
     }
     
     public void init() {
-    	super.init();
+    	//super.init();
     	this.version = new VersionEntity();
     	this.version.setId(Util.getVERSIONID());
     	//this.version.setSystem_user(System.getProperty("user.name"));
     	this.version.setSystem_user(Util.getUserName());
+    	
+    	this.ivrEditorBean = null;
+    	this.audioEditorBean = null;
+    	this.promptEditorBean = null;
+    	
+    	this.conditionEditorBean = null;
+    	this.grammarEditorBean = null;
+    	
     }
     
     
@@ -55,13 +69,42 @@ public class VersionEditorBean extends AbstractBean {
 		this.versions = versions;
 	}
 
-	public void update(ActionEvent event) {
+
+	public IvrEditorBean getIvrEditorBean() {
+		return ivrEditorBean;
+	}
+
+	public void setIvrEditorBean(IvrEditorBean ivrEditorBean) {
+		this.ivrEditorBean = ivrEditorBean;
+	}
+	public AudioEditorBean getAudioEditorBean() {
+		return audioEditorBean;
+	}
+
+	public void setAudioEditorBean(AudioEditorBean audioEditorBean) {
+		this.audioEditorBean = audioEditorBean;
+	}
+	public PromptEditorBean getPromptEditorBean() {
+		return promptEditorBean;
+	}
+
+	public void setPromptEditorBean(PromptEditorBean promptEditorBean) {
+		this.promptEditorBean = promptEditorBean;
+	}
+	public ConditionEditorBean getConditionEditorBean() {
+		return conditionEditorBean;
+	}
+
+	public void setConditionEditorBean(ConditionEditorBean conditionEditorBean) {
+		this.conditionEditorBean = conditionEditorBean;
+	}
+   	public void update(ActionEvent event) {
 		
 //		this.announce.setPrompt(ServicesFactory.getInstance().getPromptService().get(this.promptId));
 		
 	//	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Announce",this.announce.getName()+" - Updated!");
 		 
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setEditing(true);
+		//ServicesFactory.getInstance().getIvrEditorService().getBean().setEditing(true);
 		//FacesContext.getCurrentInstance().addMessage(null, msg);
 				
 		logicalFlow.validateNodes();
@@ -84,8 +127,9 @@ public class VersionEditorBean extends AbstractBean {
 		}
 		ServicesFactory.getInstance().getVersionService().save(version);
 		
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setVersion(version);
+		updateExternalsBean();
 		
+
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean saved = true;
 		context.addCallbackParam("saved", saved);
@@ -100,7 +144,8 @@ public class VersionEditorBean extends AbstractBean {
 	public void select(String id) {
 		// TODO Auto-generated method stub
 		this.version = ServicesFactory.getInstance().getVersionService().get(id);
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setVersion(this.version);
+		
+		updateExternalsBean();
 		
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean saved = true;
@@ -115,10 +160,39 @@ public class VersionEditorBean extends AbstractBean {
 
 	@Override
 	protected void updateExternalsBean() {
+		if(this.ivrEditorBean != null) {
+			this.ivrEditorBean.setVersion(this.version);
+			this.ivrEditorBean = null;
+		}
+		if(this.audioEditorBean != null) {
+			this.audioEditorBean.setVersion(this.version);
+			this.audioEditorBean = null;
+		}
+		if(this.promptEditorBean != null) {
+			this.promptEditorBean.setVersion(this.version);
+			this.promptEditorBean = null;
+		}
+		if(this.conditionEditorBean != null) {
+			this.conditionEditorBean.setVersion(this.version);
+			this.conditionEditorBean = null;
+		}
+		if(this.conditionMapEditorBean != null) {
+			this.conditionMapEditorBean.setVersion(this.version);
+			this.conditionMapEditorBean = null;
+		}
+		if(this.tagEditorBean != null) {
+			this.tagEditorBean.setVersion(this.version);
+			this.tagEditorBean = null;
+		}
+		if(this.grammarEditorBean != null) {
+			this.grammarEditorBean.setVersion(this.version);
+			this.grammarEditorBean = null;
+		}
 		// TODO Auto-generated method stub
 		
 	}
 
+	
 	@Override
 	public void edit(String id) {
 		// TODO Auto-generated method stub
@@ -134,6 +208,30 @@ public class VersionEditorBean extends AbstractBean {
 	}
 	public void viewDependence(String id, String name) {
 		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_VERSION,id, name);
+	}
+
+	public ConditionMapEditorBean getConditionMapEditorBean() {
+		return conditionMapEditorBean;
+	}
+
+	public void setConditionMapEditorBean(ConditionMapEditorBean conditionMapEditorBean) {
+		this.conditionMapEditorBean = conditionMapEditorBean;
+	}
+
+	public TagEditorBean getTagEditorBean() {
+		return tagEditorBean;
+	}
+
+	public void setTagEditorBean(TagEditorBean tagEditorBean) {
+		this.tagEditorBean = tagEditorBean;
+	}
+
+	public GrammarEditorBean getGrammarEditorBean() {
+		return grammarEditorBean;
+	}
+
+	public void setGrammarEditorBean(GrammarEditorBean grammarEditorBean) {
+		this.grammarEditorBean = grammarEditorBean;
 	}
     
 }

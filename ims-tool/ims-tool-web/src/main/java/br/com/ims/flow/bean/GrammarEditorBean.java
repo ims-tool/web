@@ -14,6 +14,7 @@ import br.com.ims.flow.common.Constants;
 import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.GrammarEntity;
+import br.com.ims.flow.model.VersionEntity;
  
 @SuppressWarnings("serial")
 @ManagedBean(name = "grammarEditorView")
@@ -26,7 +27,7 @@ public class GrammarEditorBean extends AbstractBean {
 	private PromptCollectEditorBean promptCollectBean;
 		
 	
-	
+	private VersionEntity version;
     public GrammarEditorBean() {
     	init();
     }
@@ -83,9 +84,11 @@ public class GrammarEditorBean extends AbstractBean {
     	if(this.promptCollectBean != null) {
     		
 			this.promptCollectBean.setGrammarId(this.grammar.getId());
+
 			
     	}
     }
+	
 	private boolean validateFields() {
 		if(this.grammar.getName() == null || this.grammar.getName().length() == 0) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Grammar","Please,inform the Name!");
@@ -122,14 +125,35 @@ public class GrammarEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-			return false;
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
+			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+				return false;
+			}
+			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		} else {
+			if(this.version == null) {
+				this.requestVersion(true);
+				return false;
+			}
 		}
-		this.grammar.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
+		this.grammar.setVersionId(this.version.getId());
 		return true;
 	}
-	
+	public void requestVersion(boolean save) {
+		if(save) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have to assign the Version to save changes.",
+	                "Grammar");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+		ServicesFactory.getInstance().getVersionEditorService().getBean().setGrammarEditorBean(this);
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+    	context.execute("PF('settingAdminDlg').show();");
+        context.update("settingAdminDlgId");
+	}
 	public void save(ActionEvent event) {
 		
 		
@@ -227,6 +251,14 @@ public class GrammarEditorBean extends AbstractBean {
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
+	}
+
+	public VersionEntity getVersion() {
+		return version;
+	}
+
+	public void setVersion(VersionEntity version) {
+		this.version = version;
 	}
 	
 

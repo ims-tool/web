@@ -19,14 +19,13 @@ import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.ConditionGroupEntity;
 import br.com.ims.flow.model.ConditionParameterEntity;
 import br.com.ims.flow.model.ConditionValueEntity;
+import br.com.ims.flow.model.VersionEntity;
  
 @SuppressWarnings("serial")
 @ManagedBean(name = "conditionEditorView")
 @ViewScoped
 public class ConditionEditorBean extends AbstractBean {
-     
-	
-	
+    
 	private ConditionEntity condition;	
 	
 	
@@ -38,6 +37,10 @@ public class ConditionEditorBean extends AbstractBean {
 	private PromptEditorBean promptBean;
 	private TransferEditorBean transferBean;
 	private DecisionEditorBean decisionBean;
+	
+	
+	private VersionEntity version;
+	
 	
     public ConditionEditorBean() {
     	init();
@@ -127,6 +130,14 @@ public class ConditionEditorBean extends AbstractBean {
 		this.decisionBean = decisionBean;
 	}
 
+	public VersionEntity getVersion() {
+		return version;
+	}
+
+	public void setVersion(VersionEntity version) {
+		this.version = version;
+	}
+	
 	protected void updateExternalsBean() {
     
 		
@@ -135,6 +146,7 @@ public class ConditionEditorBean extends AbstractBean {
 		}
 		if(this.promptBean != null) {
 			this.promptBean.setConditionId(this.condition.getId());
+			this.promptBean.setVersion(this.version);
 		}
 		if(this.transferBean != null) {
 			this.transferBean.setConditionId(this.condition.getId());
@@ -175,13 +187,36 @@ public class ConditionEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-			return false;
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
+			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+				return false;
+			}
+			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		} else {
+			if(this.version == null) {
+				this.requestVersion(true);
+				return false;
+			}
 		}
 		this.condition.setListConditionGroup(this.conditionGroups);
-		this.condition.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
+		this.condition.setVersionId(this.version.getId());
 		return true;
+	}
+	
+	public void requestVersion(boolean save) {
+		if(save) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have to assign the Version to save changes.",
+	                "Condition");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+		ServicesFactory.getInstance().getVersionEditorService().getBean().setConditionEditorBean(this);
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+    	context.execute("PF('settingAdminDlg').show();");
+        context.update("settingAdminDlgId");
 	}
 	
 	public void save(ActionEvent event) {
@@ -298,8 +333,10 @@ public class ConditionEditorBean extends AbstractBean {
 	public void addNewGroup(ActionEvent event) {
 		
 		collect();
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
 		
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/auxiliar/ConditionGroup.xhtml");
+			ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/auxiliar/ConditionGroup.xhtml");
+		}
 		
 		ServicesFactory.getInstance().getConditionGroupEditorService().getBean().setConditionBean(this);
 	}
@@ -367,6 +404,7 @@ public class ConditionEditorBean extends AbstractBean {
 	@Override
 	public void delete(String id) {
 		this.condition = ServicesFactory.getInstance().getConditionService().get(id);
+		this.insert = false;
 		if(this.isUsed(id)) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Condition","You cannot delete Condition '"+this.condition.getName()+"' because there are dependences.");
 			 
@@ -375,17 +413,12 @@ public class ConditionEditorBean extends AbstractBean {
 		}
 		if(ServicesFactory.getInstance().getConditionService().delete(this.condition)) {
 			
+			this.insert = true;
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Condition",this.condition.getName()+" - Deleted!");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			updateExternalsBean();
 			
-			init();
-			
-			RequestContext context = RequestContext.getCurrentInstance();
-			boolean saved = true;
-			context.addCallbackParam("saved", saved);
 		} else {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Condition","Error on Delete "+this.condition.getName()+", please contact your support.");
 			 

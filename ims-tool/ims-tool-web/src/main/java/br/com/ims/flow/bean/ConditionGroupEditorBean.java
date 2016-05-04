@@ -344,9 +344,12 @@ public class ConditionGroupEditorBean extends AbstractBean {
 	public void addNewMap(ActionEvent event) {
 		
 		this.collect();
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setUtilPageEditor("/pages/auxiliar/ConditionMap.xhtml");
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().setUtilPageEditor("/pages/auxiliar/ConditionMap.xhtml");
+		}
 		
 		ServicesFactory.getInstance().getConditionMapEditorService().getBean().setConditionGroupBean(this);
+		ServicesFactory.getInstance().getConditionMapEditorService().getBean().setVersion(this.conditionBean.getVersion());
 	}
 	protected void collect() {
 		String order = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_order").toString();
@@ -404,8 +407,6 @@ public class ConditionGroupEditorBean extends AbstractBean {
 	public void addNewTag(ActionEvent event) {
 		
 		this.collect();
-		
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setUtilPageEditor("/pages/util/TAG.xhtml");
 		
 		ServicesFactory.getInstance().getTagEditorService().getBean().setConditionGroupBean(this);
 	}

@@ -18,13 +18,13 @@ import br.com.ims.flow.model.AudioEntity;
 import br.com.ims.flow.model.ConditionEntity;
 import br.com.ims.flow.model.PromptAudioEntity;
 import br.com.ims.flow.model.PromptEntity;
+import br.com.ims.flow.model.VersionEntity;
  
 @SuppressWarnings("serial")
 @ManagedBean(name = "promptEditorView")
 @ViewScoped
 public class PromptEditorBean extends AbstractBean {
      
-	
 	
 	private PromptEntity prompt;
 	private AnnounceEditorBean announceBean;
@@ -40,6 +40,10 @@ public class PromptEditorBean extends AbstractBean {
 	private String audioOrder;
 	private List<PromptEntity> prompts;
 	
+	
+	private String pageEditor;
+	
+	private VersionEntity version;
 	
 	
     public PromptEditorBean() {
@@ -57,7 +61,6 @@ public class PromptEditorBean extends AbstractBean {
     	this.noMatchInputBean = null;
     	this.promptCollectorBean = null;
     	this.transferBean = null;
-    	
     	
     }
     
@@ -144,6 +147,7 @@ public class PromptEditorBean extends AbstractBean {
 		if(this.transferBean != null) {
 			this.transferBean.setConditionId(this.prompt.getId());
 		}
+		
     }
 	
 	private boolean validateFields() {
@@ -169,11 +173,19 @@ public class PromptEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-			return false;
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
+			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+				return false;
+			}
+			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		} else {
+			if(this.version == null) {
+				this.requestVersion(true);
+				return false;
+			}
 		}
-		this.prompt.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
+		this.prompt.setVersionId(this.version.getId());
 		return true;
 		
 	}
@@ -265,19 +277,27 @@ public class PromptEditorBean extends AbstractBean {
 	public void addNewAudio(ActionEvent event) {
 		
 		collect();
-		
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Audio.xhtml");
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Audio.xhtml");			
+		} else {
+			pageEditor = "/pages/auxiliar/Audio.xhtml";
+		}
 		
 		ServicesFactory.getInstance().getAudioEditorService().getBean().setPromptBean(this);
+		ServicesFactory.getInstance().getAudioEditorService().getBean().setVersion(this.version);
 	}
 	
 	public void addNewCondition(ActionEvent event) {
 		
 		this.collect();
-		
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) { 
+			ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
+		} else {
+			pageEditor = "/pages/auxiliar/Condition.xhtml";
+		}
 		
 		ServicesFactory.getInstance().getConditionEditorService().getBean().setPromptBean(this);
+		ServicesFactory.getInstance().getConditionEditorService().getBean().setVersion(this.version);
 	}
 
 	
@@ -381,6 +401,7 @@ public class PromptEditorBean extends AbstractBean {
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		this.prompt = ServicesFactory.getInstance().getPromptService().get(id);
+		this.insert = false;
 		if(this.isUsed(id)) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Prompt","You cannot delete Prompt '"+this.prompt.getName()+"' because there are dependences.");
 			 
@@ -391,17 +412,11 @@ public class PromptEditorBean extends AbstractBean {
 		
 		if(ServicesFactory.getInstance().getPromptService().delete(this.prompt)) {
 			
+			this.insert = true;
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Prompt",this.prompt.getName()+" - Deleted!");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			
-			updateExternalsBean();
-			
-			init();
-			
-			RequestContext context = RequestContext.getCurrentInstance();
-			boolean saved = true;
-			context.addCallbackParam("saved", saved);
 		} else {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Prompt","Error on Delete "+this.prompt.getName()+", please contact your support.");
 			 
@@ -420,4 +435,35 @@ public class PromptEditorBean extends AbstractBean {
 		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_PROMPT,id, name);
 	}
     
+	public String getPageEditor() {
+		return pageEditor;
+	}
+
+	public void setPageEditor(String pageEditor) {
+		this.pageEditor = pageEditor;
+	}
+
+	public VersionEntity getVersion() {
+		return version;
+	}
+
+	public void setVersion(VersionEntity version) {
+		this.version = version;
+	}
+	public void requestVersion(boolean save) {
+		if(save) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have to assign the Version to save changes.",
+	                "Prompt");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+		ServicesFactory.getInstance().getVersionEditorService().getBean().setPromptEditorBean(this);
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+    	context.execute("PF('settingAdminDlg').show();");
+        context.update("settingAdminDlgId");
+	}
+
+
 }

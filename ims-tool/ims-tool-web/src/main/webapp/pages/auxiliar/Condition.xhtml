@@ -97,10 +97,10 @@
 	                
 	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{bean.insert eq true}" update="@form" actionListener="#{bean.newCondition}"/>
 	                <c:if test="#{conditionEditorView.insert eq true}">
-					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)" update="@form,formComplement,formForm" actionListener="#{bean.save}"/>
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)" update="@form,formFlow,formComplement,formForm" actionListener="#{bean.save}"/>
 					</c:if>
 					<c:if test="#{conditionEditorView.insert eq false}">
-					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formComplement,formForm" actionListener="#{bean.update}"/>
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formFlow,formComplement,formForm" actionListener="#{bean.update}"/>
 					</c:if>
 	            </f:facet>  
 	        </h:panelGrid>

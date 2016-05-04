@@ -42,8 +42,14 @@
 				<div class="menuPrincipal">
 					<h:form>  
 					    <p:menubar >  
-					        <p:submenu label="IVR Editor" id="FlowEditor" icon="ui-icon-pencil">  
-					           	<p:menuitem value="Ivr Editor" url="/pages/ivreditor.faces" />					           	  								  
+					        <p:submenu label="IMS Tools" id="FlowEditor" icon="ui-icon-pencil">  
+					           	<p:menuitem value="Ivr Editor" url="/pages/ivreditor.faces" />
+					           	<p:separator />
+					           	<p:menuitem value="Audio Editor" url="/pages/audioeditor.faces" />
+					           	<p:menuitem value="Condition Editor" url="/pages/conditioneditor.faces" />
+					           	<p:menuitem value="Grammar Editor" url="/pages/grammareditor.faces" />
+					           	<p:menuitem value="Prompt Editor" url="/pages/prompteditor.faces" />
+					           	<p:menuitem value="Tag Editor" url="/pages/tageditor.faces" />						           	  								  
 					        </p:submenu> 
 					        <f:facet name="options">
                  				 <h:commandLink styleClass="links" action="#{loginBean.doLogout}" value="Logout"/>

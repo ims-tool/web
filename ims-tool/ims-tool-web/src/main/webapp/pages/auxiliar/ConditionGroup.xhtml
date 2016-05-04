@@ -170,7 +170,7 @@
 				 				<f:selectItems value="#{bean.tags}" var="tag"
 									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
 				 			</p:selectOneMenu>
-				 			<p:commandButton value="Add Tag" icon="buttonAddTag" oncomplete="PF('settingUtilDlg').show()"  update="settingUtilDlgId" ajax="true" immediate="true" actionListener="#{bean.addNewTag}"/>
+				 			<p:commandButton value="Add Tag" icon="buttonAddTag" oncomplete="PF('tagDlg').show()"  update="formTag" ajax="true" immediate="true" actionListener="#{bean.addNewTag}"/>
 				 			
 				 			<h:outputLabel id="label_auxiliar_conditiongroup_tagFalse" for="auxiliar_conditiongroup_tagFalse" value="Tag False:" />
 			            	<p:selectOneMenu value="#{bean.tagFalseId}" 
