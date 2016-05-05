@@ -30,7 +30,7 @@ public class VersionEditorBean extends AbstractBean {
 	private ConditionMapEditorBean conditionMapEditorBean;
 	private TagEditorBean tagEditorBean;
 	private GrammarEditorBean grammarEditorBean;
-	
+	private NoMatchInputEditorBean noMatchInputEditorBean;
     public VersionEditorBean() {
     	init();
     }
@@ -48,6 +48,7 @@ public class VersionEditorBean extends AbstractBean {
     	
     	this.conditionEditorBean = null;
     	this.grammarEditorBean = null;
+    	this.noMatchInputEditorBean = null;
     	
     }
     
@@ -188,6 +189,10 @@ public class VersionEditorBean extends AbstractBean {
 			this.grammarEditorBean.setVersion(this.version);
 			this.grammarEditorBean = null;
 		}
+		if(this.noMatchInputEditorBean != null) {
+			this.noMatchInputEditorBean.setVersion(this.version);
+			this.noMatchInputEditorBean = null;
+		}
 		// TODO Auto-generated method stub
 		
 	}
@@ -233,5 +238,13 @@ public class VersionEditorBean extends AbstractBean {
 	public void setGrammarEditorBean(GrammarEditorBean grammarEditorBean) {
 		this.grammarEditorBean = grammarEditorBean;
 	}
+
+	public NoMatchInputEditorBean getNoMatchInputEditorBean() {
+		return noMatchInputEditorBean;
+	}
+
+	public void setNoMatchInputEditorBean(NoMatchInputEditorBean noMatchInputEditorBean) {
+		this.noMatchInputEditorBean = noMatchInputEditorBean;
+	} 
     
 }

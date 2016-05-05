@@ -81,8 +81,8 @@
 				 		</p:selectOneMenu>
 			 			<p:commandButton value="Add Tag" 
 			 							 icon="buttonAddTag" 
-			 							 oncomplete="PF('settingUtilDlg').show()"  
-			 							 update="settingUtilDlgId" ajax="true" immediate="true" 
+			 							 oncomplete="PF('tagDlg').show()"  
+			 							 update="formTag" ajax="true" immediate="true" 
 			 							 actionListener="#{bean.addNewTag}" style="margin-left:5px"/>
 		 			</p:panelGrid>
 		 			<p:commandButton value="Add" icon="ui-icon-plusthick" update="panel_transfer_rules"   ajax="true" immediate="true" actionListener="#{bean.addRule}"/>

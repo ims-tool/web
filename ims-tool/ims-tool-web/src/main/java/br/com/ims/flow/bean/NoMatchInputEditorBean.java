@@ -15,6 +15,7 @@ import br.com.ims.flow.common.Util;
 import br.com.ims.flow.factory.ServicesFactory;
 import br.com.ims.flow.model.NoMatchInputEntity;
 import br.com.ims.flow.model.PromptEntity;
+import br.com.ims.flow.model.VersionEntity;
  
 @SuppressWarnings("serial")
 @ManagedBean(name = "nomatchinputEditorView")
@@ -32,7 +33,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	private PromptCollectEditorBean promptCollectBean;
 	
 	
-	
+	private VersionEntity version;
 	
     public NoMatchInputEditorBean() {
     	init();
@@ -213,6 +214,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	public void delete(String id) {
 		// TODO Auto-generated method stub
 		this.noMatchInput = ServicesFactory.getInstance().getNoMatchInputService().get(id);
+		this.insert = false;
 		if(this.isUsed(id)) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "NoInput/NoMatch","You cannot delete NoInput/NoMatch '"+this.noMatchInput.getName()+"' because there are dependences.");
 			 
@@ -221,6 +223,7 @@ public class NoMatchInputEditorBean extends AbstractBean {
 		}
 		if(ServicesFactory.getInstance().getNoMatchInputService().delete(this.noMatchInput)) {
 			
+			this.insert = true;
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "NoInput/NoMatch",this.noMatchInput.getName()+" - Deleted!");
 			 
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -287,17 +290,47 @@ public class NoMatchInputEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-			return false;
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
+			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+				return false;
+			}
+			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		} else {
+			if(this.version == null) {
+				this.requestVersion(true);
+				return false;
+			}
 		}
 		this.noMatchInput.setPrompt(null);
 		if(this.promptId != null && this.promptId.length() > 0) {
 			this.noMatchInput.setPrompt(ServicesFactory.getInstance().getPromptService().get(this.promptId));
 		}
-		this.noMatchInput.setVersionId(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion().getId());
+		this.noMatchInput.setVersionId(this.version.getId());
 		return true;
 		
+	}
+
+	public void requestVersion(boolean save) {
+		if(save) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "You have to assign the Version to save changes.",
+	                "NoInput/NoMatch");
+			 
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
+		
+		ServicesFactory.getInstance().getVersionEditorService().getBean().setNoMatchInputEditorBean(this);
+		
+		RequestContext context = RequestContext.getCurrentInstance();
+    	context.execute("PF('settingAdminDlg').show();");
+        context.update("settingAdminDlgId");
+	}
+	public VersionEntity getVersion() {
+		return version;
+	}
+
+	public void setVersion(VersionEntity version) {
+		this.version = version;
 	}
 
 
