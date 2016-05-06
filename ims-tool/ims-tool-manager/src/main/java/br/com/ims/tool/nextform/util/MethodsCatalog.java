@@ -394,6 +394,8 @@ public class MethodsCatalog {
 					hasNext = Boolean.TRUE;
 					methodInvocationVO.setErrorCode(0);
 					methodInvocationVO.setValue(UraConstants.YES);
+					//Grava trackDetail referente a mensagem vocalizada.
+					LogUtils.createTrackDetail("AUDIO", mapAudio.get(1), Long.valueOf(MethodInvocationUtils.getContextValue(jsonContext, MapValues.TRACKID)), Long.valueOf(MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID)));
 				} else {
 					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_COUNT, "-1", true);
 					jsonContext = MethodInvocationUtils.setContextValue(jsonContext, MapValues.MSG_HAS_NEXT, "false", true);
@@ -413,6 +415,7 @@ public class MethodsCatalog {
 			if(MethodInvocationUtils.getContextValue(jsonContext, MapValues.MSG_HAS_NEXT).equalsIgnoreCase("true")){
 				methodInvocationVO.setValue(UraConstants.YES);
 				methodInvocationVO.setErrorCode(0);
+				LogUtils.createTrackDetail("AUDIO", MethodInvocationUtils.getContextValue(jsonContext, MapValues.MSG_AUDIO), Long.valueOf(MethodInvocationUtils.getContextValue(jsonContext, MapValues.TRACKID)), Long.valueOf(MethodInvocationUtils.getContextValue(jsonContext, MapValues.LOGID)));
 			}else{
 				methodInvocationVO.setValue(UraConstants.NO);
 				methodInvocationVO.setErrorCode(0);
