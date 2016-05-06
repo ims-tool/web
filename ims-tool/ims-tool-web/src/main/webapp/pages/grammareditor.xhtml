@@ -16,7 +16,7 @@
 			
 			<h:form id="formFlow">
 				<h:panelGrid columns="1" cellpadding="5">
-	 				<h:outputText value="Version: #{grammarEditorView.version eq null ? 'unversioned' : grammarEditorView.version.toString()}" style="font-weight:bold"  />
+	 				<h:outputText value="Version: #{ivrEditorView.version eq null ? 'unversioned' : ivrEditorView.version.toString()}" style="font-weight:bold"  />
 	 			</h:panelGrid> 	
 			</h:form>
 			<p:separator />
@@ -26,6 +26,36 @@
 			 	<input type="hidden" name="internalPage" value="true" />
 				<ui:include src="/pages/complement/Grammar.xhtml" />
 			</h:form>
+			
+			<p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formAuxiliar">
+			 		<ui:include src="#{ivrEditorView.auxiliarPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+			
+		    <p:dialog id="settingUtilDlgId" header="Util" widgetVar="settingUtilDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formUtil">
+			 		<ui:include src="#{ivrEditorView.utilPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formOther" >
+			 		<ui:include src="#{ivrEditorView.otherPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			    <p:graphicImage value="/imagens/outros/loading.gif" />
+			</p:dialog>
+			
+		
+			<p:dialog id="tagDlgId" header="TAG" widgetVar="tagDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formTag" >
+			 		<input type="hidden" name="internalPage" value="true" />
+			 		<ui:include src="/pages/util/TAG.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
+			
 
 			<p:dialog id="dependenceDlgId" header="Dependences" widgetVar="dependenceDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" >
 			 	<h:form id="formDependence" >
@@ -42,7 +72,6 @@
 			 	<!--  não apague esse dialog -->
 		    </p:dialog>
 
-		    
 		    
 		    <h:form id="formForm">
 			 	<!--  não apague esse form -->

@@ -153,18 +153,12 @@ public class TagEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
-			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-				return false;
-			}
-			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
-		} else {
-			if(version == null) {
-				this.requestVersion(true);
-				return false;
-			}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
 		}
+		this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		
 		this.tag.setVersionId(this.version.getId());
 		return true;
 	}

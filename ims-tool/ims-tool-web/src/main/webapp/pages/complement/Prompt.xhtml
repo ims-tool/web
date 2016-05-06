@@ -114,10 +114,10 @@
 	                
 	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{promptEditorView.insert eq true}" update="@form" actionListener="#{promptEditorView.newPrompt}"/>
 	                <c:if test="#{promptEditorView.insert == true}">
-					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleComplementSaveRequest(xhr, status, args)"  update="@form,formOther,formForm" actionListener="#{promptEditorView.save}"/>
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleComplementSaveRequest(xhr, status, args)"  update="@form,formNoMatchInput,formForm" actionListener="#{promptEditorView.save}"/>
 					</c:if>
 					<c:if test="#{promptEditorView.insert == false}">
-					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleComplementSaveRequest(xhr, status, args)"  update="@form,formOther,formForm" actionListener="#{promptEditorView.update}"/>
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleComplementSaveRequest(xhr, status, args)"  update="@form,formNoMatchInput,formForm" actionListener="#{promptEditorView.update}"/>
 					</c:if>
 	            </f:facet>  
 	        </h:panelGrid>

@@ -16,40 +16,68 @@
 			
 			<h:form id="formFlow">
 				<h:panelGrid columns="1" cellpadding="5">
-	 				<h:outputText value="Version: #{nomatchinputEditorView.version eq null ? 'unversioned' : nomatchinputEditorView.version.toString()}" style="font-weight:bold"  />
+	 				<h:outputText value="Version: #{ivrEditorView.version eq null ? 'unversioned' : ivrEditorView.version.toString()}" style="font-weight:bold"  />
 	 			</h:panelGrid> 	
 			</h:form>
 			<p:separator />
+		 	<h:form id="formNoMatchInput" >
+		 		<ui:include src="/pages/noinputmatch/NoMatchInput.xhtml" />
+		 	</h:form>		        
+		    
+			<p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formOther" >
+			 		<ui:include src="#{ivrEditorView.otherPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
 			
-			<h:form id="formOther" >
-		 		<input type="hidden" name="internalPage" value="true" />
-		 		<ui:include src="/pages/other/NoMatchInput.xhtml" />
-		 	</h:form>
 			
-		   
+			<p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formAuxiliar">
+			 		<ui:include src="#{ivrEditorView.auxiliarPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+			
+		    <p:dialog id="settingUtilDlgId" header="Util" widgetVar="settingUtilDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formUtil">
+			 		<ui:include src="#{ivrEditorView.utilPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    
+		    
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			    <p:graphicImage value="/imagens/outros/loading.gif" />
+			</p:dialog>
+			
+		
+			<p:dialog id="tagDlgId" header="TAG" widgetVar="tagDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formTag" >
+			 		<input type="hidden" name="internalPage" value="true" />
+			 		<ui:include src="/pages/util/TAG.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
+			
+
 			<p:dialog id="dependenceDlgId" header="Dependences" widgetVar="dependenceDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" >
 			 	<h:form id="formDependence" >
 			 		<ui:include src="/pages/dependence/Dependences.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>		        
+		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formComplement">
+			 		<ui:include src="#{ivrEditorView.complementPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
 		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
 			 	<h:form id="formAdmin" >
 			 		<ui:include src="/pages/admin/Version.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
 		    
-		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
-			 	<h:form id="formComplement">
-			 		
-			 	</h:form>		        
-		    </p:dialog>
-		    
 		    <h:form id="formForm">
 			 	<!--  não apague esse form -->
 			</h:form>
-			<p:dialog id="settingOtherDlgId" widgetVar="settingOtherDlg"  >
-			 	<!--  não apague esse dialog -->		        
-		    </p:dialog>
+			<p:dialog id="noMatchInputDlgId" widgetVar="noMatchInputDlg" >
+			</p:dialog>
 		</ui:define>
 	</ui:composition>
 </html>

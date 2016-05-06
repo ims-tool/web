@@ -16,7 +16,7 @@
 			
 			<h:form id="formFlow">
 				<h:panelGrid columns="1" cellpadding="5">
-	 				<h:outputText value="Version: #{conditionEditorView.version eq null ? 'unversioned' : conditionEditorView.version.toString()}" style="font-weight:bold"  />
+	 				<h:outputText value="Version: #{ivrEditorView.version eq null ? 'unversioned' : ivrEditorView.version.toString()}" style="font-weight:bold"  />
 	 			</h:panelGrid> 	
 			</h:form>
 			<p:separator />
@@ -26,45 +26,50 @@
 			 	<input type="hidden" name="internalPage" value="true" />
 				<ui:include src="/pages/auxiliar/Condition.xhtml" />
 			</h:form>
-			<p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
-			 	<h:form id="formOther" >
-			 		<input type="hidden" name="internalPage" value="true" />
-			 		<ui:include src="/pages/auxiliar/ConditionGroup.xhtml" />
-			 	</h:form>		        
-		    </p:dialog>
-		    <p:dialog id="settingUtilDlgId" header="Util" widgetVar="settingUtilDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
-			 	<h:form id="formUtil">
-			 		<input type="hidden" name="internalPage" value="true" />
-			 		<ui:include src="/pages/auxiliar/ConditionMap.xhtml" />
-			 	</h:form>		        
-		    </p:dialog>
-			
 			<p:dialog id="dependenceDlgId" header="Dependences" widgetVar="dependenceDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" >
 			 	<h:form id="formDependence" >
 			 		<ui:include src="/pages/dependence/Dependences.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>		        
-		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+		    
+		    
+		    
+		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formComplement">
+			 		<ui:include src="#{ivrEditorView.complementPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingUtilDlgId" header="Util" widgetVar="settingUtilDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formUtil">
+			 		<ui:include src="#{ivrEditorView.utilPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formOther" >
+			 		<ui:include src="#{ivrEditorView.otherPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formAdmin" >
 			 		<ui:include src="/pages/admin/Version.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
 		    
-		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
-			 	<h:form id="formComplement">
-			 		
-			 	</h:form>		        
-		    </p:dialog>
-		    <p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
-			 			        
-		    </p:dialog>
-		    
-		    <p:dialog id="tagDlgId" header="TAG" widgetVar="tagDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			    <p:graphicImage value="/imagens/outros/loading.gif" />
+			</p:dialog>
+			<p:dialog id="tagDlgId" header="TAG" widgetVar="tagDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formTag" >
 			 		<input type="hidden" name="internalPage" value="true" />
 			 		<ui:include src="/pages/util/TAG.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
+		    
+			
+		    <p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+			 			        
+		    </p:dialog>
+		    
 		    
 		    <h:form id="formForm">
 			 	<!--  não apague esse form -->

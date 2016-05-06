@@ -159,10 +159,10 @@ public class NoMatchInputEditorBean extends AbstractBean {
 	
 	public void addPrompt(ActionEvent event) {
 		this.collect();
-		
 		ServicesFactory.getInstance().getIvrEditorService().getBean().setComplementPageEditor("/pages/complement/Prompt.xhtml");
 		
 		ServicesFactory.getInstance().getPromptEditorService().getBean().setNoMatchInputBean(this);
+		ServicesFactory.getInstance().getPromptEditorService().getBean().setVersion(this.version);
 		
 	}
 
@@ -243,16 +243,16 @@ public class NoMatchInputEditorBean extends AbstractBean {
 		
 	}
 	protected void collect() {
-		this.noMatchInput.setType(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_type_input").toString());
-		this.noMatchInput.setName(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_name").toString());
+		this.noMatchInput.setType(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formNoMatchInput:other_nmi_type_input").toString());
+		this.noMatchInput.setName(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formNoMatchInput:other_nmi_name").toString());
 
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_threshold") != null && 
-				FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_threshold").toString().length() > 0) {
-			this.noMatchInput.setThreshold(Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_threshold")));
+		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formNoMatchInput:other_nmi_threshold") != null && 
+				FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formNoMatchInput:other_nmi_threshold").toString().length() > 0) {
+			this.noMatchInput.setThreshold(Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formNoMatchInput:other_nmi_threshold")));
 		} else {
 			this.noMatchInput.setThreshold(null);
 		}
-		this.promptId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:other_nmi_prompt_input").toString();
+		this.promptId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formNoMatchInput:other_nmi_prompt_input").toString();
 		
 		
 	}
@@ -290,18 +290,12 @@ public class NoMatchInputEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
-			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-				return false;
-			}
-			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
-		} else {
-			if(this.version == null) {
-				this.requestVersion(true);
-				return false;
-			}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
 		}
+		this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		
 		this.noMatchInput.setPrompt(null);
 		if(this.promptId != null && this.promptId.length() > 0) {
 			this.noMatchInput.setPrompt(ServicesFactory.getInstance().getPromptService().get(this.promptId));

@@ -342,8 +342,6 @@ public class PromptCollectEditorBean extends AbstractBean {
 		
 		this.collect();
 		
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/other/NoMatchInput.xhtml");
-		
 		ServicesFactory.getInstance().getNoMatchInputEditorService().getBean().setPromptCollectBean(this);
 		
     }

@@ -17,7 +17,7 @@
 			<h:form id="formFlow">
 				 
 				<h:panelGrid columns="1" cellpadding="5">
-	 				<h:outputText value="Version: #{promptEditorView.version eq null ? 'unversioned' : promptEditorView.version.toString()}" style="font-weight:bold"  />
+	 				<h:outputText value="Version: #{ivrEditorView.version eq null ? 'unversioned' : ivrEditorView.version.toString()}" style="font-weight:bold"  />
 	 			</h:panelGrid>
 	
 			</h:form>
@@ -29,27 +29,19 @@
 			 	<ui:include src="/pages/complement/Prompt.xhtml" />
 			</h:form>
 			
-			<h:form id="formForm">
-			 	<!--  não apague esse form -->
-			</h:form>
-			
-			
 			<p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formAuxiliar">
-			 		<input type="hidden" name="internalPage" value="true" />
-			 		<ui:include src="#{promptEditorView.pageEditor}" />
+			 		<ui:include src="#{ivrEditorView.auxiliarPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
 		    <p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formOther" >
-			 		<input type="hidden" name="internalPage" value="true" />
-			 		<ui:include src="/pages/auxiliar/ConditionGroup.xhtml" />
+			 		<ui:include src="#{ivrEditorView.otherPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
 		    <p:dialog id="settingUtilDlgId" header="Util" widgetVar="settingUtilDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formUtil">
-			 		<input type="hidden" name="internalPage" value="true" />
-			 		<ui:include src="/pages/auxiliar/ConditionMap.xhtml" />
+			 		<ui:include src="#{ivrEditorView.utilPageEditor}" />
 			 	</h:form>		        
 		    </p:dialog>
 		    
@@ -71,11 +63,18 @@
 			 		<ui:include src="/pages/util/TAG.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
+		    <p:dialog id="noMatchInputDlgId" header="NoInput/NoMatch" widgetVar="noMatchInputDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formNoMatchInput" >
+			 		<ui:include src="/pages/noinputmatch/NoMatchInput.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
 		    
 		    <p:dialog id="settingComplementDlgId" widgetVar="settingComplementDlg"  >
 			 			        
 		    </p:dialog>
-		    
+		    <h:form id="formForm">
+			 	<!--  não apague esse form -->
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </html>

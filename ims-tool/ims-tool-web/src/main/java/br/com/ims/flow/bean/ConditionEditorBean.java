@@ -187,18 +187,12 @@ public class ConditionEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
-			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-				return false;
-			}
-			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
-		} else {
-			if(this.version == null) {
-				this.requestVersion(true);
-				return false;
-			}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
 		}
+		this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		
 		this.condition.setListConditionGroup(this.conditionGroups);
 		this.condition.setVersionId(this.version.getId());
 		return true;
@@ -333,10 +327,8 @@ public class ConditionEditorBean extends AbstractBean {
 	public void addNewGroup(ActionEvent event) {
 		
 		collect();
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
 		
-			ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/auxiliar/ConditionGroup.xhtml");
-		}
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/auxiliar/ConditionGroup.xhtml");
 		
 		ServicesFactory.getInstance().getConditionGroupEditorService().getBean().setConditionBean(this);
 	}

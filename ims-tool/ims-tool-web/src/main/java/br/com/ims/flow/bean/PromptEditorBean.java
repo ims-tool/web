@@ -41,8 +41,6 @@ public class PromptEditorBean extends AbstractBean {
 	private List<PromptEntity> prompts;
 	
 	
-	private String pageEditor;
-	
 	private VersionEntity version;
 	
 	
@@ -139,6 +137,7 @@ public class PromptEditorBean extends AbstractBean {
 		
 		if(this.noMatchInputBean != null) {
 			this.noMatchInputBean.setPromptId(this.prompt.getId());
+			this.noMatchInputBean.setVersion(this.version);
 		}
 		
 		if(this.promptCollectorBean != null) {
@@ -173,18 +172,12 @@ public class PromptEditorBean extends AbstractBean {
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 			return false;
 		}
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
-			if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
-				ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
-				return false;
-			}
-			this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
-		} else {
-			if(this.version == null) {
-				this.requestVersion(true);
-				return false;
-			}
+		if(ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion() == null) {
+			ServicesFactory.getInstance().getIvrEditorService().getBean().requestVersion(true);
+			return false;
 		}
+		this.version = ServicesFactory.getInstance().getIvrEditorService().getBean().getVersion();
+		
 		this.prompt.setVersionId(this.version.getId());
 		return true;
 		
@@ -277,11 +270,7 @@ public class PromptEditorBean extends AbstractBean {
 	public void addNewAudio(ActionEvent event) {
 		
 		collect();
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Audio.xhtml");			
-		} else {
-			pageEditor = "/pages/auxiliar/Audio.xhtml";
-		}
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Audio.xhtml");			
 		
 		ServicesFactory.getInstance().getAudioEditorService().getBean().setPromptBean(this);
 		ServicesFactory.getInstance().getAudioEditorService().getBean().setVersion(this.version);
@@ -290,11 +279,7 @@ public class PromptEditorBean extends AbstractBean {
 	public void addNewCondition(ActionEvent event) {
 		
 		this.collect();
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) { 
-			ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
-		} else {
-			pageEditor = "/pages/auxiliar/Condition.xhtml";
-		}
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setAuxiliarPageEditor("/pages/auxiliar/Condition.xhtml");
 		
 		ServicesFactory.getInstance().getConditionEditorService().getBean().setPromptBean(this);
 		ServicesFactory.getInstance().getConditionEditorService().getBean().setVersion(this.version);
@@ -433,14 +418,6 @@ public class PromptEditorBean extends AbstractBean {
 	
 	public void viewDependence(String id, String name) {
 		ServicesFactory.getInstance().getDependenceEditorService().getBean().setObject(Constants.DEPENDENCE_OBJECT_TYPE_PROMPT,id, name);
-	}
-    
-	public String getPageEditor() {
-		return pageEditor;
-	}
-
-	public void setPageEditor(String pageEditor) {
-		this.pageEditor = pageEditor;
 	}
 
 	public VersionEntity getVersion() {

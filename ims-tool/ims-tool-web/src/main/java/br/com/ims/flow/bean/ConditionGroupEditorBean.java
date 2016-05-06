@@ -344,9 +344,7 @@ public class ConditionGroupEditorBean extends AbstractBean {
 	public void addNewMap(ActionEvent event) {
 		
 		this.collect();
-		if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("internalPage") == null) {
-			ServicesFactory.getInstance().getIvrEditorService().getBean().setUtilPageEditor("/pages/auxiliar/ConditionMap.xhtml");
-		}
+		ServicesFactory.getInstance().getIvrEditorService().getBean().setUtilPageEditor("/pages/auxiliar/ConditionMap.xhtml");
 		
 		ServicesFactory.getInstance().getConditionMapEditorService().getBean().setConditionGroupBean(this);
 		ServicesFactory.getInstance().getConditionMapEditorService().getBean().setVersion(this.conditionBean.getVersion());

@@ -421,8 +421,6 @@ public class MenuEditorBean extends AbstractBean {
 	public void addNoMatchInput(ActionEvent event) {
 		
 		this.collect();
-
-		ServicesFactory.getInstance().getIvrEditorService().getBean().setOtherPageEditor("/pages/other/NoMatchInput.xhtml");
 		
 		ServicesFactory.getInstance().getNoMatchInputEditorService().getBean().setMenuBean(this);
 		

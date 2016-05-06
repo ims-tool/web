@@ -12,11 +12,10 @@
 	
 	<ui:composition template="/pages/template/mainTemplate.xhtml">
 		<ui:define name="conteudo">
-			
 			<p:growl id="msg" showDetail="true" autoUpdate="true"/>
 			<h:form id="formFlow">
 				<h:panelGrid columns="1" cellpadding="5">
-	 			<h:outputText value="Version: #{audioEditorView.version eq null ? 'unversioned' : audioEditorView.version.toString()}" style="font-weight:bold"  />
+	 			<h:outputText value="Version: #{ivrEditorView.version eq null ? 'unversioned' : ivrEditorView.version.toString()}" style="font-weight:bold"  />
 	 			</h:panelGrid> 	
 			</h:form>
 			
@@ -34,22 +33,40 @@
 			 		<ui:include src="/pages/dependence/Dependences.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>		        
-		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+		    
+		    
+		    
+		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formComplement">
+			 		<ui:include src="#{ivrEditorView.complementPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingUtilDlgId" header="Util" widgetVar="settingUtilDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formUtil">
+			 		<ui:include src="#{ivrEditorView.utilPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingOtherDlgId" header="Other" widgetVar="settingOtherDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
+			 	<h:form id="formOther" >
+			 		<ui:include src="#{ivrEditorView.otherPageEditor}" />
+			 	</h:form>		        
+		    </p:dialog>
+		    <p:dialog id="settingAdminDlgId" header="Admin" widgetVar="settingAdminDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="650" height="600" >
 			 	<h:form id="formAdmin" >
 			 		<ui:include src="/pages/admin/Version.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
 		    
-		    <p:dialog id="settingComplementDlgId" header="Complement" widgetVar="settingComplementDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
-			 	<h:form id="formComplement">
-			 		
-			 	</h:form>		        
-		    </p:dialog>
-		    <p:dialog id="settingAuxiliarDlgId" header="Auxiliar" widgetVar="settingAuxiliarDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" width="600" height="450" >
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			    <p:graphicImage value="/imagens/outros/loading.gif" />
+			</p:dialog>
+		    
+		    <p:dialog id="settingAuxiliarDlgId" widgetVar="settingAuxiliarDlg"  >
 			 			        
 		    </p:dialog>
-		    
-		    
+		    <h:form id="formForm">
+		    </h:form>
+			
 		</ui:define>
 	</ui:composition>
 </html>
