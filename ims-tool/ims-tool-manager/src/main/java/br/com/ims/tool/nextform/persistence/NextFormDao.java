@@ -243,8 +243,10 @@ public class NextFormDao {
 
 					if (UraConstants.V_WAV.equalsIgnoreCase(audio.getType())) {
 						audio.setType(UraConstants.WAV);
-						audio.setDescription(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
-						audio.setName(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
+//						audio.setDescription(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
+//						audio.setName(MethodInvocationUtils.getContextValue(jsonContext, audio.getContext()));
+						audio.setDescription(MethodInvocationUtils.getContextValue(jsonContext, audio.getName()));
+						audio.setName(MethodInvocationUtils.getContextValue(jsonContext, audio.getName()));
 						path = MethodInvocationUtils.getContextValue(jsonContext, MapValues.AUDIO_PATH)+ "/msg/";
 						path = path.replace("///", "/");
 						path = path.replace("//", "/");

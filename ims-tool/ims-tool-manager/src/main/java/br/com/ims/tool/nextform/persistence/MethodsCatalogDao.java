@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import br.com.ims.tool.nextform.exception.DaoException;
 import br.com.ims.tool.nextform.util.ConnectionDB;
 import br.com.ims.tool.nextform.util.LogUtils;
+import br.com.ims.tool.nextform.util.MapValues;
 import br.com.ims.tool.nextform.util.MethodInvocationUtils;
 
 public class MethodsCatalogDao {
@@ -175,6 +176,8 @@ public class MethodsCatalogDao {
 							if(getDDD(rs.getString("ddd_in"), rs.getString("ddd_not_in"), ddd)){
 								i++;
 								mapAudio.put(i, rs.getString("name").replace(".wav", ""));
+								
+								
 							}
 						}
 					}
