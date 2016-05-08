@@ -69,6 +69,8 @@ function node_onMouseOut(nodeElement,id) {
 		{name : 'node_y',value : parent.style['top']}
        	]);
 }
+
+
 function node_addContextMenu(div_name,node_id,node_name,form_type) {
 	console.log(form_type);
 	if(form_type == 'DecisionChance' ||
@@ -161,3 +163,12 @@ window.onbeforeunload = function (e) {
 	    return "You have work does not save.\r\nIf you continue, your changes will be discarded.";
 	}
 };
+
+window.addEventListener("scroll", function(event) {
+    var top = this.scrollY,
+        left =this.scrollX;
+    diagram_onScrolEvent([
+                		{name : 'scroll_top', value : top},
+                		{name : 'scroll_left',value : left}
+                       	]);
+}, false);

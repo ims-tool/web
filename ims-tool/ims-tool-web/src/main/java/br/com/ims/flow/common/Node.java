@@ -30,8 +30,8 @@ public class Node implements Serializable{
 		if(element.getY() == null) {
 			element.setY("0px");
 		}
-		this.positionX = Integer.valueOf(element.getX().replaceAll("[a-z,A-Z]", ""));
-		this.positionY = Integer.valueOf(element.getY().replaceAll("[a-z,A-Z]", ""));
+		this.positionX = Integer.valueOf(element.getX().replaceAll("[a-z,A-Z]", "").replace(".", ","));
+		this.positionY = Integer.valueOf(element.getY().replaceAll("[a-z,A-Z]", "").replace(".", ","));
 		this.element = element;
 		this.form = (FormEntity)element.getData();
 		listTarget = new ArrayList<Node>();

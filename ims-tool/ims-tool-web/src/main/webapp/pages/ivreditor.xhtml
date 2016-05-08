@@ -19,12 +19,12 @@
 				<h:inputHidden id="editing" value="#{ivrEditorView.editing}" />
 			
 				<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"  />
-			    <p:layout closeTitle="Cadastrar" resizeTitle="Cadastrar" collapseTitle="Cadastrar" expandTitle="Cadastrar"  id="layoutFlowEditor" style="min-width:600px;min-height:600px;" >
-    				<p:layoutUnit position="west" resizable="false" size="80">
+			    <p:layout closeTitle="Cadastrar" resizeTitle="Cadastrar" collapseTitle="Cadastrar" expandTitle="Cadastrar"  id="layoutFlowEditor" style="width:100%;height:100%;" >
+    				<p:layoutUnit position="west" resizable="false" size="80" >
     				
 	    				<p:dataTable id="palleteData" var="formType" value="#{ivrEditorView.formTypes}" >
 				            <p:column headerText="Pallete">
-				            	<p:graphicImage id="pallete"  url="#{formType.imagePathSuccess}" width="60px" height="60px" alt="#{formType.description}" />
+				            	<p:graphicImage id="pallete"  url="#{formType.imagePathSuccess}" width="40px" height="40px" alt="#{formType.description}" />
 				                <p:draggable for="pallete" revert="true" helper="clone" />
 				                <p:tooltip id="toolTip" for="pallete" value="#{formType.description}" />
 				            </p:column>
@@ -32,7 +32,9 @@
     				
 					</p:layoutUnit>
 			    
-				    <p:layoutUnit position="center" resizable="true">
+				    <p:layoutUnit position="center" 
+				    			  resizable="false"
+				    			  style="height:100%;width:100%">
 				 			<h:panelGrid columns="1" cellpadding="5">
 				 				<h:outputText value="Version: #{ivrEditorView.version eq null ? 'unversioned' : ivrEditorView.version.toString()}" style="font-weight:bold"  />
 				 			</h:panelGrid>
@@ -73,19 +75,24 @@
 								
 							</h:panelGrid>
 			 				        
-				 			<p:tabView id="tabFlowView" cache="true"  binding="#{ivrEditorView.tabFlowView}"  activeIndex="#{ivrEditorView.activeTabFlowIndex}" >  
+				 			<p:tabView id="tabFlowView" cache="true"  
+				 						binding="#{ivrEditorView.tabFlowView}"  
+				 						style="width:#{ivrEditorView.logicalFlow.getSizeWidth()}"
+				 						activeIndex="#{ivrEditorView.activeTabFlowIndex}">  
 						        <p:ajax event="tabClose" listener="#{ivrEditorView.onTabClose}" update="formFlow,growl_msg" />  
 								<p:ajax event="tabChange" listener="#{ivrEditorView.onTabChange}"  update="formFlow,growl_msg" />
 						    </p:tabView>  
 				 			
+							<p:remoteCommand name="diagram_onNodeMove" ignoreAutoUpdate="true" immediate="true" global="false" actionListener="#{ivrEditorView.onNodeMove}" />
+							<p:remoteCommand name="diagram_onNodeSelect" ignoreAutoUpdate="true" immediate="true" global="false"  actionListener="#{ivrEditorView.elementSelected}" />
+							<p:remoteCommand name="diagram_onNodeDelete" ignoreAutoUpdate="true" immediate="true" global="false" actionListener="#{ivrEditorView.deleteNode}"  />
+							<p:remoteCommand name="diagram_onScrolEvent" ignoreAutoUpdate="true" immediate="true" global="false" actionListener="#{ivrEditorView.scrollEvent}"   />			 			
 				 			
-				 			<p:remoteCommand name="diagram_onNodeMove" actionListener="#{ivrEditorView.onNodeMove}" immediate="true"  />
-				 			<p:remoteCommand name="diagram_onNodeSelect" actionListener="#{ivrEditorView.elementSelected}" immediate="true"  />
-				 			<p:remoteCommand name="diagram_onNodeDelete" actionListener="#{ivrEditorView.deleteNode}" immediate="true"  />
 				 			
 				 			<p:diagram widgetVar="graph" 
 						               value="#{ivrEditorView.model}"						                
-						               style="height:100%;" styleClass="ui-widget-content" 
+						               style="height:#{ivrEditorView.logicalFlow.getSizeHeight()};width:#{ivrEditorView.logicalFlow.getSizeWidth()}"
+						               styleClass="ui-widget-content"
 						               var="el" id="flowEditor" >
 						        
  
@@ -111,7 +118,8 @@
 							
 						    <p:droppable id="dragPalletoToEditor" 
 						                 for="flowEditor" tolerance="touch" 
-						                 activeStyleClass="ui-state-highlight" datasource="palleteData" onDrop="handleDrop"
+						                 activeStyleClass="ui-state-highlight" 
+						                 datasource="palleteData" onDrop="handleDrop"
 						                 widgetVar="dropWV">
 						        <p:ajax listener="#{ivrEditorView.onDropFormType}" update="formFlow,growl_msg" />						        
 						    </p:droppable>
@@ -176,7 +184,8 @@
 					
 				 	</p:layoutUnit>
 				</p:layout>
-						 
+				
+				<p:sticky target="formFlow:palleteData"  />		 
 			</h:form>
 			
 			<p:dialog id="settingFormDlgId" header="Settings" widgetVar="settingFormDlg" resizable="true" maximizable="true" modal="true" draggable="false" position="center" height="500">
@@ -249,9 +258,7 @@
 				<p:commandButton value="Cancel"  onclick="PF('nodeDeleteConfirmDlg').hide();" />                             
 				
 			</p:confirmDialog>
-			<h:form id="formNoInput">
-				<!--  não apague esse form -->
-			</h:form>
+			
 		</ui:define>
 	</ui:composition>
 </html>

@@ -76,6 +76,10 @@ public class IvrEditorBean extends AbstractBean {
     
     private String deleteControl;
     private String cleanTabControl;
+    
+    
+    private String scroll_top;
+    private String scroll_left;
     public IvrEditorBean() {
     	init();
     }
@@ -123,6 +127,9 @@ public class IvrEditorBean extends AbstractBean {
         this.tabFlowView.setActiveIndex(0);
         this.tabFlowView.getChildren().add(tab);
         this.activeTabFlowIndex = 0;
+        
+    	this.scroll_top = "0px";
+        this.scroll_left = "0px";
 
     }
      
@@ -348,7 +355,7 @@ public class IvrEditorBean extends AbstractBean {
             ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
 
         	
-        	
+            RequestContext.getCurrentInstance().scrollTo("formFlow:flowEditor-"+event.getSourceElement().getId());
             
         }
         else {
@@ -361,6 +368,8 @@ public class IvrEditorBean extends AbstractBean {
     	this.auxiliarPageEditor = "";
     	ServicesFactory.getInstance().getIvrEditorService().disconnectForm(this.model,this.logicalFlow, event.getSourceElement(),false);
     	logicalFlow.validateNodes();
+
+        RequestContext.getCurrentInstance().scrollTo("formFlow:flowEditor-"+event.getSourceElement().getId());
         //logicalFlow.align();
     }
      
@@ -377,7 +386,8 @@ public class IvrEditorBean extends AbstractBean {
         ServicesFactory.getInstance().getTagEditorService().getBean().setNode(node);
         ServicesFactory.getInstance().getTagEditorService().getBean().setTagFromExternal(((FormEntity)node.getElement().getData()).getTag());
 
-    	
+
+        RequestContext.getCurrentInstance().scrollTo("formFlow:flowEditor-"+event.getOriginalSourceElement().getId());
         suspendEvent = true;
     }
      
@@ -412,8 +422,9 @@ public class IvrEditorBean extends AbstractBean {
 		formEntityElement.setDescription(formType.getDescription());
 		formEntityElement.setName(formType.getName()+"_"+formEntityElement.getId());
 		formEntityElement.setFormType(formType);
-		
-		Element element = new Element(formEntityElement);
+		formEntityElement.setPositionX(this.scroll_left);
+		formEntityElement.setPositionY(this.scroll_top);
+		Element element = new Element(formEntityElement,this.scroll_left,this.scroll_top);
 		
 
 		ServicesFactory.getInstance().getIvrEditorService().setEndPoint(formType, element);
@@ -424,6 +435,9 @@ public class IvrEditorBean extends AbstractBean {
 		logicalFlow.validateNodes();
 		logicalFlow.alingElementAlone();
 		logicalFlow.resize();
+		
+		RequestContext.getCurrentInstance().scrollTo("formFlow:flowEditor-"+element.getId());
+		
     }
 	
 	public void elementSelected(ActionEvent param) {
@@ -673,6 +687,7 @@ public class IvrEditorBean extends AbstractBean {
 			}
 			
 			logicalFlow.validateNodes();
+			logicalFlow.resize();
 		}
 	}
 	
@@ -747,6 +762,11 @@ public class IvrEditorBean extends AbstractBean {
 	public void setTabFlowView(TabView tabFlowView) {
 		this.tabFlowView = tabFlowView;
 	}
+	public void scrollEvent(ActionEvent param) {
+		Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+	    this.scroll_top = params.get("scroll_top")+"px";
+	    this.scroll_left = params.get("scroll_left")+"px";
+	}
 	
 	public void onNodeMove(ActionEvent param) {
 	      Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -773,7 +793,8 @@ public class IvrEditorBean extends AbstractBean {
 	      Element element = model.findElement(id);
 	      if (element != null) {
 	    	  logicalFlow.getNode(element).setPositionX(iX);
-	    	  logicalFlow.getNode(element).setPositionY(iY);	         
+	    	  logicalFlow.getNode(element).setPositionY(iY);
+	    	  
 	      } else {
 	    	  System.out.println("Didn't find element for ID " + id);	         
 	      }

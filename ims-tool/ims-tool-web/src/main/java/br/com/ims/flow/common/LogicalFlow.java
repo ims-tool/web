@@ -21,12 +21,12 @@ import br.com.ims.flow.model.TransferEntity;
 
 @SuppressWarnings("serial")
 public class LogicalFlow implements Serializable{
-	private int minSizeWidth = 1200;
-	private int minSizeHeight = 1200;
-	private int sizeWidth = 70;
-	private int sizeHeight = 70;
-	private int distanceX = 20;
-	private int distanceY = 20;
+	private int minSizeWidth = 100;
+	private int minSizeHeight = 100;
+	private int sizeWidth = 100;
+	private int sizeHeight = 100;
+	private int distanceX = 80;
+	private int distanceY = 80;
 	//private int sizePercentage = 100;
 	
 	private List<Node> listNode = new ArrayList<Node>();
@@ -41,6 +41,12 @@ public class LogicalFlow implements Serializable{
 		this.listNode = listNode;
 	}
 	
+	public String getSizeWidth() {
+		return String.valueOf(this.sizeWidth)+"em";
+	}
+	public String getSizeHeight() {
+		return String.valueOf(this.sizeHeight)+"em";
+	}
 	
 	public List<Node> getListDeletedNode() {
 		return listDeletedNode;
@@ -442,9 +448,18 @@ public class LogicalFlow implements Serializable{
 		/**
 		 * Aumentando dinamicamente o tamanho do painel de trabalho
 		 */
+		
+		/*this.sizeHeight = this.listNode.size()*8;
+		this.sizeWidth = this.listNode.size()*8;
+		if(this.sizeHeight < this.minSizeHeight) {
+			this.sizeHeight = this.minSizeHeight;
+		}
+		if(this.sizeWidth < this.minSizeWidth) {
+			this.sizeWidth = this.minSizeWidth;
+		}*/
 		int maiorX = 0;
 		int maiorY = 0;
-		for(Node node : listFirstNode) {
+		for(Node node : listNode) {
 			if(node.getPositionX() > maiorX) {
 				maiorX = node.getPositionX();
 			}
@@ -453,15 +468,15 @@ public class LogicalFlow implements Serializable{
 			}			
 		}
 		
-		if((maiorY + distanceY) > sizeHeight ) {
-			sizeHeight = maiorY + distanceY;
-		} else if((maiorY + distanceY) < minSizeHeight) {
+		sizeHeight = (maiorY/16) + distanceY;
+		
+		if(sizeHeight < minSizeHeight) {
 			sizeHeight = minSizeHeight;
 		}
 		
-		if((maiorX + distanceX) > sizeWidth ) {
-			sizeWidth = maiorX + distanceX;
-		} else if((maiorX + distanceX) < minSizeWidth) {
+		sizeWidth = (maiorX/16) + distanceX;
+		
+		if(sizeWidth < minSizeWidth) {
 			sizeWidth = minSizeWidth;
 		}
 	}
