@@ -12,7 +12,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 					$scope.showUser = true;
 					$scope.showButtonUser = false;
 
-					$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/access/findAllUser').success(function(data1) {
+					$http.get('http://'+getPath()+'/ims-tool-server/rest/access/findAllUser').success(function(data1) {
 								$scope.users = data1;
 							});
 
@@ -36,7 +36,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 								$.ajax({	
 											type : "POST",
 											data : JSON.stringify(data),
-											url : 'http://'+ window.location.hostname+ ":8080/ims-tool-server/rest/access/update",
+											url : 'http://'+getPath()+'/ims-tool-server/rest/access/update',
 											contentType : "application/json",
 											dataType : 'json'
 										})
@@ -45,7 +45,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 							$scope.showButtonUser = false;
 							$scope.user = '';
 							setLog(3, 'add login web admin', 'ACESSO', data.login+' | '+ data.name, 0, 0);
-							$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/access/findAllUser').success(function(data1) {
+							$http.get('http://'+getPath()+'/ims-tool-server/rest/access/findAllUser').success(function(data1) {
 										$scope.users = data1;
 									});
 							$scope.refresh();
@@ -78,9 +78,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 									.ajax({
 										type : "POST",
 										data : JSON.stringify(data),
-										url : 'http://'
-												+ window.location.hostname
-												+ ":8080/ims-tool-server/rest/access/remove",
+										url : 'http://'+getPath()+'/ims-tool-server/rest/access/remove',
 										contentType : "application/json",
 										dataType : 'json'
 									})
@@ -100,9 +98,7 @@ app.controller('AccessCtrl', function($rootScope, $location, $scope, $http, $mdD
 							$.ajax({
 										type : "POST",
 										data : JSON.stringify(data),
-										url : 'http://'
-												+ window.location.hostname
-												+ ":8080/ims-tool-server/rest/access/update",
+										url : 'http://'+getPath()+'/ims-tool-server/rest/access/update',
 										contentType : "application/json",
 										dataType : 'json'
 									})
@@ -161,9 +157,7 @@ app.controller('EditAccessCtrl',
 					$scope.showButtonUser = false;
 					$http
 							.get(
-									'http://'
-											+ window.location.hostname
-											+ ':8080/ims-tool-server/rest/access/findAccessByUser/'
+									'http://'+getPath()+'/ims-tool-server/rest/access/findAccessByUser/'
 											+ $scope.user.id).success(
 									function(data2) {
 										console.log(data2);
@@ -182,9 +176,7 @@ app.controller('EditAccessCtrl',
 						$scope.access.userid = 0;
 						$http
 								.get(
-										'http://'
-												+ window.location.hostname
-												+ ':8080/ims-tool-server/rest/access/findSystem')
+										'http://'+getPath()+'/ims-tool-server/rest/access/findSystem')
 								.success(function(data1) {
 									$scope.systems = data1.system;
 								});
@@ -194,9 +186,7 @@ app.controller('EditAccessCtrl',
 						$scope.artifacts = [];
 						$http
 								.get(
-										'http://'
-												+ window.location.hostname
-												+ ':8080/ims-tool-server/rest/access/findArtifact/'
+										'http://'+getPath()+'/ims-tool-server/rest/access/findArtifact/'
 												+ $scope.system)
 								.success(function(artifacts) {
 									$scope.artifacts = artifacts.artifact;
@@ -207,9 +197,7 @@ app.controller('EditAccessCtrl',
 						$scope.accessTypes = [];
 						$http
 								.get(
-										'http://'
-												+ window.location.hostname
-												+ ':8080/ims-tool-server/rest/access/findAccessType')
+										'http://'+getPath()+'/ims-tool-server/rest/access/findAccessType')
 								.success(
 										function(accessTypes) {
 											$scope.accessTypes = accessTypes.accessType;
@@ -218,11 +206,7 @@ app.controller('EditAccessCtrl',
 
 					$scope.selectedAccessType = function() {
 						$scope.areas = [];
-						$http
-								.get(
-										'http://'
-												+ window.location.hostname
-												+ ':8080/ims-tool-server/rest/access/findArea')
+						$http.get('http://'+getPath()+'/ims-tool-server/rest/access/findArea')
 								.success(function(areas) {
 									$scope.areas = areas.area;
 								});
@@ -242,13 +226,10 @@ app.controller('EditAccessCtrl',
 						var box = confirm("Deseja realmente remover o acesso?");
 						if (box === true) {
 
-							$
-									.ajax({
+							$.ajax({
 										type : "POST",
 										data : JSON.stringify(data),
-										url : 'http://'
-												+ window.location.hostname
-												+ ":8080/ims-tool-server/rest/access/removeAccess",
+										url : 'http://'+getPath()+'/ims-tool-server/rest/access/removeAccess',
 										contentType : "application/json",
 										dataType : 'json'
 									})
@@ -271,9 +252,7 @@ app.controller('EditAccessCtrl',
 									.ajax({
 										type : "POST",
 										data : JSON.stringify($scope.access),
-										url : 'http://'
-												+ window.location.hostname
-												+ ":8080/ims-tool-server/rest/access/addAccess",
+										url : 'http://'+getPath()+'/ims-tool-server/rest/access/addAccess',
 										contentType : "application/json",
 										dataType : 'json'
 									})
@@ -286,10 +265,7 @@ app.controller('EditAccessCtrl',
 							$scope.showButtonUser = false;
 							$http
 									.get(
-											'http://'
-													+ window.location.hostname
-													+ ':8080/ims-tool-server/rest/access/findAccessByUser/'
-													+ $scope.user.id).success(
+											'http://'+getPath()+'/ims-tool-server/rest/access/findAccessByUser/'+ $scope.user.id).success(
 											function(data2) {
 												$scope.accesses = data2;
 											});
@@ -324,25 +300,4 @@ function DialogController($scope, $mdDialog) {
 	$scope.answer = function(answer) {
 		$mdDialog.hide(answer);
 	};
-}
-
-function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid,
-		pvalueid) {
-	var logaudit = {
-		userLogin : localStorage.getItem('login'),
-		typeid : ptypeid,
-		description : pdescription,
-		artifact : partifact,
-		originalvalue : poriginalvalue,
-		valueid : pvalueid,
-		artifactid : partifactid
-	};
-	$.ajax({
-		type : "POST",
-		data : JSON.stringify(logaudit),
-		url : 'http://' + window.location.hostname
-				+ ":8080/ims-tool-server/rest/logaudit/set",
-		contentType : "application/json",
-		dataType : 'json'
-	});
 }

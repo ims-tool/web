@@ -10,7 +10,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 					$scope.showNewButton = false;
 					$scope.showMessage = true;
 					
-					$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/message/findSpotList').success(function(data1) {
+					$http.get('http://'+getPath()+'/ims-tool-server/rest/message/findSpotList').success(function(data1) {
 						
 						$scope.data = {
 							    repeatSelect: null,
@@ -18,7 +18,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 						};
 					});
 					
-					$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/findAll').success(function(data1) {
+					$http.get('http://'+getPath()+'/ims-tool-server/rest/message/findAll').success(function(data1) {
 								
 								$scope.messages = data1;
 							});
@@ -48,7 +48,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 								saveMessage(data);
 								setLog(1, "update flag message ims-tool-web-admin", "MENSAGEM", data.flag, 0, data.id);
 							}else{
-								$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/findAll').success(function(data1) {
+								$http.get('http://'+getPath()+'/ims-tool-server/rest/message/findAll').success(function(data1) {
 									
 									$scope.messages = data1;
 								});
@@ -61,7 +61,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 					$scope.showForm = function() {
 						$scope.message = {};
 						var id;
-						$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/nextidMessage').success(function(data1) {
+						$http.get('http://'+getPath()+'/ims-tool-server/rest/message/nextidMessage').success(function(data1) {
 							if(data1 !== null){
 								$scope.message.id = data1;
 								$scope.message.name = data1;
@@ -97,7 +97,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 						});
 						
 						
-						$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/findAll').success(function(data1) {
+						$http.get('http://'+getPath()+'/ims-tool-server/rest/message/findAll').success(function(data1) {
 							
 							$scope.messages = data1;
 						});
@@ -118,7 +118,7 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 							$scope.showCancelButton = true;
 							$scope.showNewButton = false;
 							$scope.showMessage = true;
-							$http.get('http://'+ window.location.hostname+ ':8080/ims-tool-server/rest/message/findAll').success(function(data1) {
+							$http.get('http://'+getPath()+'/ims-tool-server/rest/message/findAll').success(function(data1) {
 								
 								$scope.messages = data1;
 							});
@@ -129,23 +129,13 @@ app.controller('MensagemCtrl', function($rootScope, $location, $scope, $http, $m
 
 				})
 
-function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, pvalueid){
-	var logaudit = {userLogin: localStorage.getItem('login'), typeid: ptypeid, description : pdescription, artifact: partifact, originalvalue: poriginalvalue, valueid : pvalueid, artifactid : partifactid};
-	$.ajax({
-		type : "POST",
-		data : JSON.stringify(logaudit),
-		url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/logaudit/set",
-		contentType : "application/json",
-		dataType : 'json'
-	});
-}
 
 function saveMessage(message){
 	
 	$.ajax({
 		type : "POST",
 		data : JSON.stringify(message),
-		url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/message/update",
+		url : 'http://'+getPath()+'/ims-tool-server/rest/message/update',
 		contentType : "application/json",
 		dataType : 'json'
 	});
@@ -158,7 +148,7 @@ function removeMessage(message){
 	$.ajax({
 		type : "POST",
 		data : JSON.stringify(message),
-		url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/message/remove",
+		url : 'http://'+getPath()+'/ims-tool-server/rest/message/remove',
 		contentType : "application/json",
 		dataType : 'json'
 	});

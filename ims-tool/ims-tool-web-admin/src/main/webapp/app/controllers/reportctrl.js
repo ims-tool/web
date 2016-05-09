@@ -15,7 +15,7 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 					$scope.call.dnis = "";
 					$scope.log.artifact = "";
 					 $scope.myDate = new Date();
-					$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getTypeControlPanel').success(function(data1) {
+					$http.get('http://'+getPath()+'/ims-tool-server/rest/report/getTypeControlPanel').success(function(data1) {
 						$scope.data = {
 							    repeatSelect: null,
 							    availableOptions: data1,
@@ -24,7 +24,7 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 					
 					$scope.getControlPanelList = function(){
 						
-						$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getControlPanelList/'+$scope.report.type).success(function(data1) {
+						$http.get('http://'+getPath()+'/ims-tool-server/rest/report/getControlPanelList/'+$scope.report.type).success(function(data1) {
 							$scope.controlPanelList = data1;
 						});
 					}
@@ -44,7 +44,7 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 								}
 								setLog(1, "update flag controlPanel ims-tool-web-admin", "PAINEL CONTROLE", statusOld, 0, data.id);
 							}else{
-								$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getControlPanelList/'+$scope.report.type).success(function(data1) {
+								$http.get('http://'+getPath()+'/ims-tool-server/rest/report/getControlPanelList/'+$scope.report.type).success(function(data1) {
 									$scope.controlPanelList = data1;
 								});
 							}
@@ -59,14 +59,14 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 								console.log(data);
 								setLog(1, "update timeout controlPanel ims-tool-web-admin", "PAINEL CONTROLE", data.timeout.toString(), 0, data.id);
 							}else{
-								$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getControlPanelList/'+$scope.report.type).success(function(data1) {
+								$http.get('http://'+getPath()+'/ims-tool-server/rest/report/getControlPanelList/'+$scope.report.type).success(function(data1) {
 									$scope.controlPanelList = data1;
 								});
 							}
 						});
 					}
 					$scope.getArtifactList = function(){
-								$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getArtifactList/'+$scope.log.data).success(function(data1) {
+								$http.get('http://'+getPath()+'/ims-tool-server/rest/report/getArtifactList/'+$scope.log.data).success(function(data1) {
 									$scope.artifacts = data1;
 								});
 
@@ -75,12 +75,14 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 							if(!$scope.log.artifact.trim()){
 								bootbox.alert("Por favor selecione os parametros para a pesquisa!");
 							}else{
-								$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getLogList/'+$scope.log.data+"/"+$scope.log.artifact).success(function(data1) {
+								$http.get('http://'+getPath()+'/ims-tool-server/rest/report/getLogList/'+$scope.log.data+"/"+$scope.log.artifact).success(function(data1) {
 									$scope.logs = data1;
 								});
 							}
 					}
 					$scope.searchCallLog = function(){
+						
+						console.log($scope.call.datai); 
 						
 						if(!$scope.call.ani){
 							$scope.call.ani = "0";
@@ -89,7 +91,7 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 							$scope.call.dnis = "0";
 						}
 							console.log("pesquisando");
-							$http.get('http://'+window.location.hostname+':8080/ims-tool-server/rest/report/getCallLogList/'+$scope.call.datai+"/"+$scope.call.dataf+"/"+$scope.call.ani+"/"+$scope.call.dnis).success(function(data1) {
+							$http.get('http://'+getPath()+'/ims-tool-server/rest/report/getCallLogList/'+$scope.call.datai+"/"+$scope.call.dataf+"/"+$scope.call.ani+"/"+$scope.call.dnis).success(function(data1) {
 								$scope.callLogs = data1;
 								console.log(data1);
 							});
@@ -98,23 +100,13 @@ app.controller('ReportCtrl', function($rootScope, $location, $scope, $http, $mdD
 					
 })					
 					
-function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, pvalueid){
-	var logaudit = {userLogin: localStorage.getItem('login'), typeid: ptypeid, description : pdescription, artifact: partifact, originalvalue: poriginalvalue, valueid : pvalueid, artifactid : partifactid};
-	$.ajax({
-		type : "POST",
-		data : JSON.stringify(logaudit),
-		url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/logaudit/set",
-		contentType : "application/json",
-		dataType : 'json'
-	});
-}
 
 function saveControlPanel(controlPanel){
 	
 	$.ajax({
 		type : "POST",
 		data : JSON.stringify(controlPanel),
-		url : 'http://'+window.location.hostname+":8080/ims-tool-server/rest/report/updateControlPanel",
+		url : 'http://'+getPath()+'/ims-tool-server/rest/report/updateControlPanel',
 		contentType : "application/json",
 		dataType : 'json'
 	});

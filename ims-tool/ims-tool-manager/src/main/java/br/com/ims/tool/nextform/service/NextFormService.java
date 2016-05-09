@@ -122,8 +122,7 @@ public class NextFormService {
 				}
 				
 			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_MENU) {
-				MenuDto menu =
-						dao.getMenuByMenuId(nextForm.getFormid(), jsonContext);
+				MenuDto menu = dao.getMenuByMenuId(nextForm.getFormid(), jsonContext);
 				nextForm.setMenu(menu);
 			//invertido type flow com flow internal para fazer validações.	
 			} else if (nextForm.getFormTypeDto().getId() == FormConstants.TYPE_FLOW_INTERNAL) {

@@ -1,20 +1,19 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<div role="main" class="container-fluid">
-
+<div ng-controller="CallLogCrtl" role="main" class="container-fluid">
 				<h2>Call Log</h2>
 			<br>
 				<div class="form-group">
 							<div class="col-md-3">
 							<label for="Description">Data Inicial</label> 
-							<input type="datetime"
+							<input type="datetime-local"
 									class="form-control" id="datai"
 									placeholder="Data inicial DD/MM/AAAA HH24:mm"
 									ng-model="call.datai"/>
 							</div>
 							<div class="col-md-3">
 								<label for="Description">Data Final</label> <input
-									type="datetime"
+									type="datetime-local"
 									class="form-control" id="dataf"
 									placeholder="Data inicial DD/MM/AAAA HH24:mm"
 									ng-model="call.dataf" />
@@ -38,7 +37,7 @@
 				</div>				  
 				<br> <br>
 				<br> <br>
-
+<div class="panel panel-default">
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
@@ -56,7 +55,12 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="callLog in callLogs">
-								<td>empty</td>
+								<td><button type="button" ng-click="showLogDetail($index)"
+											class="btn btn-info" data-toggle="tooltip"
+											data-placement="left" title="Mostrar detalhe log">
+											<span class="glyphicon glyphicon-zoom-in" aria-hidden="true">
+											</span>
+										</button></td>
 								<td>{{ callLog.id ||"empty"}}</td>
 								<td>{{ callLog.ucid || "empty"}}</td>
 								<td>{{ callLog.startdate || "empty"}}</td>
@@ -65,8 +69,14 @@
 								<td>{{ callLog.dnis || "empty"}}</td>
 								<td>{{ callLog.vdn || "empty"}}</td>
 								<td>{{ callLog.finalStatus || "empty"}}</td>
-								<td>{{ callLog.context || "empty"}}</td>
+								<td><button type="button" ng-click="showContext($index)"
+											class="btn" data-toggle="tooltip"
+											data-placement="left" title="Mostrar contexto">
+											<span class="glyphicon glyphicon-comment" aria-hidden="true">
+											</span>
+										</button></td>
 							</tr>
 						</tbody>
-					</table>		
+					</table>
+					</div>		
 		</div>
