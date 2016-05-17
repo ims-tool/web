@@ -9,6 +9,8 @@ app.controller('CallLogCrtl', function($rootScope, $location, $scope, $http, $md
 					$scope.call = {};
 					$scope.call.ani = "";
 					$scope.call.dnis = "";
+					$scope.call.datai = new Date();
+					$scope.call.dataf = new Date();
 					
 					$scope.searchCallLog = function(){
 						
@@ -61,25 +63,5 @@ app.controller('CallLogCrtl', function($rootScope, $location, $scope, $http, $md
 						
 					};
 })					
-					
-function setLog(ptypeid, pdescription, partifact, poriginalvalue, partifactid, pvalueid){
-	var logaudit = {userLogin: localStorage.getItem('login'), typeid: ptypeid, description : pdescription, artifact: partifact, originalvalue: poriginalvalue, valueid : pvalueid, artifactid : partifactid};
-	$.ajax({
-		type : "POST",
-		data : JSON.stringify(logaudit),
-		url : 'http://'+getPath()+'/ims-tool-server/rest/logaudit/set',
-		contentType : "application/json",
-		dataType : 'json'
-	});
-}
 
-function saveControlPanel(controlPanel){
-	
-	$.ajax({
-		type : "POST",
-		data : JSON.stringify(controlPanel),
-		url : 'http://'+getPath()+'/ims-tool-server/rest/report/updateControlPanel',
-		contentType : "application/json",
-		dataType : 'json'
-	});
-}
+

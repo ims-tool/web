@@ -372,7 +372,7 @@ public class DashboardDAO {
 		
 		DbConnection db = null;
 		
-		sql = " Select X.MINUTO, ROUND(SUM(X.ATH)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ATH, ROUND(SUM(X.ABN)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ABN, ROUND(SUM(X.RET)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) RET FROM (Select to_char(l.startdate, 'HH24:MI') MINUTO,sum(case when finalstatus='T' then 1 else 0 end) ATH,sum(case when finalstatus='A' then 1 else 0 end) ABN,sum(case when finalstatus='R' then 1 else 0 end) RET from flow.log l where l.startdate between date_trunc('day',now()) and now()  group by to_char(l.startdate, 'HH24:MI'),finalstatus) X GROUP BY X.MINUTO ORDER BY 1"; 
+		sql = " Select X.MINUTO, ROUND(SUM(X.ATH)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ATH, ROUND(SUM(X.ABN)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) ABN, ROUND(SUM(X.RET)*100/(SUM(X.ATH)+SUM(X.ABN)+SUM(X.RET)+0.0000001),2) RET FROM (Select to_char(l.startdate, 'HH24:MI') MINUTO,sum(case when finalstatus='T' then 1 else 0 end) ATH,sum(case when finalstatus='A' then 1 else 0 end) ABN,sum(case when finalstatus='R' then 1 else 0 end) RET from flow.log l where l.startdate between now() - INTERVAL'1 hour' and now()  group by to_char(l.startdate, 'HH24:MI'),finalstatus) X GROUP BY X.MINUTO ORDER BY 1"; 
 
 		try {
 			db= new DbConnection("");

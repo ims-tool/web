@@ -1,5 +1,5 @@
 function getPath(){
-	return 'vmtwin108:8080'
+	return 'vmpwin1037:8080'
 }
 function checkAccess(access){
 	
