@@ -274,6 +274,7 @@ public class DashboardServlet extends HttpServlet {
 	}
 
 	private String formatarStringVolumeLigacaoEstado(HashMap<String, Integer> volumeURA) {
+		
 		HashMap<String, String> localidades = new HashMap<>();
 		localidades.put("11", "São Paulo");
 		localidades.put("12", "S. José dos Campos");
@@ -343,10 +344,12 @@ public class DashboardServlet extends HttpServlet {
 		localidades.put("98", "São Luis");
 		localidades.put("99", "Imperatriz");
 		
+		
 		String lista = "[[\"Cidade\", \"DDD\", \"Qtde\"]";
 		
 		if(volumeURA != null) {
 			for(java.util.Map.Entry<String, Integer> entry : volumeURA.entrySet() ){
+				
 				lista += ",[\""+localidades.get(entry.getKey())+"\","+entry.getKey()+","+entry.getValue()+"]";
 			}
 		}

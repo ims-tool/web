@@ -283,7 +283,9 @@ function drawMapVolumeLigacaoEstado() {
 	var chartLine = new google.visualization.GeoChart(div);
 	
 	$.get("/ims-tool-dashboard/Dashboard?action=getVolumeLigacaoEstado&minutes=60", function(data){
+		
 		tabelaLine = google.visualization.arrayToDataTable(JSON.parse(data));
+		
  		var optionsLine = {region: 'BR',
  		        displayMode: 'markers',
  		        colorAxis: {colors: ['green', 'blue']}};
@@ -343,6 +345,7 @@ function drawChartMenuPrincipalUltimaHora() {
  			            top: 10, 
  			            width: '100%', 
  			            height: '100%'
+ 			            	
  			        },
  			    };
  		

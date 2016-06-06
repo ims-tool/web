@@ -229,7 +229,11 @@ public class DashboardDAO {
 			rs = db.ExecuteQuery(sql);
 			
 			while (rs.next()) {
-				volume.put(rs.getString("ddd"), rs.getInt("qtde"));				
+				if(rs.getString("ddd").equalsIgnoreCase("00")){
+					
+				}else{
+					volume.put(rs.getString("ddd"), rs.getInt("qtde"));				
+				}
 			}
 
 		} catch (Exception e) {
