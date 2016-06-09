@@ -51,7 +51,7 @@ public class LogUtils {
 		} catch (Exception e){
 			logger.info("Erro ao Recuperar ANI para a [instancia] "
 					+ MethodInvocationUtils.getContextValue(jsonContext, MapValues.INSTANCE));
-			log.setAni(null);
+			log.setAni("0");
 			e.printStackTrace();
 		}
 		log.setDnis(MethodInvocationUtils.getContextValue(jsonContext, MapValues.DNIS));
