@@ -12,6 +12,9 @@ import br.com.ims.flow.dao.FlowDAO;
 import br.com.ims.flow.dao.FormDAO;
 import br.com.ims.flow.dao.FormTypeDAO;
 import br.com.ims.flow.dao.GrammarDAO;
+import br.com.ims.flow.dao.LogicDAO;
+import br.com.ims.flow.dao.LogicMapDAO;
+import br.com.ims.flow.dao.MapTypeDAO;
 import br.com.ims.flow.dao.MenuDAO;
 import br.com.ims.flow.dao.NoMatchInputDAO;
 import br.com.ims.flow.dao.OperationDAO;
@@ -124,5 +127,13 @@ public class DAOFactory {
 	public ControlPanelDAO getControlPanelDAO() {
 		return ControlPanelDAO.getInstance();
 	}
-
+	public LogicDAO getLogicDAO() {
+		return LogicDAO.getInstance();
+	}
+	public LogicMapDAO getLogicMapDAO() {
+		return LogicMapDAO.getInstance();
+	}
+	public MapTypeDAO getMapTypeDAO() {
+		return MapTypeDAO.getInstance();
+	}
 }

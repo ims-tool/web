@@ -1,18 +1,3 @@
-ivr_operator
-- Reconhecer formtype: ANSWER,RETURN
-- Reconhecer os campos noinput_nextform, nomatch_nextform das tabelas menu e promptcollect no lugar da coluna nextform da
-  tabela nomatchinput
-- Reconhecer o novo formato da decision
-- Reconhecer o novo formato do transfer
-Tabelas:
-- version: adicionar dois novos campos (system_user varchar2 (50), date_create datetime)
-
-- formtype: 
-   -- deixei os registros hardcode, pois se alterar alguma tipificação terá que ser ajustado no código de qualquer forma.
-   -- Só adicionar as novas tipificaçõs só para ter o mapeamento
-
-- Adicionar colunas na tabela form
-
 ALTER TABLE flow.form ADD COLUMN "positionx" character varying(10);
 
 ALTER TABLE flow.form ADD COLUMN "positiony" character varying(10);
@@ -334,3 +319,154 @@ create index ix_conditiongroup_conditionmap ON flow.conditiongroup(conditionmapi
 create index ix_operationgroup_operationmap ON flow.operationgroup(operationmapid);
 
 
+--------------------------------------------------
+---criado nova estrutura de tabela logic
+--------------------------------------------------
+
+CREATE TABLE flow.logic
+(
+  id bigint NOT NULL,
+  name character varying(50),
+  description character varying(256),
+  tag integer,
+  versionid integer,
+  CONSTRAINT pk_logic PRIMARY KEY (id),
+  CONSTRAINT uk_logic UNIQUE (name)
+);
+ALTER TABLE flow.logic
+  OWNER TO postgres;
+
+CREATE INDEX ix_logic_versionid ON flow.logic(versionid);
+
+
+
+CREATE TABLE flow.maptype (
+   id integer NOT NULL,
+   "name" character varying(30),
+   description character varying(2000),
+   CONSTRAINT pk_maptype PRIMARY KEY (id)   
+);
+ALTER TABLE flow.logicnode
+  OWNER TO postgres;
+  
+insert into flow.maptype (id,"name",description) values(1,'WebService','WebService');
+
+insert into flow.maptype (id,"name",description) values(2,'SQL','SQL');
+
+
+CREATE TABLE flow.logicmap
+(
+  id integer NOT NULL,
+  "name" character varying(30),
+  description character varying(2000),
+  maptypeid integer, 
+  methodreference character varying(4000),
+  returntype character varying(10),
+  versionid integer,
+  log_active integer,
+  CONSTRAINT pk_logicmap PRIMARY KEY (id),
+  CONSTRAINT fk_logicmap FOREIGN KEY (maptypeid)
+      REFERENCES flow.maptype (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+ALTER TABLE flow.logicmap
+  OWNER TO postgres;
+
+CREATE INDEX ix_logicmap_versionid ON flow.logicmap(versionid);
+
+
+
+
+CREATE TABLE flow.logicnode
+(
+  id bigint NOT NULL,
+  logicid bigint NOT NULL,
+  name character varying(50),
+  description character varying(256),
+  logicmapid bigint,  
+  ordernum integer,
+  gotofalse bigint,
+  tagfalse integer,
+  gototrue bigint,
+  tagtrue integer, 
+  versionid integer,
+  CONSTRAINT pk_logicnode PRIMARY KEY (id),
+  CONSTRAINT fk_logicnode FOREIGN KEY (logicid)
+      REFERENCES flow.logic (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+ALTER TABLE flow.logicnode
+  OWNER TO postgres;
+
+CREATE INDEX ix_logicnode_versionid ON flow.logicnode(versionid);
+
+
+CREATE TABLE flow.logicnodeparameter
+(
+  id bigint NOT NULL,
+  logicnodeid bigint NOT NULL,
+  paramname character varying(50),
+  paramvalue character varying(500),  
+  versionid integer,
+  CONSTRAINT pk_logicnodeparameter PRIMARY KEY (id),
+  CONSTRAINT fk_logicnodeparameter FOREIGN KEY (logicnodeid)
+      REFERENCES flow.logicnode (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+ALTER TABLE flow.logicnodeparameter
+  OWNER TO postgres;
+
+
+
+CREATE INDEX ix_logicnodeparameter_versionid ON flow.logicnodeparameter(versionid);
+
+
+CREATE TABLE flow.logicnodeoperation
+(
+  id bigint NOT NULL,
+  logicnodeid bigint NOT NULL,
+  ordernum integer default 0,
+  operation character varying(50),
+  versionid integer,
+  CONSTRAINT pk_logicnodeoperation PRIMARY KEY (id),
+  CONSTRAINT fk_logicnodeoperation FOREIGN KEY (logicnodeid)
+      REFERENCES flow.logicnode (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+ALTER TABLE flow.logicnodeoperation
+  OWNER TO postgres;
+
+
+CREATE INDEX ix_logicnodeoperation_versionid ON flow.logicnodeoperation(versionid);
+
+  
+CREATE TABLE flow.logicnodevalue
+(
+  id bigint NOT NULL,
+  logicoperationid bigint NOT NULL,
+  ordernum integer default 0,	
+  resultservice integer default 1,
+  resultcontext character varying(200),
+  operation character varying(50),
+  value1 character varying(50),
+  value2 character varying(50),
+  value3 character varying(50),
+  value4 character varying(50),
+  value5 character varying(50),
+  value6 character varying(50),
+  value7 character varying(50),
+  value8 character varying(50),
+  value9 character varying(50),
+  value10 character varying(50),
+  versionid integer,
+  CONSTRAINT pk_logicnodevalue PRIMARY KEY (id),
+  CONSTRAINT fk_logicnodevalue FOREIGN KEY (logicoperationid)
+      REFERENCES flow.logicnodeoperation (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+ALTER TABLE flow.logicnodevalue
+  OWNER TO postgres;
+
+ 
+CREATE INDEX ix_logicnodevalue_versionid ON flow.logicnodevalue(versionid);
+ 

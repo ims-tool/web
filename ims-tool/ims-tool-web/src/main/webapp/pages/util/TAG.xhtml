@@ -1,4 +1,4 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+ <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
@@ -60,10 +60,10 @@
 	            <f:facet name="footer">
 	            	<p:commandButton value="New" icon="ui-icon-newwin" disabled="#{tagEditorView.insert eq true}" update="@form" actionListener="#{tagEditorView.init}"/>
 	                <c:if test="#{tagEditorView.insert == true}">
-					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleTagSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther" actionListener="#{tagEditorView.save}"/>
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleTagSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther,formLogicNode" actionListener="#{tagEditorView.save}"/>
 					</c:if>
 					<c:if test="#{tagEditorView.insert == false}">
-					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleTagSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther" actionListener="#{tagEditorView.update}"/>
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleTagSaveRequest(xhr, status, args)"  update="@form,formForm,formFlow,formOther,formLogicNode" actionListener="#{tagEditorView.update}"/>
 					</c:if>
 	                
 	            </f:facet>  	           

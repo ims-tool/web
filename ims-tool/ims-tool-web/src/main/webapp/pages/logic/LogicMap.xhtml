@@ -1,0 +1,129 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			<ui:param name="bean" value="#{logicmapEditorView}" />
+			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+				h3 { 
+				    display: block;
+				    font-size: 1.0em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/condition.png"  width="60px" height="60px"   />
+				
+				<h2>LOGIC MAP</h2>
+				<h3>#{bean.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_logicmap_id" for="logicmap_id" value="ID:" />
+	            <p:inputText id="logicmap_id" value="#{bean.logicMap.id}" readonly="true" label="label_logicmap_id" />
+	 
+	            <h:outputLabel id="label_logicmap_name" for="logicmap_name" value="Name: *" />
+	            <p:inputText id="logicmap_name" value="#{bean.logicMap.name}" requiredMessage="Please,inform the Name" label="label_logicmap_name" style="width:350px" maxlength="30"  />
+	            
+	            <h:outputLabel id="label_logicmap_description" for="logicmap_description" value="Description: *" />
+	            <p:inputTextarea id="logicmap_description" value="#{bean.logicMap.description}" requiredMessage="Please,inform the Description" label="label_logicmap_description" rows="2" autoResize="false" style="width:350px; cursor:text;"/>
+	            
+	            <h:outputLabel id="label_logicmap_mapType" for="logicmap_maptype" value="MAP TYPE:" />
+	            <p:selectOneMenu value="#{bean.mapTypeId}" 
+	 			                 id="logicmap_mapType"	 			                 
+	 			                 label="label_logicmap_mapType">
+	 				<f:selectItems value="#{bean.mapTypes}" var="maptype"
+								itemValue="#{maptype.id}" itemLabel="#{maptype.name}"  />
+	 			</p:selectOneMenu>
+	            
+	            <h:outputLabel id="label_logicmap_method" for="logicmap_method" value="Method Reference: *" />
+	            <p:inputText id="logicmap_method" value="#{bean.logicMap.methodReference}" requiredMessage="Please,inform the Method Reference" label="label_logicmap_method" style="width:350px" maxlength="100" />
+	            
+	            <h:outputLabel id="label_logicmap_returntype" for="logicmap_returntype" value="RETURN TYPE:" />
+	            <p:selectOneMenu value="#{bean.logicMap.returnType}" 
+	 			                 id="logicmap_returnType"	 			                 
+	 			                 label="label_logicmap_returnType">
+	 				<f:selectItem itemLabel="TEXT" itemValue="TEXT" />
+	 				<f:selectItem itemLabel="NUMERIC" itemValue="NUMERIC" />
+	 			</p:selectOneMenu>
+	 			<h:outputLabel id="label_logicmap_log" for="logicmap_log" value="LOG ACTIVE:" />
+	            <p:selectOneMenu value="#{bean.logicMap.logActive}" 
+	 			                 id="logicmap_log"	 			                 
+	 			                 label="label_logicmap_LOG">
+	 				<f:selectItem itemLabel="NO" itemValue="0" />
+	 				<f:selectItem itemLabel="YES" itemValue="1" />
+	 			</p:selectOneMenu>
+	            	
+	 			<f:facet name="footer">
+	                
+	                
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{bean.insert eq true}" update="@form" actionListener="#{bean.newMap}"/>
+	                <c:if test="#{bean.insert == true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleLogicMapSaveRequest(xhr, status, args)" update="@form,formLogicNode" actionListener="#{bean.save}"/>
+					</c:if>
+					<c:if test="#{bean.insert == false}">
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleLogicMapSaveRequest(xhr, status, args)"  update="@form,formLogicNode" actionListener="#{bean.update}"/>
+					</c:if>
+	            </f:facet>  
+	        </h:panelGrid>
+	        
+	        <p:separator />
+	        
+	        <p:panel id="panelLogicMapRegistered" header="Logic Maps Registered" style="margin-bottom:20px">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="c" value="#{bean.logicMaps}" resizableColumns="true">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{c.id}" />
+			        </p:column>
+			        
+			        <p:column headerText="NAME" filterBy="#{c.name}" filterMatchMode="contains">
+			            <h:outputText value="#{c.name}" />
+			        </p:column>
+			        <p:column headerText="DESCRIPTION" filterBy="#{c.description}" filterMatchMode="contains">
+			            <h:outputText value="#{c.description}" />
+			        </p:column>
+			        <p:column headerText="MAP TYPE" filterBy="#{c.mapType.name}" filterMatchMode="contains">
+			            <h:outputText value="#{c.mapType.name}" />
+			        </p:column>
+			        <p:column headerText="METHOD REFERENCE" filterBy="#{c.methodReference}" filterMatchMode="contains">
+			            <h:outputText value="#{c.methodReference}" />
+			        </p:column>
+			        <p:column headerText="RETURN TYPE" filterBy="#{c.returnType}" filterMatchMode="contains">
+			            <h:outputText value="#{c.returnType}" />
+			        </p:column>
+			        <p:column headerText="DEPENDENCES" >
+			            <p:commandButton icon="ui-icon-search" actionListener="#{bean.viewDependence(c.id,c.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId"/>
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{bean.edit(c.id)}" update="@form"/>
+			             <p:commandButton icon="ui-icon-close" title="Delete" actionListener="#{bean.delete(c.id)}" update="@form">
+			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
+			             </p:commandButton>				                
+			        </p:column>
+				</p:dataTable>
+			</p:panel>	        	        
+	
+				
+</ui:composition>
+

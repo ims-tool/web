@@ -1,0 +1,133 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"		>
+		
+	<p:tooltip />
+	
+			<ui:param name="bean" value="#{logicEditorView}" />
+			
+			<p:growl id="msg" showDetail="true" />	
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+				h3 { 
+				    display: block;
+				    font-size: 1.0em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/logic.png"  width="60px" height="60px"   />
+				
+				<h2>LOGIC</h2>
+				<h3>#{bean.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_logic_id" for="logic_id" value="ID:" />
+	            <p:inputText id="logic_id" value="#{bean.logic.id}" label="label_logic_id" readonly="true" />
+	 
+	            <h:outputLabel id="label_logic_name" for="logic_name" value="Name: *" />
+	            <p:inputText id="logic_name" value="#{bean.logic.name}" requiredMessage="Please,inform the Name" label="label_logic_name" maxlength="30" style="width:350px" />
+	            
+	            <h:outputLabel id="label_logic_description" for="logic_description" value="Description: *" />
+	            <p:inputTextarea id="logic_description" value="#{bean.logic.description}" requiredMessage="Please,inform the Description" label="label_logic_description" rows="2" maxlength="256" autoResize="false" style="width:350px; cursor:text;"/>
+	            
+	            <p:column colspan="2">
+					<p:commandButton value="Add Node" icon="ui-icon-plusthick" update="logicNodeDlgId" oncomplete="PF('logicNodeDlg').show()" ajax="true" immediate="true" actionListener="#{bean.addNewNode}"/>
+ 					<p:panel id="panelNodes" header="Logic Nodes" style="margin-bottom:20px">
+		 				<p:dataTable  
+		 						scrollable="true" 
+		 						scrollHeight="100"
+		 						value="#{bean.logicNodes}"
+		 						var="node"
+		 						emptyMessage="No Logic Node" 
+		 						sortBy="#{node.orderNum}" >
+					        <p:column headerText="Order" width="50px" >
+					            <h:outputText value="#{node.orderNum} " />
+					        </p:column>
+					        <p:column headerText="Description" >
+					            <h:outputText value="#{node.description}" />
+					        </p:column>
+					        <p:column headerText="Map" >
+					            <h:outputText value="#{node.logicMap.name}" />
+					        </p:column>
+					        <p:column headerText="Parameters"  >
+					        	<p:dataTable  var="p" value="#{bean.paremeterView(logic.id)}" >
+							        <p:column>							        
+							            <h:outputText value="#{p}" />
+							        </p:column>							        
+							    </p:dataTable>					        						            
+					        </p:column>
+					        <p:column headerText="Operation" >
+					        	<p:dataTable  var="o" value="#{bean.operationView(logic.id)}" >
+							        <p:column>							        
+							            <h:outputText value="#{o}" />
+							        </p:column>							        
+							    </p:dataTable>						            
+					        </p:column>
+					        <p:column style="width:32px;text-align: center">
+					        	 <p:commandButton update="settingOtherDlgId" oncomplete="PF('settingOtherDlg').show()" ajax="true" immediate="true" actionListener="#{bean.editGroup(group.id)}" icon="ui-icon-pencil" title="Edit" />
+					             <p:commandButton update="formAuxiliar:panelConditionGroup" icon="ui-icon-close" title="Delete" ajax="true" immediate="true" actionListener="#{bean.deleteGroup(group.id)}" />					                		                
+					        </p:column>
+					    </p:dataTable>
+		 						 				
+		 			</p:panel>
+		 		</p:column>	
+	            	
+	 			<f:facet name="footer">
+	                
+	                
+	                <p:commandButton value="New" icon="ui-icon-newwin" disabled="#{bean.insert eq true}" update="@form" actionListener="#{bean.newCondition}"/>
+	                <c:if test="#{bean.insert eq true}">
+					  <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)" update="@form,formFlow,formComplement,formForm" actionListener="#{bean.save}"/>
+					</c:if>
+					<c:if test="#{bean.insert eq false}">
+					  <p:commandButton value="Update" icon="ui-icon-disk" oncomplete="handleAuxiliarSaveRequest(xhr, status, args)"  update="@form,formFlow,formComplement,formForm" actionListener="#{bean.update}"/>
+					</c:if>
+	            </f:facet>  
+	        </h:panelGrid>
+	        
+	        <p:separator />
+	        
+	        <p:panel id="panelLogicRegistered" header="Logics Registered" style="margin-bottom:20px">
+ 				<p:dataTable  scrollable="true" scrollHeight="300" var="l" value="#{bean.logics}">
+			        <p:column headerText="ID" >
+			            <h:outputText value="#{l.id}" />
+			        </p:column>
+			        
+			        <p:column headerText="NAME" filterBy="#{l.name}" filterMatchMode="contains">
+			            <h:outputText value="#{l.name}" />
+			        </p:column>
+			        <p:column headerText="DEPENDENCES" >
+			            <p:commandButton icon="ui-icon-search" actionListener="#{bean.viewDependence(l.id,l.name)}" oncomplete="PF('dependenceDlg').show()" update="dependenceDlgId" />
+			        </p:column>
+			        <p:column style="width:32px;text-align: center">
+			             <p:commandButton icon="ui-icon-pencil" title="Edit" actionListener="#{bean.edit(l.id)}" update="@form"/>
+			             <p:commandButton icon="ui-icon-close" title="Delete" actionListener="#{bean.delete(l.id)}" update="@form">
+			             	<p:confirm header="Confirmation" message="Are you sure? After confirm, this action could not be undone" icon="ui-icon-alert" />
+			             </p:commandButton>			                
+			        </p:column>
+				</p:dataTable>
+			</p:panel>	        	        
+	
+				
+</ui:composition>
+

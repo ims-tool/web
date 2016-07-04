@@ -19,7 +19,11 @@ import br.com.ims.flow.service.FormTypeService;
 import br.com.ims.flow.service.GrammarEditorService;
 import br.com.ims.flow.service.GrammarService;
 import br.com.ims.flow.service.IvrEditorService;
+import br.com.ims.flow.service.LogicMapService;
+import br.com.ims.flow.service.LogicNodeEditorService;
+import br.com.ims.flow.service.LogicService;
 import br.com.ims.flow.service.LoginBeanService;
+import br.com.ims.flow.service.MapTypeService;
 import br.com.ims.flow.service.MenuService;
 import br.com.ims.flow.service.NoMatchInputEditorService;
 import br.com.ims.flow.service.NoMatchInputService;
@@ -182,6 +186,18 @@ public class ServicesFactory {
 	}
 	public VersionEditorService getVersionEditorService() {
 		return new VersionEditorService();
+	}
+	public LogicService getLogicService() {
+		return new LogicService();
+	}
+	public LogicMapService getLogicMapService() {
+		return new LogicMapService(); 
+	}
+	public LogicNodeEditorService getLogicNodeEditorService() {
+		return new LogicNodeEditorService(); 
+	}
+	public MapTypeService getMapTypeService() {
+		return new MapTypeService(); 
 	}
 
 }

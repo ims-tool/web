@@ -1,0 +1,212 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"	>
+		
+	<p:tooltip />
+	
+			<ui:param name="bean" value="#{logicnodeEditorView}" />
+			
+			<p:growl id="msg" showDetail="true" />	
+			<style>
+				h2 { 
+				    display: block;
+				    font-size: 1.25em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+				h3 { 
+				    display: block;
+				    font-size: 1.0em;
+				    margin-top: 1em;
+				    margin-bottom: 1em;
+				    margin-left: 1em;
+				    margin-right: 0;
+				    font-weight: bold;
+				}
+			</style>
+			
+			<h:panelGrid columns="2" cellpadding="15">
+				<p:graphicImage library="images" value="/imagens/icones/flow/logic.png"  width="60px" height="60px"   />
+				
+				<h2>LOGIC NODE</h2>
+				<h3>#{bean.insert? 'Mode: Inserting' : 'Mode: Editing'}</h3>
+			</h:panelGrid>
+			
+			<h:panelGrid cellpadding="5">
+				
+				<h:outputLabel id="label_logicnode_id" for="logicnode_id" value="ID:" />
+	            <p:inputText id="logicnode_id" value="#{bean.logicNode.id}" readonly="true" label="label_logicnode_id" />
+	 
+	            <h:outputLabel id="label_logicnode_order" for="logicnode_order" value="Number Order:" />
+	            <p:inputText id="logicnode_order" value="#{bean.logicNode.orderNum}"  label="label_logicnode_order" rendered="true" requiredMessage="Please, inform the Number Order!" type="number" />
+	            
+	            
+	            <h:outputLabel id="label_logicnode_description" for="logicnode_description" value="Description:" />
+	            <p:inputTextarea id="logicnode_description" value="#{bean.logicNode.description}" required="true" requiredMessage="Please,inform the Description" label="label_logicnode_description" rows="2" maxlength="200" autoResize="false" style="width:350px; cursor:text;"/>
+	            
+	            
+	            
+	            <p:column colspan="2">
+	            	
+	            	<h:panelGrid columns="3" cellpadding="5">
+		 				<h:outputLabel id="label_logicnode_map" for="logicnode_map" value="MAP:" />
+	                    <p:selectOneMenu required="true" 
+			 			                 requiredMessage="Please,select the Map" 
+			 			                 value="#{bean.mapId}" 
+			 			                 id="logicnode_map"
+			 			                 filter="true" filterMatchMode="startsWith" 
+			 			                 label="label_logicnode_map">
+			 				<f:selectItem itemLabel="Select One" itemValue="" />
+			 				<f:selectItems value="#{bean.maps}" var="map"
+								itemValue="#{map.id}" itemLabel="#{map.name} - #{map.methodReference}"  />
+			 			</p:selectOneMenu>
+			 			
+			            <p:commandButton value="Add New Map" icon="buttonAddMap" oncomplete="PF('logicNodeMapDlg').show()" update="logicNodeMapDlgId" ajax="true" immediate="true" actionListener="#{bean.addNewMap}"/>			            				
+		 			</h:panelGrid>	 		
+				</p:column>
+	            <p:column colspan="2">
+	            	<p:separator />
+            		<p:panel id="panelLogicNodeAddParameter" header="Parameters" >
+            		
+	            		<h:outputLabel id="label_logicnode_paramname" for="logicnode_paramname" value="Name:" />
+		            	<p:inputText id="logicnode_paramname" value="#{bean.nodeParameter.paramName}" label="label_logicnode_paramname" />
+		            	
+		            	<h:outputLabel id="label_logicnode_paramvalue" for="logicnode_paramvalue" value="Value:" style="margin-left:5px" />
+		            	<p:inputText id="logicnode_paramvalue" value="#{bean.nodeParameter.paramValue}" label="label_logicnode_paramvalue" style="margin-right:5px" />
+		 
+	            		<p:commandButton value="Add" icon="ui-icon-plusthick" update="panelLogicNodeAddParameter,panelLogicNodeParameterList,msg" ajax="true" immediate="true" actionListener="#{bean.addParameter}"/>
+			        </p:panel>
+			        <p:panel id="panelLogicNodeParameterList" style="margin-bottom:10px">
+		 				<p:dataTable  
+		 						scrollable="true" 
+		 						scrollHeight="70"
+		 						value="#{bean.listNodeParameter}"
+		 						var="parameter"
+		 						emptyMessage="No Parameter" >
+					        <p:column headerText="Name" >
+					            <h:outputText value="#{parameter.paramName}" />
+					        </p:column>
+					        <p:column headerText="Value" >
+					            <h:outputText value="#{parameter.paramValue}" />
+					        </p:column>
+					        <p:column style="width:32px;text-align: center">
+					        	 <p:commandButton update="formLogicNodeMap:panelLogicNodeParameterList,formLogicNodeMap:msg" ajax="true" immediate="true" actionListener="#{bean.removeParameter(parameter.id)}" icon="ui-icon-close" title="Delete" />					                
+					        </p:column>
+					    </p:dataTable>
+		 						 				
+		 			</p:panel>
+			        <p:separator />
+	            </p:column>
+	            <p:column colspan="2">	          
+            		<p:panel id="panelLogicNodeAddOperations" header="Operations" >
+            		
+	            		<p:panelGrid columns="2" cellpadding="5" >
+	            		
+		            		<h:outputLabel id="label_logicnode_orderNum" for="logicnode_orderNum" value="Order:"  />
+			            	<p:inputText id="logicnode_orderNum" value="#{bean.nodeOperation.orderNum}" label="label_logicnode_orderNum" type="number" style="width:30px;margin-bottom:5px" />
+			            	
+			            	<h:outputLabel id="label_logicnode_operation" for="logicnode_operation" value="Operation:" />
+			            	<p:selectOneMenu value="#{bean.nodeOperation.operation}" 
+				 			                 id="logicnode_operation"
+				 			                 filter="true" filterMatchMode="startsWith" 
+				 			                 label="label_logicnode_operation"
+				 			                 style="margin-bottom:5px">
+				 				<f:selectItem itemLabel="OR" itemValue="OR" />
+				 				<f:selectItem itemLabel="AND" itemValue="AND" />
+				 				
+				 				<p:ajax event="change"  />
+				 			</p:selectOneMenu>
+				 		</p:panelGrid>
+			            
+				       
+			        	<p:commandButton value="Add" icon="ui-icon-plusthick" update="panelLogicNodeAddOperations,msg"   ajax="true" immediate="true" actionListener="#{bean.addValue}"/>
+			        </p:panel>
+			        <p:panel id="panelLogicNodeOperationList" style="margin-bottom:10px">
+		 				<p:dataTable  
+		 						scrollable="true" 
+		 						scrollHeight="70"
+		 						value="#{bean.listNodeOperation}"
+		 						var="operation"
+		 						emptyMessage="No Operation" >
+					        <p:column headerText="Operation" >
+					            <h:outputText value="#{operation.operation}" />
+					        </p:column>
+					        
+					        <p:column style="width:32px;text-align: center">
+					        	 <p:commandButton update="formLogicNode:panelLogicNodeOperationList" ajax="true" immediate="true" actionListener="#{bean.editOperation(operation.id)}" icon="ui-icon-plusthick" title="Add Values" />
+					        	 <p:commandButton update="formLogicNode:panelLogicNodeOperationList" ajax="true" immediate="true" actionListener="#{bean.removeOperation(operation.id)}" icon="ui-icon-close" title="Delete" />					                
+					        </p:column>
+					    </p:dataTable>
+		 						 				
+		 			</p:panel>
+			        <p:separator />
+	            </p:column>
+	            <p:column colspan="2">	          
+            		<p:panel id="panelLogicNodeAddTargets" header="Targets" >
+            		
+	            	    
+				       <p:panelGrid id="panelLogicNodeTag" columns="5" style="margin-bottom:10px" >	
+			            	<h:outputLabel id="label_logicnode_tagTrue" for="logicnode_tagTrue" value="Tag True:" />
+			            	<p:selectOneMenu value="#{bean.tagTrueId}" 
+				 			                 id="logicnode_tagTrue"
+				 			                 filter="true" filterMatchMode="startsWith" 
+				 			                 label="label_logicnode_tagTrue"
+				 			                 style="margin-bottom:5px">
+				 				<f:selectItem itemLabel="Select One" itemValue="" />
+				 				<f:selectItems value="#{bean.tags}" var="tag"
+									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
+				 			</p:selectOneMenu>
+				 			<p:commandButton value="Add Tag True" icon="buttonAddTag" oncomplete="PF('tagDlg').show()"  update="formTag" ajax="true" immediate="true" actionListener="#{bean.addNewTag}" style="margin:0px 5px 5px 0px"/>
+				 			<h:outputLabel id="label_logicnode_gotoTrue" for="logicnode_gotoTrue" value="Go To Node if True:"  style="margin:0px 5px 5px 0px"/>
+			            	<p:selectOneMenu value="#{bean.gotoTrue}" 
+				 			                 id="logicnode_gotoTrue"
+				 			                 filter="true" filterMatchMode="startsWith" 
+				 			                 label="label_logicnode_gotoTrue"
+				 			                 style="margin-bottom:5px">
+				 				<f:selectItem itemLabel="Select One" itemValue="" />
+				 				<f:selectItems value="#{bean.tags}" var="tag"
+									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
+				 			</p:selectOneMenu>
+				 			
+				 			<h:outputLabel id="label_logicnode_tagFalse" for="logicnode_tagFalse" value="Tag False:" style="margin:0px 5px 5px 0px" />
+			            	<p:selectOneMenu value="#{bean.tagFalseId}" 
+				 			                 id="logicnode_tagFalse"
+				 			                 filter="true" filterMatchMode="startsWith" 
+				 			                 label="label_logicnode_tagFalse"
+				 			                 style="margin-bottom:5px">
+				 				<f:selectItem itemLabel="Select One" itemValue="" />
+				 				<f:selectItems value="#{bean.tags}" var="tag"
+									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
+				 			</p:selectOneMenu>
+				 			<p:commandButton value="Add Tag False" icon="buttonAddTag" oncomplete="PF('tagDlg').show()"  update="formTag" ajax="true" immediate="true" actionListener="#{bean.addNewTag}" style="margin:0px 5px 5px 0px"/>
+				 			<h:outputLabel id="label_logicnode_gotoFalse" for="logicnode_gotoFalse" value="Go To Node if False:" />
+			            	<p:selectOneMenu value="#{bean.gotoFalse}" 
+				 			                 id="logicnode_gotoFalse"
+				 			                 filter="true" filterMatchMode="startsWith" 
+				 			                 label="label_logicnode_gotoFalse"
+				 			                 style="margin-bottom:5px">
+				 				<f:selectItem itemLabel="Select One" itemValue="" />
+				 				<f:selectItems value="#{bean.tags}" var="tag"
+									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
+				 			</p:selectOneMenu>
+			            </p:panelGrid>
+
+			        </p:panel>
+			        <p:separator />
+	            </p:column>
+	            
+	            	
+	 			<f:facet name="footer">
+	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleOtherSaveRequest(xhr, status, args)" update="formOther,formAuxiliar,msg" actionListener="#{bean.save}"/>
+	            </f:facet>  
+	        </h:panelGrid>
+	        	
+				
+</ui:composition>

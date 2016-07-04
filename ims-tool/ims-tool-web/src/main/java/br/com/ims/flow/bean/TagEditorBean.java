@@ -43,7 +43,8 @@ public class TagEditorBean extends AbstractBean {
 	
 	private ConditionGroupEditorBean conditionGroupBean;
 	private TransferEditorBean transferBean;
-	
+	private LogicNodeEditorBean logicNodeEditorBean;
+	private boolean logicNodeTagTrue = false;
 	
 	private VersionEntity version;
     public TagEditorBean() { 
@@ -64,6 +65,8 @@ public class TagEditorBean extends AbstractBean {
     	
     	this.conditionGroupBean = null;
     	this.transferBean = null;
+    	this.logicNodeEditorBean = null;
+    	this.logicNodeTagTrue = false;
     	
     }
 
@@ -71,9 +74,26 @@ public class TagEditorBean extends AbstractBean {
 		this.node = node;
 	}
 	
+	
 	public void setNoMatchInput(NoMatchInputEntity noMatchInput) {
 		this.noMatchInput = noMatchInput;
 	}
+
+	
+	
+	public void setLogicNodeEditorBean(LogicNodeEditorBean logicNodeEditorBean) {
+		this.logicNodeEditorBean = logicNodeEditorBean;
+	}
+
+
+
+
+	public void setLogicNodeTagTrue(boolean logicNodeTagTrue) {
+		this.logicNodeTagTrue = logicNodeTagTrue;
+	}
+
+
+
 
 	public TagEntity getTag() {
 		return tag;
@@ -239,7 +259,7 @@ public class TagEditorBean extends AbstractBean {
 		}	
     	if(this.noMatchInput != null) {
     		this.noMatchInput.setTag(this.tag);
-    		
+    		this.noMatchInput = null;
     	}
     	if(this.conditionGroupBean != null) {
     		if(this.conditionGroupBean.getTagTrueId() == null || 
@@ -251,9 +271,18 @@ public class TagEditorBean extends AbstractBean {
     			this.conditionGroupBean.setTagFalseId(this.tag.getId());
     		}
     		this.conditionGroupBean.getConditionBean().setVersion(this.version);
+    		this.conditionGroupBean = null;
     	}
     	if(this.transferBean != null) {
     		this.transferBean.setTagId(this.tag.getId());
+    		this.transferBean = null;
+    	}
+    	if(this.logicNodeEditorBean != null) {
+    		if(this.logicNodeTagTrue)
+    			this.logicNodeEditorBean.setTagFalseId(this.tag.getId());
+    		else 
+    			this.logicNodeEditorBean.setTagFalseId(this.tag.getId());
+    		this.logicNodeEditorBean=null;
     	}
     	
     	init();

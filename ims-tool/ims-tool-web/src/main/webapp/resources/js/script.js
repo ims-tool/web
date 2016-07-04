@@ -61,6 +61,14 @@ function handleNoMatchInputSaveRequest(xhr, status, args) {
     }			        
 }
 
+function handleLogicMapSaveRequest(xhr, status, args) {		        						       
+    if(!args.validationFailed) {				        	
+    	if(args.saved == true) {
+        	PF('logicNodeMapDlg').hide();
+        }        	
+    }			        
+}
+
 function node_onMouseOut(nodeElement,id) {
 	var parent = nodeElement.parentElement;
 	diagram_onNodeMove([
