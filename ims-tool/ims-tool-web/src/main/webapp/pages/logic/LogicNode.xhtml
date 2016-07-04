@@ -126,7 +126,8 @@
 				 		</p:panelGrid>
 			            
 				       
-			        	<p:commandButton value="Add" icon="ui-icon-plusthick" update="panelLogicNodeAddOperations,msg"   ajax="true" immediate="true" actionListener="#{bean.addValue}"/>
+			        	
+			        	<p:commandButton value="Add New" icon="ui-icon-plusthick" oncomplete="PF('logicOperationDlg').show()"  update="panelLogicNodeOperationList,msg" ajax="true" immediate="true" actionListener="#{bean.addOperation}" style="margin:0px 5px 5px 0px"/>
 			        </p:panel>
 			        <p:panel id="panelLogicNodeOperationList" style="margin-bottom:10px">
 		 				<p:dataTable  
@@ -163,7 +164,7 @@
 				 				<f:selectItems value="#{bean.tags}" var="tag"
 									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
 				 			</p:selectOneMenu>
-				 			<p:commandButton value="Add Tag True" icon="buttonAddTag" oncomplete="PF('tagDlg').show()"  update="formTag" ajax="true" immediate="true" actionListener="#{bean.addNewTag}" style="margin:0px 5px 5px 0px"/>
+				 			<p:commandButton value="Add Tag True" icon="buttonAddTag" oncomplete="PF('tagDlg').show()"  update="formTag" ajax="true" immediate="true" actionListener="#{bean.addNewTagTrue}" style="margin:0px 5px 5px 0px"/>
 				 			<h:outputLabel id="label_logicnode_gotoTrue" for="logicnode_gotoTrue" value="Go To Node if True:"  style="margin:0px 5px 5px 0px"/>
 			            	<p:selectOneMenu value="#{bean.gotoTrue}" 
 				 			                 id="logicnode_gotoTrue"
@@ -185,7 +186,7 @@
 				 				<f:selectItems value="#{bean.tags}" var="tag"
 									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
 				 			</p:selectOneMenu>
-				 			<p:commandButton value="Add Tag False" icon="buttonAddTag" oncomplete="PF('tagDlg').show()"  update="formTag" ajax="true" immediate="true" actionListener="#{bean.addNewTag}" style="margin:0px 5px 5px 0px"/>
+				 			<p:commandButton value="Add Tag False" icon="buttonAddTag" oncomplete="PF('tagDlg').show()"  update="formTag" ajax="true" immediate="true" actionListener="#{bean.addNewTagFalse}" style="margin:0px 5px 5px 0px"/>
 				 			<h:outputLabel id="label_logicnode_gotoFalse" for="logicnode_gotoFalse" value="Go To Node if False:" />
 			            	<p:selectOneMenu value="#{bean.gotoFalse}" 
 				 			                 id="logicnode_gotoFalse"
@@ -207,6 +208,10 @@
 	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleOtherSaveRequest(xhr, status, args)" update="formOther,formAuxiliar,msg" actionListener="#{bean.save}"/>
 	            </f:facet>  
 	        </h:panelGrid>
-	        	
+	        <p:dialog id="logicOperationDlgId" header="Logic Operation" widgetVar="logicOperationDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" style="" >
+			 	<h:form id="formLogicOperation" >
+			 		<ui:include src="/pages/logic/LogicOperation.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>	
 				
 </ui:composition>

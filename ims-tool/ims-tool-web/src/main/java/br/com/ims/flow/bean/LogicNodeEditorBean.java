@@ -24,10 +24,16 @@ import br.com.ims.flow.model.TagEntity;
 @ViewScoped
 public class LogicNodeEditorBean extends AbstractBean {
      
-	
+	/*
+	 * continuar aqui
+	 * ajustar .xhtml
+	 */
 	
 	private LogicNodeEntity logicNode;
-	private LogicNodeOperationEntity nodeOperation;
+	
+	
+	
+	
 	private LogicNodeParameterEntity nodeParameter;
 	
 	private List<LogicNodeOperationEntity> listNodeOperation;
@@ -54,7 +60,6 @@ public class LogicNodeEditorBean extends AbstractBean {
     	this.logicNode = new LogicNodeEntity();
     	this.logicNode.setId(Util.getUID());
 
-    	this.nodeOperation = new LogicNodeOperationEntity();
     	this.nodeParameter = new LogicNodeParameterEntity();
 
     	
@@ -79,7 +84,9 @@ public class LogicNodeEditorBean extends AbstractBean {
 	public LogicNodeEntity getLogicNode() {
 		return this.logicNode;
 	}
+	
 
+	
 	@SuppressWarnings("unchecked")
 	public void setLogicNode(LogicNodeEntity logicNode) {
 		this.insert = false;
@@ -109,13 +116,7 @@ public class LogicNodeEditorBean extends AbstractBean {
 	}
 
 
-	public LogicNodeOperationEntity getNodeOperation() {
-		return nodeOperation;
-	}
-
-	public void setNodeOperation(LogicNodeOperationEntity nodeOperation) {
-		this.nodeOperation = nodeOperation;
-	}
+	
 
 	public String getMapId() {
 		return mapId;
@@ -286,6 +287,10 @@ public class LogicNodeEditorBean extends AbstractBean {
 	public void addOperation(ActionEvent event) { 
 		
 		this.collect();
+		
+		//ServicesFactory.getInstance().getConditionMapEditorService().getBean().setConditionGroupBean(this);
+		//ServicesFactory.getInstance().getConditionMapEditorService().getBean().setVersion(this.conditionBean.getVersion());
+		
 	}
 	public void removeOperation(String valueId) {
 		boolean find = false;
@@ -369,11 +374,18 @@ public class LogicNodeEditorBean extends AbstractBean {
 		}*/
 	}
 	
-	public void addNewTag(ActionEvent event) {
+	public void addNewTagTrue(ActionEvent event) {
 		
 		this.collect();
 		
-		//ServicesFactory.getInstance().getTagEditorService().getBean().setConditionGroupBean(this);
+		ServicesFactory.getInstance().getTagEditorService().getBean().setLogicNodeEditorBean(this);
+		ServicesFactory.getInstance().getTagEditorService().getBean().setLogicNodeTagTrue(true);
+	}
+	public void addNewTagFalse(ActionEvent event) {
+		
+		this.collect();
+		ServicesFactory.getInstance().getTagEditorService().getBean().setLogicNodeEditorBean(this);
+		ServicesFactory.getInstance().getTagEditorService().getBean().setLogicNodeTagTrue(false);
 	}
 	
 	@Override

@@ -58,17 +58,17 @@
 				<p:column colspan="2">	          
             		<p:panel id="panelLogicNodeOperationAddValues" header="Values" >
             		
-            		    continuar aqui
+            		    
 	            		<p:panelGrid columns="2" cellpadding="5" >
 	            		
-		            		<h:outputLabel id="label_auxiliar_conditiongroup_orderNum" for="auxiliar_conditiongroup_orderNum" value="Order:"  />
-			            	<p:inputText id="auxiliar_conditiongroup_orderNum" value="#{bean.conditionValue.orderNum}" label="label_auxiliar_conditiongroup_orderNum" type="number" style="width:30px;margin-bottom:5px" />
+		            		<h:outputLabel id="label_operationvalue_orderNum" for="operationvalue_orderNum" value="Order:"  />
+			            	<p:inputText id="operationvalue_orderNum" value="#{bean.conditionValue.orderNum}" label="label_auxiliar_conditiongroup_orderNum" type="number" style="width:30px;margin-bottom:5px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_operation" for="auxiliar_conditiongroup_operation" value="Operation:" />
-			            	<p:selectOneMenu value="#{bean.conditionValue.operation}" 
-				 			                 id="auxiliar_conditiongroup_operation"
+			            	<h:outputLabel id="label_operationvalue_operation" for="operationvalue_operation" value="Operation:" />
+			            	<p:selectOneMenu value="#{bean.nodeOperationValue.operation}" 
+				 			                 id="operationvalue_operation"
 				 			                 filter="true" filterMatchMode="startsWith" 
-				 			                 label="label_auxiliar_conditiongroup_operation"
+				 			                 label="label_operationvalue_operation"
 				 			                 style="margin-bottom:5px">
 				 				<f:selectItem itemLabel="=" itemValue="=" />
 				 				<f:selectItem itemLabel="&gt;" itemValue="&gt;" />
@@ -77,74 +77,49 @@
 				 				<f:selectItem itemLabel="NOT IN" itemValue="NOT IN" />
 				 				<f:selectItem itemLabel="BETWEEN" itemValue="BETWEEN" />
 				 				
-				 				<p:ajax event="change"  update="panelConditionGroupAddValues1"/>
+				 				<p:ajax event="change"  update="panelOperationValueAddValues1"/>
 				 			</p:selectOneMenu>
 				 		</p:panelGrid>
-			            <p:panelGrid id="panelConditionGroupAddValues1" columns="10" style="margin-bottom:10px" >	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value1" for="auxiliar_conditiongroup_value1" value="Value1:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value1" value="#{bean.conditionValue.value1}" label="label_auxiliar_conditiongroup_value1"  style="width:100px;margin:0px 5px 5px 0px" />
+			            <p:panelGrid id="panelOperationValueAddValues1" columns="10" style="margin-bottom:10px" >	
+			            	<h:outputLabel id="label_operationvalue_value1" for="operationvalue_value1" value="Value1:" />
+			            	<p:inputText id="operationvalue_value1" value="#{bean.nodeOperationValue.value1}" label="label_operationvalue_value1"  style="width:100px;margin:0px 5px 5px 0px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value2" for="auxiliar_conditiongroup_value2" value="Value2:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value2" value="#{bean.conditionValue.value2}" label="label_auxiliar_conditiongroup_value2" disabled="#{bean.conditionValue.operation eq '=' or bean.conditionValue.operation eq '&gt;' or bean.conditionValue.operation eq '&lt;'}" style="width:100px;margin:0px 5px 5px 0px"  />
+			            	<h:outputLabel id="label_operationvalue_value2" for="operationvalue_value2" value="Value2:" />
+			            	<p:inputText id="operationvalue_value2" value="#{bean.nodeOperationValue.value2}" label="label_operationvalue_value2" disabled="#{bean.nodeOperationValue.operation eq '=' or bean.nodeOperationValue.operation eq '&gt;' or bean.nodeOperationValue.operation eq '&lt;'}" style="width:100px;margin:0px 5px 5px 0px"  />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value3" for="auxiliar_conditiongroup_value3" value="Value3:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value3" value="#{bean.conditionValue.value3}" label="label_auxiliar_conditiongroup_value3" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<h:outputLabel id="label_operationvalue_value3" for="operationvalue_value3" value="Value3:" />
+			            	<p:inputText id="operationvalue_value3" value="#{bean.nodeOperationValue.value3}" label="label_operationvalue_value3" disabled="#{bean.nodeOperationValue.operation ne 'IN' and bean.nodeOperationValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value4" for="auxiliar_conditiongroup_value4" value="Value4:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value4" value="#{bean.conditionValue.value4}" label="label_auxiliar_conditiongroup_value4" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<h:outputLabel id="label_operationvalue_value4" for="operationvalue_value4" value="Value4:" />
+			            	<p:inputText id="operationvalue_value4" value="#{bean.nodeOperationValue.value4}" label="label_operationvalue_value4" disabled="#{bean.nodeOperationValue.operation ne 'IN' and bean.cnodeOperationValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value5" for="auxiliar_conditiongroup_value5" value="Value5:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value5" value="#{bean.conditionValue.value5}" label="label_auxiliar_conditiongroup_value5" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<h:outputLabel id="label_operationvalue_value5" for="operationvalue_value5" value="Value5:" />
+			            	<p:inputText id="operationvalue_value5" value="#{bean.nodeOperationValue.value5}" label="label_operationvalue_value5" disabled="#{bean.nodeOperationValue.operation ne 'IN' and bean.nodeOperationValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value6" for="auxiliar_conditiongroup_value6" value="Value6:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value6" value="#{bean.conditionValue.value6}" label="label_auxiliar_conditiongroup_value6" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<h:outputLabel id="label_operationvalue_value6" for="operationvalue_value6" value="Value6:" />
+			            	<p:inputText id="operationvalue_value6" value="#{bean.nodeOperationValue.value6}" label="label_operationvalue_value6" disabled="#{bean.nodeOperationValue.operation ne 'IN' and bean.nodeOperationValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value7" for="auxiliar_conditiongroup_value7" value="Value7:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value7" value="#{bean.conditionValue.value7}" label="label_auxiliar_conditiongroup_value7" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<h:outputLabel id="label_operationvalue_value7" for="operationvalue_value7" value="Value7:" />
+			            	<p:inputText id="operationvalue_value7" value="#{bean.nodeOperationValue.value7}" label="label_operationvalue_value7" disabled="#{bean.nodeOperationValue.operation ne 'IN' and bean.nodeOperationValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value8" for="auxiliar_conditiongroup_value8" value="Value8:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value8" value="#{bean.conditionValue.value8}" label="label_auxiliar_conditiongroup_value8" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<h:outputLabel id="label_operationvalue_value8" for="operationvalue_value8" value="Value8:" />
+			            	<p:inputText id="operationvalue_value8" value="#{bean.nodeOperationValue.value8}" label="label_operationvalue_value8" disabled="#{bean.nodeOperationValue.operation ne 'IN' and bean.nodeOperationValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value9" for="auxiliar_conditiongroup_value9" value="Value9:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value9" value="#{bean.conditionValue.value9}" label="label_auxiliar_conditiongroup_value9" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
+			            	<h:outputLabel id="label_operationvalue_value9" for="operationvalue_value9" value="Value9:" />
+			            	<p:inputText id="operationvalue_value9" value="#{bean.nodeOperationValue.value9}" label="label_operationvalue_value9" disabled="#{bean.nodeOperationValue.operation ne 'IN' and bean.nodeOperationValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />
 			            	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_value10" for="auxiliar_conditiongroup_value10" value="Value10:" />
-			            	<p:inputText id="auxiliar_conditiongroup_value10" value="#{bean.conditionValue.value10}" label="label_auxiliar_conditiongroup_value10" disabled="#{bean.conditionValue.operation ne 'IN' and bean.conditionValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />		            			            		            
+			            	<h:outputLabel id="label_operationvalue_value10" for="operationvalue_value10" value="Value10:" />
+			            	<p:inputText id="operationvalue_value10" value="#{bean.nodeOperationValue.value10}" label="label_operationvalue_value10" disabled="#{bean.nodeOperationValue.operation ne 'IN' and bean.nodeOperationValue.operation ne 'NOT IN'}" style="width:100px;margin:0px 5px 5px 0px" />		            			            		            
 				        </p:panelGrid>
-				       <p:panelGrid id="panelConditionGroupTag" columns="3" style="margin-bottom:10px" >	
-			            	<h:outputLabel id="label_auxiliar_conditiongroup_tagTrue" for="auxiliar_conditiongroup_tagTrue" value="Tag True:" />
-			            	<p:selectOneMenu value="#{bean.tagTrueId}" 
-				 			                 id="auxiliar_conditiongroup_tagTrue"
-				 			                 filter="true" filterMatchMode="startsWith" 
-				 			                 label="label_auxiliar_conditiongroup_tagTrue"
-				 			                 style="margin-bottom:5px">
-				 				<f:selectItem itemLabel="Select One" itemValue="" />
-				 				<f:selectItems value="#{bean.tags}" var="tag"
-									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
-				 			</p:selectOneMenu>
-				 			<p:commandButton value="Add Tag" icon="buttonAddTag" oncomplete="PF('tagDlg').show()"  update="formTag" ajax="true" immediate="true" actionListener="#{bean.addNewTag}"/>
-				 			
-				 			<h:outputLabel id="label_auxiliar_conditiongroup_tagFalse" for="auxiliar_conditiongroup_tagFalse" value="Tag False:" />
-			            	<p:selectOneMenu value="#{bean.tagFalseId}" 
-				 			                 id="auxiliar_conditiongroup_tagFalse"
-				 			                 filter="true" filterMatchMode="startsWith" 
-				 			                 label="label_auxiliar_conditiongroup_tagFalse"
-				 			                 style="margin-bottom:5px">
-				 				<f:selectItem itemLabel="Select One" itemValue="" />
-				 				<f:selectItems value="#{bean.tags}" var="tag"
-									itemValue="#{tag.id}" itemLabel="#{tag.id} - #{tag.description}"  />
-				 			</p:selectOneMenu>
-			            </p:panelGrid>
-			        	<p:commandButton value="Add" icon="ui-icon-plusthick" update="panelConditionGroupAddValues,panelConditionGroupValuesList,msgAuxiliarCondition"   ajax="true" immediate="true" actionListener="#{bean.addValue}"/>
-			        </p:panel>
-			        <p:panel id="panelConditionGroupValuesList" style="margin-bottom:10px">
+				     
+			        <p:panel id="panelOperationValuesList" style="margin-bottom:10px">
 		 				<p:dataTable  
 		 						scrollable="true" 
 		 						scrollHeight="70"
-		 						value="#{bean.listConditionValue}"
+		 						value="#{bean.listNodeOperationValue}"
 		 						var="value"
 		 						emptyMessage="No Value" >
-					        <p:column headerText="Order" >
+					        <p:column headerText="Order Number" >
 					            <h:outputText value="#{value.orderNum}" />
 					        </p:column>
 					        <p:column headerText="Operation" >
@@ -187,7 +162,7 @@
 					            <h:outputText value="#{value.tagFalse.id}" />
 					        </p:column>
 					        <p:column style="width:32px;text-align: center">
-					        	 <p:commandButton update="formOther:panelConditionGroupValuesList,formOther:msgAuxiliarCondition" ajax="true" immediate="true" actionListener="#{bean.removeValue(value.id)}" icon="ui-icon-close" title="Delete" />					                
+					        	 <p:commandButton update="formLogicOperation:panelOperationValuesList,formLogicOperation:msg" ajax="true" immediate="true" actionListener="#{bean.removeValue(value.id)}" icon="ui-icon-close" title="Delete" />					                
 					        					                
 					        </p:column>
 					    </p:dataTable>
@@ -198,7 +173,7 @@
 	            
 	            	
 	 			<f:facet name="footer">
-	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleOtherSaveRequest(xhr, status, args)" update="formOther,formAuxiliar,msg" actionListener="#{bean.save}"/>
+	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleOperationSaveRequest(xhr, status, args)" update="formLogicNode,msg" actionListener="#{bean.save}"/>
 	            </f:facet>  
 	        </h:panelGrid>
 	        	

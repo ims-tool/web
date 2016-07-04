@@ -46,6 +46,8 @@ function handleAdminSaveRequest(xhr, status, args) {
         }        	
     }			        
 }
+
+
 function handleTagSaveRequest(xhr, status, args) {		        						       
     if(!args.validationFailed) {				        	
     	if(args.saved == true) {
@@ -65,6 +67,14 @@ function handleLogicMapSaveRequest(xhr, status, args) {
     if(!args.validationFailed) {				        	
     	if(args.saved == true) {
         	PF('logicNodeMapDlg').hide();
+        }        	
+    }			        
+}
+
+function handleOperationSaveRequest(xhr, status, args) {		        						       
+    if(!args.validationFailed) {				        	
+    	if(args.saved == true) {
+        	PF('logicOperationDlg').hide();
         }        	
     }			        
 }

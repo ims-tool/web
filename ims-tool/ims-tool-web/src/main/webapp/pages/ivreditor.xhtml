@@ -235,6 +235,24 @@
 			 	</h:form>		        
 		    </p:dialog>
 		    
+		    <p:dialog id="logicDlgId" header="Logic" widgetVar="logicDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" style="" >
+			    <h:form id="formLogic">
+					<ui:include src="/pages/logic/Logic.xhtml" />
+				</h:form>
+			</p:dialog>
+			
+		    <p:dialog id="logicNodeDlgId" header="Logic Node" widgetVar="logicNodeDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" style="" >
+			 	<h:form id="formLogicNode" >
+			 		<ui:include src="/pages/logic/LogicNode.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
+			
+			<p:dialog id="logicNodeMapDlgId" header="Logic Map" widgetVar="logicNodeMapDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" style="" >
+			 	<h:form id="formLogicNodeMap" >
+			 		<ui:include src="/pages/logic/LogicMap.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>
+		    
 			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
 			    <p:graphicImage value="/imagens/outros/loading.gif" />
 			</p:dialog>
