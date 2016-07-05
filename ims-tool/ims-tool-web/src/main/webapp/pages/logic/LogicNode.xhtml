@@ -105,31 +105,8 @@
 			        <p:separator />
 	            </p:column>
 	            <p:column colspan="2">	          
-            		<p:panel id="panelLogicNodeAddOperations" header="Operations" >
-            		
-	            		<p:panelGrid columns="2" cellpadding="5" >
-	            		
-		            		<h:outputLabel id="label_logicnode_orderNum" for="logicnode_orderNum" value="Order:"  />
-			            	<p:inputText id="logicnode_orderNum" value="#{bean.nodeOperation.orderNum}" label="label_logicnode_orderNum" type="number" style="width:30px;margin-bottom:5px" />
-			            	
-			            	<h:outputLabel id="label_logicnode_operation" for="logicnode_operation" value="Operation:" />
-			            	<p:selectOneMenu value="#{bean.nodeOperation.operation}" 
-				 			                 id="logicnode_operation"
-				 			                 filter="true" filterMatchMode="startsWith" 
-				 			                 label="label_logicnode_operation"
-				 			                 style="margin-bottom:5px">
-				 				<f:selectItem itemLabel="OR" itemValue="OR" />
-				 				<f:selectItem itemLabel="AND" itemValue="AND" />
-				 				
-				 				<p:ajax event="change"  />
-				 			</p:selectOneMenu>
-				 		</p:panelGrid>
-			            
-				       
-			        	
-			        	<p:commandButton value="Add New" icon="ui-icon-plusthick" oncomplete="PF('logicOperationDlg').show()"  update="panelLogicNodeOperationList,msg" ajax="true" immediate="true" actionListener="#{bean.addOperation}" style="margin:0px 5px 5px 0px"/>
-			        </p:panel>
-			        <p:panel id="panelLogicNodeOperationList" style="margin-bottom:10px">
+            		<p:panel id="panelLogicNodeOperationList" style="margin-bottom:10px" header="Operations">
+		 				<p:commandButton value="Add New" icon="ui-icon-plusthick" oncomplete="PF('logicOperationDlg').show()"  update="panelLogicNodeOperationList,msg" ajax="true" immediate="true" actionListener="#{bean.addOperation}" style="margin:0px 5px 5px 0px"/>
 		 				<p:dataTable  
 		 						scrollable="true" 
 		 						scrollHeight="70"
@@ -208,10 +185,6 @@
 	                <p:commandButton value="Save" icon="ui-icon-disk" oncomplete="handleOtherSaveRequest(xhr, status, args)" update="formOther,formAuxiliar,msg" actionListener="#{bean.save}"/>
 	            </f:facet>  
 	        </h:panelGrid>
-	        <p:dialog id="logicOperationDlgId" header="Logic Operation" widgetVar="logicOperationDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" style="" >
-			 	<h:form id="formLogicOperation" >
-			 		<ui:include src="/pages/logic/LogicOperation.xhtml" />
-			 	</h:form>		        
-		    </p:dialog>	
-				
+	        
+	       
 </ui:composition>

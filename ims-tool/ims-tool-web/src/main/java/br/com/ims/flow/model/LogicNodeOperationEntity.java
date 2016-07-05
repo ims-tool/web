@@ -13,6 +13,7 @@ public class LogicNodeOperationEntity extends AbstractEntity implements Comparab
 	private List<LogicNodeValueEntity> listLogicNodeValues;
 	
 	public LogicNodeOperationEntity() {
+		orderNum = 0;
 		listLogicNodeValues = new ArrayList<LogicNodeValueEntity>();
 	}
 	

@@ -287,9 +287,7 @@ public class LogicNodeEditorBean extends AbstractBean {
 	public void addOperation(ActionEvent event) { 
 		
 		this.collect();
-		
-		//ServicesFactory.getInstance().getConditionMapEditorService().getBean().setConditionGroupBean(this);
-		//ServicesFactory.getInstance().getConditionMapEditorService().getBean().setVersion(this.conditionBean.getVersion());
+		ServicesFactory.getInstance().getLogicOperationEditorService().getBean().setLogicNodeBean(this);
 		
 	}
 	public void removeOperation(String valueId) {
@@ -332,46 +330,12 @@ public class LogicNodeEditorBean extends AbstractBean {
 		this.tagTrueId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formLogicNode:logicnode_tagTrue_input").toString();
 		this.tagFalseId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formLogicNode:logicnode_tagFalse_input").toString();
 		
+		LogicMapEntity map = null;
+		if(this.mapId != null && this.mapId.length() > 0)		
+			map = ServicesFactory.getInstance().getLogicMapService().get(this.mapId);	
 		
-		order = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formLogicNode:logicnode_orderNum").toString();
+		this.logicNode.setLogicMap(map);
 		
-		order = order == null || order.length() == 0 ? "0" : order;
-		/*
-		this.conditionValue.setOrderNum(Integer.valueOf(order	));
-		this.conditionValue.setOperation(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_operation_input").toString());
-		this.conditionValue.setValue1(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value1").toString());
-		
-		if(this.conditionValue.getOperation().equals("BETWEEN")) {
-			this.conditionValue.setValue2(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value2").toString());
-			this.conditionValue.setValue3("");
-			this.conditionValue.setValue4("");
-			this.conditionValue.setValue5("");
-			this.conditionValue.setValue6("");
-			this.conditionValue.setValue7("");
-			this.conditionValue.setValue8("");
-			this.conditionValue.setValue9("");
-			this.conditionValue.setValue10("");
-		} else if(this.conditionValue.getOperation().equals("IN") || this.conditionValue.getOperation().equals("NOT IN")) {			
-			this.conditionValue.setValue2(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value2").toString());
-			this.conditionValue.setValue3(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value3").toString());
-			this.conditionValue.setValue4(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value4").toString());
-			this.conditionValue.setValue5(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value5").toString());
-			this.conditionValue.setValue6(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value6").toString());
-			this.conditionValue.setValue7(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value7").toString());
-			this.conditionValue.setValue8(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value8").toString());
-			this.conditionValue.setValue9(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value9").toString());
-			this.conditionValue.setValue10(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formOther:auxiliar_conditiongroup_value10").toString());
-		} else {
-			this.conditionValue.setValue2("");
-			this.conditionValue.setValue3("");
-			this.conditionValue.setValue4("");
-			this.conditionValue.setValue5("");
-			this.conditionValue.setValue6("");
-			this.conditionValue.setValue7("");
-			this.conditionValue.setValue8("");
-			this.conditionValue.setValue9("");
-			this.conditionValue.setValue10("");
-		}*/
 	}
 	
 	public void addNewTagTrue(ActionEvent event) {

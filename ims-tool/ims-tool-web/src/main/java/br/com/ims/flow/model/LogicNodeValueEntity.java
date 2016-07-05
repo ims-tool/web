@@ -22,8 +22,12 @@ public class LogicNodeValueEntity extends AbstractEntity implements Comparable <
 	private TagEntity tagTrue;
 	private TagEntity tagFalse;
 	
+	
+	
 	public LogicNodeValueEntity() {
 		this.operation = "=";
+		this.orderNum = 0;
+		this.resultService = 1;
 	}
 	
 	public String getOperation() {

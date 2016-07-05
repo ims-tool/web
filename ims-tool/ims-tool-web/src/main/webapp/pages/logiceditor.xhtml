@@ -25,6 +25,8 @@
 				<ui:include src="/pages/logic/Logic.xhtml" />
 			</h:form>
 			
+			 
+			
 			<p:dialog id="logicNodeDlgId" header="Logic Node" widgetVar="logicNodeDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" style="" >
 			 	<h:form id="formLogicNode" >
 			 		<ui:include src="/pages/logic/LogicNode.xhtml" />
@@ -36,6 +38,12 @@
 			 		<ui:include src="/pages/logic/LogicMap.xhtml" />
 			 	</h:form>		        
 		    </p:dialog>
+		    
+		    <p:dialog id="logicOperationDlgId" header="Logic Operation" widgetVar="logicOperationDlg" resizable="true" maximizable="true" responsive="true" modal="false" draggable="false" position="center" width="600" height="450" style="" >
+			 	<h:form id="formLogicOperation" >
+			 		<ui:include src="/pages/logic/LogicOperation.xhtml" />
+			 	</h:form>		        
+		    </p:dialog>	
 			
 			<p:dialog id="dependenceDlgId" header="Dependences" widgetVar="dependenceDlg" resizable="true" maximizable="true" responsive="true" modal="true" draggable="false" position="center" width="600" height="450" >
 			 	<h:form id="formDependence" >

@@ -18,7 +18,7 @@ import br.com.ims.flow.model.LogicNodeOperationEntity;
 import br.com.ims.flow.model.LogicNodeValueEntity;
  
 @SuppressWarnings("serial")
-@ManagedBean(name = "conditiongroupEditorView")
+@ManagedBean(name = "logicoperationEditorView")
 @ViewScoped
 public class LogicOperationEditorBean extends AbstractBean {
      
@@ -53,7 +53,28 @@ public class LogicOperationEditorBean extends AbstractBean {
     }
     
     
-    
+    public String describeCompareWith(String id) {
+    	String result = "";
+    	for(LogicNodeValueEntity value : this.listNodeOperationValue ) {
+    		if(value.getId().equals(id)) {
+    			if(value.getResultService().equals(1)) {
+    				result = "MAP(";
+    				if(this.logicNodeBean != null) {
+    					if(this.logicNodeBean.getLogicNode().getLogicMap() != null) {
+    						result+= this.logicNodeBean.getLogicNode().getLogicMap().getName()+")";
+    					} else {
+    						result+= "undefined)";
+    					}
+    				} else {
+    					result+= "undefined)";	
+    				}
+    			} else {
+    				result = "CONTEXT("+value.getResultContext()+")";
+    			}
+    		}
+    	}
+    	return result;
+    }
     
 	public String getOperationId() {
 		return operationId;
@@ -183,6 +204,13 @@ public class LogicOperationEditorBean extends AbstractBean {
 			}
 		}
 		
+		if(this.nodeOperationValue.getResultService().equals(0) ) {
+			if(this.nodeOperationValue.getResultContext() == null || this.nodeOperationValue.getResultContext().length() == 0) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Logic Node Operaton - Value","You must inform the context, ex: call.ani");
+				FacesContext.getCurrentInstance().addMessage(null, msg);
+				return;
+			}
+		}
 		
 		if(this.nodeOperationValue.getValue1() == null || this.nodeOperationValue.getValue1().length() == 0) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Logic Node Operation - Value","Please, inform Value1!");
@@ -230,6 +258,18 @@ public class LogicOperationEditorBean extends AbstractBean {
 		
 		this.nodeOperationValue.setOperation(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formLogicOperation:operationvalue_operation_input").toString());
 		this.nodeOperationValue.setValue1(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formLogicOperation:operationvalue_value1").toString());
+		
+		String compareWith = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formLogicOperation:operationvalue_compareWith").toString();
+		
+		
+		this.nodeOperationValue.setResultService(Integer.valueOf(compareWith));
+		if(compareWith.equals("1")) {
+			this.nodeOperationValue.setResultContext(null);
+		} else {
+			String context = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formLogicOperation:operationvalue_context").toString();
+			this.nodeOperationValue.setResultContext(context);
+			
+		}
 		
 		if(this.nodeOperationValue.getOperation().equals("BETWEEN")) {
 			this.nodeOperationValue.setValue2(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("formLogicOperation:operationvalue_value2").toString());

@@ -21,6 +21,7 @@ import br.com.ims.flow.service.GrammarService;
 import br.com.ims.flow.service.IvrEditorService;
 import br.com.ims.flow.service.LogicMapService;
 import br.com.ims.flow.service.LogicNodeEditorService;
+import br.com.ims.flow.service.LogicOperationEditorService;
 import br.com.ims.flow.service.LogicService;
 import br.com.ims.flow.service.LoginBeanService;
 import br.com.ims.flow.service.MapTypeService;
@@ -198,6 +199,9 @@ public class ServicesFactory {
 	}
 	public MapTypeService getMapTypeService() {
 		return new MapTypeService(); 
+	}
+	public LogicOperationEditorService getLogicOperationEditorService() {
+		return new LogicOperationEditorService();
 	}
 
 }
